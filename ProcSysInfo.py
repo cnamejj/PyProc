@@ -1739,7 +1739,7 @@ class ProcNetSOFTNET_STAT:
 class ProcNetRT6_STATS:
     """Pull records from /proc/net/rt6_stats"""
 # DCHK: 11/18/12
-# source: 
+# source: net/ipv6/route.c
 #    seq_printf(seq, "%04x %04x %04x %04x %04x %04x %04x\n",
 #               net->ipv6.rt6_stats->fib_nodes,
 #               net->ipv6.rt6_stats->fib_route_nodes,
@@ -3302,6 +3302,7 @@ class ProcNetTCP:
 #       this version has the "%lu %lu %u %u %d" fields at the end, meaning 6 of the 
 #       last seven fields.  There are also no column headers for those extra fields
 #       so I'm guessing their meaning from the code.
+#
 #        seq_printf(f, "%4d: %08X:%04X %08X:%04X %02X %08X:%08X %02X:%08lX "
 #                        "%08X %5d %8d %lu %d %pK %lu %lu %u %u %d%n",
 #                i, src, srcp, dest, destp, sk->sk_state,
@@ -3423,6 +3424,41 @@ class ProcNetTCP:
 
 class ProcNetTCP6:
     """Abstraction layer to pull records from /proc/net/tcp6"""
+# DCHK: 2/3/13
+# source: net/ipv6/tcp_ipv6.c
+# Note: Just as with the "tcp4" code, the source has three separate sections that
+#       write data to this proc file.  And the one used depends on the state of the
+#       connection, "open" is handled one way, "time_wait" another, and the code
+#       snippet included here is used for any other connection state.  This one has
+#       more fields, so I'm using it as the sample code.  Some of the fields at the
+#       end are un-labelled in the proc file (meaning there's no column heading).
+#       So the constants used to reference them were picked based on what the values
+#       appear to be after reviewing the code.
+#
+#  seq_printf(seq,
+#             "%4d: %08X%08X%08X%08X:%04X %08X%08X%08X%08X:%04X "
+#             "%02X %08X:%08X %02X:%08lX %08X %5d %8d %lu %d %pK %lu %lu %u %u %d\n",
+#             i,
+#             src->s6_addr32[0], src->s6_addr32[1],
+#             src->s6_addr32[2], src->s6_addr32[3], srcp,
+#             dest->s6_addr32[0], dest->s6_addr32[1],
+#             dest->s6_addr32[2], dest->s6_addr32[3], destp,
+#             sp->sk_state,
+#             tp->write_seq-tp->snd_una,
+#             (sp->sk_state == TCP_LISTEN) ? sp->sk_ack_backlog : (tp->rcv_nxt - tp->copied_seq),
+#             timer_active,
+#             jiffies_to_clock_t(timer_expires - jiffies),
+#             icsk->icsk_retransmits,
+#             sock_i_uid(sp),
+#             icsk->icsk_probes_out,
+#             sock_i_ino(sp),
+#             atomic_read(&sp->sk_refcnt), sp,
+#             jiffies_to_clock_t(icsk->icsk_rto),
+#             jiffies_to_clock_t(icsk->icsk_ack.ato),
+#             (icsk->icsk_ack.quick << 1 ) | icsk->icsk_ack.pingpong,
+#             tp->snd_cwnd,
+#             tcp_in_initial_slowstart(tp) ? -1 : tp->snd_ssthresh
+#             );
 
     def __init__(self):
         self.field = dict()
@@ -3466,13 +3502,20 @@ class ProcNetTCP6:
             self.field[F_UID] =0
             self.field[F_TIMEOUT] = 0
             self.field[F_INODE] = 0
+            self.field[F_REFCOUNT] = 0
+            self.field[F_POINTER] = 0
+            self.field[F_RETRY_TIMEOUT] = 0
+            self.field[F_ACK_TIMEOUT] = 0
+            self.field[F_QUICK_OR_PPONG] = 0
+            self.field[F_CONGEST_WINDOW] = 0
+            self.field[F_SSTART_THRESH] = 0
 
         else:
-            self.orig_hexip = self.lineparts[1].partition(self.__FieldSplitDelim)[0]
-            self.dest_hexip = self.lineparts[2].partition(self.__FieldSplitDelim)[0]
+            self.orig_hexip = str(self.lineparts[1].partition(self.__FieldSplitDelim)[0])
+            self.dest_hexip = str(self.lineparts[2].partition(self.__FieldSplitDelim)[0])
 
-            self.orig_hexport = self.lineparts[1].partition(self.__FieldSplitDelim)[2]
-            self.dest_hexport = self.lineparts[2].partition(self.__FieldSplitDelim)[2]
+            self.orig_hexport = str(self.lineparts[1].partition(self.__FieldSplitDelim)[2])
+            self.dest_hexport = str(self.lineparts[2].partition(self.__FieldSplitDelim)[2])
 
             self.orig_ip = self.ipconv.ipv6_hexstring_to_presentation(self.orig_hexip)
             self.dest_ip = self.ipconv.ipv6_hexstring_to_presentation(self.dest_hexip)
@@ -3493,16 +3536,25 @@ class ProcNetTCP6:
             self.field[F_DEST_IP] = self.dest_ip
             self.field[F_ORIG_PORT] = self.orig_port
             self.field[F_DEST_PORT] = self.dest_port
-            self.field[F_HEXSTATE] = self.lineparts[3]
+            self.field[F_HEXSTATE] = str(self.lineparts[3])
             self.field[F_STATE] = self.state
-            self.field[F_TXQUEUE] = self.lineparts[4].partition(self.__FieldSplitDelim)[0]
-            self.field[F_RXQUEUE] = self.lineparts[4].partition(self.__FieldSplitDelim)[2]
-            self.field[F_TIMER] = self.lineparts[5].partition(self.__FieldSplitDelim)[0]
-            self.field[F_TIMER_WHEN] = self.lineparts[5].partition(self.__FieldSplitDelim)[2]
-            self.field[F_RETRANS] = self.lineparts[6]
-            self.field[F_UID] = self.lineparts[7]
-            self.field[F_TIMEOUT] = self.lineparts[8]
-            self.field[F_INODE] = self.lineparts[9]
+            self.field[F_TXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[0],16)
+            self.field[F_RXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[2],16)
+            self.field[F_TIMER] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[0],16)
+            self.field[F_TIMER_WHEN] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[2],16)
+            self.field[F_RETRANS] = long(self.lineparts[6],16)
+            self.field[F_UID] = long(self.lineparts[7])
+            self.field[F_TIMEOUT] = long(self.lineparts[8])
+            self.field[F_INODE] = long(self.lineparts[9])
+            self.field[F_REFCOUNT] = long(self.lineparts[10])
+            self.field[F_POINTER] = long(self.lineparts[11],16)
+
+            if self.linewords == 17:
+                self.field[F_RETRY_TIMEOUT] = long(self.lineparts[12])
+                self.field[F_ACK_TIMEOUT] = long(self.lineparts[13])
+                self.field[F_QUICK_OR_PPONG] = long(self.lineparts[14])
+                self.field[F_CONGEST_WINDOW] = long(self.lineparts[15])
+                self.field[F_SSTART_THRESH] = long(self.lineparts[16])
 
 #        print "dbg::(" + self.buff[:-1] + ")"
         return( self.orig_hexip, self.dest_hexip, self.orig_ip, self.orig_port, self.dest_ip, self.dest_port, self.state)
