@@ -4293,7 +4293,7 @@ if __name__ == "__main__":
         pss = ProcNetSOCKSTAT()
 
         for socktypelist in pss:
-            for socktype in pss.field:
+            for socktype in socktypelist:
                 print socktype
                 keyvals = pss.field[socktype]
                 for key in keyvals:
