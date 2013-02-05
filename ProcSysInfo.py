@@ -3681,7 +3681,7 @@ class ProcNetSOCKSTAT6:
 
 class ProcNetPTYPE:
     """Abstraction layer to pull records from /proc/net/ptype"""
-# DCHK:
+# DCHK: 2/5/13
 #
 # source: net/core/dev.c
 #
