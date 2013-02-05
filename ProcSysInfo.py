@@ -331,6 +331,19 @@ F_SOCK_RAW = "RAW:"
 F_SOCK_FRAG = "FRAG:"
 F_SOCK_SOCKETS = "sockets:"
 
+# -- fields added to support "sockstat6" data
+F_SOCK_TCP6 = "TCP6:"
+F_SOCK_UDP6 = "UDP6:"
+F_SOCK_UDPLITE6 = "UDPLITE6:"
+F_SOCK_RAW6 = "RAW6:"
+F_SOCK_FRAG6 = "FRAG6:"
+
+# -- fields added to support "ptype" data
+F_DEVICE_TYPE = "dev_type"
+F_DEVICE_NAME = "dev_name"
+F_DEVICE_FUNC = "dev_function"
+
+
 class ProcNetDEV_SNMP6:
     """Pull records from a device specific file in the /proc/net/dev_snmp6/ directory"""
 # DCHK: 11/25/12
@@ -3568,18 +3581,35 @@ class ProcNetTCP6:
 
 class ProcNetSOCKSTAT:
     """Abstraction layer to pull records from /proc/net/sockstat"""
-# DCHK: ...
-# source: ...
-# Note: ...
+# DCHK: 2/4/13
+# Note: Two different ".c" files write data to /net/sockstat.  They are called
+#       in the order listed here.
 #
+# source #1: net/socket.c
+#
+# seq_printf(seq, "sockets: used %d\n", counter);
+#
+# source #2: net/ipv4/proc.c
+#
+#  seq_printf(seq, "TCP: inuse %d orphan %d tw %d alloc %d mem %ld\n",
+#             sock_prot_inuse_get(net, &tcp_prot), orphans,
+#             tcp_death_row.tw_count, sockets,
+#             atomic_long_read(&tcp_memory_allocated));
+#  seq_printf(seq, "UDP: inuse %d mem %ld\n",
+#             sock_prot_inuse_get(net, &udp_prot),
+#             atomic_long_read(&udp_memory_allocated));
+#  seq_printf(seq, "UDPLITE: inuse %d\n",
+#             sock_prot_inuse_get(net, &udplite_prot));
+#  seq_printf(seq, "RAW: inuse %d\n",
+#             sock_prot_inuse_get(net, &raw_prot));
+#  seq_printf(seq,  "FRAG: inuse %d memory %d\n",
+#             ip_frag_nqueues(net), ip_frag_mem(net));
 
     def __init__(self):
         self.field = dict()
-        self.__sio = SeqFileIO()
-        self.__sio.open_file(self, "/proc/net/sockstat", 1)
+        self.sio = SeqFileIO()
+        self.sio.open_file(self, "/proc/net/sockstat", 1)
         self.__sock_type_list = ([ F_SOCK_TCP, F_SOCK_UDP, F_SOCK_UDPLITE, F_SOCK_RAW, F_SOCK_FRAG, F_SOCK_SOCKETS ])
-        self.__sock_type = ""
-        self.__result = set()
 
     def __iter__(self):
         return(self)
@@ -3593,29 +3623,128 @@ class ProcNetSOCKSTAT:
 # RAW: inuse 0
 # FRAG: inuse 0 memory 0
 
-        if not self.open:
-            raise StopIteration
+        self.__result = set()
+        self.__unknown_label = set()
+        self.field = dict()
+        for self.__sock_type in self.__sock_type_list:
+            self.field[self.__sock_type] = dict()
 
-        try:
-            while self.__sio.read_line(self):
-                self.__sock_type = str(self.lineparts[0])
-                if self.__sock_type in self.__sock_type_list:
-                    self.__result.add(self.__sock_type)
-                    self.field[self.__sock_type] = self.__sio.pair_list_to_dictionary(self.buff, 2)
-        except StopIteration:
-            self.open = 0;
-
-        if self.__sock_type == "":
-            self.__result = set()
-            self.field = dict()
-            self.field[F_SOCK_TCP] = dict()
-            self.field[F_SOCK_UDP] = dict()
-            self.field[F_SOCK_UDPLITE] = dict()
-            self.field[F_SOCK_RAW] = dict()
-            self.field[F_SOCK_FRAG] = dict()
+        self.__result, self.__unknown_label = self.sio.read_labelled_pair_list_file(self, self.__sock_type_list)
 
         return( self.__result)
-	
+
+class ProcNetSOCKSTAT6:
+    """Abstraction layer to pull records from /proc/net/sockstat6"""
+# DCHK: 2/4/13
+#
+# source: net/ipv6/proc.c
+#
+#  seq_printf(seq, "TCP6: inuse %d\n",
+#                 sock_prot_inuse_get(net, &tcpv6_prot));
+#  seq_printf(seq, "UDP6: inuse %d\n",
+#                 sock_prot_inuse_get(net, &udpv6_prot));
+#  seq_printf(seq, "UDPLITE6: inuse %d\n",
+#                  sock_prot_inuse_get(net, &udplitev6_prot));
+#  seq_printf(seq, "RAW6: inuse %d\n",
+#                 sock_prot_inuse_get(net, &rawv6_prot));
+#  seq_printf(seq, "FRAG6: inuse %d memory %d\n",
+#                 ip6_frag_nqueues(net), ip6_frag_mem(net));
+
+
+    def __init__(self):
+        self.field = dict()
+        self.sio = SeqFileIO()
+        self.sio.open_file(self, "/proc/net/sockstat6", 1)
+        self.__sock_type_list = ([ F_SOCK_TCP6, F_SOCK_UDP6, F_SOCK_UDPLITE6, F_SOCK_RAW6, F_SOCK_FRAG6 ])
+
+    def __iter__(self):
+        return(self)
+
+    def next(self):
+
+# -- Sample lines for reference...
+# TCP6: inuse 4
+# UDP6: inuse 2
+# UDPLITE6: inuse 0
+# RAW6: inuse 0
+# FRAG6: inuse 0 memory 0
+
+        self.__result = set()
+        self.__unknown_label = set()
+        self.field = dict()
+        for self.__sock_type in self.__sock_type_list:
+            self.field[self.__sock_type] = dict()
+
+        self.__result, self.__unknown_label = self.sio.read_labelled_pair_list_file(self, self.__sock_type_list)
+
+        return( self.__result)
+
+class ProcNetPTYPE:
+    """Abstraction layer to pull records from /proc/net/ptype"""
+# DCHK:
+#
+# source: net/core/dev.c
+#
+# if (v == SEQ_START_TOKEN)
+#         seq_puts(seq, "Type Device      Function\n");
+# else if (pt->dev == NULL || dev_net(pt->dev) == seq_file_net(seq)) {
+#         if (pt->type == htons(ETH_P_ALL))
+#                 seq_puts(seq, "ALL ");
+#         else
+#                 seq_printf(seq, "%04x", ntohs(pt->type));
+#
+#         seq_printf(seq, " %-8s %pF\n",
+#                    pt->dev ? pt->dev->name : "", pt->func);
+
+    def __init__(self):
+        self.field = dict()
+        self.__sio = SeqFileIO()
+        self.__sio.open_file(self, "/proc/net/ptype", 2, "Type")
+
+    def __iter__(self):
+        return(self)
+
+    def next(self):
+
+# -- Sample lines for reference...
+#
+# Note: This file can't be parsed as blank delimited words, since the second field is sometimes
+#       blank.  So we have to parse by columns, since the layout is fixed rather than delimited.
+#       The normal "read_line" call can still be used to pull in the data.  But we just have to
+#       pull column ranges from the buffer and the split words in the "lineparts" array is
+#       ignored.
+#
+# Type Device      Function
+# 0800          ip_rcv+0x0/0x300
+# 0011          llc_rcv+0x0/0x370
+# 0004          llc_rcv+0x0/0x370
+# 0806          arp_rcv+0x0/0x140
+
+        self.__sio.read_line(self)
+
+        if self.buff == "":
+            self.device_name = self.device_function = "";
+            self.device_type = 0
+
+            self.field = dict()
+            self.field[F_DEVICE_TYPE] = 0
+            self.field[F_DEVICE_NAME] = ""
+            self.field[F_DEVICE_FUNC] = ""
+
+        else:
+            self.device_type = long(self.buff[0:4],16)
+            self.device_name = str(self.buff[5:13])
+            self.device_function = str(self.buff[14:-1])
+
+            if self.device_name == "        ":
+                self.device_name = ""
+
+            self.field[F_DEVICE_TYPE] = self.device_type
+            self.field[F_DEVICE_NAME] = self.device_name
+            self.field[F_DEVICE_FUNC] = self.device_function
+
+        return( self.device_type, self.device_name, self.device_function)
+
 
 class IPAddressConv:
     """Utlities for converting IP address to/from various formats."""
@@ -3731,6 +3860,28 @@ class SeqFileIO:
             __pairs[__word_list[__key_pos]] = __word_list[__key_pos+1]
 
         return __pairs
+
+
+    def read_labelled_pair_list_file(self, pfs, label_set):
+
+        if not pfs.open:
+            raise StopIteration
+
+        try:
+            pfs.__result = set()
+            pfs.__unknown_label = set()
+
+            while pfs.sio.read_line(pfs):
+                pfs.__sock_type = str(pfs.lineparts[0])
+                if pfs.__sock_type in label_set:
+                    pfs.__result.add(pfs.__sock_type)
+                    pfs.field[pfs.__sock_type] = pfs.sio.pair_list_to_dictionary(pfs.buff, 2)
+                else:
+                    pfs.__unknown_label.add(pfs.__sock_type)
+        except StopIteration:
+            pfs.open = 0;
+
+        return(pfs.__result, pfs.__unknown_label)
         
 
 class CachedDNS:
@@ -4298,3 +4449,25 @@ if __name__ == "__main__":
                 keyvals = pss.field[socktype]
                 for key in keyvals:
                     print "-- {0:s} {1:s}".format(str(key),str(keyvals[key]))
+
+
+    if which == "all" or which == "sockstat6":
+        print __sep, "sockstat6"
+
+        pss = ProcNetSOCKSTAT6()
+
+        for socktypelist in pss:
+            for socktype in socktypelist:
+                print socktype
+                keyvals = pss.field[socktype]
+                for key in keyvals:
+                    print "-- {0:s} {1:s}".format(str(key),str(keyvals[key]))
+
+
+    if which == "all" or which == "ptype":
+        print __sep, "ptype"
+
+        pnp = ProcNetPTYPE()
+
+        for dev_type, dev_name, dev_func in pnp:
+            print '{0:04x} {1:s} "{2:s}"'.format(dev_type, dev_func, dev_name)
