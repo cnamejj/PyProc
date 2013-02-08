@@ -343,6 +343,52 @@ F_DEVICE_TYPE = "dev_type"
 F_DEVICE_NAME = "dev_name"
 F_DEVICE_FUNC = "dev_function"
 
+# -- 
+F_NULL_HANDLER = "/dev/null"
+
+proc_file_handler_registry = dict()
+
+def GetProcFileHandler(proc_file):
+    __handler = 0
+    __append_list = ( "/proc", "/proc/", "/proc/net/" )
+
+    if proc_file in proc_file_handler_registry:
+        __handler = proc_file_handler_registry[proc_file]
+    else:
+        for __prefix in __append_list:
+            __exp_file = __prefix + proc_file
+            if __exp_file in proc_file_handler_registry:
+                __handler = proc_file_handler_registry[__exp_file]
+
+    if __handler == 0:
+        __handler = proc_file_handler_registry[F_NULL_HANDLER]
+
+    return __handler
+
+def RegisterProcFileHandler(proc_file, handler):
+    proc_file_handler_registry[proc_file] = handler
+
+def ShowProcFileHandlers():
+    for __file in proc_file_handler_registry:
+        print "For " + __file + " use " + str(proc_file_handler_registry[__file])
+
+
+
+class ProcNetNULL:
+    """Dummy class that just acts like reading from an empty file, returned as the handler
+       for unrecognized files."""
+    def __init__(self, *opts):
+        self.field = dict()
+
+    def __iter__(self):
+        return(self)
+
+    def next(self):
+        raise StopIteration
+
+        return(self.field)
+#
+RegisterProcFileHandler(F_NULL_HANDLER, ProcNetNULL)
 
 class ProcNetDEV_SNMP6:
     """Pull records from a device specific file in the /proc/net/dev_snmp6/ directory"""
@@ -398,6 +444,8 @@ class ProcNetDEV_SNMP6:
                     self.field[self.__words[0]] = self.__words[1]
 
         return(self.field)
+#
+RegisterProcFileHandler("/proc/net/dev_snmp6", ProcNetDEV_SNMP6)
 
 
 
@@ -435,6 +483,8 @@ class ProcNetSNMP6:
                     self.field[self.__words[0]] = self.__words[1]
 
         return(self.field)
+#
+RegisterProcFileHandler("/proc/net/snmp6", ProcNetSNMP6)
 
 
 
@@ -701,7 +751,8 @@ class ProcNetNF_CONNTRACK:
             self.dst_port = self.field[F_OR_DST_PORT]
 
         return( self.l3_protocol, self.protocol, self.timeout, self.state, self.src_ip, self.src_port, self.dst_ip, self.dst_port)
-
+#
+RegisterProcFileHandler("/proc/net/nf_conntrack", ProcNetNF_CONNTRACK)
 
 
 
@@ -932,6 +983,8 @@ class ProcNetIP_CONNTRACK:
             self.dst_port = self.field[F_OR_DST_PORT]
 
         return( self.protocol, self.timeout, self.state, self.src_ip, self.src_port, self.dst_ip, self.dst_port)
+#
+RegisterProcFileHandler("/proc/net/ip_conntrack", ProcNetIP_CONNTRACK)
 
 
 
@@ -962,6 +1015,8 @@ class ProcNetIP_TABLES_TARGETS:
             raise StopIteration
 
         return( self.__lines)
+#
+RegisterProcFileHandler("/proc/net/ip_tables_targets", ProcNetIP_TABLES_TARGETS)
 
 
 
@@ -990,6 +1045,8 @@ class ProcNetIP_TABLES_NAMES:
             raise StopIteration
 
         return( self.__lines)
+#
+RegisterProcFileHandler("/proc/net/ip_tables_names", ProcNetIP_TABLES_NAMES)
 
 
 
@@ -1021,6 +1078,8 @@ class ProcNetIP_TABLES_MATCHES:
             raise StopIteration
 
         return( self.__lines)
+#
+RegisterProcFileHandler("/proc/net/ip_tables_matches", ProcNetIP_TABLES_MATCHES)
 
 
 
@@ -1050,6 +1109,8 @@ class ProcNetIP6_TABLES_TARGETS:
             raise StopIteration
 
         return( self.__lines)
+#
+RegisterProcFileHandler("/proc/net/ip6_tables_targets", ProcNetIP6_TABLES_TARGETS)
 
 
 
@@ -1078,6 +1139,8 @@ class ProcNetIP6_TABLES_NAMES:
             raise StopIteration
 
         return( self.__lines)
+#
+RegisterProcFileHandler("/proc/net/ip6_tables_names", ProcNetIP6_TABLES_NAMES)
 
 
 
@@ -1109,6 +1172,8 @@ class ProcNetIP6_TABLES_MATCHES:
             raise StopIteration
 
         return( self.__lines)
+#
+RegisterProcFileHandler("/proc/net/ip6_tables_matches", ProcNetIP6_TABLES_MATCHES)
 
 
 
@@ -1222,6 +1287,8 @@ class ProcNetIGMP:
                 self.timer = self.field[F_TIMER]
 
         return( self.index, self.device, self.count, self.querier, self.group, self.users, self.timer)
+#
+RegisterProcFileHandler("/proc/net/igmp", ProcNetIGMP)
 
 
 
@@ -1271,6 +1338,8 @@ class ProcNetNetfilterNF_QUEUE:
             self.name = self.field[F_NAME]
 
         return( self.index, self.name)
+#
+RegisterProcFileHandler("/proc/net/netfilter/nf_queue", ProcNetNetfilterNF_QUEUE)
 
 
 
@@ -1343,6 +1412,8 @@ class ProcNetNetfilterNF_LOG:
             self.log_list = self.field[F_LOGGER_LIST]
 
         return( self.index, self.name, self.log_list)
+#
+RegisterProcFileHandler("/proc/net/netfilter/nf_log", ProcNetNetfilterNF_LOG)
 
 
 
@@ -1423,6 +1494,8 @@ class ProcNetNETLINK:
             self.drops = self.field[F_DROPS]
 
         return( self.protocol, self.pid, self.groups, self.dump, self.locks, self.drops)
+#
+RegisterProcFileHandler("/proc/net/netlink", ProcNetNETLINK)
 
 
 
@@ -1476,6 +1549,8 @@ class ProcNetCONNECTOR:
             self.id_val = self.field[F_ID_VAL]
 
         return( self.name, self.id_idx, self.id_val)
+#
+RegisterProcFileHandler("/proc/net/connector", ProcNetCONNECTOR)
 
 
 
@@ -1551,6 +1626,8 @@ class ProcNetPACKET:
             self.uid = self.field[F_UID]
 
         return( self.type, self.protocol, self.interface_index, self.running, self.rmem_alloc, self.uid)
+#
+RegisterProcFileHandler("/proc/net/packet", ProcNetPACKET)
 
 
 
@@ -1682,6 +1759,8 @@ class ProcNetPROTOCOLS:
             self.module = self.field[F_MODULE]
 
         return( self.protocol, self.size, self.sockets, self.memory, self.module)
+#
+RegisterProcFileHandler("/proc/net/protocols", ProcNetPROTOCOLS)
 
 
 
@@ -1753,6 +1832,8 @@ class ProcNetSOFTNET_STAT:
             self.received_rps = self.field[F_RECEIVED_RPS]
 
         return( self.processed, self.dropped, self.time_squeeze, self.cpu_coll, self.received_rps)
+#
+RegisterProcFileHandler("/proc/net/softnet_stat", ProcNetSOFTNET_STAT)
 
 
 
@@ -1819,6 +1900,9 @@ class ProcNetRT6_STATS:
             self.discarded = self.field[F_FIB_DISC_ROUTES] 
 
         return( self.nodes, self.route_nodes, self.route_entries, self.route_cache, self.discarded)
+#
+RegisterProcFileHandler("/proc/net/rt6_stats", ProcNetRT6_STATS)
+
 
 
 class ProcNetPSCHED:
@@ -1870,6 +1954,9 @@ class ProcNetPSCHED:
             self.nsec_per_hrtime = self.field[F_NSEC_PER_HRTIME]
 
         return( self.nsec_per_usec, self.psched_ticks, self.nsec_per_hrtime)
+#
+RegisterProcFileHandler("/proc/net/psched", ProcNetPSCHED)
+
 
 
 class ProcNetIPV6_ROUTE:
@@ -1967,6 +2054,9 @@ class ProcNetIPV6_ROUTE:
             self.device = self.field[F_DEVICE]
 
         return( self.dest_ip, self.dest_pref_len, self.src_ip, self.src_pref_len, self.dest_refcount, self.device)
+#
+RegisterProcFileHandler("/proc/net/ipv6_route", ProcNetIPV6_ROUTE)
+
 
 
 class ProcNetIGMP6:
@@ -2032,6 +2122,9 @@ class ProcNetIGMP6:
             self.mcast_flags = self.field[F_MCAST_FLAGS]
 
         return( self.device, self.mcast_addr, self.mcast_users, self.mcast_flags)
+#
+RegisterProcFileHandler("/proc/net/igmp6", ProcNetIGMP6)
+
 
 
 class ProcNetDEV_MCAST:
@@ -2088,6 +2181,9 @@ class ProcNetDEV_MCAST:
             self.global_use = self.field[F_GLOBAL_USE]
 
         return( self.device, self.ref_count, self.global_use)
+#
+RegisterProcFileHandler("/proc/net/dev_mcast", ProcNetDEV_MCAST)
+
 
 
 class ProcNetIF_INET6:
@@ -2161,6 +2257,8 @@ class ProcNetIF_INET6:
             self.device = self.field[F_DEVICE]
 
         return( self.ipv6, self.ipv6_hex, self.scope, self.device)
+#
+RegisterProcFileHandler("/proc/net/if_inet6", ProcNetIF_INET6)
 
 
 
@@ -2258,6 +2356,8 @@ class ProcNetUNIX:
             self.path = self.field[F_PATH]
 
         return( self.refcount, self.protocol, self.flags, self.type, self.state, self.inode, self.path)
+#
+RegisterProcFileHandler("/proc/net/unix", ProcNetUNIX)
 
 
 
@@ -2358,6 +2458,8 @@ class ProcNetStatRT_CACHE:
             self.out_slow = self.field[F_OUT_SLOW_TOT]
 
         return( self.entries, self.in_hit, self.in_slow, self.out_hit, self.out_slow)
+#
+RegisterProcFileHandler("/proc/net/stat/rt_cache", ProcNetStatRT_CACHE)
 
 
 
@@ -2439,6 +2541,8 @@ class ProcNetStatNDISC_CACHE:
             self.hits = self.field[F_HIT]
 
         return( self.entries, self.lookups, self.hits)
+#
+RegisterProcFileHandler("/proc/net/stat/ndisc_cache", ProcNetStatNDISC_CACHE)
 
 
 
@@ -2545,6 +2649,9 @@ class ProcNetStatNF_CONNTRACK:
             self.drop = self.field[F_DROP]
 
         return( self.entries, self.searched, self.found, self.new, self.invalid, self.ignore, self.delete, self.insert, self.drop)
+#
+RegisterProcFileHandler("/proc/net/stat/nf_conntrack", ProcNetStatNF_CONNTRACK)
+
 
 
 class ProcNetStatIP_CONNTRACK:
@@ -2650,6 +2757,8 @@ class ProcNetStatIP_CONNTRACK:
             self.drop = self.field[F_DROP]
 
         return( self.entries, self.searched, self.found, self.new, self.invalid, self.ignore, self.delete, self.insert, self.drop)
+#
+RegisterProcFileHandler("/proc/net/stat/ip_conntrack", ProcNetStatIP_CONNTRACK)
 
 
 
@@ -2730,6 +2839,8 @@ class ProcNetStatARP_CACHE:
             self.hits = self.field[F_HIT]
 
         return( self.entries, self.lookups, self.hits)
+#
+RegisterProcFileHandler("/proc/net/stat/arp_cache", ProcNetStatARP_CACHE)
 
 
 
@@ -2842,6 +2953,8 @@ class ProcNetRT_CACHE:
             self.spec_dst = self.field[F_SPEC_DST]
 
         return( self.interface, self.destination, self.gateway, self.usecount, self.source, self.spec_dst)
+#
+RegisterProcFileHandler("/proc/net/rt_cache", ProcNetRT_CACHE)
 
 
 
@@ -2939,6 +3052,8 @@ class ProcNetROUTE:
             self.netmask = self.field[F_NETMASK]
 
         return( self.interface, self.destination, self.gateway, self.netmask)
+#
+RegisterProcFileHandler("/proc/net/route", ProcNetROUTE)
 
 
 
@@ -3038,6 +3153,8 @@ class ProcNetDEV:
             self.tx_errors = self.field[F_TX_ERRORS]
 
         return( self.device, self.rx_packets, self.rx_errors, self.tx_packets, self.tx_errors)
+#
+RegisterProcFileHandler("/proc/net/dev", ProcNetDEV)
 
 
 
@@ -3093,6 +3210,8 @@ class ProcNetARP:
             self.device = self.field[F_DEVICE]
 
         return( self.ip_addr, self.hw_addr, self.device)
+#
+RegisterProcFileHandler("/proc/net/arp", ProcNetARP)
 
 
 
@@ -3206,6 +3325,9 @@ class ProcNetUDP6:
 
 #        print "dbg::(" + self.buff[:-1] + ")"
         return( self.orig_hexip, self.dest_hexip, self.orig_ip, self.orig_port, self.dest_ip, self.dest_port, self.state)
+#
+RegisterProcFileHandler("/proc/net/udp6", ProcNetUDP6)
+
 
 
 class ProcNetUDP:
@@ -3311,6 +3433,9 @@ class ProcNetUDP:
 
 #        print "dbg::(" + self.buff[:-1] + ")"
         return( self.orig_hexip, self.dest_hexip, self.orig_ip, self.orig_port, self.dest_ip, self.dest_port, self.state)
+#
+RegisterProcFileHandler("/proc/net/udp", ProcNetUDP)
+
 
 
 class ProcNetTCP:
@@ -3441,6 +3566,10 @@ class ProcNetTCP:
 
 #        print "dbg::(" + self.buff[:-1] + ")"
         return( self.orig_hexip, self.dest_hexip, self.orig_ip, self.orig_port, self.dest_ip, self.dest_port, self.state)
+#
+RegisterProcFileHandler("/proc/net/tcp", ProcNetTCP)
+
+
 
 class ProcNetTCP6:
     """Abstraction layer to pull records from /proc/net/tcp6"""
@@ -3632,6 +3761,10 @@ class ProcNetSOCKSTAT:
         self.__result, self.__unknown_label = self.sio.read_labelled_pair_list_file(self, self.__sock_type_list)
 
         return( self.__result)
+#
+RegisterProcFileHandler("/proc/net/tcp6", ProcNetTCP6)
+
+
 
 class ProcNetSOCKSTAT6:
     """Abstraction layer to pull records from /proc/net/sockstat6"""
@@ -3678,6 +3811,10 @@ class ProcNetSOCKSTAT6:
         self.__result, self.__unknown_label = self.sio.read_labelled_pair_list_file(self, self.__sock_type_list)
 
         return( self.__result)
+#
+RegisterProcFileHandler("/proc/net/sockstat6", ProcNetSOCKSTAT6)
+
+
 
 class ProcNetPTYPE:
     """Abstraction layer to pull records from /proc/net/ptype"""
@@ -3732,7 +3869,9 @@ class ProcNetPTYPE:
             self.field[F_DEVICE_FUNC] = ""
 
         else:
-            self.device_type = long(self.buff[0:4],16)
+            self.device_type = self.buff[0:4]
+            if self.device_type != "ALL ":
+                self.device_type = long(self.buff[0:4],16)
             self.device_name = str(self.buff[5:13])
             self.device_function = str(self.buff[14:-1])
 
@@ -3744,6 +3883,9 @@ class ProcNetPTYPE:
             self.field[F_DEVICE_FUNC] = self.device_function
 
         return( self.device_type, self.device_name, self.device_function)
+#
+RegisterProcFileHandler("/proc/net/ptype", ProcNetPTYPE)
+
 
 
 class IPAddressConv:
@@ -3997,7 +4139,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         which = sys.argv[1]
     else:
-        which = "conn"
+        which = "show"
 
     if len(sys.argv) > 2:
         qualify = sys.argv[2]
@@ -4010,7 +4152,10 @@ if __name__ == "__main__":
     NO_SESSION_PID = procinfo.get_PID_err_value()
     NO_PROCESS_SUMMARY = procinfo.get_process_summary_err_value()
 
-    if which == "all" or which == "conn" or which == "udp6":
+    if which == "show":
+        ShowProcFileHandlers()
+
+    elif which == "all" or which == "conn" or which == "udp6":
         if which == "all":
             print __sep, "udp6"
 
