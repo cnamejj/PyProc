@@ -3707,6 +3707,8 @@ class ProcNetTCP6:
 
 #        print "dbg::(" + self.buff[:-1] + ")"
         return( self.orig_hexip, self.dest_hexip, self.orig_ip, self.orig_port, self.dest_ip, self.dest_port, self.state)
+RegisterProcFileHandler("/proc/net/tcp6", ProcNetTCP6)
+
 
 class ProcNetSOCKSTAT:
     """Abstraction layer to pull records from /proc/net/sockstat"""
@@ -3762,7 +3764,7 @@ class ProcNetSOCKSTAT:
 
         return( self.__result)
 #
-RegisterProcFileHandler("/proc/net/tcp6", ProcNetTCP6)
+RegisterProcFileHandler("/proc/net/sockstat", ProcNetSOCKSTAT)
 
 
 
@@ -3860,7 +3862,7 @@ class ProcNetPTYPE:
         self.__sio.read_line(self)
 
         if self.buff == "":
-            self.device_name = self.device_function = "";
+            self.device_name = self.device_function = ""
             self.device_type = 0
 
             self.field = dict()
@@ -3885,6 +3887,48 @@ class ProcNetPTYPE:
         return( self.device_type, self.device_name, self.device_function)
 #
 RegisterProcFileHandler("/proc/net/ptype", ProcNetPTYPE)
+
+
+
+class ProcNetSNMP:
+    """Abstraction layer to pull records from /proc/net/snmp"""
+# DCHK: ???
+#
+# source: ???
+#
+
+    def __init__(self):
+        self.field = dict()
+        self.sio = SeqFileIO()
+        self.sio.open_file(self, "/proc/net/snmp", 2)
+
+    def __iter__(self):
+        return(self)
+
+    def next(self):
+
+# -- Sample lines for reference...
+#
+# Note: Only a couple of the /proc/net files use this format and it can't
+#       be parsed with the existing code.  This one consists of a series
+#       of logical records, each one of which is two-lines in the file.
+#       The first line of each logical record starts with an id that names
+#       the logical record type, then has a list of field names that apply
+#       to that type.  The second line starts with the same "type" field
+#       followed by the values for each of the fields.  Both lines are
+#       blank delimited.
+#       
+# Tcp: RtoAlgorithm RtoMin RtoMax MaxConn ActiveOpens PassiveOpens AttemptFails EstabResets CurrEstab InSegs OutSegs RetransSegs InErrs OutRsts
+# Tcp: 1 200 120000 -1 160318 5208 5105 523 17 21554159 12995200 11248 0 16685
+# Udp: InDatagrams NoPorts InErrors OutDatagrams RcvbufErrors SndbufErrors
+# Udp: 890715 230 0 667254 0 0
+
+        self.sio.read_twoline_logical_record(self)
+        self.protocol_type = self.field[F_PROTOCOL]
+
+        return( self.protocol_type, self.field)
+#
+RegisterProcFileHandler("/proc/net/snmp", ProcNetSNMP)
 
 
 
@@ -4021,9 +4065,36 @@ class SeqFileIO:
                 else:
                     pfs.__unknown_label.add(pfs.__sock_type)
         except StopIteration:
-            pfs.open = 0;
+            pfs.open = 0
 
         return(pfs.__result, pfs.__unknown_label)
+
+
+    def read_twoline_logical_record(self, pfs):
+
+        if not pfs.open:
+            raise StopIteration
+
+        try:
+            pfs.field = dict()
+            pfs.sio.read_line(pfs)
+            pfs.__pss_varlist = pfs.lineparts
+            pfs.__pss_varcount = pfs.linewords
+
+            pfs.sio.read_line(pfs)
+            if pfs.linewords != pfs.__pss_varcount:
+                raise StopIteration
+            else:
+                pfs.field[F_PROTOCOL] = pfs.lineparts[0]
+
+                for __varnum in range(0, pfs.linewords, 1):
+                    pfs.field[pfs.__pss_varlist[__varnum]] = pfs.lineparts[__varnum]
+
+        except StopIteration:
+            pfs.open = 0
+
+        return
+
         
 
 class CachedDNS:
