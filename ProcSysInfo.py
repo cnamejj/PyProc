@@ -3892,9 +3892,109 @@ RegisterProcFileHandler("/proc/net/ptype", ProcNetPTYPE)
 
 class ProcNetSNMP:
     """Abstraction layer to pull records from /proc/net/snmp"""
-# DCHK: ???
+# DCHK: 4/8/13
 #
-# source: ???
+# source: net/ipv4/proc.c
+#
+#... from icmpmsg_put()
+# for (i = 0; i < ICMPMSG_MIB_MAX; i++) {
+#     val = snmp_fold_field((void __percpu **) net->mib.icmpmsg_statistics, i);
+#     if (val) {
+#         type[count] = i;
+#         vals[count++] = val;
+#     }
+#     if (count == PERLINE) {
+#         icmpmsg_put_line(seq, vals, type, count);
+#         count = 0;
+#     }
+# }
+# icmpmsg_put_line(seq, vals, type, count);
+#
+#
+#
+#... from icmp_put()
+# seq_puts(seq, "\nIcmp: InMsgs InErrors");
+# for (i=0; icmpmibmap[i].name != NULL; i++)
+#     seq_printf(seq, " In%s", icmpmibmap[i].name);
+# seq_printf(seq, " OutMsgs OutErrors");
+# for (i=0; icmpmibmap[i].name != NULL; i++)
+#     seq_printf(seq, " Out%s", icmpmibmap[i].name);
+# seq_printf(seq, "\nIcmp: %lu %lu",
+#     snmp_fold_field((void __percpu **) net->mib.icmp_statistics, ICMP_MIB_INMSGS),
+#     snmp_fold_field((void __percpu **) net->mib.icmp_statistics, ICMP_MIB_INERRORS));
+# for (i=0; icmpmibmap[i].name != NULL; i++)
+#     seq_printf(seq, " %lu",
+#         snmp_fold_field((void __percpu **) net->mib.icmpmsg_statistics,
+#             icmpmibmap[i].index));
+# seq_printf(seq, " %lu %lu",
+#     snmp_fold_field((void __percpu **) net->mib.icmp_statistics, ICMP_MIB_OUTMSGS),
+#     snmp_fold_field((void __percpu **) net->mib.icmp_statistics, ICMP_MIB_OUTERRORS));
+# for (i=0; icmpmibmap[i].name != NULL; i++)
+#     seq_printf(seq, " %lu",
+#         snmp_fold_field((void __percpu **) net->mib.icmpmsg_statistics,
+#             icmpmibmap[i].index | 0x100));
+#
+#
+#
+#...from snmp_seq_show()
+# seq_puts(seq, "Ip: Forwarding DefaultTTL");
+#
+# for (i = 0; snmp4_ipstats_list[i].name != NULL; i++)
+#     seq_printf(seq, " %s", snmp4_ipstats_list[i].name);
+#
+# seq_printf(seq, "\nIp: %d %d",
+#        IPV4_DEVCONF_ALL(net, FORWARDING) ? 1 : 2,
+#        sysctl_ip_default_ttl);
+#
+# BUILD_BUG_ON(offsetof(struct ipstats_mib, mibs) != 0);
+# for (i = 0; snmp4_ipstats_list[i].name != NULL; i++)
+#     seq_printf(seq, " %llu",
+#            snmp_fold_field64((void __percpu **)net->mib.ip_statistics,
+#                      snmp4_ipstats_list[i].entry,
+#                      offsetof(struct ipstats_mib, syncp)));
+#
+# icmp_put(seq);    /* RFC 2011 compatibility */
+# icmpmsg_put(seq);
+#
+# seq_puts(seq, "\nTcp:");
+# for (i = 0; snmp4_tcp_list[i].name != NULL; i++)
+#     seq_printf(seq, " %s", snmp4_tcp_list[i].name);
+#
+# seq_puts(seq, "\nTcp:");
+# for (i = 0; snmp4_tcp_list[i].name != NULL; i++) {
+#     /* MaxConn field is signed, RFC 2012 */
+#     if (snmp4_tcp_list[i].entry == TCP_MIB_MAXCONN)
+#         seq_printf(seq, " %ld",
+#                snmp_fold_field((void __percpu **)net->mib.tcp_statistics,
+#                        snmp4_tcp_list[i].entry));
+#     else
+#         seq_printf(seq, " %lu",
+#                snmp_fold_field((void __percpu **)net->mib.tcp_statistics,
+#                        snmp4_tcp_list[i].entry));
+# }
+#
+# seq_puts(seq, "\nUdp:");
+# for (i = 0; snmp4_udp_list[i].name != NULL; i++)
+#     seq_printf(seq, " %s", snmp4_udp_list[i].name);
+#
+# seq_puts(seq, "\nUdp:");
+# for (i = 0; snmp4_udp_list[i].name != NULL; i++)
+#     seq_printf(seq, " %lu",
+#            snmp_fold_field((void __percpu **)net->mib.udp_statistics,
+#                    snmp4_udp_list[i].entry));
+#
+# /* the UDP and UDP-Lite MIBs are the same */
+# seq_puts(seq, "\nUdpLite:");
+# for (i = 0; snmp4_udp_list[i].name != NULL; i++)
+#     seq_printf(seq, " %s", snmp4_udp_list[i].name);
+#
+# seq_puts(seq, "\nUdpLite:");
+# for (i = 0; snmp4_udp_list[i].name != NULL; i++)
+#     seq_printf(seq, " %lu",
+#            snmp_fold_field((void __percpu **)net->mib.udplite_statistics,
+#                    snmp4_udp_list[i].entry));
+#
+# seq_putc(seq, '\n');
 #
 
     def __init__(self):
@@ -3924,7 +4024,11 @@ class ProcNetSNMP:
 # Udp: 890715 230 0 667254 0 0
 
         self.sio.read_twoline_logical_record(self)
-        self.protocol_type = self.field[F_PROTOCOL]
+
+        try:
+            self.protocol_type = self.field[F_PROTOCOL]
+        except KeyError:
+            self.procotol_type = ""
 
         return( self.protocol_type, self.field)
 #
@@ -4085,7 +4189,7 @@ class SeqFileIO:
             if pfs.linewords != pfs.__pss_varcount:
                 raise StopIteration
             else:
-                pfs.field[F_PROTOCOL] = pfs.lineparts[0]
+                pfs.field[F_PROTOCOL] = pfs.lineparts[0][0:-1]
 
                 for __varnum in range(0, pfs.linewords, 1):
                     pfs.field[pfs.__pss_varlist[__varnum]] = pfs.lineparts[__varnum]
@@ -4687,3 +4791,14 @@ if __name__ == "__main__":
 
         for dev_type, dev_name, dev_func in pnp:
             print '{0:04x} {1:s} "{2:s}"'.format(dev_type, dev_func, dev_name)
+
+
+    if which == "all" or which == "snmp":
+        print __sep, "snmp"
+
+        snmp = GetProcFileHandler("snmp")()
+
+        for summ_results in snmp:
+            print '--- protocol {0:s}'.format(summ_results[0])
+            for var_name in snmp.field:
+                print '{0:s} : {1:s}'.format(var_name, snmp.field[var_name])
