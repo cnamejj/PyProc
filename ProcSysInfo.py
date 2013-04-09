@@ -4028,11 +4028,73 @@ class ProcNetSNMP:
         try:
             self.protocol_type = self.field[F_PROTOCOL]
         except KeyError:
-            self.procotol_type = ""
+            self.protocol_type = ""
+
 
         return( self.protocol_type, self.field)
 #
 RegisterProcFileHandler("/proc/net/snmp", ProcNetSNMP)
+
+
+
+class ProcNetNETSTAT:
+    """Abstraction layer to pull records from /proc/net/netstat"""
+# DCHK: 4/8/13
+#
+# source: net/ipv4/proc.c
+#
+# seq_puts(seq, "TcpExt:");
+# for (i = 0; snmp4_net_list[i].name != NULL; i++)
+#     seq_printf(seq, " %s", snmp4_net_list[i].name);
+#
+# seq_puts(seq, "\nTcpExt:");
+# for (i = 0; snmp4_net_list[i].name != NULL; i++)
+#     seq_printf(seq, " %lu",
+#            snmp_fold_field((void __percpu **)net->mib.net_statistics,
+#                    snmp4_net_list[i].entry));
+#
+# seq_puts(seq, "\nIpExt:");
+# for (i = 0; snmp4_ipextstats_list[i].name != NULL; i++)
+#     seq_printf(seq, " %s", snmp4_ipextstats_list[i].name);
+#
+# seq_puts(seq, "\nIpExt:");
+# for (i = 0; snmp4_ipextstats_list[i].name != NULL; i++)
+#     seq_printf(seq, " %llu",
+#            snmp_fold_field64((void __percpu **)net->mib.ip_statistics,
+#                      snmp4_ipextstats_list[i].entry,
+#                      offsetof(struct ipstats_mib, syncp)));
+#
+# seq_putc(seq, '\n');
+
+    def __init__(self):
+        self.field = dict()
+        self.sio = SeqFileIO()
+        self.sio.open_file(self, "/proc/net/netstat", 2)
+
+    def __iter__(self):
+        return(self)
+
+    def next(self):
+
+# -- Sample lines for reference...
+#
+# Note: This file uses the same "one logical record is two physical
+#       records" format as /proc/net/snmp.  It uses the same routines
+#       to parse the file contents.
+#
+# IpExt: InNoRoutes InTruncatedPkts InMcastPkts OutMcastPkts InBcastPkts OutBcastPkts InOctets OutOctets InMcastOctets OutMcastOctets InBcastOctets OutBcastOctets
+# IpExt: 0 0 1 0 102161 495 27899358724 1793111008 112 0 20737154 71127
+
+        self.sio.read_twoline_logical_record(self)
+
+        try:
+            self.protocol_type = self.field[F_PROTOCOL]
+        except KeyError:
+            self.protocol_type = ""
+
+        return( self.protocol_type, self.field)
+#
+RegisterProcFileHandler("/proc/net/netstat", ProcNetNETSTAT)
 
 
 
@@ -4080,8 +4142,11 @@ class SeqFileIO:
 
     def read_line(self, proc_file_session):
 
+        proc_file_session.lineparts = dict()
+        proc_file_session.linewords = 0
+        proc_file_session.buff = ""
+
         if proc_file_session.open == 0:
-            proc_file_session.buff = ""
             raise StopIteration
 
 	else:
@@ -4176,17 +4241,22 @@ class SeqFileIO:
 
     def read_twoline_logical_record(self, pfs):
 
+        pfs.field = dict()
+        pfs.lineparts = dict()
+        pfs.linewords = 0
+
         if not pfs.open:
             raise StopIteration
 
         try:
-            pfs.field = dict()
             pfs.sio.read_line(pfs)
             pfs.__pss_varlist = pfs.lineparts
             pfs.__pss_varcount = pfs.linewords
 
             pfs.sio.read_line(pfs)
             if pfs.linewords != pfs.__pss_varcount:
+                pfs.lineparts = dict()
+                pfs.linewords = 0
                 raise StopIteration
             else:
                 pfs.field[F_PROTOCOL] = pfs.lineparts[0][0:-1]
@@ -4195,6 +4265,8 @@ class SeqFileIO:
                     pfs.field[pfs.__pss_varlist[__varnum]] = pfs.lineparts[__varnum]
 
         except StopIteration:
+            pfs.lineparts = dict()
+            pfs.linewords = 0
             pfs.open = 0
 
         return
@@ -4799,6 +4871,21 @@ if __name__ == "__main__":
         snmp = GetProcFileHandler("snmp")()
 
         for summ_results in snmp:
-            print '--- protocol {0:s}'.format(summ_results[0])
+            lrec_prot = summ_results[0]
+            if lrec_prot != "":
+                print '--- protocol {0:s}'.format(lrec_prot)
             for var_name in snmp.field:
                 print '{0:s} : {1:s}'.format(var_name, snmp.field[var_name])
+
+
+    if which == "all" or which == "netstat":
+        print __sep, "netstat"
+
+        netstat = GetProcFileHandler("netstat")()
+
+        for summ_results in netstat:
+            lrec_prot = summ_results[0]
+            if lrec_prot != "":
+                print '--- protocol {0:s}'.format(lrec_prot)
+            for var_name in netstat.field:
+                print '{0:s} : {1:s}'.format(var_name, netstat.field[var_name])
