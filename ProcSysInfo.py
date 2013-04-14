@@ -18,6 +18,7 @@ import socket
 from subprocess import Popen, PIPE
 import binascii
 import sys
+import struct
 
 
 unknown_state = "UNRECOGNIZED"
@@ -4108,15 +4109,34 @@ class IPAddressConv:
         return socket.inet_ntop(socket.AF_INET6,socket.inet_pton(socket.AF_INET6,hexdelim))
 
     def ipv6_hexstring_to_presentation(self, hexip):
-        __pres = socket.inet_ntop(socket.AF_INET6,socket.inet_pton(socket.AF_INET6,self.ipv6_hexstring_to_hexdelimited(hexip)))
+        __delim = ""
+        __sep = ""
+
+        for __off in range( 0, 4):
+            __delim = __delim + __sep
+            __sep = self.__DelimIPV6
+
+            __chunk = hexip[ __off * 8: (__off + 1) * 8 ]
+            __net_hex = '{0:08x}'.format(struct.unpack("!L",struct.pack("=L",int(__chunk,16)))[0])
+            __delim = __delim + __net_hex[0:4] + self.__DelimIPV6 + __net_hex[4:8]
+
+        __pres = socket.inet_ntop(socket.AF_INET6,socket.inet_pton(socket.AF_INET6,__delim))
         if __pres == ANY_IPV6_ADDR:
             __pres = PRESENT_ANY_IPV6_ADDR
         return __pres
 
     def ipv6_hexstring_to_hexdelimited(self, hexip):
-        __delim = hexip[0:4]
-        for __off in range(4,len(hexip),4):
-            __delim = __delim + self.__DelimIPV6 + hexip[__off:__off+4]
+        __delim = ""
+        __sep = ""
+
+        for __off in range( 0, 4):
+            __delim = __delim + __sep
+            __sep = self.__DelimIPV6
+
+            __chunk = hexip[ __off * 8: (__off + 1) * 8 ]
+            __net_hex = '{0:08x}'.format(struct.unpack("!L",struct.pack("=L",int(__chunk,16)))[0])
+            __delim = __delim + __net_hex[0:4] + self.__DelimIPV6 + __net_hex[4:8]
+
         return __delim
 
 
