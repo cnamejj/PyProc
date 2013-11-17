@@ -4401,6 +4401,10 @@ class ProcessInfo:
 
 if __name__ == "__main__":
 
+    if sys.platform == "darwin":
+        print "MacOS doesn't have a '/proc' filesystem, quitting."
+        sys.exit(0)
+
     __sep = "-----------------------------------------------------------------------"
 
     if len(sys.argv) > 1:
