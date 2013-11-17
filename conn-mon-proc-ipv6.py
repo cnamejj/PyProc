@@ -9,9 +9,13 @@ times each was seen.
 """
 
 import time
+import sys
 
 from ProcSysInfo import ProcNetTCP6, CachedDNS, ProcessInfo
     
+if sys.platform == "darwin":
+    print "MacOS doesn't have a '/proc' filesystem, quitting."
+    sys.exit(0)
 
 iplookup = CachedDNS()
 procinfo = ProcessInfo()

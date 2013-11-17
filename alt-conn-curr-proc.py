@@ -4,8 +4,14 @@
 Data is pulled from /proc filesystem.
 """
 
+import sys
+
 import ProcSysInfo
 from ProcSysInfo import CachedDNS, ProcessInfo, GetProcFileHandler
+
+if sys.platform == "darwin":
+    print "MacOS doesn't have a '/proc' filesystem, quitting."
+    sys.exit(0)
 
 iplookup = CachedDNS()
 procinfo = ProcessInfo()

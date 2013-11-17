@@ -8,9 +8,14 @@ was written and the number of times each was seen.
 """
 
 import time
+import sys
 
 import ProcSysInfo
 from ProcSysInfo import GetProcFileHandler, CachedDNS, ProcessInfo
+
+if sys.platform == "darwin":
+    print "MacOS doesn't have a '/proc' filesystem, quitting."
+    sys.exit(0)
     
 psi = ProcSysInfo
 
