@@ -72,3 +72,6 @@ for ip in seen_freq:
     ip2host = iplookup.get_cache_entry( ip) 
 
     print "{0:d} {1:s} host: {2:s}".format( seen_freq[ip], ip, ip2host)
+
+sys.stderr.flush()
+sys.stdout.flush()
