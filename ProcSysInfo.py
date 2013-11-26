@@ -3111,7 +3111,7 @@ class ProcNetDEV:
             self.field[F_RX_BYTES] = 0
             self.field[F_RX_PACKETS] = 0
             self.field[F_RX_ERRORS] = 0
-            self.field[F_RX_DROP] =0
+            self.field[F_RX_DROP] = 0
             self.field[F_RX_FIFO] = 0
             self.field[F_RX_FRAME] = 0
             self.field[F_RX_COMPRESSED] = 0
@@ -3277,7 +3277,7 @@ class ProcNetUDP6:
             self.field[F_TIMER] = 0
             self.field[F_TIMER_WHEN] = 0
             self.field[F_RETRANS] = 0
-            self.field[F_UID] =0
+            self.field[F_UID] = 0
             self.field[F_TIMEOUT] = 0
             self.field[F_INODE] = 0
             self.field[F_REFCOUNT] = 0
@@ -3384,7 +3384,7 @@ class ProcNetUDP:
             self.field[F_TIMER] = 0
             self.field[F_TIMER_WHEN] = 0
             self.field[F_RETRANS] = 0
-            self.field[F_UID] =0
+            self.field[F_UID] = 0
             self.field[F_TIMEOUT] = 0
             self.field[F_INODE] = 0
             self.field[F_REFCOUNT] = 0
@@ -3508,7 +3508,7 @@ class ProcNetTCP:
             self.field[F_TIMER] = 0
             self.field[F_TIMER_WHEN] = 0
             self.field[F_RETRANS] = 0
-            self.field[F_UID] =0
+            self.field[F_UID] = 0
             self.field[F_TIMEOUT] = 0
             self.field[F_INODE] = 0
             self.field[F_REFCOUNT] = 0
@@ -3649,7 +3649,7 @@ class ProcNetTCP6:
             self.field[F_TIMER] = 0
             self.field[F_TIMER_WHEN] = 0
             self.field[F_RETRANS] = 0
-            self.field[F_UID] =0
+            self.field[F_UID] = 0
             self.field[F_TIMEOUT] = 0
             self.field[F_INODE] = 0
             self.field[F_REFCOUNT] = 0

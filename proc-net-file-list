@@ -1,0 +1,68 @@
+anycast6 EMPTY NOHEADER
+arp DONE ProcNetARP
+connector DONE ProcNetCONNECTOR
+dev DONE ProcNetDEV
+dev_mcast DONE ProcNetDEV_MCAST
+dev_snmp6 DONE DIR
+dev_snmp6/eth0 DONE ProcNetDEV_SNMP6
+dev_snmp6/lo DONE ProcNetDEV_SNMP6
+fib_trie NONRECORD
+fib_triestat NONRECORD
+icmp EMPTY
+if_inet6 DONE ProcNetIF_INET6
+igmp DONE ProcNetIGMP
+igmp6 DONE ProcNetIGMP6
+ip6_flowlabel EMPTY
+ip6_mr_cache EMPTY
+ip6_mr_vif EMPTY
+ip6_tables_matches DONE ProcNetIP6_TABLES_MATCHES ROOTONLY
+ip6_tables_names DONE ProcNetIP6_TABLES_NAMES ROOTONLY
+ip6_tables_targets DONE ProcNetIP6_TARGETS ROOTONLY
+ip_conntrack DONE ProcNetIP_CONNTRACK ROOTONLY
+ip_conntrack_expect EMPTY NOHEADER ROOTONLY
+ip_mr_cache EMPTY
+ip_mr_vif EMPTY
+ip_tables_matches DONE ProcNetIP_TABLES_MATCHES ROOTONLY
+ip_tables_names DONE ProcNetIP_TABLES_NAMES ROOTONLY
+ip_tables_targets DONE ProcNetIP_TABLES_TARGETS ROOTONLY
+ipv6_route DONE ProcNetIPV6_ROUTE
+mcfilter EMPTY
+mcfilter6 EMPTY
+netfilter DONE DIR
+netfilter/nf_log DONE ProcNetNetfilterNF_LOG
+netfilter/nf_queue DONE ProcNetNetfilterNF_QUEUE
+netlink DONE ProcNetNETLINK
+netstat DONE ProcNetNETSTAT
+nf_conntrack DONE ProcNetNF_CONNTRACK ROOTONLY
+nf_conntrack_expect EMPTY NOHEADER ROOTONLY
+packet DONE ProcNetPACKET
+protocols DONE ProcNetPROTOCOLS
+psched DONE ProcNetPSCHED
+ptype DONE ProcNetPTYPE
+raw EMPTY
+raw6 EMPTY
+route DONE ProcNetROUTE
+rt6_stats DONE ProcNetRT6_STATS
+rt_acct EMPTY NOHEADER
+rt_cache DONE ProcNetRT_CACHE
+snmp DONE ProcNetSNMP
+snmp6 DONE ProcNetSNMP6
+sockstat DONE ProcNetSOCKSTAT
+sockstat6 DONE ProcNetSOCKSTAT6
+softnet_stat DONE ProcNetSOFTNET_STAT
+stat DONE DIR
+stat/arp_cache DONE ProcNetStatARP_CACHE
+stat/ip_conntrack DONE ProcNetStatIP_CONNTRACK
+stat/ndisc_cache DONE ProcNetStatNDISC_CACHE
+stat/nf_conntrack DONE ProcNetStatNF_CONNTRACK
+stat/rt_cache DONE ProcNetStatRT_CACHE
+tcp DONE ProcNetTCP
+tcp6 DONE ProcNetTCP6
+tr_rif EMPTY
+udp DONE ProcNetUDP
+udp6 DONE ProcNetUDP6
+udplite EMPTY
+udplite6 EMPTY
+unix DONE ProcNetUNIX
+wireless EMPTY
+xfrm_stat NOHEADER aqui-only
