@@ -686,15 +686,15 @@ class ProcNetNF_CONNTRACK:
                 self.field[F_OR_DST_PORT] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__UNREPLIED_PREF)] == self.__UNREPLIED_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__UNREPLIED_PREF)] == self.__UNREPLIED_PREF:
                 self.field[F_UNREPLIED] = str(self.lineparts[self.__off])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__PACKETS_PREF)] == self.__PACKETS_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__PACKETS_PREF)] == self.__PACKETS_PREF:
                 self.field[F_OR_PACKETS] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__BYTES_PREF)] == self.__BYTES_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__BYTES_PREF)] == self.__BYTES_PREF:
                 self.field[F_OR_BYTES] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
@@ -711,31 +711,31 @@ class ProcNetNF_CONNTRACK:
                 self.field[F_RE_DST_PORT] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__PACKETS_PREF)] == self.__PACKETS_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__PACKETS_PREF)] == self.__PACKETS_PREF:
                 self.field[F_RE_PACKETS] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__BYTES_PREF)] == self.__BYTES_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__BYTES_PREF)] == self.__BYTES_PREF:
                 self.field[F_RE_BYTES] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__ASSURED_PREF)] == self.__ASSURED_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__ASSURED_PREF)] == self.__ASSURED_PREF:
                 self.field[F_ASSURED] = str(self.lineparts[self.__off])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__MARK_PREF)] == self.__MARK_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__MARK_PREF)] == self.__MARK_PREF:
                 self.field[F_MARK] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__SECCTX_PREF)] == self.__SECCTX_PREF:
-                self.field[F_SECCTX] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__SECCTX_PREF)] == self.__SECCTX_PREF:
+                self.field[F_SECCTX] = self.lineparts[self.__off].partition(self.__Val_Delim)[2]
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__ZONE_PREF)] == self.__ZONE_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__ZONE_PREF)] == self.__ZONE_PREF:
                 self.field[F_ZONE] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__DELTA_TIME_PREF)] == self.__DELTA_TIME_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__DELTA_TIME_PREF)] == self.__DELTA_TIME_PREF:
                 self.field[F_DELTA_TIME] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
@@ -927,15 +927,15 @@ class ProcNetIP_CONNTRACK:
                 self.field[F_OR_DST_PORT] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__UNREPLIED_PREF)] == self.__UNREPLIED_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__UNREPLIED_PREF)] == self.__UNREPLIED_PREF:
                 self.field[F_UNREPLIED] = str(self.lineparts[self.__off])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__PACKETS_PREF)] == self.__PACKETS_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__PACKETS_PREF)] == self.__PACKETS_PREF:
                 self.field[F_OR_PACKETS] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__BYTES_PREF)] == self.__BYTES_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__BYTES_PREF)] == self.__BYTES_PREF:
                 self.field[F_OR_BYTES] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
@@ -952,23 +952,23 @@ class ProcNetIP_CONNTRACK:
                 self.field[F_RE_DST_PORT] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__PACKETS_PREF)] == self.__PACKETS_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__PACKETS_PREF)] == self.__PACKETS_PREF:
                 self.field[F_RE_PACKETS] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__BYTES_PREF)] == self.__BYTES_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__BYTES_PREF)] == self.__BYTES_PREF:
                 self.field[F_RE_BYTES] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__ASSURED_PREF)] == self.__ASSURED_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__ASSURED_PREF)] == self.__ASSURED_PREF:
                 self.field[F_ASSURED] = str(self.lineparts[self.__off])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__MARK_PREF)] == self.__MARK_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__MARK_PREF)] == self.__MARK_PREF:
                 self.field[F_MARK] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
-            if  self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__SECCTX_PREF)] == self.__SECCTX_PREF:
+            if self.__off < self.linewords and self.lineparts[self.__off][0:len(self.__SECCTX_PREF)] == self.__SECCTX_PREF:
                 self.field[F_SECCTX] = long(self.lineparts[self.__off].partition(self.__Val_Delim)[2])
                 self.__off += 1
 
