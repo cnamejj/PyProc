@@ -32,17 +32,40 @@ else:
 if qualify != "":
    target = target + "/" + qualify
 
-for srec in active:
-    out = ""
-    seq = seq + 1
+nested = 0
+head = ""
 
-    if seq == 1:
-        for key in active.field:
-            out = out + sep + key
-        print "{0:s}{1:s}".format(target, out)
-        out = ""
+for srec in active:
+    prev_head = head
+    head = ""
+    seq = seq + 1
 
     if len(active.field) > 0:
         for key in active.field:
-            out = out + sep + str(active.field[key])
-        print "{0:d}{1:s}".format(seq, out)
+            if type(active.field[key]) == dict:
+                nested = 1
+            head = head + sep + key
+        if nested == 1 and seq == 1:
+            print "{0:s}{1:s}".format(target, head)
+        elif head != prev_head:
+            if seq > 1:
+                print ""
+            print "{0:s}{1:s}".format(target, head)
+
+        if nested == 1:
+            for key in active.field:
+                currval = active.field[key]
+                head = ""
+                out = ""
+                for subkey in currval:
+                    head = head + sep + subkey
+                    out = out + sep + currval[subkey]
+                print ""
+                print "{0:d}{1:s}Label{2:s}".format(seq,sep,head)
+                print "{0:d}{1:s}{2:s}{3:s}".format(seq,sep,key,out)
+
+        else:
+            out = ""
+            for key in active.field:
+                out = out + sep + str(active.field[key])
+            print "{0:d}{1:s}".format(seq, out)

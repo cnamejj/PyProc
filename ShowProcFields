@@ -42,12 +42,14 @@ for srec in active:
         for off in active.field:
             fseq = fseq + 1
             currval = active.field[off]
-            if type(currval) == str or type(currval) == int or type(currval) == long:
-                print "- - - {0:d}. {1:s} : {2:s}".format(fseq,off,str(currval))
-            elif type(currval) == dict:
+            if type(currval) == dict:
                 subseq = 0
-                print "- - - {0:d}. {1:s} ...".format(fseq,off)
+                print "- - {0:d}. {1:s} ...".format(fseq,off)
                 for subent in currval:
                     subseq = subseq + 1
                     if type(subent) == str:
-                        print "- - - - - {0:d}.{1:d}. {2:s} : {3:s}".format(fseq,subseq,subent,str(currval[subent]))
+                        print "- - - {0:d}.{1:d}. {2:s} : {3:s}".format(fseq,subseq,subent,str(currval[subent]))
+            else:
+                print "- - {0:d}. {1:s} : {2:s}".format(fseq,off,str(currval))
+
+
