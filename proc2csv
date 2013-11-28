@@ -11,6 +11,10 @@ if sys.platform == "darwin":
     sys.exit(0)
 
 qualify = ""
+seq = 0
+sep = "|"
+nested = 0
+head = ""
 
 if len(sys.argv) > 1:
     target = sys.argv[1]
@@ -19,53 +23,41 @@ if len(sys.argv) > 1:
 else:
     target = "tcp"
 
-seq = 0
-sep = "|"
-
 handler = ProcSysInfo.GetProcFileHandler(target)
 
 if qualify != "":
     active = handler(qualify)
+    target = '{path}/{file}'.format(path=target,file=qualify)
 else:
     active = handler()
 
-if qualify != "":
-   target = target + "/" + qualify
-
-nested = 0
-head = ""
-
 for srec in active:
     prev_head = head
-    head = ""
     seq = seq + 1
 
     if len(active.field) > 0:
         for key in active.field:
             if type(active.field[key]) == dict:
                 nested = 1
-            head = head + sep + key
-        if nested == 1 and seq == 1:
-            print "{0:s}{1:s}".format(target, head)
-        elif head != prev_head:
+        head = sep.join(active.field)
+        if head != prev_head:
             if seq > 1:
                 print ""
-            print "{0:s}{1:s}".format(target, head)
+            print "{procfile}{sep}{header}".format(procfile=target, sep=sep, header=head)
 
         if nested == 1:
             for key in active.field:
                 currval = active.field[key]
-                head = ""
                 out = ""
                 for subkey in currval:
-                    head = head + sep + subkey
-                    out = out + sep + currval[subkey]
+                    out = "{out}{sep}{keyval}".format(out=out, sep=sep, keyval=currval[subkey])
+                head = sep.join(currval)
                 print ""
-                print "{0:d}{1:s}Label{2:s}".format(seq,sep,head)
-                print "{0:d}{1:s}{2:s}{3:s}".format(seq,sep,key,out)
+                print "{seq}{sep}Label{sep}{header}".format(seq=seq,sep=sep,header=head)
+                print "{seq}{sep}{label}{datalist}".format(seq=seq,sep=sep,label=key,datalist=out)
 
         else:
             out = ""
             for key in active.field:
-                out = out + sep + str(active.field[key])
-            print "{0:d}{1:s}".format(seq, out)
+                out = "{out}{sep}{keyval}".format(out=out, sep=sep, keyval=str(active.field[key]))
+            print "{seq}{datalist}".format(seq=seq, datalist=out)
