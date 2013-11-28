@@ -1,5 +1,6 @@
 anycast6 EMPTY NOHEADER
 arp DONE ProcNetARP
+bnep NEED aqui-only
 connector DONE ProcNetCONNECTOR
 dev DONE ProcNetDEV
 dev_mcast DONE ProcNetDEV_MCAST
@@ -8,7 +9,9 @@ dev_snmp6/eth0 DONE ProcNetDEV_SNMP6
 dev_snmp6/lo DONE ProcNetDEV_SNMP6
 fib_trie NONRECORD
 fib_triestat NONRECORD
+hci NEED aqui-only
 icmp EMPTY
+icmp6 EMPTY aqui-only
 if_inet6 DONE ProcNetIF_INET6
 igmp DONE ProcNetIGMP
 igmp6 DONE ProcNetIGMP6
@@ -26,6 +29,7 @@ ip_tables_matches DONE ProcNetIP_TABLES_MATCHES ROOTONLY
 ip_tables_names DONE ProcNetIP_TABLES_NAMES ROOTONLY
 ip_tables_targets DONE ProcNetIP_TABLES_TARGETS ROOTONLY
 ipv6_route DONE ProcNetIPV6_ROUTE
+l2cap NEED aqui-only
 mcfilter EMPTY
 mcfilter6 EMPTY
 netfilter DONE DIR
@@ -45,6 +49,7 @@ route DONE ProcNetROUTE
 rt6_stats DONE ProcNetRT6_STATS
 rt_acct EMPTY NOHEADER
 rt_cache DONE ProcNetRT_CACHE
+sco NEED aqui-only
 snmp DONE ProcNetSNMP
 snmp6 DONE ProcNetSNMP6
 sockstat DONE ProcNetSOCKSTAT
