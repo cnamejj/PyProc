@@ -31,5 +31,5 @@ else:
 if qualify != "":
     target = target + "/" + qualify
 
-print "File {0:s} handled by {1:s}".format(target,handler)
+print "File {0:s} handled by {1:s}".format(target, handler)
 

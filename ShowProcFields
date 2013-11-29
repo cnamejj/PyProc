@@ -34,7 +34,7 @@ print "- Logical records from {0:s}".format(target)
 for srec in active:
     seq = seq + 1
     if len(active.field) > 0:
-        print "- Record {seq} fields {size}".format(seq=seq,size=len(active.field))
+        print "- Record {seq} fields {size}".format(seq=seq, size=len(active.field))
 
         fseq = 0
         for off in active.field:
@@ -42,12 +42,12 @@ for srec in active:
             currval = active.field[off]
             if type(currval) == dict:
                 subseq = 0
-                print "- - {seq}. {key} ...".format(seq=fseq,key=off)
+                print "- - {seq}. {key} ...".format(seq=fseq, key=off)
                 for subent in currval:
                     subseq = subseq + 1
                     if type(subent) == str:
-                        print "- - - {seq}.{subseq}. {subkey} : {subkeyval}".format(seq=fseq,subseq=subseq,subkey=subent,subkeyval=str(currval[subent]))
+                        print "- - - {seq}.{subseq}. {subkey} : {subkeyval}".format(seq=fseq, subseq=subseq, subkey=subent, subkeyval=str(currval[subent]))
             else:
-                print "- - {seq}. {key} : {keyval}".format(seq=fseq,key=off,keyval=str(currval))
+                print "- - {seq}. {key} : {keyval}".format(seq=fseq, key=off, keyval=str(currval))
 
 

@@ -27,7 +27,7 @@ handler = ProcSysInfo.GetProcFileHandler(target)
 
 if qualify != "":
     active = handler(qualify)
-    target = '{path}/{file}'.format(path=target,file=qualify)
+    target = '{path}/{file}'.format(path=target, file=qualify)
 else:
     active = handler()
 
@@ -53,8 +53,8 @@ for srec in active:
                     out = "{out}{sep}{keyval}".format(out=out, sep=sep, keyval=currval[subkey])
                 head = sep.join(currval)
                 print ""
-                print "{seq}{sep}Label{sep}{header}".format(seq=seq,sep=sep,header=head)
-                print "{seq}{sep}{label}{datalist}".format(seq=seq,sep=sep,label=key,datalist=out)
+                print "{seq}{sep}Label{sep}{header}".format(seq=seq, sep=sep, header=head)
+                print "{seq}{sep}{label}{datalist}".format(seq=seq, sep=sep, label=key, datalist=out)
 
         else:
             out = ""

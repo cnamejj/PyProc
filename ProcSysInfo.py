@@ -13,7 +13,7 @@ Describe what's in this module and put that info here...
 # 2 of the License, or (at your option) any later version.
 
 
-import time
+#import time
 import socket
 from subprocess import Popen, PIPE
 import binascii
@@ -350,6 +350,8 @@ F_NULL_HANDLER = "/dev/null"
 proc_file_handler_registry = dict()
 
 def GetProcFileHandler(proc_file):
+    """Lookup routine to find the code that knows how to parse the requested /proc/net/ datafile"""
+
     __handler = 0
     __append_list = ( "/proc", "/proc/", "/proc/net/" )
 
@@ -367,9 +369,13 @@ def GetProcFileHandler(proc_file):
     return __handler
 
 def RegisterProcFileHandler(proc_file, handler):
+    """Associate the given code object with a specific /proc/net datafile"""
+
     proc_file_handler_registry[proc_file] = handler
 
 def ShowProcFileHandlers():
+    """Print a list of all the known file to handler mappings"""
+
     for __file in proc_file_handler_registry:
         print "For " + __file + " use " + str(proc_file_handler_registry[__file])
 
@@ -378,7 +384,7 @@ def ShowProcFileHandlers():
 class ProcNetNULL:
     """Dummy class that just acts like reading from an empty file, returned as the handler
        for unrecognized files."""
-    def __init__(self, *opts):
+    def __init__(self):
         self.field = dict()
 
     def __iter__(self):
@@ -387,7 +393,6 @@ class ProcNetNULL:
     def next(self):
         raise StopIteration
 
-        return(self.field)
 #
 RegisterProcFileHandler(F_NULL_HANDLER, ProcNetNULL)
 
@@ -562,6 +567,10 @@ class ProcNetNF_CONNTRACK:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.linewords = 0
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/nf_conntrack", 14)
 
@@ -661,9 +670,9 @@ class ProcNetNF_CONNTRACK:
             self.field[F_DELTA_TIME] = 0
             self.field[F_USE] = 0
 
-	    self.field[F_L3_PROTOCOL] = str(self.lineparts[0])
+            self.field[F_L3_PROTOCOL] = str(self.lineparts[0])
             self.field[F_L3_PROTOCOL_NUM] = long(self.lineparts[1])
-	    self.field[F_PROTOCOL] = str(self.lineparts[2])
+            self.field[F_PROTOCOL] = str(self.lineparts[2])
             self.field[F_PROTOCOL_NUM] = long(self.lineparts[3])
             self.field[F_TIMEOUT] = long(self.lineparts[4])
 
@@ -815,6 +824,10 @@ class ProcNetIP_CONNTRACK:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.linewords = 0
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/ip_conntrack", 12)
 
@@ -904,7 +917,7 @@ class ProcNetIP_CONNTRACK:
             self.field[F_SECCTX] = 0
             self.field[F_USE] = 0
 
-	    self.field[F_PROTOCOL] = str(self.lineparts[0])
+            self.field[F_PROTOCOL] = str(self.lineparts[0])
             self.field[F_PROTOCOL_NUM] = long(self.lineparts[1])
             self.field[F_TIMEOUT] = long(self.lineparts[2])
 
@@ -1196,6 +1209,10 @@ class ProcNetIGMP:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.linewords = 0
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__MinWords_first = 5
         self.__MinWords_second = 4
@@ -1272,11 +1289,11 @@ class ProcNetIGMP:
                 self.field[F_REPORTER] = 0
 
             else:
-                self.field[F_GROUP] = long(self.lineparts[0],16)
+                self.field[F_GROUP] = long(self.lineparts[0], 16)
                 self.field[F_USERS] = long(self.lineparts[1])
                 __split = self.lineparts[2].partition(self.__FieldSplitDelim)
                 self.field[F_TIMER] = long(__split[0])
-                self.field[F_ZERO1] = long(__split[2],16)
+                self.field[F_ZERO1] = long(__split[2], 16)
                 self.field[F_REPORTER] = long(self.lineparts[3])
 
                 self.index = self.field[F_INDEX]
@@ -1304,6 +1321,9 @@ class ProcNetNetfilterNF_QUEUE:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/netfilter/nf_queue", 2)
 
@@ -1371,6 +1391,9 @@ class ProcNetNetfilterNF_LOG:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/netfilter/nf_log", 3)
 
@@ -1437,6 +1460,9 @@ class ProcNetNETLINK:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/netlink", 10, "sk")
 
@@ -1476,13 +1502,13 @@ class ProcNetNETLINK:
             self.field[F_INODE] = 0
 
         else:
-            self.field[F_SOCKET_POINTER] = long(self.lineparts[0],16)
+            self.field[F_SOCKET_POINTER] = long(self.lineparts[0], 16)
             self.field[F_PROTOCOL] = long(self.lineparts[1])
             self.field[F_PID] = long(self.lineparts[2])
-            self.field[F_GROUPS] = long(self.lineparts[3],16)
+            self.field[F_GROUPS] = long(self.lineparts[3], 16)
             self.field[F_RMEM_ALLOC] = long(self.lineparts[4])
             self.field[F_WMEM_ALLOC] = long(self.lineparts[5])
-            self.field[F_DUMP] = long(self.lineparts[6],16)
+            self.field[F_DUMP] = long(self.lineparts[6], 16)
             self.field[F_LOCKS] = long(self.lineparts[7])
             self.field[F_DROPS] = long(self.lineparts[8])
             self.field[F_INODE] = long(self.lineparts[9])
@@ -1512,6 +1538,9 @@ class ProcNetCONNECTOR:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/connector", 2, "Name")
         self.__FieldSplitDelim = ":"
@@ -1573,6 +1602,9 @@ class ProcNetPACKET:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/packet", 9, "sk")
 
@@ -1593,7 +1625,7 @@ class ProcNetPACKET:
             self.protocol = 0
             self.interface_index = 0
             self.running = 0
-	    self.rmem_alloc = 0
+            self.rmem_alloc = 0
             self.uid = 0
 
             self.field = dict()
@@ -1609,10 +1641,10 @@ class ProcNetPACKET:
             self.field[F_INODE] = 0
 
         else:
-            self.field[F_SOCKET_POINTER] = long(self.lineparts[0],16)
+            self.field[F_SOCKET_POINTER] = long(self.lineparts[0], 16)
             self.field[F_REFCOUNT] = long(self.lineparts[1])
             self.field[F_TYPE] = long(self.lineparts[2])
-            self.field[F_PROTOCOL] = long(self.lineparts[3],16)
+            self.field[F_PROTOCOL] = long(self.lineparts[3], 16)
             self.field[F_INT_INDEX] = long(self.lineparts[4])
             self.field[F_RUNNING] = long(self.lineparts[5])
             self.field[F_RMEM_ALLOC] = long(self.lineparts[6])
@@ -1623,7 +1655,7 @@ class ProcNetPACKET:
             self.protocol = self.field[F_PROTOCOL]
             self.interface_index = self.field[F_INT_INDEX]
             self.running = self.field[F_RUNNING]
-	    self.rmem_alloc = self.field[F_RMEM_ALLOC]
+            self.rmem_alloc = self.field[F_RMEM_ALLOC]
             self.uid = self.field[F_UID]
 
         return( self.type, self.protocol, self.interface_index, self.running, self.rmem_alloc, self.uid)
@@ -1669,6 +1701,9 @@ class ProcNetPROTOCOLS:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/protocols", 27, "protocol")
 
@@ -1718,7 +1753,7 @@ class ProcNetPROTOCOLS:
             self.field[F_RECVMSG] = ""
             self.field[F_SENDPAGE] = ""
             self.field[F_BIND] = ""
-            self.field[F_BACKLOG_RC] = ""
+            self.field[F_BACKLOG_RCV] = ""
             self.field[F_HASH] = ""
             self.field[F_UNHASH] = ""
             self.field[F_GET_PORT] = ""
@@ -1776,6 +1811,9 @@ class ProcNetSOFTNET_STAT:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/softnet_stat", 10)
 
@@ -1815,16 +1853,16 @@ class ProcNetSOFTNET_STAT:
             self.field[F_RECEIVED_RPS] = 0
 
         else:
-            self.field[F_PROCESSED] = long(self.lineparts[0],16)
-            self.field[F_DROPPED] = long(self.lineparts[1],16)
-            self.field[F_TIME_SQUEEZE] = long(self.lineparts[2],16)
-            self.field[F_ZERO1] = long(self.lineparts[3],16)
-            self.field[F_ZERO2] = long(self.lineparts[4],16)
-            self.field[F_ZERO3] = long(self.lineparts[5],16)
-            self.field[F_ZERO4] = long(self.lineparts[6],16)
-            self.field[F_ZERO5] = long(self.lineparts[7],16)
-            self.field[F_CPU_COLL] = long(self.lineparts[8],16)
-            self.field[F_RECEIVED_RPS] = long(self.lineparts[9],16)
+            self.field[F_PROCESSED] = long(self.lineparts[0], 16)
+            self.field[F_DROPPED] = long(self.lineparts[1], 16)
+            self.field[F_TIME_SQUEEZE] = long(self.lineparts[2], 16)
+            self.field[F_ZERO1] = long(self.lineparts[3], 16)
+            self.field[F_ZERO2] = long(self.lineparts[4], 16)
+            self.field[F_ZERO3] = long(self.lineparts[5], 16)
+            self.field[F_ZERO4] = long(self.lineparts[6], 16)
+            self.field[F_ZERO5] = long(self.lineparts[7], 16)
+            self.field[F_CPU_COLL] = long(self.lineparts[8], 16)
+            self.field[F_RECEIVED_RPS] = long(self.lineparts[9], 16)
 
             self.processed = self.field[F_PROCESSED]
             self.dropped = self.field[F_DROPPED]
@@ -1853,6 +1891,9 @@ class ProcNetRT6_STATS:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/rt6_stats", 7)
 
@@ -1886,13 +1927,13 @@ class ProcNetRT6_STATS:
             self.field[F_FIB_DISC_ROUTES] = 0
 
         else:
-            self.field[F_FIB_NODES] = long(self.lineparts[0],16)
-            self.field[F_FIB_ROUTE_NODES] = long(self.lineparts[1],16)
-            self.field[F_FIB_ROUTE_ALLOC] = long(self.lineparts[2],16)
-            self.field[F_FIB_ROUTE_ENTRIES] = long(self.lineparts[3],16)
-            self.field[F_FIB_ROUTE_CACHE] = long(self.lineparts[4],16)
-            self.field[F_FIB_DEST_OPS] = long(self.lineparts[5],16)
-            self.field[F_FIB_DISC_ROUTES] = long(self.lineparts[6],16)
+            self.field[F_FIB_NODES] = long(self.lineparts[0], 16)
+            self.field[F_FIB_ROUTE_NODES] = long(self.lineparts[1], 16)
+            self.field[F_FIB_ROUTE_ALLOC] = long(self.lineparts[2], 16)
+            self.field[F_FIB_ROUTE_ENTRIES] = long(self.lineparts[3], 16)
+            self.field[F_FIB_ROUTE_CACHE] = long(self.lineparts[4], 16)
+            self.field[F_FIB_DEST_OPS] = long(self.lineparts[5], 16)
+            self.field[F_FIB_DISC_ROUTES] = long(self.lineparts[6], 16)
 
             self.nodes = self.field[F_FIB_NODES] 
             self.route_nodes = self.field[F_FIB_ROUTE_NODES] 
@@ -1917,6 +1958,9 @@ class ProcNetPSCHED:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/psched", 4)
 
@@ -1945,10 +1989,10 @@ class ProcNetPSCHED:
             self.field[F_NSEC_PER_HRTIME] = 0
 
         else:
-            self.field[F_NSEC_PER_USEC] = long(self.lineparts[0],16)
-            self.field[F_PSCHED_TICKS] = long(self.lineparts[1],16)
-            self.field[F_UNKNOWN_FIELD] = long(self.lineparts[2],16)
-            self.field[F_NSEC_PER_HRTIME] = long(self.lineparts[3],16)
+            self.field[F_NSEC_PER_USEC] = long(self.lineparts[0], 16)
+            self.field[F_PSCHED_TICKS] = long(self.lineparts[1], 16)
+            self.field[F_UNKNOWN_FIELD] = long(self.lineparts[2], 16)
+            self.field[F_NSEC_PER_HRTIME] = long(self.lineparts[3], 16)
 
             self.nsec_per_usec = self.field[F_NSEC_PER_USEC] 
             self.psched_ticks = self.field[F_PSCHED_TICKS] 
@@ -1986,6 +2030,9 @@ class ProcNetIPV6_ROUTE:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/ipv6_route", 10)
         self.ipconv = IPAddressConv()
@@ -2036,16 +2083,16 @@ class ProcNetIPV6_ROUTE:
             self.field[F_SRCE_HEXIP] = str(self.lineparts[2])
             self.field[F_SRCE_PREFIX_LEN_HEX] = str(self.lineparts[3])
             self.field[F_PRIMARY_KEY] = str(self.lineparts[4])
-            self.field[F_RT6I_METRIC] = long(self.lineparts[5],16)
-            self.field[F_DEST_REFCOUNT] = long(self.lineparts[6],16)
-            self.field[F_DEST_USE] = long(self.lineparts[7],16)
+            self.field[F_RT6I_METRIC] = long(self.lineparts[5], 16)
+            self.field[F_DEST_REFCOUNT] = long(self.lineparts[6], 16)
+            self.field[F_DEST_USE] = long(self.lineparts[7], 16)
             self.field[F_RT6I_FLAGS] = str(self.lineparts[8])
             self.field[F_DEVICE] = str(self.lineparts[9])
 
             self.field[F_DEST_IP] = self.ipconv.ipv6_hexstring_to_presentation(self.field[F_DEST_HEXIP])
-            self.field[F_DEST_PREFIX_LEN] = long(self.field[F_DEST_PREFIX_LEN_HEX],16)
+            self.field[F_DEST_PREFIX_LEN] = long(self.field[F_DEST_PREFIX_LEN_HEX], 16)
             self.field[F_SOURCE] = self.ipconv.ipv6_hexstring_to_presentation(self.field[F_SRCE_HEXIP])
-            self.field[F_SRCE_PREFIX_LEN] = long(self.field[F_SRCE_PREFIX_LEN_HEX],16)
+            self.field[F_SRCE_PREFIX_LEN] = long(self.field[F_SRCE_PREFIX_LEN_HEX], 16)
 
             self.dest_ip = self.field[F_DEST_IP] 
             self.dest_pref_len = self.field[F_DEST_PREFIX_LEN]
@@ -2074,6 +2121,9 @@ class ProcNetIGMP6:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/igmp6", 6)
         self.ipconv = IPAddressConv()
@@ -2140,6 +2190,9 @@ class ProcNetDEV_MCAST:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/dev_mcast", 5)
 
@@ -2201,6 +2254,9 @@ class ProcNetIF_INET6:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/if_inet6", 6)
         self.ipconv = IPAddressConv()
@@ -2242,13 +2298,13 @@ class ProcNetIF_INET6:
         else:
             self.field[F_IPV6_HEX] = str(self.lineparts[0])
             self.field[F_INT_INDEX_HEX] = str(self.lineparts[1])
-            self.field[F_INT_INDEX] = long(self.lineparts[1],16)
+            self.field[F_INT_INDEX] = long(self.lineparts[1], 16)
             self.field[F_PREFIX_LEN_HEX] = str(self.lineparts[2])
-            self.field[F_PREFIX_LEN_HEX] = long(self.lineparts[2],16)
+            self.field[F_PREFIX_LEN_HEX] = long(self.lineparts[2], 16)
             self.field[F_SCOPE_HEX] = str(self.lineparts[3])
-            self.field[F_SCOPE] = long(self.lineparts[3],16)
+            self.field[F_SCOPE] = long(self.lineparts[3], 16)
             self.field[F_FLAGS_HEX] = str(self.lineparts[4])
-            self.field[F_FLAGS] = long(self.lineparts[4],16)
+            self.field[F_FLAGS] = long(self.lineparts[4], 16)
             self.field[F_DEVICE] = self.lineparts[5]
             self.field[F_IPV6] = self.ipconv.ipv6_hexstring_to_presentation(str(self.lineparts[0]))
 
@@ -2296,6 +2352,11 @@ class ProcNetUNIX:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+        self.MinWords = 7
+        self.linewords = 0
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/unix", 7, "Num")
 
@@ -2336,12 +2397,12 @@ class ProcNetUNIX:
             __seq = self.lineparts[0]
             if __seq[-1:] == ":":
                 __seq = __seq[:-1]
-            self.field[F_NUM] = long(__seq,16)
-            self.field[F_REFCOUNT] = long(self.lineparts[1],16)
-            self.field[F_PROTOCOL] = long(self.lineparts[2],16)
-            self.field[F_FLAGS] = long(self.lineparts[3],16)
-            self.field[F_TYPE] = long(self.lineparts[4],16)
-            self.field[F_STATE] = long(self.lineparts[5],16)
+            self.field[F_NUM] = long(__seq, 16)
+            self.field[F_REFCOUNT] = long(self.lineparts[1], 16)
+            self.field[F_PROTOCOL] = long(self.lineparts[2], 16)
+            self.field[F_FLAGS] = long(self.lineparts[3], 16)
+            self.field[F_TYPE] = long(self.lineparts[4], 16)
+            self.field[F_STATE] = long(self.lineparts[5], 16)
             self.field[F_INODE] = long(self.lineparts[6])
             if self.linewords > self.MinWords:
                 self.field[F_PATH] = self.lineparts[7]
@@ -2391,6 +2452,9 @@ class ProcNetStatRT_CACHE:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/stat/rt_cache", 17, "entries")
 
@@ -2434,23 +2498,23 @@ class ProcNetStatRT_CACHE:
             self.field[F_OUT_HL_SEARCH] = 0
     
         else:
-            self.field[F_ENTRIES] = long(self.lineparts[0],16)
-            self.field[F_IN_HIT] = long(self.lineparts[1],16)
-            self.field[F_IN_SLOW_TOT] = long(self.lineparts[2],16)
-            self.field[F_IN_SLOW_MC] = long(self.lineparts[3],16)
-            self.field[F_IN_NO_ROUTE] = long(self.lineparts[4],16)
-            self.field[F_IN_BRD] = long(self.lineparts[5],16)
-            self.field[F_IN_MARTIAN_DST] = long(self.lineparts[6],16)
-            self.field[F_IN_MARTIAN_SRC] = long(self.lineparts[7],16)
-            self.field[F_OUT_HIT] = long(self.lineparts[8],16)
-            self.field[F_OUT_SLOW_TOT] = long(self.lineparts[9],16)
-            self.field[F_OUT_SLOW_MC] = long(self.lineparts[10],16)
-            self.field[F_GC_TOTAL] = long(self.lineparts[11],16)
-            self.field[F_GC_IGNORED] = long(self.lineparts[12],16)
-            self.field[F_GC_GOAL_MISS] = long(self.lineparts[13],16)
-            self.field[F_GC_DST_OVERFLOW] = long(self.lineparts[14],16)
-            self.field[F_IN_HL_SEARCH] = long(self.lineparts[15],16)
-            self.field[F_OUT_HL_SEARCH] = long(self.lineparts[16],16)
+            self.field[F_ENTRIES] = long(self.lineparts[0], 16)
+            self.field[F_IN_HIT] = long(self.lineparts[1], 16)
+            self.field[F_IN_SLOW_TOT] = long(self.lineparts[2], 16)
+            self.field[F_IN_SLOW_MC] = long(self.lineparts[3], 16)
+            self.field[F_IN_NO_ROUTE] = long(self.lineparts[4], 16)
+            self.field[F_IN_BRD] = long(self.lineparts[5], 16)
+            self.field[F_IN_MARTIAN_DST] = long(self.lineparts[6], 16)
+            self.field[F_IN_MARTIAN_SRC] = long(self.lineparts[7], 16)
+            self.field[F_OUT_HIT] = long(self.lineparts[8], 16)
+            self.field[F_OUT_SLOW_TOT] = long(self.lineparts[9], 16)
+            self.field[F_OUT_SLOW_MC] = long(self.lineparts[10], 16)
+            self.field[F_GC_TOTAL] = long(self.lineparts[11], 16)
+            self.field[F_GC_IGNORED] = long(self.lineparts[12], 16)
+            self.field[F_GC_GOAL_MISS] = long(self.lineparts[13], 16)
+            self.field[F_GC_DST_OVERFLOW] = long(self.lineparts[14], 16)
+            self.field[F_IN_HL_SEARCH] = long(self.lineparts[15], 16)
+            self.field[F_OUT_HL_SEARCH] = long(self.lineparts[16], 16)
 
             self.entries = self.field[F_ENTRIES]
             self.in_hit = self.field[F_IN_HIT]
@@ -2487,6 +2551,9 @@ class ProcNetStatNDISC_CACHE:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/stat/ndisc_cache", 12, "entries")
 
@@ -2524,18 +2591,18 @@ class ProcNetStatNDISC_CACHE:
             self.field[F_UNRES_DISCARD] = 0
     
         else:
-            self.field[F_ARP_ENTRIES] = long(self.lineparts[0],16)
-            self.field[F_ALLOC] = long(self.lineparts[1],16)
-            self.field[F_DESTROY] = long(self.lineparts[2],16)
-            self.field[F_HASH_GROW] = long(self.lineparts[3],16)
-            self.field[F_LOOKUP] = long(self.lineparts[4],16)
-            self.field[F_HIT] = long(self.lineparts[5],16)
-            self.field[F_RES_FAIL] = long(self.lineparts[6],16)
-            self.field[F_RCV_MCAST_PROBE] = long(self.lineparts[7],16)
-            self.field[F_RCV_UCAST_PROBE] = long(self.lineparts[8],16)
-            self.field[F_GC_PERIODIC] = long(self.lineparts[9],16)
-            self.field[F_GC_FORCED] = long(self.lineparts[10],16)
-            self.field[F_UNRES_DISCARD] = long(self.lineparts[11],16)
+            self.field[F_ARP_ENTRIES] = long(self.lineparts[0], 16)
+            self.field[F_ALLOC] = long(self.lineparts[1], 16)
+            self.field[F_DESTROY] = long(self.lineparts[2], 16)
+            self.field[F_HASH_GROW] = long(self.lineparts[3], 16)
+            self.field[F_LOOKUP] = long(self.lineparts[4], 16)
+            self.field[F_HIT] = long(self.lineparts[5], 16)
+            self.field[F_RES_FAIL] = long(self.lineparts[6], 16)
+            self.field[F_RCV_MCAST_PROBE] = long(self.lineparts[7], 16)
+            self.field[F_RCV_UCAST_PROBE] = long(self.lineparts[8], 16)
+            self.field[F_GC_PERIODIC] = long(self.lineparts[9], 16)
+            self.field[F_GC_FORCED] = long(self.lineparts[10], 16)
+            self.field[F_UNRES_DISCARD] = long(self.lineparts[11], 16)
 
             self.entries = self.field[F_ARP_ENTRIES]
             self.lookups = self.field[F_LOOKUP]
@@ -2574,6 +2641,9 @@ class ProcNetStatNF_CONNTRACK:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/stat/nf_conntrack", 17, "entries")
 
@@ -2621,23 +2691,23 @@ class ProcNetStatNF_CONNTRACK:
             self.field[F_SEARCH_RESTART] = 0
 
         else:
-            self.field[F_ENTRIES] = long(self.lineparts[0],16)
-            self.field[F_SEARCHED] = long(self.lineparts[1],16)
-            self.field[F_FOUND] = long(self.lineparts[2],16)
-            self.field[F_NEW] = long(self.lineparts[3],16)
-            self.field[F_INVALID] = long(self.lineparts[4],16)
-            self.field[F_IGNORE] = long(self.lineparts[5],16)
-            self.field[F_DELETE] = long(self.lineparts[6],16)
-            self.field[F_DELETE_LIST] = long(self.lineparts[7],16)
-            self.field[F_INSERT] = long(self.lineparts[8],16)
-            self.field[F_INSERT_FAILED] = long(self.lineparts[9],16)
-            self.field[F_DROP] = long(self.lineparts[10],16)
-            self.field[F_DROP_EARLY] = long(self.lineparts[11],16)
-            self.field[F_ICMP_ERROR] = long(self.lineparts[12],16)
-            self.field[F_EXP_NEW] = long(self.lineparts[13],16)
-            self.field[F_EXP_CREATE] = long(self.lineparts[14],16)
-            self.field[F_EXP_DELETE] = long(self.lineparts[15],16)
-            self.field[F_SEARCH_RESTART] = long(self.lineparts[16],16)
+            self.field[F_ENTRIES] = long(self.lineparts[0], 16)
+            self.field[F_SEARCHED] = long(self.lineparts[1], 16)
+            self.field[F_FOUND] = long(self.lineparts[2], 16)
+            self.field[F_NEW] = long(self.lineparts[3], 16)
+            self.field[F_INVALID] = long(self.lineparts[4], 16)
+            self.field[F_IGNORE] = long(self.lineparts[5], 16)
+            self.field[F_DELETE] = long(self.lineparts[6], 16)
+            self.field[F_DELETE_LIST] = long(self.lineparts[7], 16)
+            self.field[F_INSERT] = long(self.lineparts[8], 16)
+            self.field[F_INSERT_FAILED] = long(self.lineparts[9], 16)
+            self.field[F_DROP] = long(self.lineparts[10], 16)
+            self.field[F_DROP_EARLY] = long(self.lineparts[11], 16)
+            self.field[F_ICMP_ERROR] = long(self.lineparts[12], 16)
+            self.field[F_EXP_NEW] = long(self.lineparts[13], 16)
+            self.field[F_EXP_CREATE] = long(self.lineparts[14], 16)
+            self.field[F_EXP_DELETE] = long(self.lineparts[15], 16)
+            self.field[F_SEARCH_RESTART] = long(self.lineparts[16], 16)
 
             self.entries = self.field[F_ENTRIES]
             self.searched = self.field[F_SEARCHED]
@@ -2682,6 +2752,9 @@ class ProcNetStatIP_CONNTRACK:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/stat/ip_conntrack", 17, "entries")
 
@@ -2729,23 +2802,23 @@ class ProcNetStatIP_CONNTRACK:
             self.field[F_SEARCH_RESTART] = 0
 
         else:
-            self.field[F_ENTRIES] = long(self.lineparts[0],16)
-            self.field[F_SEARCHED] = long(self.lineparts[1],16)
-            self.field[F_FOUND] = long(self.lineparts[2],16)
-            self.field[F_NEW] = long(self.lineparts[3],16)
-            self.field[F_INVALID] = long(self.lineparts[4],16)
-            self.field[F_IGNORE] = long(self.lineparts[5],16)
-            self.field[F_DELETE] = long(self.lineparts[6],16)
-            self.field[F_DELETE_LIST] = long(self.lineparts[7],16)
-            self.field[F_INSERT] = long(self.lineparts[8],16)
-            self.field[F_INSERT_FAILED] = long(self.lineparts[9],16)
-            self.field[F_DROP] = long(self.lineparts[10],16)
-            self.field[F_DROP_EARLY] = long(self.lineparts[11],16)
-            self.field[F_ICMP_ERROR] = long(self.lineparts[12],16)
-            self.field[F_EXP_NEW] = long(self.lineparts[13],16)
-            self.field[F_EXP_CREATE] = long(self.lineparts[14],16)
-            self.field[F_EXP_DELETE] = long(self.lineparts[15],16)
-            self.field[F_SEARCH_RESTART] = long(self.lineparts[16],16)
+            self.field[F_ENTRIES] = long(self.lineparts[0], 16)
+            self.field[F_SEARCHED] = long(self.lineparts[1], 16)
+            self.field[F_FOUND] = long(self.lineparts[2], 16)
+            self.field[F_NEW] = long(self.lineparts[3], 16)
+            self.field[F_INVALID] = long(self.lineparts[4], 16)
+            self.field[F_IGNORE] = long(self.lineparts[5], 16)
+            self.field[F_DELETE] = long(self.lineparts[6], 16)
+            self.field[F_DELETE_LIST] = long(self.lineparts[7], 16)
+            self.field[F_INSERT] = long(self.lineparts[8], 16)
+            self.field[F_INSERT_FAILED] = long(self.lineparts[9], 16)
+            self.field[F_DROP] = long(self.lineparts[10], 16)
+            self.field[F_DROP_EARLY] = long(self.lineparts[11], 16)
+            self.field[F_ICMP_ERROR] = long(self.lineparts[12], 16)
+            self.field[F_EXP_NEW] = long(self.lineparts[13], 16)
+            self.field[F_EXP_CREATE] = long(self.lineparts[14], 16)
+            self.field[F_EXP_DELETE] = long(self.lineparts[15], 16)
+            self.field[F_SEARCH_RESTART] = long(self.lineparts[16], 16)
 
             self.entries = self.field[F_ENTRIES]
             self.searched = self.field[F_SEARCHED]
@@ -2785,6 +2858,9 @@ class ProcNetStatARP_CACHE:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/stat/arp_cache", 12, "entries")
 
@@ -2822,18 +2898,18 @@ class ProcNetStatARP_CACHE:
             self.field[F_UNRES_DISCARD] = 0
     
         else:
-            self.field[F_ARP_ENTRIES] = long(self.lineparts[0],16)
-            self.field[F_ALLOC] = long(self.lineparts[1],16)
-            self.field[F_DESTROY] = long(self.lineparts[2],16)
-            self.field[F_HASH_GROW] = long(self.lineparts[3],16)
-            self.field[F_LOOKUP] = long(self.lineparts[4],16)
-            self.field[F_HIT] = long(self.lineparts[5],16)
-            self.field[F_RES_FAIL] = long(self.lineparts[6],16)
-            self.field[F_RCV_MCAST_PROBE] = long(self.lineparts[7],16)
-            self.field[F_RCV_UCAST_PROBE] = long(self.lineparts[8],16)
-            self.field[F_GC_PERIODIC] = long(self.lineparts[9],16)
-            self.field[F_GC_FORCED] = long(self.lineparts[10],16)
-            self.field[F_UNRES_DISCARD] = long(self.lineparts[11],16)
+            self.field[F_ARP_ENTRIES] = long(self.lineparts[0], 16)
+            self.field[F_ALLOC] = long(self.lineparts[1], 16)
+            self.field[F_DESTROY] = long(self.lineparts[2], 16)
+            self.field[F_HASH_GROW] = long(self.lineparts[3], 16)
+            self.field[F_LOOKUP] = long(self.lineparts[4], 16)
+            self.field[F_HIT] = long(self.lineparts[5], 16)
+            self.field[F_RES_FAIL] = long(self.lineparts[6], 16)
+            self.field[F_RCV_MCAST_PROBE] = long(self.lineparts[7], 16)
+            self.field[F_RCV_UCAST_PROBE] = long(self.lineparts[8], 16)
+            self.field[F_GC_PERIODIC] = long(self.lineparts[9], 16)
+            self.field[F_GC_FORCED] = long(self.lineparts[10], 16)
+            self.field[F_UNRES_DISCARD] = long(self.lineparts[11], 16)
 
             self.entries = self.field[F_ARP_ENTRIES]
             self.lookups = self.field[F_LOOKUP]
@@ -2868,6 +2944,9 @@ class ProcNetRT_CACHE:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/rt_cache", 15, "Iface")
         self.ipconv = IPAddressConv()
@@ -2921,7 +3000,7 @@ class ProcNetRT_CACHE:
             self.field[F_INTERFACE] = self.lineparts[0]
             self.field[F_DEST_HEXIP] = str(self.lineparts[1])
             self.field[F_GATE_HEXIP] = str(self.lineparts[2])
-            self.field[F_FLAGS] = long(self.lineparts[3],16)
+            self.field[F_FLAGS] = long(self.lineparts[3], 16)
             self.field[F_REFCOUNT] = long(self.lineparts[4])
             self.field[F_USECOUNT] = long(self.lineparts[5])
             self.field[F_METRIC] = long(self.lineparts[6])
@@ -2929,22 +3008,22 @@ class ProcNetRT_CACHE:
             self.field[F_MTU] = long(self.lineparts[8])
             self.field[F_WINDOW] = long(self.lineparts[9])
             self.field[F_IRTT] = long(self.lineparts[10])
-            self.field[F_TOS] = long(self.lineparts[11],16)
+            self.field[F_TOS] = long(self.lineparts[11], 16)
             self.field[F_HHREF] = long(self.lineparts[12])
             self.field[F_HHUPTOD] = long(self.lineparts[13])
             self.field[F_SPEC_HEXIP] = str(self.lineparts[14])
 
             __hexip = self.field[F_DEST_HEXIP]
-            self.field[F_DEST_IP] = socket.inet_ntop(socket.AF_INET,binascii.unhexlify('{0:08x}'.format(socket.htonl(long(__hexip,16)))))
+            self.field[F_DEST_IP] = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(__hexip, 16)))))
 
             __hexip = self.field[F_GATE_HEXIP]
-            self.field[F_GATEWAY] = socket.inet_ntop(socket.AF_INET,binascii.unhexlify('{0:08x}'.format(socket.htonl(long(__hexip,16)))))
+            self.field[F_GATEWAY] = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(__hexip, 16)))))
 
             __hexip = self.field[F_SRCE_HEXIP]
-            self.field[F_SOURCE] = socket.inet_ntop(socket.AF_INET,binascii.unhexlify('{0:08x}'.format(socket.htonl(long(__hexip,16)))))
+            self.field[F_SOURCE] = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(__hexip, 16)))))
 
             __hexip = self.field[F_SPEC_HEXIP]
-            self.field[F_SPEC_DST] = socket.inet_ntop(socket.AF_INET,binascii.unhexlify('{0:08x}'.format(socket.htonl(long(__hexip,16)))))
+            self.field[F_SPEC_DST] = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(__hexip, 16)))))
 
             self.interface = self.field[F_INTERFACE]
             self.destination = self.field[F_DEST_IP]
@@ -2986,6 +3065,9 @@ class ProcNetROUTE:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/route", 11, "Iface")
 
@@ -3029,7 +3111,7 @@ class ProcNetROUTE:
             self.field[F_INTERFACE] = self.lineparts[0]
             self.field[F_DEST_HEXIP] = str(self.lineparts[1])
             self.field[F_GATE_HEXIP] = str(self.lineparts[2])
-            self.field[F_FLAGS] = long(self.lineparts[3],16)
+            self.field[F_FLAGS] = long(self.lineparts[3], 16)
             self.field[F_REFCOUNT] = long(self.lineparts[4])
             self.field[F_USECOUNT] = long(self.lineparts[5])
             self.field[F_METRIC] = long(self.lineparts[6])
@@ -3039,13 +3121,13 @@ class ProcNetROUTE:
             self.field[F_IRTT] = long(self.lineparts[10])
 
             __hexip = self.field[F_DEST_HEXIP]
-            self.field[F_DEST_IP] = socket.inet_ntop(socket.AF_INET,binascii.unhexlify('{0:08x}'.format(socket.htonl(long(__hexip,16)))))
+            self.field[F_DEST_IP] = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(__hexip, 16)))))
 
             __hexip = self.field[F_GATE_HEXIP]
-            self.field[F_GATEWAY] = socket.inet_ntop(socket.AF_INET,binascii.unhexlify('{0:08x}'.format(socket.htonl(long(__hexip,16)))))
+            self.field[F_GATEWAY] = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(__hexip, 16)))))
 
             __hexip = self.field[F_MASK_HEXIP]
-            self.field[F_NETMASK] = socket.inet_ntop(socket.AF_INET,binascii.unhexlify('{0:08x}'.format(socket.htonl(long(__hexip,16)))))
+            self.field[F_NETMASK] = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(__hexip, 16)))))
 
             self.interface = self.field[F_INTERFACE]
             self.destination = self.field[F_DEST_IP]
@@ -3082,6 +3164,9 @@ class ProcNetDEV:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/dev", 17, "face")
 
@@ -3168,6 +3253,9 @@ class ProcNetARP:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/arp", 6, "IP")
 
@@ -3200,8 +3288,8 @@ class ProcNetARP:
 
         else:
             self.field[F_IP_ADDRESS] = self.lineparts[0]
-            self.field[F_HW_TYPE] = long(self.lineparts[1],16)
-            self.field[F_FLAGS] = long(self.lineparts[2],16)
+            self.field[F_HW_TYPE] = long(self.lineparts[1], 16)
+            self.field[F_FLAGS] = long(self.lineparts[2], 16)
             self.field[F_HW_ADDRESS] = self.lineparts[3]
             self.field[F_MASK] = self.lineparts[4]
             self.field[F_DEVICE] = self.lineparts[5]
@@ -3239,6 +3327,9 @@ class ProcNetUDP6:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/udp6", 12, "sl")
         self.__FieldSplitDelim = ":"
@@ -3294,8 +3385,8 @@ class ProcNetUDP6:
             self.orig_ip = self.ipconv.ipv6_hexstring_to_presentation(self.orig_hexip)
             self.dest_ip = self.ipconv.ipv6_hexstring_to_presentation(self.dest_hexip)
 
-            self.orig_port = long(self.lineparts[1].partition(self.__FieldSplitDelim)[2],16)
-            self.dest_port = long(self.lineparts[2].partition(self.__FieldSplitDelim)[2],16)
+            self.orig_port = long(self.lineparts[1].partition(self.__FieldSplitDelim)[2], 16)
+            self.dest_port = long(self.lineparts[2].partition(self.__FieldSplitDelim)[2], 16)
 
             if self.lineparts[3] in state_list:
                 self.state = state_list[self.lineparts[3]]
@@ -3312,16 +3403,16 @@ class ProcNetUDP6:
             self.field[F_DEST_PORT] = self.dest_port
             self.field[F_HEXSTATE] = str(self.lineparts[3])
             self.field[F_STATE] = self.state
-            self.field[F_TXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[0],16)
-            self.field[F_RXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[2],16)
-            self.field[F_TIMER] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[0],16)
-            self.field[F_TIMER_WHEN] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[2],16)
-            self.field[F_RETRANS] = long(self.lineparts[6],16)
+            self.field[F_TXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[0], 16)
+            self.field[F_RXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[2], 16)
+            self.field[F_TIMER] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[0], 16)
+            self.field[F_TIMER_WHEN] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[2], 16)
+            self.field[F_RETRANS] = long(self.lineparts[6], 16)
             self.field[F_UID] = long(self.lineparts[7])
             self.field[F_TIMEOUT] = long(self.lineparts[8])
             self.field[F_INODE] = long(self.lineparts[9])
             self.field[F_REFCOUNT] = long(self.lineparts[10])
-            self.field[F_POINTER] = long(self.lineparts[11],16)
+            self.field[F_POINTER] = long(self.lineparts[11], 16)
             self.field[F_DROPS] = long(self.lineparts[12])
 
 #        print "dbg::(" + self.buff[:-1] + ")"
@@ -3346,6 +3437,9 @@ class ProcNetUDP:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/udp", 12, "sl")
         self.__FieldSplitDelim = ":"
@@ -3398,11 +3492,11 @@ class ProcNetUDP:
             self.orig_hexport = str(self.lineparts[1].partition(self.__FieldSplitDelim)[2])
             self.dest_hexport = str(self.lineparts[2].partition(self.__FieldSplitDelim)[2])
 
-            self.orig_ip = socket.inet_ntop(socket.AF_INET,binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.orig_hexip,16)))))
-            self.dest_ip = socket.inet_ntop(socket.AF_INET,binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.dest_hexip,16)))))
+            self.orig_ip = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.orig_hexip, 16)))))
+            self.dest_ip = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.dest_hexip, 16)))))
 
-            self.orig_port = long(self.lineparts[1].partition(self.__FieldSplitDelim)[2],16)
-            self.dest_port = long(self.lineparts[2].partition(self.__FieldSplitDelim)[2],16)
+            self.orig_port = long(self.lineparts[1].partition(self.__FieldSplitDelim)[2], 16)
+            self.dest_port = long(self.lineparts[2].partition(self.__FieldSplitDelim)[2], 16)
 
             if self.lineparts[3] in state_list:
                 self.state = state_list[self.lineparts[3]]
@@ -3419,16 +3513,16 @@ class ProcNetUDP:
             self.field[F_DEST_PORT] = self.dest_port
             self.field[F_HEXSTATE] = str(self.lineparts[3])
             self.field[F_STATE] = self.state
-            self.field[F_TXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[0],16)
-            self.field[F_RXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[2],16)
-            self.field[F_TIMER] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[0],16)
-            self.field[F_TIMER_WHEN] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[2],16)
-            self.field[F_RETRANS] = long(self.lineparts[6],16)
+            self.field[F_TXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[0], 16)
+            self.field[F_RXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[2], 16)
+            self.field[F_TIMER] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[0], 16)
+            self.field[F_TIMER_WHEN] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[2], 16)
+            self.field[F_RETRANS] = long(self.lineparts[6], 16)
             self.field[F_UID] = long(self.lineparts[7])
             self.field[F_TIMEOUT] = long(self.lineparts[8])
             self.field[F_INODE] = long(self.lineparts[9])
             self.field[F_REFCOUNT] = long(self.lineparts[10])
-            self.field[F_POINTER] = long(self.lineparts[11],16)
+            self.field[F_POINTER] = long(self.lineparts[11], 16)
             self.field[F_DROPS] = long(self.lineparts[12])
 
 
@@ -3470,6 +3564,10 @@ class ProcNetTCP:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+        self.linewords = 0
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/tcp", 12, "sl")
         self.__FieldSplitDelim = ":"
@@ -3526,11 +3624,11 @@ class ProcNetTCP:
             self.orig_hexport = str(self.lineparts[1].partition(self.__FieldSplitDelim)[2])
             self.dest_hexport = str(self.lineparts[2].partition(self.__FieldSplitDelim)[2])
 
-            self.orig_ip = socket.inet_ntop(socket.AF_INET,binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.orig_hexip,16)))))
-            self.dest_ip = socket.inet_ntop(socket.AF_INET,binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.dest_hexip,16)))))
+            self.orig_ip = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.orig_hexip, 16)))))
+            self.dest_ip = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.dest_hexip, 16)))))
 
-            self.orig_port = long(self.lineparts[1].partition(self.__FieldSplitDelim)[2],16)
-            self.dest_port = long(self.lineparts[2].partition(self.__FieldSplitDelim)[2],16)
+            self.orig_port = long(self.lineparts[1].partition(self.__FieldSplitDelim)[2], 16)
+            self.dest_port = long(self.lineparts[2].partition(self.__FieldSplitDelim)[2], 16)
 
             if self.lineparts[3] in state_list:
                 self.state = state_list[self.lineparts[3]]
@@ -3547,16 +3645,16 @@ class ProcNetTCP:
             self.field[F_DEST_PORT] = self.dest_port
             self.field[F_HEXSTATE] = str(self.lineparts[3])
             self.field[F_STATE] = self.state
-            self.field[F_TXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[0],16)
-            self.field[F_RXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[2],16)
-            self.field[F_TIMER] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[0],16)
-            self.field[F_TIMER_WHEN] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[2],16)
-            self.field[F_RETRANS] = long(self.lineparts[6],16)
+            self.field[F_TXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[0], 16)
+            self.field[F_RXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[2], 16)
+            self.field[F_TIMER] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[0], 16)
+            self.field[F_TIMER_WHEN] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[2], 16)
+            self.field[F_RETRANS] = long(self.lineparts[6], 16)
             self.field[F_UID] = long(self.lineparts[7])
             self.field[F_TIMEOUT] = long(self.lineparts[8])
             self.field[F_INODE] = long(self.lineparts[9])
             self.field[F_REFCOUNT] = long(self.lineparts[10])
-            self.field[F_POINTER] = long(self.lineparts[11],16)
+            self.field[F_POINTER] = long(self.lineparts[11], 16)
 
             if self.linewords == 17:
                 self.field[F_RETRY_TIMEOUT] = long(self.lineparts[12])
@@ -3612,6 +3710,10 @@ class ProcNetTCP6:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+        self.linewords = 0
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/tcp6", 12, "sl")
         self.__FieldSplitDelim = ":"
@@ -3670,8 +3772,8 @@ class ProcNetTCP6:
             self.orig_ip = self.ipconv.ipv6_hexstring_to_presentation(self.orig_hexip)
             self.dest_ip = self.ipconv.ipv6_hexstring_to_presentation(self.dest_hexip)
 
-            self.orig_port = long(self.lineparts[1].partition(self.__FieldSplitDelim)[2],16)
-            self.dest_port = long(self.lineparts[2].partition(self.__FieldSplitDelim)[2],16)
+            self.orig_port = long(self.lineparts[1].partition(self.__FieldSplitDelim)[2], 16)
+            self.dest_port = long(self.lineparts[2].partition(self.__FieldSplitDelim)[2], 16)
 
             if self.lineparts[3] in state_list:
                 self.state = state_list[self.lineparts[3]]
@@ -3688,16 +3790,16 @@ class ProcNetTCP6:
             self.field[F_DEST_PORT] = self.dest_port
             self.field[F_HEXSTATE] = str(self.lineparts[3])
             self.field[F_STATE] = self.state
-            self.field[F_TXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[0],16)
-            self.field[F_RXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[2],16)
-            self.field[F_TIMER] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[0],16)
-            self.field[F_TIMER_WHEN] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[2],16)
-            self.field[F_RETRANS] = long(self.lineparts[6],16)
+            self.field[F_TXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[0], 16)
+            self.field[F_RXQUEUE] = long(self.lineparts[4].partition(self.__FieldSplitDelim)[2], 16)
+            self.field[F_TIMER] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[0], 16)
+            self.field[F_TIMER_WHEN] = long(self.lineparts[5].partition(self.__FieldSplitDelim)[2], 16)
+            self.field[F_RETRANS] = long(self.lineparts[6], 16)
             self.field[F_UID] = long(self.lineparts[7])
             self.field[F_TIMEOUT] = long(self.lineparts[8])
             self.field[F_INODE] = long(self.lineparts[9])
             self.field[F_REFCOUNT] = long(self.lineparts[10])
-            self.field[F_POINTER] = long(self.lineparts[11],16)
+            self.field[F_POINTER] = long(self.lineparts[11], 16)
 
             if self.linewords == 17:
                 self.field[F_RETRY_TIMEOUT] = long(self.lineparts[12])
@@ -3789,6 +3891,9 @@ class ProcNetSOCKSTAT6:
 
     def __init__(self):
         self.field = dict()
+        self.lineparts = dict()
+        self.buff = ""
+
         self.sio = SeqFileIO()
         self.sio.open_file(self, "/proc/net/sockstat6", 1)
         self.__sock_type_list = ([ F_SOCK_TCP6, F_SOCK_UDP6, F_SOCK_UDPLITE6, F_SOCK_RAW6, F_SOCK_FRAG6 ])
@@ -3838,6 +3943,8 @@ class ProcNetPTYPE:
 
     def __init__(self):
         self.field = dict()
+        self.buff = ""
+
         self.__sio = SeqFileIO()
         self.__sio.open_file(self, "/proc/net/ptype", 2, "Type")
 
@@ -3874,7 +3981,7 @@ class ProcNetPTYPE:
         else:
             self.device_type = self.buff[0:4]
             if self.device_type != "ALL ":
-                self.device_type = long(self.buff[0:4],16)
+                self.device_type = long(self.buff[0:4], 16)
             self.device_name = str(self.buff[5:13])
             self.device_function = str(self.buff[14:-1])
 
@@ -4106,7 +4213,7 @@ class IPAddressConv:
         self.__DelimIPV6 = ":"
 
     def ipv6_hexdelimited_to_presentation(self, hexdelim):
-        return socket.inet_ntop(socket.AF_INET6,socket.inet_pton(socket.AF_INET6,hexdelim))
+        return socket.inet_ntop(socket.AF_INET6, socket.inet_pton(socket.AF_INET6, hexdelim))
 
     def ipv6_hexstring_to_presentation(self, hexip):
         __delim = ""
@@ -4117,10 +4224,10 @@ class IPAddressConv:
             __sep = self.__DelimIPV6
 
             __chunk = hexip[ __off * 8: (__off + 1) * 8 ]
-            __net_hex = '{0:08x}'.format(struct.unpack("!L",struct.pack("=L",int(__chunk,16)))[0])
+            __net_hex = '{0:08x}'.format(struct.unpack("!L", struct.pack("=L", int(__chunk, 16)))[0])
             __delim = __delim + __net_hex[0:4] + self.__DelimIPV6 + __net_hex[4:8]
 
-        __pres = socket.inet_ntop(socket.AF_INET6,socket.inet_pton(socket.AF_INET6,__delim))
+        __pres = socket.inet_ntop(socket.AF_INET6, socket.inet_pton(socket.AF_INET6, __delim))
         if __pres == ANY_IPV6_ADDR:
             __pres = PRESENT_ANY_IPV6_ADDR
         return __pres
@@ -4134,7 +4241,7 @@ class IPAddressConv:
             __sep = self.__DelimIPV6
 
             __chunk = hexip[ __off * 8: (__off + 1) * 8 ]
-            __net_hex = '{0:08x}'.format(struct.unpack("!L",struct.pack("=L",int(__chunk,16)))[0])
+            __net_hex = '{0:08x}'.format(struct.unpack("!L", struct.pack("=L", int(__chunk, 16)))[0])
             __delim = __delim + __net_hex[0:4] + self.__DelimIPV6 + __net_hex[4:8]
 
         return __delim
@@ -4147,17 +4254,17 @@ class SeqFileIO:
         pass
 
 
-    def open_file(self, proc_file_session, file, *options):
+    def open_file(self, proc_file_session, procfile, *options):
         try:
-            proc_file_session.pnt_fd = open( file)
+            proc_file_session.pnt_fd = open( procfile)
             proc_file_session.open = 1
         except IOError:
             proc_file_session.open = 0
 
         if len(options) > 0:
-           proc_file_session.MinWords = options[0]
-           if len(options) > 1:
-               proc_file_session.SkipLine = options[1]
+            proc_file_session.MinWords = options[0]
+            if len(options) > 1:
+                proc_file_session.SkipLine = options[1]
 
 
     def read_line(self, proc_file_session):
@@ -4169,18 +4276,18 @@ class SeqFileIO:
         if proc_file_session.open == 0:
             raise StopIteration
 
-	else:
+        else:
             proc_file_session.buff = proc_file_session.pnt_fd.readline()
 
             try:
-               __MinWords = proc_file_session.MinWords
+                __MinWords = proc_file_session.MinWords
             except AttributeError:
-               __MinWords = 0
+                __MinWords = 0
 
             try:
-               __SkipLine = proc_file_session.SkipLine 
+                __SkipLine = proc_file_session.SkipLine 
             except AttributeError:
-               __SkipLine = ""
+                __SkipLine = ""
 
             if proc_file_session.buff == "":
                 proc_file_session.pnt_fd.close()
@@ -4196,7 +4303,7 @@ class SeqFileIO:
                     if proc_file_session.lineparts[0] == __SkipLine:
                         self.read_line(proc_file_session)
 
-	return(proc_file_session.open)
+        return(proc_file_session.open)
 
 
     def read_all_lines(self, proc_file_session):
@@ -4207,14 +4314,14 @@ class SeqFileIO:
             __lines = proc_file_session.pnt_fd.readlines()
 
             try:
-               __SkipPref = proc_file_session.SkipLine 
+                __SkipPref = proc_file_session.SkipLine 
             except AttributeError:
-               __SkipPref = ""
+                __SkipPref = ""
 
             if __lines != "":
                 __SkipPrefLen = len(__SkipPref) + 1
 
-                for __off in range(len(__lines)-1,-1,-1):
+                for __off in range(len(__lines)-1, -1, -1):
                     if __lines[__off][-1:] == "\n":
                         __lines[__off] = __lines[__off][:-1]
                     if __SkipPrefLen > 1:
@@ -4338,18 +4445,18 @@ class ProcessInfo:
     def map_connection_to_PID(self, loc_port, rem_ip, rem_port, net_protocol):
         __rip = rem_ip
         if __rip == ANY_IPV6_ADDR or __rip == ANY_IP_ADDR or __rip == PRESENT_ANY_IPV6_ADDR or __rip == PRESENT_ANY_IP_ADDR:
-           __rip = ""
+            __rip = ""
 
         __rpo = str(rem_port)
         if __rpo == "0":
-           __rpo = ""
+            __rpo = ""
 
         __prot = net_protocol
         if __prot == "udp6" or __prot == "tcp6":
-           __prot = __prot[:-1]
-           __ipv = "-6"
+            __prot = __prot[:-1]
+            __ipv = "-6"
         else:
-           __ipv = "-4"
+            __ipv = "-4"
 
         __fuser_arg = "{0:d},{1:s},{2:s}/{3:s}".format( loc_port, __rip, __rpo, __prot)
 #        print '::dbg', __prot, __fuser_arg, __ipv
@@ -4361,7 +4468,8 @@ class ProcessInfo:
             __sout_buff, __serr_buff = __fufd.communicate()
 #            print '::dbg ({0:s})'.format(__sout_buff)
             if __sout_buff != "":
-                __pid = long( __sout_buff.split()[0], 10)
+#                Trying to make "pylint" happy here...
+                __pid = long( str(__sout_buff).split()[0], 10)
             else:
                 __pid = self.__NO_CONN_PID
 
@@ -4370,14 +4478,14 @@ class ProcessInfo:
 
         return __pid
 
-    def map_PID_to_process_summary(self, pid):
+    def map_PID_to_process_summary(self, targetpid):
         __psumm = self.__NO_PROCESS_SUMMARY
         self.__ps_retcode = None
 
-        if pid != self.__NO_CONN_PID:
-            __ps_arg = "{0:d}".format(pid)
+        if targetpid != self.__NO_CONN_PID:
+            __ps_arg = "{0:d}".format(targetpid)
             try:
-                __ps_fd = Popen( ["ps", "--no-headers", "-o", "user,pid,cmd", "-p", __ps_arg], stdout=PIPE, stderr=PIPE)
+                __ps_fd = Popen( ["ps", "--no-headers", "-o", "user,targetpid,cmd", "-p", __ps_arg], stdout=PIPE, stderr=PIPE)
 
                 __sout_buff, __serr_buff = __ps_fd.communicate()
                 if __sout_buff != "":
@@ -4405,7 +4513,7 @@ if __name__ == "__main__":
         print "MacOS doesn't have a '/proc' filesystem, quitting."
         sys.exit(0)
 
-    __sep = "-----------------------------------------------------------------------"
+    __outsep = "-----------------------------------------------------------------------"
 
     if len(sys.argv) > 1:
         which = sys.argv[1]
@@ -4428,7 +4536,7 @@ if __name__ == "__main__":
 
     elif which == "all" or which == "conn" or which == "udp6":
         if which == "all":
-            print __sep, "udp6"
+            print __outsep, "udp6"
 
         socklist = ProcNetUDP6()
 
@@ -4450,7 +4558,7 @@ if __name__ == "__main__":
 
     if which == "all" or which == "conn" or which == "udp":
         if which == "all":
-            print __sep, "udp"
+            print __outsep, "udp"
 
         socklist = ProcNetUDP()
 
@@ -4472,7 +4580,7 @@ if __name__ == "__main__":
 
     if which == "all" or which == "conn" or which == "tcp6":
         if which == "all":
-            print __sep, "tcp6"
+            print __outsep, "tcp6"
 
         socklist = ProcNetTCP6()
 
@@ -4494,7 +4602,7 @@ if __name__ == "__main__":
 
     if which == "all" or which == "conn" or which == "tcp":
         if which == "all":
-            print __sep, "tcp"
+            print __outsep, "tcp"
 
         socklist = ProcNetTCP()
 
@@ -4516,346 +4624,346 @@ if __name__ == "__main__":
 
     if which == "all" or which == "arp":
         if which == "all":
-            print __sep, "arp"
+            print __outsep, "arp"
 
         arp = ProcNetARP()
 
-        for list in arp:
-            print list
+        for highlight in arp:
+            print highlight
 
     if which == "all" or which == "dev":
         if which == "all":
-            print __sep, "dev"
+            print __outsep, "dev"
 
         dev = ProcNetDEV()
 
-        for list in dev:
-            print list
+        for highlight in dev:
+            print highlight
 
     if which == "all" or which == "route":
         if which == "all":
-            print __sep, "route"
+            print __outsep, "route"
 
         route = ProcNetROUTE()
 
-        for list in route:
-            print list
+        for highlight in route:
+            print highlight
 
     if which == "all" or which == "rt_cache":
         if which == "all":
-            print __sep, "rt_cache"
+            print __outsep, "rt_cache"
 
         rtc = ProcNetRT_CACHE()
 
-        for list in rtc:
-            print list
+        for highlight in rtc:
+            print highlight
 
     if which == "all" or which == "stat/arp_cache":
         if which == "all":
-            print __sep, "stat/arp_cache"
+            print __outsep, "stat/arp_cache"
 
         sac = ProcNetStatARP_CACHE()
 
-        for list in sac:
-            print list
+        for highlight in sac:
+            print highlight
 
 
     if which == "all" or which == "stat/ip_conntrack":
         if which == "all":
-            print __sep, "stat/ip_conntrack"
+            print __outsep, "stat/ip_conntrack"
 
         sic = ProcNetStatIP_CONNTRACK()
 
-        for list in sic:
-            print list
+        for highlight in sic:
+            print highlight
 
 
     if which == "all" or which == "stat/nf_conntrack":
         if which == "all":
-            print __sep, "stat/nf_conntrack"
+            print __outsep, "stat/nf_conntrack"
 
         snc = ProcNetStatNF_CONNTRACK()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "stat/ndisc_cache":
         if which == "all":
-            print __sep, "stat/ndisc_cache"
+            print __outsep, "stat/ndisc_cache"
 
         snc = ProcNetStatNDISC_CACHE()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "stat/rt_cache":
         if which == "all":
-            print __sep, "stat/rt_cache"
+            print __outsep, "stat/rt_cache"
 
         snc = ProcNetStatRT_CACHE()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "unix":
         if which == "all":
-            print __sep, "unix"
+            print __outsep, "unix"
 
         snc = ProcNetUNIX()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "if_inet6":
         if which == "all":
-            print __sep, "if_inet6"
+            print __outsep, "if_inet6"
 
         snc = ProcNetIF_INET6()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "dev_mcast":
         if which == "all":
-            print __sep, "dev_mcast"
+            print __outsep, "dev_mcast"
 
         snc = ProcNetDEV_MCAST()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "igmp6":
         if which == "all":
-            print __sep, "igmp6"
+            print __outsep, "igmp6"
 
         snc = ProcNetIGMP6()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "ipv6_route":
         if which == "all":
-            print __sep, "ipv6_route"
+            print __outsep, "ipv6_route"
 
         snc = ProcNetIPV6_ROUTE()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "psched":
         if which == "all":
-            print __sep, "psched"
+            print __outsep, "psched"
 
         snc = ProcNetPSCHED()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "rt6_stats":
         if which == "all":
-            print __sep, "rt6_stats"
+            print __outsep, "rt6_stats"
 
         snc = ProcNetRT6_STATS()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "softnet_stat":
         if which == "all":
-            print __sep, "softnet_stat"
+            print __outsep, "softnet_stat"
 
         snc = ProcNetSOFTNET_STAT()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "protocols":
         if which == "all":
-            print __sep, "protocols"
+            print __outsep, "protocols"
 
         snc = ProcNetPROTOCOLS()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "packet":
         if which == "all":
-            print __sep, "packet"
+            print __outsep, "packet"
 
         snc = ProcNetPACKET()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "connector":
         if which == "all":
-            print __sep, "connector"
+            print __outsep, "connector"
 
         snc = ProcNetCONNECTOR()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "netlink":
         if which == "all":
-            print __sep, "netlink"
+            print __outsep, "netlink"
 
         snc = ProcNetNETLINK()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "netfilter/nf_log":
         if which == "all":
-            print __sep, "netfilter/nf_log"
+            print __outsep, "netfilter/nf_log"
 
         snc = ProcNetNetfilterNF_LOG()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "netfilter/nf_queue":
         if which == "all":
-            print __sep, "netfilter/nf_queue"
+            print __outsep, "netfilter/nf_queue"
 
         snc = ProcNetNetfilterNF_QUEUE()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "igmp":
         if which == "all":
-            print __sep, "igmp"
+            print __outsep, "igmp"
 
         snc = ProcNetIGMP()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
             print snc.field
 
 
     if which == "all" or which == "ip6_tables_matches":
         if which == "all":
-            print __sep, "ip6_tables_matches"
+            print __outsep, "ip6_tables_matches"
 
         snc = ProcNetIP6_TABLES_MATCHES()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "ip6_tables_names":
         if which == "all":
-            print __sep, "ip6_tables_names"
+            print __outsep, "ip6_tables_names"
 
         snc = ProcNetIP6_TABLES_NAMES()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "ip6_tables_targets":
         if which == "all":
-            print __sep, "ip6_tables_targets"
+            print __outsep, "ip6_tables_targets"
 
         snc = ProcNetIP6_TABLES_TARGETS()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "ip_tables_matches":
         if which == "all":
-            print __sep, "ip_tables_matches"
+            print __outsep, "ip_tables_matches"
 
         snc = ProcNetIP_TABLES_MATCHES()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "ip_tables_names":
         if which == "all":
-            print __sep, "ip_tables_names"
+            print __outsep, "ip_tables_names"
 
         snc = ProcNetIP_TABLES_NAMES()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "ip_tables_targets":
         if which == "all":
-            print __sep, "ip_tables_targets"
+            print __outsep, "ip_tables_targets"
 
         snc = ProcNetIP_TABLES_TARGETS()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 
 
     if which == "all" or which == "ip_conntrack":
         if which == "all":
-            print __sep, "ip_conntrack"
+            print __outsep, "ip_conntrack"
 
         snc = ProcNetIP_CONNTRACK()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 #            print snc.field
 
 
     if which == "all" or which == "nf_conntrack":
         if which == "all":
-            print __sep, "nf_conntrack"
+            print __outsep, "nf_conntrack"
 
         snc = ProcNetNF_CONNTRACK()
 
-        for list in snc:
-            print list
+        for highlight in snc:
+            print highlight
 #            print snc.field
 
 
     if which == "all" or which == "snmp6":
         if which == "all":
-            print __sep, "snmp6"
+            print __outsep, "snmp6"
 
         snc = ProcNetSNMP6()
 
         for keyvals in snc:
             for key in keyvals:
-                print "{0:s} {1:s}".format(key,keyvals[key])
+                print "{0:s} {1:s}".format(key, keyvals[key])
 
 
     if which == "all" or which == "dev_snmp6":
-        print __sep, "dev_snmp6", qualify
+        print __outsep, "dev_snmp6", qualify
 
         snc = ProcNetDEV_SNMP6(qualify)
 
         for keyvals in snc:
             for key in keyvals:
-                print "{0:s} {1:s}".format(key,keyvals[key])
+                print "{0:s} {1:s}".format(key, keyvals[key])
 
 
     if which == "all" or which == "sockstat":
-        print __sep, "sockstat"
+        print __outsep, "sockstat"
 
         pss = ProcNetSOCKSTAT()
 
@@ -4864,11 +4972,11 @@ if __name__ == "__main__":
                 print socktype
                 keyvals = pss.field[socktype]
                 for key in keyvals:
-                    print "-- {0:s} {1:s}".format(str(key),str(keyvals[key]))
+                    print "-- {0:s} {1:s}".format(str(key), str(keyvals[key]))
 
 
     if which == "all" or which == "sockstat6":
-        print __sep, "sockstat6"
+        print __outsep, "sockstat6"
 
         pss = ProcNetSOCKSTAT6()
 
@@ -4877,11 +4985,11 @@ if __name__ == "__main__":
                 print socktype
                 keyvals = pss.field[socktype]
                 for key in keyvals:
-                    print "-- {0:s} {1:s}".format(str(key),str(keyvals[key]))
+                    print "-- {0:s} {1:s}".format(str(key), str(keyvals[key]))
 
 
     if which == "all" or which == "ptype":
-        print __sep, "ptype"
+        print __outsep, "ptype"
 
         pnp = ProcNetPTYPE()
 
@@ -4890,7 +4998,7 @@ if __name__ == "__main__":
 
 
     if which == "all" or which == "snmp":
-        print __sep, "snmp"
+        print __outsep, "snmp"
 
         snmp = GetProcFileHandler("snmp")()
 
@@ -4903,7 +5011,7 @@ if __name__ == "__main__":
 
 
     if which == "all" or which == "netstat":
-        print __sep, "netstat"
+        print __outsep, "netstat"
 
         netstat = GetProcFileHandler("netstat")()
 
