@@ -421,6 +421,11 @@ class ProcNetDEV_SNMP6:
         self.__sio = SeqFileIO()
         self.__sio.open_file( self.__infile)
 
+#       Making 'pylint' happy
+        self.__keyval = ""
+        self.__words = ()
+        self.__lines = ()
+
     def __iter__(self):
         return(self)
 
@@ -464,6 +469,11 @@ class ProcNetSNMP6:
         self.field = dict()
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/snmp6")
+
+#       Making 'pylint' happy
+        self.__keyval = ""
+        self.__words = ()
+        self.__lines = ()
 
     def __iter__(self):
         return(self)
@@ -583,6 +593,17 @@ class ProcNetNF_CONNTRACK:
         self.__DELTA_TIME_PREF = "delta-time="
 
         self.__Val_Delim = "="
+
+#       Let's make 'pylint' happy
+        self.protocol = ""
+        self.src_port = 0
+        self.src_ip = ANY_IP_ADDR
+        self.state = unknown_state
+        self.__off = 0
+        self.l3_protocol = ""
+        self.dst_port = 0
+        self.timeout = 0
+        self.dst_ip = ANY_IP_ADDR
 
     def __iter__(self):
         return(self)
@@ -836,6 +857,16 @@ class ProcNetIP_CONNTRACK:
         self.__SECCTX_PREF = "secctx="
         self.__Val_Delim = "="
 
+#       Making 'pylint' happy
+        self.protocol = ""
+        self.__off = 0
+        self.src_port = 0
+        self.src_ip = ANY_IP_ADDR
+        self.state = unknown_state
+        self.timeout = 0
+        self.dst_ip = ANY_IP_ADDR
+        self.dst_port = 0
+
     def __iter__(self):
         return(self)
 
@@ -1008,6 +1039,9 @@ class ProcNetIP_TABLES_TARGETS:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/ip_tables_targets")
 
+#       For 'pylint'
+        self.__lines = ()
+
     def __iter__(self):
         return(self)
 
@@ -1040,6 +1074,9 @@ class ProcNetIP_TABLES_NAMES:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/ip_tables_names")
 
+#       For 'pylint'
+        self.__lines = ()
+
     def __iter__(self):
         return(self)
 
@@ -1069,6 +1106,9 @@ class ProcNetIP_TABLES_MATCHES:
         self.field = dict()
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/ip_tables_matches")
+
+#       For 'pylint'
+        self.__lines = ()
 
     def __iter__(self):
         return(self)
@@ -1103,6 +1143,9 @@ class ProcNetIP6_TABLES_TARGETS:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/ip6_tables_targets")
 
+#       For 'pylint'
+        self.__lines = ()
+
     def __iter__(self):
         return(self)
 
@@ -1134,6 +1177,9 @@ class ProcNetIP6_TABLES_NAMES:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/ip6_tables_names")
 
+#       For 'pylint'
+        self.__lines = ()
+
     def __iter__(self):
         return(self)
 
@@ -1163,6 +1209,9 @@ class ProcNetIP6_TABLES_MATCHES:
         self.field = dict()
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/ip6_tables_matches")
+
+#       Lines for 'pylint'
+        self.__lines = ()
 
     def __iter__(self):
         return(self)
@@ -1211,6 +1260,15 @@ class ProcNetIGMP:
         self.__MinWords_second = 4
         self.__sio.open_file( "/proc/net/igmp", self.__MinWords_first, "Idx")
         self.__FieldSplitDelim = ":"
+
+#       Lines added for 'pylint'
+        self.count = 0
+        self.index = 0
+        self.group = 0
+        self.timer = 0
+        self.querier = ""
+        self.device = ANY_DEVICE
+        self.users = 0
 
     def __iter__(self):
         return(self)
@@ -1319,6 +1377,10 @@ class ProcNetNetfilterNF_QUEUE:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/netfilter/nf_queue", 2)
 
+#       Lines for 'pylint'
+        self.name = ""
+        self.index = 0
+
     def __iter__(self):
         return(self)
 
@@ -1388,6 +1450,11 @@ class ProcNetNetfilterNF_LOG:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/netfilter/nf_log", 3)
 
+#       Lines for 'pylint'
+        self.index = 0
+        self.name = ""
+        self.log_list = ""
+
     def __iter__(self):
         return(self)
 
@@ -1455,6 +1522,14 @@ class ProcNetNETLINK:
 
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/netlink", 10, "sk")
+
+#       Line for 'pylint'
+        self.protocol = 0
+        self.pid = 0
+        self.groups = 0
+        self.dump = 0
+        self.locks = 0
+        self.drops = 0
 
     def __iter__(self):
         return(self)
@@ -1534,6 +1609,11 @@ class ProcNetCONNECTOR:
         self.__sio.open_file( "/proc/net/connector", 2, "Name")
         self.__FieldSplitDelim = ":"
 
+#       Lines for 'pylint'
+        self.name = ""
+        self.id_idx = 0
+        self.id_val = 0
+
     def __iter__(self):
         return(self)
 
@@ -1595,6 +1675,14 @@ class ProcNetPACKET:
 
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/packet", 9, "sk")
+
+#       Lines for 'pylint'
+        self.type = 0
+        self.protocol = 0
+        self.interface_index = 0
+        self.running = 0
+        self.rmem_alloc = 0
+        self.uid = 0
 
     def __iter__(self):
         return(self)
@@ -1693,6 +1781,13 @@ class ProcNetPROTOCOLS:
 
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/protocols", 27, "protocol")
+
+#       Lines for 'pylint'
+        self.protocol = ""
+        self.size = 0
+        self.sockets = 0
+        self.memory = 0
+        self.module = ""
 
     def __iter__(self):
         return(self)
@@ -1803,6 +1898,13 @@ class ProcNetSOFTNET_STAT:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/softnet_stat", 10)
 
+#       Lines for 'pylint'
+        self.processed = 0
+        self.dropped = 0
+        self.time_squeeze = 0
+        self.cpu_coll = 0
+        self.received_rps = 0
+
     def __iter__(self):
         return(self)
 
@@ -1881,6 +1983,13 @@ class ProcNetRT6_STATS:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/rt6_stats", 7)
 
+#       Line for 'pylint'
+        self.nodes = 0
+        self.route_nodes = 0
+        self.route_entries = 0
+        self.route_cache = 0
+        self.discarded = 0
+
     def __iter__(self):
         return(self)
 
@@ -1945,6 +2054,11 @@ class ProcNetPSCHED:
         self.field = dict()
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/psched", 4)
+
+#       Lines for 'pylint'
+        self.nsec_per_usec = 0
+        self.psched_ticks = 0
+        self.nsec_per_hrtime = 0
 
     def __iter__(self):
         return(self)
@@ -2016,6 +2130,14 @@ class ProcNetIPV6_ROUTE:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/ipv6_route", 10)
         self.ipconv = IPAddressConv()
+
+#       Lines for 'pylint'
+        self.dest_ip = PRESENT_ANY_IPV6_ADDR
+        self.dest_pref_len = 0
+        self.src_ip = PRESENT_ANY_IPV6_ADDR
+        self.src_pref_len = 0
+        self.dest_refcount = 0
+        self.device = ANY_DEVICE
 
     def __iter__(self):
         return(self)
@@ -2106,6 +2228,12 @@ class ProcNetIGMP6:
         self.__sio.open_file( "/proc/net/igmp6", 6)
         self.ipconv = IPAddressConv()
 
+#       Lines for 'pylint'
+        self.device = ANY_DEVICE
+        self.mcast_addr = PRESENT_ANY_IPV6_ADDR
+        self.mcast_users = 0
+        self.mcast_flags = NULL_MASK_HEX
+
     def __iter__(self):
         return(self)
 
@@ -2172,6 +2300,11 @@ class ProcNetDEV_MCAST:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/dev_mcast", 5)
 
+#       Lines for 'pylint'
+        self.device = ""
+        self.ref_count = 0
+        self.global_use = 0
+
     def __iter__(self):
         return(self)
 
@@ -2234,6 +2367,12 @@ class ProcNetIF_INET6:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/if_inet6", 6)
         self.ipconv = IPAddressConv()
+
+#       Lines for 'pylint'
+        self.ipv6 = ANY_IPV6_ADDR
+        self.ipv6_hex = ANY_IPV6_ADDR_HEX
+        self.scope = 0
+        self.device = ANY_DEVICE
 
     def __iter__(self):
         return(self)
@@ -2330,6 +2469,15 @@ class ProcNetUNIX:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/unix", 7, "Num")
 
+#       Lines for 'pylint'
+        self.protocol = 0
+        self.refcount = 0
+        self.flags = 0
+        self.type = 0
+        self.state = 0
+        self.inode = 0
+        self.path = ""
+
     def __iter__(self):
         return(self)
 
@@ -2425,6 +2573,13 @@ class ProcNetStatRT_CACHE:
         self.field = dict()
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/stat/rt_cache", 17, "entries")
+
+#       Lines for 'pylint'
+        self.entries = 0
+        self.in_hit = 0
+        self.in_slow = 0
+        self.out_hit = 0
+        self.out_slow = 0
 
     def __iter__(self):
         return(self)
@@ -2523,6 +2678,11 @@ class ProcNetStatNDISC_CACHE:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/stat/ndisc_cache", 12, "entries")
 
+#       Lines for 'pylint'
+        self.entries = 0
+        self.lookups = 0
+        self.hits = 0
+
     def __iter__(self):
         return(self)
 
@@ -2610,6 +2770,17 @@ class ProcNetStatNF_CONNTRACK:
         self.field = dict()
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/stat/nf_conntrack", 17, "entries")
+
+#       Lines for 'pylint'
+        self.insert = 0
+        self.drop = 0
+        self.found = 0
+        self.entries = 0
+        self.invalid = 0
+        self.ignore = 0
+        self.searched = 0
+        self.new = 0
+        self.delete = 0
 
     def __iter__(self):
         return(self)
@@ -2720,6 +2891,17 @@ class ProcNetStatIP_CONNTRACK:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/stat/ip_conntrack", 17, "entries")
 
+#       Lines for 'pylint'
+        self.insert = 0
+        self.drop = 0
+        self.found = 0
+        self.entries = 0
+        self.invalid = 0
+        self.ignore = 0
+        self.searched = 0
+        self.new = 0
+        self.delete = 0
+
     def __iter__(self):
         return(self)
 
@@ -2824,6 +3006,11 @@ class ProcNetStatARP_CACHE:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/stat/arp_cache", 12, "entries")
 
+#       Lines for 'pylint'
+        self.lookups = 0
+        self.hits = 0
+        self.entries = 0
+
     def __iter__(self):
         return(self)
 
@@ -2908,6 +3095,14 @@ class ProcNetRT_CACHE:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/rt_cache", 15, "Iface")
         self.ipconv = IPAddressConv()
+
+#       Lines for 'pylint'
+        self.interface = ""
+        self.destination = ""
+        self.gateway = ""
+        self.usecount = 0
+        self.source = ""
+        self.spec_dst = ""
 
     def __iter__(self):
         return(self)
@@ -3027,6 +3222,12 @@ class ProcNetROUTE:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/route", 11, "Iface")
 
+#       Lines for 'pylint'
+        self.interface = ""
+        self.destination = ""
+        self.gateway = ""
+        self.netmask = ""
+
     def __iter__(self):
         return(self)
 
@@ -3124,6 +3325,13 @@ class ProcNetDEV:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/dev", 17, "face")
 
+#       Lines for 'pylint'
+        self.device = ""
+        self.rx_packets = 0
+        self.rx_errors = 0
+        self.tx_packets = 0
+        self.tx_errors = 0
+
     def __iter__(self):
         return(self)
 
@@ -3211,6 +3419,11 @@ class ProcNetARP:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/arp", 6, "IP")
 
+#       Lines for 'pylint'
+        self.ip_addr = ""
+        self.hw_addr = ""
+        self.device = ""
+
     def __iter__(self):
         return(self)
 
@@ -3284,6 +3497,12 @@ class ProcNetUDP6:
         self.__sio.open_file( "/proc/net/udp6", 12, "sl")
         self.__FieldSplitDelim = ":"
         self.ipconv = IPAddressConv()
+
+#       Lines for 'pylint'
+        self.orig_hexip = self.dest_hexip = self.orig_ip = self.dest_ip = self.state = ""
+        self.orig_port = self.dest_port = 0
+        self.orig_hexport = ""
+        self.dest_hexport = ""
 
     def __iter__(self):
         return(self)
@@ -3391,6 +3610,12 @@ class ProcNetUDP:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/udp", 12, "sl")
         self.__FieldSplitDelim = ":"
+
+#       Lines for 'pylint'
+        self.orig_hexip = self.dest_hexip = self.orig_ip = self.dest_ip = self.state = ""
+        self.orig_port = self.dest_port = 0
+        self.orig_hexport = ""
+        self.dest_hexport = ""
 
     def __iter__(self):
         return(self)
@@ -3516,6 +3741,12 @@ class ProcNetTCP:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/tcp", 12, "sl")
         self.__FieldSplitDelim = ":"
+
+#       Lines for 'pylint'
+        self.orig_hexip = self.dest_hexip = self.orig_ip = self.dest_ip = self.state = ""
+        self.orig_port = self.dest_port = 0
+        self.orig_hexport = ""
+        self.dest_hexport = ""
 
     def __iter__(self):
         return(self)
@@ -3661,8 +3892,11 @@ class ProcNetTCP6:
         self.__FieldSplitDelim = ":"
         self.ipconv = IPAddressConv()
 
+#       Lines for 'pylint'
         self.orig_hexip = self.dest_hexip = self.orig_ip = self.dest_ip = self.state = ""
         self.orig_port = self.dest_port = 0
+        self.orig_hexport = ""
+        self.dest_hexport = ""
 
     def __iter__(self):
         return(self)
@@ -3791,6 +4025,11 @@ class ProcNetSOCKSTAT:
         self.__sio.open_file( "/proc/net/sockstat", 1)
         self.__sock_type_list = ([ F_SOCK_TCP, F_SOCK_UDP, F_SOCK_UDPLITE, F_SOCK_RAW, F_SOCK_FRAG, F_SOCK_SOCKETS ])
 
+#       Lines for 'pylint'
+        self.__result = set()
+        self.__unknown_label = set()
+        self.__sock_type = ""
+
     def __iter__(self):
         return(self)
 
@@ -3841,6 +4080,11 @@ class ProcNetSOCKSTAT6:
         self.__sio.open_file( "/proc/net/sockstat6", 1)
         self.__sock_type_list = ([ F_SOCK_TCP6, F_SOCK_UDP6, F_SOCK_UDPLITE6, F_SOCK_RAW6, F_SOCK_FRAG6 ])
 
+#       Lines for 'pylint'
+        self.__result = set()
+        self.__unknown_label = set()
+        self.__sock_type = ""
+
     def __iter__(self):
         return(self)
 
@@ -3888,6 +4132,11 @@ class ProcNetPTYPE:
         self.field = dict()
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/ptype", 2, "Type")
+
+#       Lines for 'pylint'
+        self.device_name = ""
+        self.device_type = 0
+        self.device_function = ""
 
     def __iter__(self):
         return(self)
@@ -4053,6 +4302,9 @@ class ProcNetSNMP:
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/snmp", 2)
 
+#       Lines for 'pylint'
+        self.protocol_type = ""
+
     def __iter__(self):
         return(self)
 
@@ -4121,6 +4373,9 @@ class ProcNetNETSTAT:
         self.field = dict()
         self.__sio = SeqFileIO()
         self.__sio.open_file( "/proc/net/netstat", 2)
+
+#       Lines for 'pylint'
+        self.protocol_type = ""
 
     def __iter__(self):
         return(self)
@@ -4200,7 +4455,13 @@ class SeqFileIO:
         self.is_open = 0
         self.MinWords = 0
         self.SkipLine = ""
-#        self.pnt_fd = 0
+
+#       For 'pylint'
+        self.__pss_varcount = 0
+        self.__unknown_label = set()
+        self.__result = set()
+        self.__pss_varlist = ()
+        self.__sock_type = ""
 
     def open_file(self, procfile, *options):
         try:
@@ -4389,6 +4650,9 @@ class ProcessInfo:
         self.__NO_CONN_PID = -1
         self.__NO_PROCESS_SUMMARY = "n/a"
         self.__ps_returncode = None
+
+#       Lines for 'pylint'
+        self.__ps_retcode = None
 
     def map_connection_to_PID(self, loc_port, rem_ip, rem_port, net_protocol):
         __rip = rem_ip
