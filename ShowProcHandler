@@ -19,17 +19,21 @@ if len(sys.argv) > 1:
 else:
     target = "tcp"
 
-seq = 0
+if target == "all":
 
-handler = ProcSysInfo.GetProcFileHandler(target)
+    ProcSysInfo.ShowProcFileHandlers()
 
-if qualify != "":
-    active = handler(qualify)
 else:
-    active = handler()
 
-if qualify != "":
-    target = target + "/" + qualify
+    handler = ProcSysInfo.GetProcFileHandler(target)
 
-print "File {0:s} handled by {1:s}".format(target, handler)
+    if qualify != "":
+        active = handler(qualify)
+    else:
+        active = handler()
+
+    if qualify != "":
+        target = target + "/" + qualify
+
+    print "File {0:s} handled by {1:s}".format(target, handler)
 
