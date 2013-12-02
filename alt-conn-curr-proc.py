@@ -7,14 +7,16 @@ Data is pulled from /proc filesystem.
 import sys
 
 import ProcSysInfo
-from ProcSysInfo import CachedDNS, ProcessInfo, GetProcFileHandler
+from ProcSysInfo import GetProcFileHandler
+import CachedDNS
+import ProcessInfo
 
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
 
-iplookup = CachedDNS()
-procinfo = ProcessInfo()
+iplookup = CachedDNS.CachedDNS()
+procinfo = ProcessInfo.ProcessInfo()
 psi = ProcSysInfo
 
 socklist = GetProcFileHandler("/proc/net/tcp")()

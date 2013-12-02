@@ -11,7 +11,9 @@ import time
 import sys
 
 import ProcSysInfo
-from ProcSysInfo import GetProcFileHandler, CachedDNS, ProcessInfo
+from ProcSysInfo import GetProcFileHandler
+import CachedDNS
+import ProcessInfo
 
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
@@ -19,8 +21,8 @@ if sys.platform == "darwin":
     
 psi = ProcSysInfo
 
-iplookup = CachedDNS()
-procinfo = ProcessInfo()
+iplookup = CachedDNS.CachedDNS()
+procinfo = ProcessInfo.ProcessInfo()
 
 NO_SESSION_PID = procinfo.get_PID_err_value()
 NO_PROCESS_SUMMARY = procinfo.get_process_summary_err_value()

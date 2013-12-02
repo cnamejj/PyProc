@@ -6,14 +6,16 @@ Data is pulled from /proc filesystem.
 
 import sys
 
-from ProcSysInfo import ProcNetTCP, CachedDNS, ProcessInfo, ProcNetTCP6
+from ProcSysInfo import ProcNetTCP, ProcNetTCP6
+import ProcessInfo
+import CachedDNS
 
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
 
-iplookup = CachedDNS()
-procinfo = ProcessInfo()
+iplookup = CachedDNS.CachedDNS()
+procinfo = ProcessInfo.ProcessInfo()
 socklist = ProcNetTCP()
 
 for orig_hexip, dest_hexip, orig_ip, orig_port, dest_ip, dest_port, sock_stat in socklist:

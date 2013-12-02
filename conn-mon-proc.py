@@ -11,14 +11,16 @@ times each was seen.
 import time
 import sys
 
-from ProcSysInfo import ProcNetTCP, CachedDNS, ProcessInfo
+from ProcSysInfo import ProcNetTCP
+import ProcessInfo
+import CachedDNS
     
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
 
-iplookup = CachedDNS()
-procinfo = ProcessInfo()
+iplookup = CachedDNS.CachedDNS()
+procinfo = ProcessInfo.ProcessInfo()
 
 NO_SESSION_PID = procinfo.get_PID_err_value()
 NO_PROCESS_SUMMARY = procinfo.get_process_summary_err_value()
