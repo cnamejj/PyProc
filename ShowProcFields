@@ -10,6 +10,38 @@ if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
 
+def ShowRecsFromOneFile( handler, target, qualify):
+
+    seq = 0
+
+    if qualify != "":
+        active = handler( qualify)
+    else:
+        active = handler()
+
+    print "- Logical records from {0:s}".format(target)
+
+    for srec in active:
+        seq = seq + 1
+        if len(active.field) > 0:
+            print "- Record {seq} fields {size}".format(seq=seq, size=len(active.field))
+
+            fseq = 0
+            for off in active.field:
+                fseq = fseq + 1
+                currval = active.field[off]
+                if type(currval) == dict:
+                    subseq = 0
+                    print "- - {seq}. {key} ...".format(seq=fseq, key=off)
+                    for subent in currval:
+                        subseq = subseq + 1
+                        if type(subent) == str:
+                            print "- - - {seq}.{subseq}. {subkey} : {subkeyval}".format(seq=fseq, subseq=subseq, subkey=subent, subkeyval=str(currval[subent]))
+                else:
+                    print "- - {seq}. {key} : {keyval}".format(seq=fseq, key=off, keyval=str(currval))
+
+    return
+
 qualify = ""
 
 if len(sys.argv) > 1:
@@ -19,35 +51,13 @@ if len(sys.argv) > 1:
 else:
     target = "tcp"
 
-seq = 0
+if target == "all":
 
-handler = ProcSysInfo.GetProcFileHandler(target)
+    for target in ProcSysInfo.proc_file_handler_registry:
+        ShowRecsFromOneFile( ProcSysInfo.proc_file_handler_registry[target], target, "")
+        print ""
 
-if qualify != "":
-    active = handler(qualify)
-    target = "{path}/{file}".format(path=target, file=qualify)
 else:
-    active = handler()
+    handler = ProcSysInfo.GetProcFileHandler(target)
 
-print "- Logical records from {0:s}".format(target)
-
-for srec in active:
-    seq = seq + 1
-    if len(active.field) > 0:
-        print "- Record {seq} fields {size}".format(seq=seq, size=len(active.field))
-
-        fseq = 0
-        for off in active.field:
-            fseq = fseq + 1
-            currval = active.field[off]
-            if type(currval) == dict:
-                subseq = 0
-                print "- - {seq}. {key} ...".format(seq=fseq, key=off)
-                for subent in currval:
-                    subseq = subseq + 1
-                    if type(subent) == str:
-                        print "- - - {seq}.{subseq}. {subkey} : {subkeyval}".format(seq=fseq, subseq=subseq, subkey=subent, subkeyval=str(currval[subent]))
-            else:
-                print "- - {seq}. {key} : {keyval}".format(seq=fseq, key=off, keyval=str(currval))
-
-
+    ShowRecsFromOneFile( handler, target, qualify)
