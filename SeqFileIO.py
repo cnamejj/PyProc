@@ -22,6 +22,17 @@ Describe what's in this module and put that info here...
 #PRESENT_ANY_IP_ADDR = "0.0.0.0"
 #ANY_DEVICE = "any"
 
+def pair_list_to_dictionary(line, start_pos):
+
+    __pairs = dict()
+
+    __word_list = line.split()
+    __word_count = len(__word_list)
+    for __key_pos in range(start_pos - 1, __word_count, 2):
+        __pairs[__word_list[__key_pos]] = __word_list[__key_pos+1]
+
+    return __pairs
+
 
 class SeqFileIO:
     """Utility routines to handle I/O to proc file system files"""
@@ -131,7 +142,7 @@ class SeqFileIO:
                 self.__sock_type = str(self.lineparts[0])
                 if self.__sock_type in label_set:
                     self.__result.add(self.__sock_type)
-                    handler.field[self.__sock_type] = self.pair_list_to_dictionary(self.buff, 2)
+                    handler.field[self.__sock_type] = pair_list_to_dictionary(self.buff, 2)
                 else:
                     self.__unknown_label.add(self.__sock_type)
         except StopIteration:
@@ -174,14 +185,14 @@ class SeqFileIO:
         return
 
 
-    def pair_list_to_dictionary(self, line, start_pos):
-
-        __pairs = dict()
-
-        __word_list = line.split()
-        __word_count = len(__word_list)
-
-        for __key_pos in range(start_pos - 1, __word_count, 2):
-            __pairs[__word_list[__key_pos]] = __word_list[__key_pos+1]
-
-        return __pairs
+#    def pair_list_to_dictionary(self, line, start_pos):
+#
+#        __pairs = dict()
+#
+#        __word_list = line.split()
+#        __word_count = len(__word_list)
+#
+#        for __key_pos in range(start_pos - 1, __word_count, 2):
+#            __pairs[__word_list[__key_pos]] = __word_list[__key_pos+1]
+#
+#        return __pairs

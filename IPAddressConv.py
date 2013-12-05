@@ -10,14 +10,14 @@ import struct
 ANY_IPV6_ADDR = "::"
 PRESENT_ANY_IPV6_ADDR = "::0"
 
+def ipv6_hexdelimited_to_presentation(hexdelim):
+    return socket.inet_ntop(socket.AF_INET6, socket.inet_pton(socket.AF_INET6, hexdelim))
+
 class IPAddressConv:
     """Utlities for converting IP address to/from various formats."""
 
     def __init__(self):
         self.__DelimIPV6 = ":"
-
-    def ipv6_hexdelimited_to_presentation(self, hexdelim):
-        return socket.inet_ntop(socket.AF_INET6, socket.inet_pton(socket.AF_INET6, hexdelim))
 
     def ipv6_hexstring_to_presentation(self, hexip):
         __delim = ""
