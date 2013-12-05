@@ -10,8 +10,9 @@ class CachedDNS:
     """Map IP's to hostnames using local cache where possible, using lookups otherwise"""
 
     def __init__(self):
-        self.__hostname_cache = dict()
+
         self.__DEF_HOSTNAME = "-unknown-"
+        self.__hostname_cache = dict()
         self.__hostname_cache["0.0.0.0"] = self.__DEF_HOSTNAME
 
 
@@ -39,3 +40,12 @@ class CachedDNS:
             __ip2host = self.__DEF_HOSTNAME
 
         return __ip2host
+
+    def flush_cache(self):
+
+        self.__hostname_cache = dict()
+        self.__hostname_cache["0.0.0.0"] = self.__DEF_HOSTNAME
+
+    def get_cache_list(self):
+
+        return( self.__hostname_cache)
