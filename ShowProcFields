@@ -10,16 +10,14 @@ if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
 
-def ShowRecsFromOneFile( handler, target, qualify):
+def ShowRecsFromOneFile( ioh, subfile):
 
     seq = 0
 
-    if qualify != "":
-        active = handler( qualify)
+    if subfile != "":
+        active = ioh( subfile)
     else:
-        active = handler()
-
-    print "- Logical records from {0:s}".format(target)
+        active = ioh()
 
     for srec in active:
         seq = seq + 1
@@ -54,10 +52,18 @@ else:
 if target == "all":
 
     for target in ProcSysInfo.proc_file_handler_registry:
-        ShowRecsFromOneFile( ProcSysInfo.proc_file_handler_registry[target], target, "")
+        print "- Logical records from {0:s}".format(target)
+
+        ShowRecsFromOneFile( ProcSysInfo.proc_file_handler_registry[target], "")
         print ""
 
 else:
     handler = ProcSysInfo.GetProcFileHandler(target)
+    nohandler = ProcSysInfo.GetProcFileHandler("null")
 
-    ShowRecsFromOneFile( handler, target, qualify)
+    if handler == nohandler:
+        print "- No handler available for file {file}".format(file=target)
+    else:
+        print "- Logical records from {0:s}".format(target)
+
+        ShowRecsFromOneFile( handler, qualify)
