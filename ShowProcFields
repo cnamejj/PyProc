@@ -46,8 +46,10 @@ if len(sys.argv) > 1:
     target = sys.argv[1]
     if len(sys.argv) > 2:
         qualify = sys.argv[2]
+        fulltarget = "{target}/{subfile}".format(target=target, subfile=qualify)
 else:
     target = "tcp"
+    fulltarget = target
 
 if target == "all":
 
@@ -62,8 +64,8 @@ else:
     nohandler = ProcSysInfo.GetProcFileHandler("null")
 
     if handler == nohandler:
-        print "- No handler available for file {file}".format(file=target)
+        print "- No handler available for file {file}".format(file=fulltarget)
     else:
-        print "- Logical records from {0:s}".format(target)
+        print "- Logical records from {0:s}".format(fulltarget)
 
         ShowRecsFromOneFile( handler, qualify)

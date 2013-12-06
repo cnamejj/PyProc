@@ -4,24 +4,6 @@
 Describe what's in this module and put that info here...
 """
 
-#import socket
-#import binascii
-#import sys
-#
-#unknown_state = "UNRECOGNIZED"
-#
-#ANY_HW_ADDR = "00:00:00:00:00:00"
-#ANY_INTERFACE = "any"
-#ANY_IPV6_ADDR = "::"
-#ANY_IP_ADDR = "0.0.0.0"
-#ANY_IP_ADDR_HEX = "00000000"
-#ANY_IPV6_ADDR_HEX = "00000000000000000000000000000000"
-#ANY_MASK_HEX = "FFFFFFFF"
-#NULL_MASK_HEX = "00000000"
-#PRESENT_ANY_IPV6_ADDR = "::0"
-#PRESENT_ANY_IP_ADDR = "0.0.0.0"
-#ANY_DEVICE = "any"
-
 def pair_list_to_dictionary(line, start_pos):
 
     __pairs = dict()
@@ -171,7 +153,6 @@ class SeqFileIO:
                 self.linewords = 0
                 raise StopIteration
             else:
-#                handler.field[F_PROTOCOL] = self.lineparts[0][0:-1]
                 handler.field[prot_field] = self.lineparts[0][0:-1]
 
                 for __varnum in range(0, self.linewords, 1):
@@ -183,16 +164,3 @@ class SeqFileIO:
             self.is_open = 0
 
         return
-
-
-#    def pair_list_to_dictionary(self, line, start_pos):
-#
-#        __pairs = dict()
-#
-#        __word_list = line.split()
-#        __word_count = len(__word_list)
-#
-#        for __key_pos in range(start_pos - 1, __word_count, 2):
-#            __pairs[__word_list[__key_pos]] = __word_list[__key_pos+1]
-#
-#        return __pairs

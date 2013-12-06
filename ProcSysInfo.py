@@ -359,7 +359,7 @@ def GetProcFileHandler(proc_file):
         __handler = proc_file_handler_registry[proc_file]
     else:
         for __prefix in __append_list:
-            __exp_file = __prefix + proc_file
+            __exp_file = "{prefix}{procfile}".format(prefix=__prefix, procfile=proc_file)
             if __exp_file in proc_file_handler_registry:
                 __handler = proc_file_handler_registry[__exp_file]
 
@@ -414,7 +414,7 @@ class ProcNetDEV_SNMP6:
             if opts[0] == "":
                 self.__infile = "/proc/net/dev_snmp6/lo"
             else:
-                self.__infile = "/proc/net/dev_snmp6/" + opts[0]
+                self.__infile = "/proc/net/dev_snmp6/{subfile}".format(subfile=opts[0])
         else:
             self.__infile = "/proc/net/dev_snmp6/lo"
         self.field = dict()
@@ -2129,7 +2129,7 @@ class ProcNetIPV6_ROUTE:
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
         self.__sio.open_file( "/proc/net/ipv6_route", 10)
-        self.ipconv = IPAddressConv.IPAddressConv()
+        self.ipconv = IPAddressConv
 
 #       Lines for 'pylint'
         self.dest_ip = PRESENT_ANY_IPV6_ADDR
@@ -2226,7 +2226,7 @@ class ProcNetIGMP6:
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
         self.__sio.open_file( "/proc/net/igmp6", 6)
-        self.ipconv = IPAddressConv.IPAddressConv()
+        self.ipconv = IPAddressConv
 
 #       Lines for 'pylint'
         self.device = ANY_DEVICE
@@ -2366,7 +2366,7 @@ class ProcNetIF_INET6:
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
         self.__sio.open_file( "/proc/net/if_inet6", 6)
-        self.ipconv = IPAddressConv.IPAddressConv()
+        self.ipconv = IPAddressConv
 
 #       Lines for 'pylint'
         self.ipv6 = ANY_IPV6_ADDR
@@ -3094,7 +3094,7 @@ class ProcNetRT_CACHE:
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
         self.__sio.open_file( "/proc/net/rt_cache", 15, "Iface")
-        self.ipconv = IPAddressConv.IPAddressConv()
+        self.ipconv = IPAddressConv
 
 #       Lines for 'pylint'
         self.interface = ""
@@ -3496,7 +3496,7 @@ class ProcNetUDP6:
         self.__sio = SeqFileIO.SeqFileIO()
         self.__sio.open_file( "/proc/net/udp6", 12, "sl")
         self.__FieldSplitDelim = ":"
-        self.ipconv = IPAddressConv.IPAddressConv()
+        self.ipconv = IPAddressConv
 
 #       Lines for 'pylint'
         self.orig_hexip = self.dest_hexip = self.orig_ip = self.dest_ip = self.state = ""
@@ -3887,7 +3887,7 @@ class ProcNetTCP6:
         self.__sio = SeqFileIO.SeqFileIO()
         self.__sio.open_file( "/proc/net/tcp6", 12, "sl")
         self.__FieldSplitDelim = ":"
-        self.ipconv = IPAddressConv.IPAddressConv()
+        self.ipconv = IPAddressConv
 
 #       Lines for 'pylint'
         self.orig_hexip = self.dest_hexip = self.orig_ip = self.dest_ip = self.state = ""

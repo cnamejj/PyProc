@@ -33,7 +33,7 @@ else:
         active = handler()
 
     if qualify != "":
-        target = target + "/" + qualify
+        target = "{dir}/{file}".format(dir=target, file=qualify)
 
     print "File {0:s} handled by {1:s}".format(target, handler)
 
