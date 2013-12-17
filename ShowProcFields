@@ -47,6 +47,8 @@ if len(sys.argv) > 1:
     if len(sys.argv) > 2:
         qualify = sys.argv[2]
         fulltarget = "{target}/{subfile}".format(target=target, subfile=qualify)
+    else:
+        fulltarget = target
 else:
     target = "tcp"
     fulltarget = target
