@@ -20,6 +20,7 @@ import IPAddressConv
 import ProcessInfo
 import CachedDNS
 import SeqFileIO
+import os
 
 unknown_state = "UNRECOGNIZED"
 
@@ -347,13 +348,33 @@ F_DEVICE_FUNC = "dev_function"
 # -- 
 F_NULL_HANDLER = "/dev/null"
 
+# --
+PROC_PATH_PREFIX_LIST = ( "/proc", "/proc/", "/proc/net/", "/proc/self/net/" )
+
 proc_file_handler_registry = dict()
+proc_partial_file_handler_registry = dict()
+handler_to_path = dict()
+
+def ProcFileToPath(proc_file):
+    """If the arg passed in doesn't exist, try prepending well known directories to find the file."""
+
+    __path = ""
+
+    if os.path.isfile(proc_file):
+        __path = proc_file
+    else:
+        for __pref in PROC_PATH_PREFIX_LIST:
+            __trial = "{prefix}{file}".format(prefix=__pref,file=proc_file)
+            if __path == "" and os.path.isfile(__trial):
+                __path = __trial
+
+    return __path
 
 def GetProcFileHandler(proc_file):
     """Lookup routine to find the code that knows how to parse the requested /proc/net/ datafile"""
 
     __handler = 0
-    __append_list = ( "/proc", "/proc/", "/proc/net/" )
+    __append_list = PROC_PATH_PREFIX_LIST
 
     if proc_file in proc_file_handler_registry:
         __handler = proc_file_handler_registry[proc_file]
@@ -364,6 +385,11 @@ def GetProcFileHandler(proc_file):
                 __handler = proc_file_handler_registry[__exp_file]
 
     if __handler == 0:
+        for __patt in proc_partial_file_handler_registry:
+            if __patt == proc_file[-len(__patt):]:
+                __handler = proc_partial_file_handler_registry[__patt]
+
+    if __handler == 0:
         __handler = proc_file_handler_registry[F_NULL_HANDLER]
 
     return __handler
@@ -372,6 +398,12 @@ def RegisterProcFileHandler(proc_file, handler):
     """Associate the given code object with a specific /proc/net datafile"""
 
     proc_file_handler_registry[proc_file] = handler
+    handler_to_path[str(handler)] = proc_file
+
+def RegisterPartialProcFileHandler(end_of_path, handler):
+    """Associate the given code object with a filename pattern to allow partial matches"""
+
+    proc_partial_file_handler_registry[end_of_path] = handler
 
 def ShowProcFileHandlers():
     """Print a list of all the known file to handler mappings"""
@@ -379,7 +411,17 @@ def ShowProcFileHandlers():
     for __file in proc_file_handler_registry:
         print "For {file} use {handler}".format(file=__file,  handler=str(proc_file_handler_registry[__file]))
 
+def ShowPartialProcFileHandlers():
+    """Print a list of all the known 'end of path' file patterns and their handler mappings"""
 
+    for __patt in proc_partial_file_handler_registry:
+        print "Path {patt} matches {handler}".format(patt=__patt,  handler=str(proc_partial_file_handler_registry[__patt]))
+
+def ShowHandlerFilePath(cl_instance):
+    """Return the fullpath of the /proc file associated with the base class of the instance provided"""
+
+    __key = "{tmod}.{tcl}".format(tmod=cl_instance.__class__.__module__, tcl=cl_instance.__class__.__name__)
+    return handler_to_path[__key]
 
 class ProcNetNULL:
     """Dummy class that just acts like reading from an empty file, returned as the handler
@@ -392,9 +434,9 @@ class ProcNetNULL:
 
     def next(self):
         raise StopIteration
-
 #
 RegisterProcFileHandler(F_NULL_HANDLER, ProcNetNULL)
+
 
 class ProcNetDEV_SNMP6:
     """Pull records from a device specific file in the /proc/net/dev_snmp6/ directory"""
@@ -411,12 +453,10 @@ class ProcNetDEV_SNMP6:
 
     def __init__(self, *opts):
         if len(opts) > 0:
-            if opts[0] == "":
-                self.__infile = "/proc/net/dev_snmp6/lo"
-            else:
-                self.__infile = "/proc/net/dev_snmp6/{subfile}".format(subfile=opts[0])
+            self.__infile = ProcFileToPath(opts[0])
         else:
-            self.__infile = "/proc/net/dev_snmp6/lo"
+            self.__infile = "{prefix}/{file}".format(prefix=ShowHandlerFilePath(self), file="lo")
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
         self.__sio.open_file( self.__infile)
@@ -457,6 +497,7 @@ class ProcNetDEV_SNMP6:
         return(self.field)
 #
 RegisterProcFileHandler("/proc/net/dev_snmp6", ProcNetDEV_SNMP6)
+RegisterPartialProcFileHandler("dev_snmp6", ProcNetDEV_SNMP6)
 
 
 
@@ -465,10 +506,15 @@ class ProcNetSNMP6:
 # DCHK: 11/25/12
 # source: net/ipv6/proc.c
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/snmp6")
+        self.__sio.open_file(self.__infile)
 
 #       Making 'pylint' happy
         self.__keyval = ""
@@ -501,6 +547,7 @@ class ProcNetSNMP6:
         return(self.field)
 #
 RegisterProcFileHandler("/proc/net/snmp6", ProcNetSNMP6)
+RegisterPartialProcFileHandler("snmp6", ProcNetSNMP6)
 
 
 
@@ -575,11 +622,15 @@ class ProcNetNF_CONNTRACK:
 # -- from ct_show_secctx()
 #  ret = seq_printf(s, "secctx=%s ", secctx);
 
-    def __init__(self):
-        self.field = dict()
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
 
+        self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/nf_conntrack", 14)
+        self.__sio.open_file( self.__infile, 14)
 
         self.__TUPLE_PREF = "src="
         self.__UNREPLIED_PREF = "["
@@ -782,6 +833,7 @@ class ProcNetNF_CONNTRACK:
         return( self.l3_protocol, self.protocol, self.timeout, self.state, self.src_ip, self.src_port, self.dst_ip, self.dst_port)
 #
 RegisterProcFileHandler("/proc/net/nf_conntrack", ProcNetNF_CONNTRACK)
+RegisterPartialProcFileHandler("net/nf_conntrack", ProcNetNF_CONNTRACK)
 
 
 
@@ -841,11 +893,15 @@ class ProcNetIP_CONNTRACK:
 # -- from ct_show_secctx()
 #  ret = seq_printf(s, "secctx=%s ", secctx);
 
-    def __init__(self):
-        self.field = dict()
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
 
+        self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/ip_conntrack", 12)
+        self.__sio.open_file( self.__infile, 12)
 
         self.__TUPLE_PREF = "src="
         self.__UNREPLIED_PREF = "["
@@ -1026,6 +1082,7 @@ class ProcNetIP_CONNTRACK:
         return( self.protocol, self.timeout, self.state, self.src_ip, self.src_port, self.dst_ip, self.dst_port)
 #
 RegisterProcFileHandler("/proc/net/ip_conntrack", ProcNetIP_CONNTRACK)
+RegisterPartialProcFileHandler("net/ip_conntrack", ProcNetIP_CONNTRACK)
 
 
 
@@ -1034,10 +1091,15 @@ class ProcNetIP_TABLES_TARGETS:
 # DCHK: 11/24/12
 # source: net/netfilter/x_tables.c
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/ip_tables_targets")
+        self.__sio.open_file( self.__infile)
 
 #       For 'pylint'
         self.__lines = ()
@@ -1061,6 +1123,7 @@ class ProcNetIP_TABLES_TARGETS:
         return( self.__lines)
 #
 RegisterProcFileHandler("/proc/net/ip_tables_targets", ProcNetIP_TABLES_TARGETS)
+RegisterPartialProcFileHandler("ip_tables_targets", ProcNetIP_TABLES_TARGETS)
 
 
 
@@ -1069,10 +1132,15 @@ class ProcNetIP_TABLES_NAMES:
 # DCHK: 11/24/12
 # source: net/netfilter/x_tables.c
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/ip_tables_names")
+        self.__sio.open_file( self.__infile)
 
 #       For 'pylint'
         self.__lines = ()
@@ -1094,6 +1162,7 @@ class ProcNetIP_TABLES_NAMES:
         return( self.__lines)
 #
 RegisterProcFileHandler("/proc/net/ip_tables_names", ProcNetIP_TABLES_NAMES)
+RegisterPartialProcFileHandler("ip_tables_names", ProcNetIP_TABLES_NAMES)
 
 
 
@@ -1102,10 +1171,15 @@ class ProcNetIP_TABLES_MATCHES:
 # DCHK: 11/24/12
 # source: net/netfilter/x_tables.c
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/ip_tables_matches")
+        self.__sio.open_file( self.__infile)
 
 #       For 'pylint'
         self.__lines = ()
@@ -1130,6 +1204,7 @@ class ProcNetIP_TABLES_MATCHES:
         return( self.__lines)
 #
 RegisterProcFileHandler("/proc/net/ip_tables_matches", ProcNetIP_TABLES_MATCHES)
+RegisterPartialProcFileHandler("ip_tables_matches", ProcNetIP_TABLES_MATCHES)
 
 
 
@@ -1138,10 +1213,15 @@ class ProcNetIP6_TABLES_TARGETS:
 # DCHK: 11/24/12
 # source: net/netfilter/x_tables.c
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/ip6_tables_targets")
+        self.__sio.open_file( self.__infile)
 
 #       For 'pylint'
         self.__lines = ()
@@ -1164,6 +1244,7 @@ class ProcNetIP6_TABLES_TARGETS:
         return( self.__lines)
 #
 RegisterProcFileHandler("/proc/net/ip6_tables_targets", ProcNetIP6_TABLES_TARGETS)
+RegisterPartialProcFileHandler("ip6_tables_targets", ProcNetIP6_TABLES_TARGETS)
 
 
 
@@ -1172,10 +1253,15 @@ class ProcNetIP6_TABLES_NAMES:
 # DCHK: 11/24/12
 # source: net/netfilter/x_tables.c
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/ip6_tables_names")
+        self.__sio.open_file( self.__infile)
 
 #       For 'pylint'
         self.__lines = ()
@@ -1197,6 +1283,7 @@ class ProcNetIP6_TABLES_NAMES:
         return( self.__lines)
 #
 RegisterProcFileHandler("/proc/net/ip6_tables_names", ProcNetIP6_TABLES_NAMES)
+RegisterPartialProcFileHandler("ip6_tables_names", ProcNetIP6_TABLES_NAMES)
 
 
 
@@ -1205,10 +1292,15 @@ class ProcNetIP6_TABLES_MATCHES:
 # DCHK: 11/20/12
 # source: net/netfilter/x_tables.c
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/ip6_tables_matches")
+        self.__sio.open_file( self.__infile)
 
 #       Lines for 'pylint'
         self.__lines = ()
@@ -1233,6 +1325,7 @@ class ProcNetIP6_TABLES_MATCHES:
         return( self.__lines)
 #
 RegisterProcFileHandler("/proc/net/ip6_tables_matches", ProcNetIP6_TABLES_MATCHES)
+RegisterPartialProcFileHandler("ip6_tables_matches", ProcNetIP6_TABLES_MATCHES)
 
 
 
@@ -1252,13 +1345,19 @@ class ProcNetIGMP:
 #                   jiffies_to_clock_t(im->timer.expires-jiffies) : 0,
 #                   im->reporter);
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+            print self.__class__.__name__
+
         self.field = dict()
 
         self.__sio = SeqFileIO.SeqFileIO()
         self.__MinWords_first = 5
         self.__MinWords_second = 4
-        self.__sio.open_file( "/proc/net/igmp", self.__MinWords_first, "Idx")
+        self.__sio.open_file( self.__infile, self.__MinWords_first, "Idx")
         self.__FieldSplitDelim = ":"
 
 #       Lines added for 'pylint'
@@ -1359,6 +1458,7 @@ class ProcNetIGMP:
         return( self.index, self.device, self.count, self.querier, self.group, self.users, self.timer)
 #
 RegisterProcFileHandler("/proc/net/igmp", ProcNetIGMP)
+RegisterPartialProcFileHandler("igmp", ProcNetIGMP)
 
 
 
@@ -1371,11 +1471,16 @@ class ProcNetNetfilterNF_QUEUE:
 #  else
 #          ret = seq_printf(s, "%2lld %s\n", *pos, qh->name);
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
 
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/netfilter/nf_queue", 2)
+        self.__sio.open_file( self.__infile, 2)
 
 #       Lines for 'pylint'
         self.name = ""
@@ -1416,6 +1521,7 @@ class ProcNetNetfilterNF_QUEUE:
         return( self.index, self.name)
 #
 RegisterProcFileHandler("/proc/net/netfilter/nf_queue", ProcNetNetfilterNF_QUEUE)
+RegisterPartialProcFileHandler("nf_queue", ProcNetNetfilterNF_QUEUE)
 
 
 
@@ -1444,11 +1550,16 @@ class ProcNetNetfilterNF_LOG:
 #
 #  return seq_printf(s, ")\n");
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
 
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/netfilter/nf_log", 3)
+        self.__sio.open_file(self.__infile, 3)
 
 #       Lines for 'pylint'
         self.index = 0
@@ -1497,6 +1608,7 @@ class ProcNetNetfilterNF_LOG:
         return( self.index, self.name, self.log_list)
 #
 RegisterProcFileHandler("/proc/net/netfilter/nf_log", ProcNetNetfilterNF_LOG)
+RegisterPartialProcFileHandler("nf_log", ProcNetNetfilterNF_LOG)
 
 
 
@@ -1517,11 +1629,16 @@ class ProcNetNETLINK:
 #                   sock_i_ino(s)
 #                );
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
 
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/netlink", 10, "sk")
+        self.__sio.open_file(self.__infile, 10, "sk")
 
 #       Line for 'pylint'
         self.protocol = 0
@@ -1589,6 +1706,7 @@ class ProcNetNETLINK:
         return( self.protocol, self.pid, self.groups, self.dump, self.locks, self.drops)
 #
 RegisterProcFileHandler("/proc/net/netlink", ProcNetNETLINK)
+RegisterPartialProcFileHandler("netlink", ProcNetNETLINK)
 
 
 
@@ -1602,11 +1720,16 @@ class ProcNetCONNECTOR:
 #                     cbq->id.id.idx,
 #                     cbq->id.id.val);
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
 
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/connector", 2, "Name")
+        self.__sio.open_file(self.__infile, 2, "Name")
         self.__FieldSplitDelim = ":"
 
 #       Lines for 'pylint'
@@ -1651,6 +1774,7 @@ class ProcNetCONNECTOR:
         return( self.name, self.id_idx, self.id_val)
 #
 RegisterProcFileHandler("/proc/net/connector", ProcNetCONNECTOR)
+RegisterPartialProcFileHandler("connector", ProcNetCONNECTOR)
 
 
 
@@ -1670,11 +1794,16 @@ class ProcNetPACKET:
 #                   sock_i_uid(s),
 #                   sock_i_ino(s));
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
 
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/packet", 9, "sk")
+        self.__sio.open_file(self.__infile, 9, "sk")
 
 #       Lines for 'pylint'
         self.type = 0
@@ -1738,6 +1867,7 @@ class ProcNetPACKET:
         return( self.type, self.protocol, self.interface_index, self.running, self.rmem_alloc, self.uid)
 #
 RegisterProcFileHandler("/proc/net/packet", ProcNetPACKET)
+RegisterPartialProcFileHandler("packet", ProcNetPACKET)
 
 
 
@@ -1776,11 +1906,16 @@ class ProcNetPROTOCOLS:
 #               proto_method_implemented(proto->get_port),
 #               proto_method_implemented(proto->enter_memory_pressure));
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
 
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/protocols", 27, "protocol")
+        self.__sio.open_file(self.__infile, 27, "protocol")
 
 #       Lines for 'pylint'
         self.protocol = ""
@@ -1880,6 +2015,7 @@ class ProcNetPROTOCOLS:
         return( self.protocol, self.size, self.sockets, self.memory, self.module)
 #
 RegisterProcFileHandler("/proc/net/protocols", ProcNetPROTOCOLS)
+RegisterPartialProcFileHandler("protocols", ProcNetPROTOCOLS)
 
 
 
@@ -1892,11 +2028,15 @@ class ProcNetSOFTNET_STAT:
 #                   0, 0, 0, 0, /* was fastroute */
 #                   sd->cpu_collision, sd->received_rps);
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
         self.field = dict()
 
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/softnet_stat", 10)
+        self.__sio.open_file(self.__infile, 10)
 
 #       Lines for 'pylint'
         self.processed = 0
@@ -1962,6 +2102,7 @@ class ProcNetSOFTNET_STAT:
         return( self.processed, self.dropped, self.time_squeeze, self.cpu_coll, self.received_rps)
 #
 RegisterProcFileHandler("/proc/net/softnet_stat", ProcNetSOFTNET_STAT)
+RegisterPartialProcFileHandler("softnet_stat", ProcNetSOFTNET_STAT)
 
 
 
@@ -1978,10 +2119,15 @@ class ProcNetRT6_STATS:
 #               dst_entries_get_slow(&net->ipv6.ip6_dst_ops),
 #               net->ipv6.rt6_stats->fib_discarded_routes);
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/rt6_stats", 7)
+        self.__sio.open_file(self.__infile, 7)
 
 #       Line for 'pylint'
         self.nodes = 0
@@ -2038,6 +2184,7 @@ class ProcNetRT6_STATS:
         return( self.nodes, self.route_nodes, self.route_entries, self.route_cache, self.discarded)
 #
 RegisterProcFileHandler("/proc/net/rt6_stats", ProcNetRT6_STATS)
+RegisterPartialProcFileHandler("rt6_stats", ProcNetRT6_STATS)
 
 
 
@@ -2050,10 +2197,15 @@ class ProcNetPSCHED:
 #                  1000000,
 #                  (u32)NSEC_PER_SEC/(u32)ktime_to_ns(timespec_to_ktime(ts)));
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/psched", 4)
+        self.__sio.open_file(self.__infile, 4)
 
 #       Lines for 'pylint'
         self.nsec_per_usec = 0
@@ -2098,6 +2250,7 @@ class ProcNetPSCHED:
         return( self.nsec_per_usec, self.psched_ticks, self.nsec_per_hrtime)
 #
 RegisterProcFileHandler("/proc/net/psched", ProcNetPSCHED)
+RegisterPartialProcFileHandler("psched", ProcNetPSCHED)
 
 
 
@@ -2125,10 +2278,15 @@ class ProcNetIPV6_ROUTE:
 #                    rt->dst.__use, rt->rt6i_flags,
 #                    rt->rt6i_dev ? rt->rt6i_dev->name : "");
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/ipv6_route", 10)
+        self.__sio.open_file(self.__infile, 10)
         self.ipconv = IPAddressConv
 
 #       Lines for 'pylint'
@@ -2207,6 +2365,7 @@ class ProcNetIPV6_ROUTE:
         return( self.dest_ip, self.dest_pref_len, self.src_ip, self.src_pref_len, self.dest_refcount, self.device)
 #
 RegisterProcFileHandler("/proc/net/ipv6_route", ProcNetIPV6_ROUTE)
+RegisterPartialProcFileHandler("ipv6_route", ProcNetIPV6_ROUTE)
 
 
 
@@ -2222,10 +2381,15 @@ class ProcNetIGMP6:
 #                   (im->mca_flags&MAF_TIMER_RUNNING) ?
 #                   jiffies_to_clock_t(im->mca_timer.expires-jiffies) : 0);
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/igmp6", 6)
+        self.__sio.open_file(self.__infile, 6)
         self.ipconv = IPAddressConv
 
 #       Lines for 'pylint'
@@ -2282,6 +2446,7 @@ class ProcNetIGMP6:
         return( self.device, self.mcast_addr, self.mcast_users, self.mcast_flags)
 #
 RegisterProcFileHandler("/proc/net/igmp6", ProcNetIGMP6)
+RegisterPartialProcFileHandler("igmp6", ProcNetIGMP6)
 
 
 
@@ -2295,10 +2460,15 @@ class ProcNetDEV_MCAST:
 #                for (i = 0; i < dev->addr_len; i++)
 #                        seq_printf(seq, "%02x", ha->addr[i]);
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/dev_mcast", 5)
+        self.__sio.open_file(self.__infile, 5)
 
 #       Lines for 'pylint'
         self.device = ""
@@ -2347,6 +2517,7 @@ class ProcNetDEV_MCAST:
         return( self.device, self.ref_count, self.global_use)
 #
 RegisterProcFileHandler("/proc/net/dev_mcast", ProcNetDEV_MCAST)
+RegisterPartialProcFileHandler("dev_mcast", ProcNetDEV_MCAST)
 
 
 
@@ -2362,10 +2533,15 @@ class ProcNetIF_INET6:
 #                   ifp->flags,
 #                   ifp->idev->dev->name);
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/if_inet6", 6)
+        self.__sio.open_file( self.__infile, 6)
         self.ipconv = IPAddressConv
 
 #       Lines for 'pylint'
@@ -2430,6 +2606,7 @@ class ProcNetIF_INET6:
         return( self.ipv6, self.ipv6_hex, self.scope, self.device)
 #
 RegisterProcFileHandler("/proc/net/if_inet6", ProcNetIF_INET6)
+RegisterPartialProcFileHandler("if_inet6", ProcNetIF_INET6)
 
 
 
@@ -2464,10 +2641,15 @@ class ProcNetUNIX:
 #                                seq_putc(seq, u->addr->name->sun_path[i]);
 
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/unix", 7, "Num")
+        self.__sio.open_file(self.__infile, 7, "Num")
 
 #       Lines for 'pylint'
         self.protocol = 0
@@ -2539,6 +2721,7 @@ class ProcNetUNIX:
         return( self.refcount, self.protocol, self.flags, self.type, self.state, self.inode, self.path)
 #
 RegisterProcFileHandler("/proc/net/unix", ProcNetUNIX)
+RegisterPartialProcFileHandler("unix", ProcNetUNIX)
 
 
 
@@ -2569,10 +2752,15 @@ class ProcNetStatRT_CACHE:
 #                   st->out_hlist_search
 
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/stat/rt_cache", 17, "entries")
+        self.__sio.open_file(self.__infile, 17, "entries")
 
 #       Lines for 'pylint'
         self.entries = 0
@@ -2649,6 +2837,7 @@ class ProcNetStatRT_CACHE:
         return( self.entries, self.in_hit, self.in_slow, self.out_hit, self.out_slow)
 #
 RegisterProcFileHandler("/proc/net/stat/rt_cache", ProcNetStatRT_CACHE)
+RegisterPartialProcFileHandler("stat/rt_cache", ProcNetStatRT_CACHE)
 
 
 
@@ -2673,10 +2862,15 @@ class ProcNetStatNDISC_CACHE:
 #                   );
 
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/stat/ndisc_cache", 12, "entries")
+        self.__sio.open_file(self.__infile, 12, "entries")
 
 #       Lines for 'pylint'
         self.entries = 0
@@ -2738,6 +2932,7 @@ class ProcNetStatNDISC_CACHE:
         return( self.entries, self.lookups, self.hits)
 #
 RegisterProcFileHandler("/proc/net/stat/ndisc_cache", ProcNetStatNDISC_CACHE)
+RegisterPartialProcFileHandler("ndisc_cache", ProcNetStatNDISC_CACHE)
 
 
 
@@ -2766,10 +2961,15 @@ class ProcNetStatNF_CONNTRACK:
 #                   st->search_restart
 #                );
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/stat/nf_conntrack", 17, "entries")
+        self.__sio.open_file(self.__infile, 17, "entries")
 
 #       Lines for 'pylint'
         self.insert = 0
@@ -2858,6 +3058,7 @@ class ProcNetStatNF_CONNTRACK:
         return( self.entries, self.searched, self.found, self.new, self.invalid, self.ignore, self.delete, self.insert, self.drop)
 #
 RegisterProcFileHandler("/proc/net/stat/nf_conntrack", ProcNetStatNF_CONNTRACK)
+RegisterPartialProcFileHandler("stat/nf_conntrack", ProcNetStatNF_CONNTRACK)
 
 
 
@@ -2886,10 +3087,15 @@ class ProcNetStatIP_CONNTRACK:
 #                   st->search_restart
 #                );
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/stat/ip_conntrack", 17, "entries")
+        self.__sio.open_file(self.__infile, 17, "entries")
 
 #       Lines for 'pylint'
         self.insert = 0
@@ -2978,6 +3184,7 @@ class ProcNetStatIP_CONNTRACK:
         return( self.entries, self.searched, self.found, self.new, self.invalid, self.ignore, self.delete, self.insert, self.drop)
 #
 RegisterProcFileHandler("/proc/net/stat/ip_conntrack", ProcNetStatIP_CONNTRACK)
+RegisterPartialProcFileHandler("stat/ip_conntrack", ProcNetStatIP_CONNTRACK)
 
 
 
@@ -3001,10 +3208,15 @@ class ProcNetStatARP_CACHE:
 #                   st->unres_discards
 #                   );
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/stat/arp_cache", 12, "entries")
+        self.__sio.open_file(self.__infile, 12, "entries")
 
 #       Lines for 'pylint'
         self.lookups = 0
@@ -3066,6 +3278,7 @@ class ProcNetStatARP_CACHE:
         return( self.entries, self.lookups, self.hits)
 #
 RegisterProcFileHandler("/proc/net/stat/arp_cache", ProcNetStatARP_CACHE)
+RegisterPartialProcFileHandler("arp_cache", ProcNetStatARP_CACHE)
 
 
 
@@ -3090,10 +3303,15 @@ class ProcNetRT_CACHE:
 #                        r->rt_spec_dst, &len);
 #                seq_printf(seq, "%*s\n", 127 - len, "");
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/rt_cache", 15, "Iface")
+        self.__sio.open_file(self.__infile, 15, "Iface")
         self.ipconv = IPAddressConv
 
 #       Lines for 'pylint'
@@ -3189,6 +3407,7 @@ class ProcNetRT_CACHE:
         return( self.interface, self.destination, self.gateway, self.usecount, self.source, self.spec_dst)
 #
 RegisterProcFileHandler("/proc/net/rt_cache", ProcNetRT_CACHE)
+RegisterPartialProcFileHandler("net/rt_cache", ProcNetRT_CACHE)
 
 
 
@@ -3217,10 +3436,15 @@ class ProcNetROUTE:
 #                                         mask, 0, 0, 0, &len);
 #                        seq_printf(seq, "%*s\n", 127 - len, "");
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/route", 11, "Iface")
+        self.__sio.open_file(self.__infile, 11, "Iface")
 
 #       Lines for 'pylint'
         self.interface = ""
@@ -3295,6 +3519,7 @@ class ProcNetROUTE:
         return( self.interface, self.destination, self.gateway, self.netmask)
 #
 RegisterProcFileHandler("/proc/net/route", ProcNetROUTE)
+RegisterPartialProcFileHandler("route", ProcNetROUTE)
 
 
 
@@ -3320,10 +3545,15 @@ class ProcNetDEV:
 #                    stats->tx_heartbeat_errors,
 #                   stats->tx_compressed);
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/dev", 17, "face")
+        self.__sio.open_file(self.__infile, 17, "face")
 
 #       Lines for 'pylint'
         self.device = ""
@@ -3404,6 +3634,7 @@ class ProcNetDEV:
         return( self.device, self.rx_packets, self.rx_errors, self.tx_packets, self.tx_errors)
 #
 RegisterProcFileHandler("/proc/net/dev", ProcNetDEV)
+RegisterPartialProcFileHandler("dev", ProcNetDEV)
 
 
 
@@ -3414,10 +3645,15 @@ class ProcNetARP:
 #        seq_printf(seq, "%-16s 0x%-10x0x%-10x%s     *        %s\n",
 #                   tbuf, hatype, arp_state_to_flags(n), hbuffer, dev->name);
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/arp", 6, "IP")
+        self.__sio.open_file(self.__infile, 6, "IP")
 
 #       Lines for 'pylint'
         self.ip_addr = ""
@@ -3467,6 +3703,7 @@ class ProcNetARP:
         return( self.ip_addr, self.hw_addr, self.device)
 #
 RegisterProcFileHandler("/proc/net/arp", ProcNetARP)
+RegisterPartialProcFileHandler("arp", ProcNetARP)
 
 
 
@@ -3491,10 +3728,15 @@ class ProcNetUDP6:
 #                   atomic_read(&sp->sk_refcnt), sp,
 #                   atomic_read(&sp->sk_drops));
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/udp6", 12, "sl")
+        self.__sio.open_file(self.__infile, 12, "sl")
         self.__FieldSplitDelim = ":"
         self.ipconv = IPAddressConv
 
@@ -3588,6 +3830,7 @@ class ProcNetUDP6:
         return( self.orig_hexip, self.dest_hexip, self.orig_ip, self.orig_port, self.dest_ip, self.dest_port, self.state)
 #
 RegisterProcFileHandler("/proc/net/udp6", ProcNetUDP6)
+RegisterPartialProcFileHandler("udp6", ProcNetUDP6)
 
 
 
@@ -3604,10 +3847,15 @@ class ProcNetUDP:
 #                atomic_read(&sp->sk_refcnt), sp,
 #                atomic_read(&sp->sk_drops), len);
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/udp", 12, "sl")
+        self.__sio.open_file(self.__infile, 12, "sl")
         self.__FieldSplitDelim = ":"
 
 #       Lines for 'pylint'
@@ -3702,6 +3950,7 @@ class ProcNetUDP:
         return( self.orig_hexip, self.dest_hexip, self.orig_ip, self.orig_port, self.dest_ip, self.dest_port, self.state)
 #
 RegisterProcFileHandler("/proc/net/udp", ProcNetUDP)
+RegisterPartialProcFileHandler("udp", ProcNetUDP)
 
 
 
@@ -3734,10 +3983,15 @@ class ProcNetTCP:
 #                tcp_in_initial_slowstart(tp) ? -1 : tp->snd_ssthresh,
 #                len);
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/tcp", 12, "sl")
+        self.__sio.open_file(self.__infile, 12, "sl")
         self.__FieldSplitDelim = ":"
 
 #       Lines for 'pylint'
@@ -3841,6 +4095,7 @@ class ProcNetTCP:
         return( self.orig_hexip, self.dest_hexip, self.orig_ip, self.orig_port, self.dest_ip, self.dest_port, self.state)
 #
 RegisterProcFileHandler("/proc/net/tcp", ProcNetTCP)
+RegisterPartialProcFileHandler("tcp", ProcNetTCP)
 
 
 
@@ -3882,10 +4137,15 @@ class ProcNetTCP6:
 #             tcp_in_initial_slowstart(tp) ? -1 : tp->snd_ssthresh
 #             );
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/tcp6", 12, "sl")
+        self.__sio.open_file(self.__infile, 12, "sl")
         self.__FieldSplitDelim = ":"
         self.ipconv = IPAddressConv
 
@@ -3987,6 +4247,7 @@ class ProcNetTCP6:
 
         return( self.orig_hexip, self.dest_hexip, self.orig_ip, self.orig_port, self.dest_ip, self.dest_port, self.state)
 RegisterProcFileHandler("/proc/net/tcp6", ProcNetTCP6)
+RegisterPartialProcFileHandler("tcp6", ProcNetTCP6)
 
 
 class ProcNetSOCKSTAT:
@@ -4015,10 +4276,15 @@ class ProcNetSOCKSTAT:
 #  seq_printf(seq,  "FRAG: inuse %d memory %d\n",
 #             ip_frag_nqueues(net), ip_frag_mem(net));
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/sockstat", 1)
+        self.__sio.open_file(self.__infile, 1)
         self.__sock_type_list = ([ F_SOCK_TCP, F_SOCK_UDP, F_SOCK_UDPLITE, F_SOCK_RAW, F_SOCK_FRAG, F_SOCK_SOCKETS ])
 
 #       Lines for 'pylint'
@@ -4049,6 +4315,7 @@ class ProcNetSOCKSTAT:
         return( self.__result)
 #
 RegisterProcFileHandler("/proc/net/sockstat", ProcNetSOCKSTAT)
+RegisterPartialProcFileHandler("sockstat", ProcNetSOCKSTAT)
 
 
 
@@ -4070,10 +4337,15 @@ class ProcNetSOCKSTAT6:
 #                 ip6_frag_nqueues(net), ip6_frag_mem(net));
 
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/sockstat6", 1)
+        self.__sio.open_file(self.__infile, 1)
         self.__sock_type_list = ([ F_SOCK_TCP6, F_SOCK_UDP6, F_SOCK_UDPLITE6, F_SOCK_RAW6, F_SOCK_FRAG6 ])
 
 #       Lines for 'pylint'
@@ -4104,6 +4376,7 @@ class ProcNetSOCKSTAT6:
         return( self.__result)
 #
 RegisterProcFileHandler("/proc/net/sockstat6", ProcNetSOCKSTAT6)
+RegisterPartialProcFileHandler("sockstat6", ProcNetSOCKSTAT6)
 
 
 
@@ -4124,10 +4397,15 @@ class ProcNetPTYPE:
 #         seq_printf(seq, " %-8s %pF\n",
 #                    pt->dev ? pt->dev->name : "", pt->func);
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/ptype", 2, "Type")
+        self.__sio.open_file(self.__infile, 2, "Type")
 
 #       Lines for 'pylint'
         self.device_name = ""
@@ -4183,6 +4461,7 @@ class ProcNetPTYPE:
         return( self.device_type, self.device_name, self.device_function)
 #
 RegisterProcFileHandler("/proc/net/ptype", ProcNetPTYPE)
+RegisterPartialProcFileHandler("ptype", ProcNetPTYPE)
 
 
 
@@ -4293,10 +4572,15 @@ class ProcNetSNMP:
 # seq_putc(seq, '\n');
 #
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/snmp", 2)
+        self.__sio.open_file(self.__infile, 2)
 
 #       Lines for 'pylint'
         self.protocol_type = ""
@@ -4333,6 +4617,7 @@ class ProcNetSNMP:
         return( self.protocol_type, self.field)
 #
 RegisterProcFileHandler("/proc/net/snmp", ProcNetSNMP)
+RegisterPartialProcFileHandler("snmp", ProcNetSNMP)
 
 
 
@@ -4365,10 +4650,15 @@ class ProcNetNETSTAT:
 #
 # seq_putc(seq, '\n');
 
-    def __init__(self):
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.__infile = ProcFileToPath(opts[0])
+        else:
+            self.__infile = ShowHandlerFilePath(self)
+
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file( "/proc/net/netstat", 2)
+        self.__sio.open_file(self.__infile, 2)
 
 #       Lines for 'pylint'
         self.protocol_type = ""
@@ -4397,6 +4687,7 @@ class ProcNetNETSTAT:
         return( self.protocol_type, self.field)
 #
 RegisterProcFileHandler("/proc/net/netstat", ProcNetNETSTAT)
+RegisterPartialProcFileHandler("netstat", ProcNetNETSTAT)
 
 
 if __name__ == "__main__":

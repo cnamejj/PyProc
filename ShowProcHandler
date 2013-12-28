@@ -30,7 +30,7 @@ else:
     if qualify != "":
         active = handler(qualify)
     else:
-        active = handler()
+        active = handler(target)
 
     if qualify != "":
         target = "{dir}/{file}".format(dir=target, file=qualify)

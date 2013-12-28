@@ -16,6 +16,8 @@ sep = "|"
 nested = 0
 head = ""
 
+DEV_SNMP6 = "dev_snmp6"
+
 if len(sys.argv) > 1:
     target = sys.argv[1]
     if len(sys.argv) > 2:
@@ -26,10 +28,13 @@ else:
 handler = ProcSysInfo.GetProcFileHandler(target)
 
 if qualify != "":
-    active = handler(qualify)
     target = '{path}/{file}'.format(path=target, file=qualify)
+    active = handler(target)
 else:
-    active = handler()
+    if target == DEV_SNMP6:
+        active = handler()
+    else:
+        active = handler(target)
 
 for srec in active:
     prev_head = head
