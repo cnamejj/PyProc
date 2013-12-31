@@ -63,8 +63,8 @@ class ProcRootEXECDOMAINS(PBR.fixed_delim_format_recs):
             __split = sio.lineparts[0].partition(self.__FieldSplitDelim)
             self.field[PFC.F_PERSONALITY_LOW] = long(__split[0])
             self.field[PFC.F_PERSONALITY_HIGH] = long(__split[2])
-            self.field[PFC.F_EXDOM_NAME] = str(sio.lineparts[1])
-            self.field[PFC.F_EXDOM_MODULE] = str(sio.lineparts[2])
+            self.field[PFC.F_EXDOM_NAME] = sio.lineparts[1]
+            self.field[PFC.F_EXDOM_MODULE] = sio.lineparts[2]
 
         self.pers_low = self.field[PFC.F_PERSONALITY_LOW]
         self.pers_high = self.field[PFC.F_PERSONALITY_HIGH]
@@ -121,7 +121,7 @@ class ProcRootCGROUPS(PBR.fixed_delim_format_recs):
             self.field[PFC.F_ENABLED] = 0
 
         else:
-            self.field[PFC.F_SUBSYSTEM] = str(sio.lineparts[0])
+            self.field[PFC.F_SUBSYSTEM] = sio.lineparts[0]
             self.field[PFC.F_HIERARCHY] = long(sio.lineparts[1])
             self.field[PFC.F_NUM_CGROUPS] = long(sio.lineparts[2])
             self.field[PFC.F_ENABLED] = long(sio.lineparts[3])
@@ -141,7 +141,7 @@ RegisterPartialProcFileHandler("cgroups", ProcRootCGROUPS)
 # ---
 class ProcRootMTRR(PBR.fixed_delim_format_recs):
     """Pull records from /proc/mtrr"""
-# source: 
+# source: arch/x86/kernel/cpu/mtrr/if.c
 #
 #        for (i = 0; i < max; i++) {
 #                mtrr_if->get(i, &base, &size, &type);
@@ -197,23 +197,23 @@ class ProcRootMTRR(PBR.fixed_delim_format_recs):
             self.field[PFC.F_TYPE] = ""
 
         else:
-            self.field[PFC.F_INDEX] = long(str(sio.lineparts[0])[-3:-1])
-            self.field[PFC.F_BASE_MEMORY] = long(str(sio.lineparts[1])[-9:-5], 16)
+            self.field[PFC.F_INDEX] = long(sio.lineparts[0][-3:-1])
+            self.field[PFC.F_BASE_MEMORY] = long(sio.lineparts[1][-9:-5], 16)
 
             __offset = 3
-            if str(sio.lineparts[__offset]) == self.__SizePref:
+            if sio.lineparts[__offset] == self.__SizePref:
                 __offset = __offset + 1
-            elif str(sio.lineparts[__offset][:len(self.__SizePref)]) != self.__SizePref:
+            elif sio.lineparts[__offset][:len(self.__SizePref)] != self.__SizePref:
                 __offset = __offset + 1
-                if str(sio.lineparts[__offset]) == self.__SizePref:
+                if sio.lineparts[__offset] == self.__SizePref:
                     __offset = __offset + 1
-            self.field[PFC.F_SIZE] = long(str(sio.lineparts[__offset])[-8:-3])
+            self.field[PFC.F_SIZE] = long(sio.lineparts[__offset][-8:-3])
 
             __offset = __offset + 1
-            self.field[PFC.F_COUNT] = long(str(sio.lineparts[__offset])[6:-1])
+            self.field[PFC.F_COUNT] = long(sio.lineparts[__offset][6:-1])
 
             __offset = __offset + 1
-            self.field[PFC.F_TYPE] = str(sio.lineparts[__offset])
+            self.field[PFC.F_TYPE] = sio.lineparts[__offset]
                 
         self.index = self.field[PFC.F_INDEX]
         self.base = self.field[PFC.F_BASE_MEMORY]
@@ -225,5 +225,179 @@ class ProcRootMTRR(PBR.fixed_delim_format_recs):
 #
 RegisterProcFileHandler("/proc/mtrr", ProcRootMTRR)
 RegisterPartialProcFileHandler("mtrr", ProcRootMTRR)
+
+
+
+# ---
+class ProcRootMODULES(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/modules"""
+# source: kernel/module.c
+#
+# ... in routine m_show():
+#
+#        seq_printf(m, "%s %u",
+#                   mod->name, mod->init_size + mod->core_size);
+#        print_unload_info(m, mod);
+#
+#        /* Informative for users. */
+#        seq_printf(m, " %s",
+#                   mod->state == MODULE_STATE_GOING ? "Unloading":
+#                   mod->state == MODULE_STATE_COMING ? "Loading":
+#                   "Live");
+#        /* Used by oprofile and other similar tools. */
+#        seq_printf(m, " 0x%pK", mod->module_core);
+#
+#        /* Taints info */
+#        if (mod->taints)
+#                seq_printf(m, " %s", module_flags(mod, buf));
+#
+#        seq_printf(m, "\n");
+#
+# ... in routine print_unload_info():
+#
+#        seq_printf(m, " %u ", module_refcount(mod));
+#
+#        /* Always include a trailing , so userspace can differentiate
+#           between this and the old multi-field proc format. */
+#        list_for_each_entry(use, &mod->source_list, source_list) {
+#                printed_something = 1;
+#                seq_printf(m, "%s,", use->source->name);
+#        }
+#
+#        if (mod->init != NULL && mod->exit == NULL) {
+#                printed_something = 1;
+#                seq_printf(m, "[permanent],");
+#        }
+#
+#        if (!printed_something)
+#                seq_printf(m, "-");
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 6
+
+        self.module = ""
+        self.size = 0
+        self.refcount = 0
+        self.source_list = ""
+        self.status = ""
+        self.module_core = 0
+        self.taints = ""
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# pci_stub 12622 1 - Live 0x0000000000000000
+# vboxpci 23200 0 - Live 0x0000000000000000 (O)
+# vboxnetadp 13382 0 - Live 0x0000000000000000 (O)
+# vboxnetflt 23441 0 - Live 0x0000000000000000 (O)
+# vboxdrv 287130 3 vboxpci,vboxnetadp,vboxnetflt, Live 0x0000000000000000 (O)
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_MODULE] = ""
+            self.field[PFC.F_SIZE] = 0
+            self.field[PFC.F_REFCOUNT] = 0
+            self.field[PFC.F_SOURCE_LIST] = ""
+            self.field[PFC.F_STATUS] = ""
+            self.field[PFC.F_MODULE_CORE] = 0
+            self.field[PFC.F_TAINTS] = ""
+
+        else:
+            self.field[PFC.F_MODULE] = sio.lineparts[0]
+            self.field[PFC.F_SIZE] = long(sio.lineparts[1])
+            self.field[PFC.F_REFCOUNT] = long(sio.lineparts[2])
+            self.field[PFC.F_SOURCE_LIST] = sio.lineparts[3]
+            self.field[PFC.F_STATUS] = sio.lineparts[4]
+            self.field[PFC.F_MODULE_CORE] = long(sio.lineparts[5][2:], 16)
+            if sio.linewords > 6:
+                self.field[PFC.F_TAINTS] = sio.lineparts[6]
+            else:
+                self.field[PFC.F_TAINTS] = ""
+
+        self.module = self.field[PFC.F_MODULE]
+        self.size = self.field[PFC.F_SIZE]
+        self.refcount = self.field[PFC.F_REFCOUNT]
+        self.source_list = self.field[PFC.F_SOURCE_LIST]
+        self.status = self.field[PFC.F_STATUS]
+        self.module_core = self.field[PFC.F_MODULE_CORE]
+        self.taints = self.field[PFC.F_TAINTS]
+
+        return(self.module, self.size, self.refcount, self.source_list, self.status, self.module_core, self.taints)
+#
+RegisterProcFileHandler("/proc/modules", ProcRootMODULES)
+RegisterPartialProcFileHandler("modules", ProcRootMODULES)
+
+
+# ---
+class ProcRootBUDDYINFO(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/buddyinfo"""
+# source: mm/vmstat.c
+#
+#        seq_printf(m, "Node %d, zone %8s ", pgdat->node_id, zone->name);
+#        for (order = 0; order < MAX_ORDER; ++order)
+#                seq_printf(m, "%6lu ", zone->free_area[order].nr_free);
+#        seq_putc(m, '\n');
+
+    def extra_init(self, *opts):
+        self.minfields = 15
+
+        self.node = 0
+        self.zone = ""
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# Node 0, zone      DMA      1      0      1      0      1      1      1      0      1      1      3 
+# Node 0, zone    DMA32  18435  13755   5520    786      7      1      0      1      0      0      0 
+# Node 0, zone   Normal  36118   8165   6999    374      0      0      0      0      0      0      1 
+
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_NODE] = 0
+            self.field[PFC.F_ZONE] = ""
+            self.field[PFC.F_FRBL_AREA_1] = 0
+            self.field[PFC.F_FRBL_AREA_2] = 0
+            self.field[PFC.F_FRBL_AREA_3] = 0
+            self.field[PFC.F_FRBL_AREA_4] = 0
+            self.field[PFC.F_FRBL_AREA_5] = 0
+            self.field[PFC.F_FRBL_AREA_6] = 0
+            self.field[PFC.F_FRBL_AREA_7] = 0
+            self.field[PFC.F_FRBL_AREA_8] = 0
+            self.field[PFC.F_FRBL_AREA_9] = 0
+            self.field[PFC.F_FRBL_AREA_10] = 0
+            self.field[PFC.F_FRBL_AREA_11] = 0
+
+        else:
+            self.field[PFC.F_NODE] = long(sio.lineparts[1][:-1])
+            self.field[PFC.F_ZONE] = sio.lineparts[3]
+            self.field[PFC.F_FRBL_AREA_1] = sio.lineparts[4]
+            self.field[PFC.F_FRBL_AREA_2] = sio.lineparts[5]
+            self.field[PFC.F_FRBL_AREA_3] = sio.lineparts[6]
+            self.field[PFC.F_FRBL_AREA_4] = sio.lineparts[7]
+            self.field[PFC.F_FRBL_AREA_5] = sio.lineparts[8]
+            self.field[PFC.F_FRBL_AREA_6] = sio.lineparts[9]
+            self.field[PFC.F_FRBL_AREA_7] = sio.lineparts[10]
+            self.field[PFC.F_FRBL_AREA_8] = sio.lineparts[11]
+            self.field[PFC.F_FRBL_AREA_9] = sio.lineparts[12]
+            self.field[PFC.F_FRBL_AREA_10] = sio.lineparts[13]
+            self.field[PFC.F_FRBL_AREA_11] = sio.lineparts[14]
+
+        self.node = self.field[PFC.F_NODE]
+        self.zone = self.field[PFC.F_ZONE]
+
+        return(self.node, self.zone)
+#
+RegisterProcFileHandler("/proc/buddyinfo", ProcRootBUDDYINFO)
+RegisterPartialProcFileHandler("buddyinfo", ProcRootBUDDYINFO)
 
 

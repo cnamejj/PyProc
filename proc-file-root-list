@@ -45,10 +45,10 @@ vmallocinfo NEED WSD NOHEADER ROOTONLY
 zoneinfo NEED REPORT
 vmstat NEED WSD NOHEADER
 pagetypeinfo NEED NESTED
-buddyinfo NEED WSD NOHEADER
+buddyinfo DONE WSD ProcRootBUDDYINFO NOHEADER
 latency_stats NEED one-line nowhere-only NOHEADER
 kallsyms NEED WSD NOHEADER HUGE
-modules NEED WSD NOHEADER
+modules DONE WSD ProcRootMODULES NOHEADER
 dma NEED WSD one-line NOHEADER
 timer_stats NEED FLIPPED 
 timer_list NEED REPORT
