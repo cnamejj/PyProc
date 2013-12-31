@@ -164,3 +164,9 @@ class SeqFileIO:
             self.is_open = 0
 
         return
+
+
+
+if __name__ == "__main__":
+
+    print "This is a library of routines that provides access to text files via Python iterators"

@@ -4,7 +4,7 @@
 """
 
 import sys
-import ProcSysInfo
+import ProcHandlers
     
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
@@ -21,11 +21,11 @@ else:
 
 if target == "all":
 
-    ProcSysInfo.ShowProcFileHandlers()
+    ProcHandlers.ShowProcFileHandlers()
 
 else:
 
-    handler = ProcSysInfo.GetProcFileHandler(target)
+    handler = ProcHandlers.GetProcFileHandler(target)
 
     if qualify != "":
         active = handler(qualify)

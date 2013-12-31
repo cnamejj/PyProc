@@ -10,16 +10,19 @@ was written and the number of times each was seen.
 import time
 import sys
 
-import ProcSysInfo
-from ProcSysInfo import GetProcFileHandler
+import ProcHandlers
+import ProcFieldConstants
 import CachedDNS
 import ProcessInfo
+
+GetProcFileHandler = ProcHandlers.GetProcFileHandler
 
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
     
-psi = ProcSysInfo
+psi = ProcHandlers
+pfc = ProcFieldConstants
 
 iplookup = CachedDNS.CachedDNS()
 procinfo = ProcessInfo.ProcessInfo()
@@ -42,13 +45,13 @@ try:
         socklist = handle_tcp()
 
         for proc_rec in socklist:
-            orig_ip = socklist.field[psi.F_ORIG_IP]
-            orig_hexip = socklist.field[psi.F_ORIG_HEXIP]
-            orig_port = socklist.field[psi.F_ORIG_PORT]
-            dest_ip = socklist.field[psi.F_DEST_IP]
-            dest_hexip = socklist.field[psi.F_DEST_HEXIP]
-            dest_port = socklist.field[psi.F_DEST_PORT]
-            sock_stat = socklist.field[psi.F_STATE]
+            orig_ip = socklist.field[pfc.F_ORIG_IP]
+            orig_hexip = socklist.field[pfc.F_ORIG_HEXIP]
+            orig_port = socklist.field[pfc.F_ORIG_PORT]
+            dest_ip = socklist.field[pfc.F_DEST_IP]
+            dest_hexip = socklist.field[pfc.F_DEST_HEXIP]
+            dest_port = socklist.field[pfc.F_DEST_PORT]
+            sock_stat = socklist.field[pfc.F_STATE]
 
 #            print "--> ", dest_ip, dest_port, sock_stat
             if orig_hexip != "" and dest_hexip != "" and sock_stat != "LISTEN":
@@ -66,13 +69,13 @@ try:
         socklist = handle_tcp6()
 
         for proc_rec in socklist:
-            orig_ip = socklist.field[psi.F_ORIG_IP]
-            orig_hexip = socklist.field[psi.F_ORIG_HEXIP]
-            orig_port = socklist.field[psi.F_ORIG_PORT]
-            dest_ip = socklist.field[psi.F_DEST_IP]
-            dest_hexip = socklist.field[psi.F_DEST_HEXIP]
-            dest_port = socklist.field[psi.F_DEST_PORT]
-            sock_stat = socklist.field[psi.F_STATE]
+            orig_ip = socklist.field[pfc.F_ORIG_IP]
+            orig_hexip = socklist.field[pfc.F_ORIG_HEXIP]
+            orig_port = socklist.field[pfc.F_ORIG_PORT]
+            dest_ip = socklist.field[pfc.F_DEST_IP]
+            dest_hexip = socklist.field[pfc.F_DEST_HEXIP]
+            dest_port = socklist.field[pfc.F_DEST_PORT]
+            sock_stat = socklist.field[pfc.F_STATE]
 
 #            print "--> ", dest_ip, dest_port, sock_stat
             if orig_hexip != "" and dest_hexip != "" and sock_stat != "LISTEN":

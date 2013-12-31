@@ -49,3 +49,8 @@ class CachedDNS:
     def get_cache_list(self):
 
         return( self.__hostname_cache)
+
+
+
+if __name__ == "__main__":
+    print "This is a collection of routines to perform DNS lookups"

@@ -34,3 +34,9 @@ def ipv6_hexstring_to_hexdelimited( hexip):
         __delim = "{partial}{chunk1}{separator}{chunk2}".format(partial=__delim, chunk1=__net_hex[0:4], separator=__delimIPV6, chunk2=__net_hex[4:8])
 
     return __delim
+
+
+
+if __name__ == "__main__":
+
+    print "This is collection of routines to convert IP addresses to/from various formats"

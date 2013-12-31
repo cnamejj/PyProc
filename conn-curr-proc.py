@@ -6,7 +6,7 @@ Data is pulled from /proc filesystem.
 
 import sys
 
-from ProcSysInfo import ProcNetTCP, ProcNetTCP6
+from ProcHandlers import ProcNetTCP, ProcNetTCP6
 import ProcessInfo
 import CachedDNS
 

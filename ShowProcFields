@@ -4,7 +4,7 @@
 """
 
 import sys
-import ProcSysInfo
+import ProcHandlers
     
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
@@ -55,15 +55,15 @@ else:
 
 if target == "all":
 
-    for target in ProcSysInfo.proc_file_handler_registry:
-        print "- Logical records from {file} using {handler)".format(file=target, handler=str(ProcSysInfo.proc_file_handler_registry[target]))
+    for target in ProcHandlers.proc_file_handler_registry:
+        print "- Logical records from {file} using {handler)".format(file=target, handler=str(ProcHandlers.proc_file_handler_registry[target]))
 
-        ShowRecsFromOneFile( ProcSysInfo.proc_file_handler_registry[target], target, "")
+        ShowRecsFromOneFile( ProcHandlers.proc_file_handler_registry[target], target, "")
         print ""
 
 else:
-    handler = ProcSysInfo.GetProcFileHandler(target)
-    nohandler = ProcSysInfo.GetProcFileHandler("null")
+    handler = ProcHandlers.GetProcFileHandler(target)
+    nohandler = ProcHandlers.GetProcFileHandler("null")
 
     if handler == nohandler:
         print "- No handler available for file {file}".format(file=fulltarget)

@@ -84,3 +84,9 @@ class ProcessInfo:
 
     def get_ps_returncode(self):
         return self.__ps_returncode
+
+
+
+if __name__ == "__main__":
+
+    print "This is a library of routines to get info about running processes."

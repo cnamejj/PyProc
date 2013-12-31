@@ -11,7 +11,7 @@ times each was seen.
 import time
 import sys
 
-from ProcSysInfo import ProcNetTCP
+from ProcHandlers import ProcNetTCP
 import ProcessInfo
 import CachedDNS
     

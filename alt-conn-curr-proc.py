@@ -6,10 +6,12 @@ Data is pulled from /proc filesystem.
 
 import sys
 
-import ProcSysInfo
-from ProcSysInfo import GetProcFileHandler
+import ProcHandlers
+import ProcFieldConstants
 import CachedDNS
 import ProcessInfo
+
+GetProcFileHandler = ProcHandlers.GetProcFileHandler
 
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
@@ -17,17 +19,18 @@ if sys.platform == "darwin":
 
 iplookup = CachedDNS.CachedDNS()
 procinfo = ProcessInfo.ProcessInfo()
-psi = ProcSysInfo
+psi = ProcHandlers
+pfc = ProcFieldConstants
 
 socklist = GetProcFileHandler("/proc/net/tcp")()
 
 for proc_rec in socklist:
 
-    dest_ip = socklist.field[psi.F_DEST_IP]
-    dest_port = socklist.field[psi.F_DEST_PORT]
-    orig_ip = socklist.field[psi.F_ORIG_IP]
-    orig_port = socklist.field[psi.F_ORIG_PORT]
-    sock_stat = socklist.field[psi.F_STATE]
+    dest_ip = socklist.field[pfc.F_DEST_IP]
+    dest_port = socklist.field[pfc.F_DEST_PORT]
+    orig_ip = socklist.field[pfc.F_ORIG_IP]
+    orig_port = socklist.field[pfc.F_ORIG_PORT]
+    sock_stat = socklist.field[pfc.F_STATE]
 
     ip2host = iplookup.get_cached_hostname(dest_ip)
 
@@ -41,11 +44,11 @@ socklist = GetProcFileHandler("/proc/net/tcp6")()
 
 for proc_rec in socklist:
 
-    dest_ip = socklist.field[psi.F_DEST_IP]
-    dest_port = socklist.field[psi.F_DEST_PORT]
-    orig_ip = socklist.field[psi.F_ORIG_IP]
-    orig_port = socklist.field[psi.F_ORIG_PORT]
-    sock_stat = socklist.field[psi.F_STATE]
+    dest_ip = socklist.field[pfc.F_DEST_IP]
+    dest_port = socklist.field[pfc.F_DEST_PORT]
+    orig_ip = socklist.field[pfc.F_ORIG_IP]
+    orig_port = socklist.field[pfc.F_ORIG_PORT]
+    sock_stat = socklist.field[pfc.F_STATE]
 
     ip2host = iplookup.get_cached_hostname(dest_ip)
 
