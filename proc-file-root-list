@@ -1,0 +1,64 @@
+Terms:
+ WSD - normal whitespace delimited file driver
+
+ NESTED - appears to have multiple groups of info, somewhat inconsistently formatted
+
+ REPORT - looks more like a report than a data file, tricky to parse and then group into "logical records"
+
+ FLIPPED - like a table flipped 90 degrees, each row is a different variable with the values listed on the line
+
+ HUGE - lots and lots of records in the file, unmanageable amount for a person to use directly
+
+ TBD - something about the format suggests that more investigation is needed before deciding how to parse it
+
+ MULTILINE - one logical record is made up of data from multiple records in the file
+
+ FIXEDCOLS - fields appear in specific columns, possibly with embedded spaces, so the WSD logic relying on positions won't work
+---
+file-name STATUS FORMAT <Handler> FLAGS
+sysrq-trigger SKIP NOTDATA ROOTONLY
+partitions NEED WSD
+diskstats NEED WSD NOHEADER
+crypto NEED NESTED
+key-users NEED WSD one-line NOHEADER
+version_signature NEED WSD one-line NOHEADER
+kpageflags SKIP BINARY ROOTONLY
+kpagecount SKIP BINARY ROOTONLY
+kmsg SKIP NOTDATA ROOTONLY
+kcore SKIP BINARY ROOTONLY
+softirqs NEED WSD
+version NEED WSD one-line NOHEADER
+uptime NEED WSD one-line NOHEADER
+stat NEED NESTED
+meminfo NEED WSD NOHEADER
+loadavg NEED WSD one-line NOHEADER
+interrupts NEED WSD
+devices NEED NESTED
+cpuinfo NEED MULTILINE
+consoles NEED WSD one-line NOHEADER
+cmdline NEED WSD one-line NOHEADER
+locks NEED WSD NOHEADER
+filesystems NEED TBD
+slabinfo NEED WSD ROOTONLY
+swaps NEED WSD
+vmallocinfo NEED WSD NOHEADER ROOTONLY
+zoneinfo NEED REPORT
+vmstat NEED WSD NOHEADER
+pagetypeinfo NEED NESTED
+buddyinfo NEED WSD NOHEADER
+latency_stats NEED one-line nowhere-only NOHEADER
+kallsyms NEED WSD NOHEADER HUGE
+modules NEED WSD NOHEADER
+dma NEED WSD one-line NOHEADER
+timer_stats NEED FLIPPED 
+timer_list NEED REPORT
+iomem NEED WSD NOHEADER
+ioports NEED WSD NOHEADER
+execdomains DONE WSD ProcRootEXECDOMAINS NOHEADER
+schedstat NEED NESTED
+sched_debug NEED REPORT
+mdstat NEED NESTED 
+misc NEED WSD NOHEADER
+fb NEED WSD one-line NOHEADER
+mtrr DONE FIXEDCOLS ProcRootMTRR NOHEADER
+cgroups DONE WSD ProcRootCGROUPS

@@ -56,7 +56,7 @@ else:
 if target == "all":
 
     for target in ProcHandlers.proc_file_handler_registry:
-        print "- Logical records from {file} using {handler)".format(file=target, handler=str(ProcHandlers.proc_file_handler_registry[target]))
+        print "- Logical records from {file} using {handler}".format(file=target, handler=str(ProcHandlers.proc_file_handler_registry[target]))
 
         ShowRecsFromOneFile( ProcHandlers.proc_file_handler_registry[target], target, "")
         print ""

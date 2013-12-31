@@ -301,3 +301,18 @@ F_TERM_LIST = "list_of_terms"
 
 # --
 F_NULL_HANDLER = "/dev/null"
+
+# -- addition fields added for "/proc/execdomains"
+F_PERSONALITY_LOW = "pers-low"
+F_PERSONALITY_HIGH = "pers-high"
+F_EXDOM_NAME = "exec-domain-name"
+F_EXDOM_MODULE = "exec-domain-module"
+
+# -- added for "/proc/cgroups"
+F_SUBSYSTEM = "subsystem"
+F_HIERARCHY = "hierarchy"
+F_NUM_CGROUPS = "num-groups"
+F_ENABLED = "enabled"
+
+# -- added for "/proc/mtrr"
+F_BASE_MEMORY = "base-memory-address"
