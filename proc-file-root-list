@@ -14,11 +14,13 @@ Terms:
  MULTILINE - one logical record is made up of data from multiple records in the file
 
  FIXEDCOLS - fields appear in specific columns, possibly with embedded spaces, so the WSD logic relying on positions won't work
+
+ VARIES - the fields included vary from system to system
 ---
 file-name STATUS FORMAT <Handler> FLAGS
 sysrq-trigger SKIP NOTDATA ROOTONLY
 partitions NEED WSD
-diskstats NEED WSD NOHEADER
+diskstats DONE WSD ProcRootDISKSTATS NOHEADER
 crypto NEED NESTED
 key-users NEED WSD one-line NOHEADER
 version_signature NEED WSD one-line NOHEADER
@@ -26,24 +28,24 @@ kpageflags SKIP BINARY ROOTONLY
 kpagecount SKIP BINARY ROOTONLY
 kmsg SKIP NOTDATA ROOTONLY
 kcore SKIP BINARY ROOTONLY
-softirqs NEED WSD
+softirqs NEED FIXEDCOLS VARIES
 version NEED WSD one-line NOHEADER
 uptime NEED WSD one-line NOHEADER
 stat NEED NESTED
 meminfo NEED WSD NOHEADER
 loadavg NEED WSD one-line NOHEADER
-interrupts NEED WSD
+interrupts NEED FIXEDCOLS VARIES
 devices NEED NESTED
 cpuinfo NEED MULTILINE
 consoles NEED WSD one-line NOHEADER
 cmdline NEED WSD one-line NOHEADER
-locks NEED WSD NOHEADER
+locks DONE WSD ProcRootLOCKS NOHEADER
 filesystems NEED TBD
 slabinfo NEED WSD ROOTONLY
-swaps NEED WSD
+swaps DONE WSD ProcRootSWAPS
 vmallocinfo NEED WSD NOHEADER ROOTONLY
 zoneinfo NEED REPORT
-vmstat NEED WSD NOHEADER
+vmstat DONE WSD ProcRootVMSTAT NOHEADER
 pagetypeinfo NEED NESTED
 buddyinfo DONE WSD ProcRootBUDDYINFO NOHEADER
 latency_stats NEED one-line nowhere-only NOHEADER

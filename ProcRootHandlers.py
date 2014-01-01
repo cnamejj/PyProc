@@ -8,7 +8,7 @@
 # as published by the Free Software Foundation; either version
 # 2 of the License, or (at your option) any later version.
 
-
+import numpy
 import ProcBaseRoutines
 import ProcFieldConstants
 
@@ -401,3 +401,371 @@ RegisterProcFileHandler("/proc/buddyinfo", ProcRootBUDDYINFO)
 RegisterPartialProcFileHandler("buddyinfo", ProcRootBUDDYINFO)
 
 
+
+# ---
+class ProcRootSWAPS(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/swaps"""
+# source: mm/swapfile.c
+#
+#        if (si == SEQ_START_TOKEN) {
+#                seq_puts(swap,"Filename\t\t\t\tType\t\tSize\tUsed\tPriority\n");
+#                return 0;
+#        }
+#
+#        file = si->swap_file;
+#        len = seq_path(swap, &file->f_path, " \t\n\\");
+#        seq_printf(swap, "%*s%s\t%u\t%u\t%d\n",
+#                        len < 40 ? 40 - len : 1, " ",
+#                        S_ISBLK(file->f_path.dentry->d_inode->i_mode) ?
+#                                "partition" : "file\t",
+#                        si->pages << (PAGE_SHIFT - 10),
+#                        si->inuse_pages << (PAGE_SHIFT - 10),
+#                        si->prio);
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 5
+        self.skipped = "Filename"
+
+        self.filename = ""
+        self.type = ""
+        self.size = 0
+        self.used = 0
+        self.priority = 0
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# Filename				Type		Size	Used	Priority
+# /dev/sda3                               partition	16777212	49700	-1
+# /dev/sdb3                               partition	16777212	0	-2
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_FILENAME] = ""
+            self.field[PFC.F_TYPE] = ""
+            self.field[PFC.F_SIZE] = 0
+            self.field[PFC.F_USED] = 0
+            self.field[PFC.F_PRIORITY] = 0
+
+        else:
+            self.field[PFC.F_FILENAME] = sio.lineparts[0]
+            self.field[PFC.F_TYPE] = sio.lineparts[1]
+            self.field[PFC.F_SIZE] = long(sio.lineparts[2])
+            self.field[PFC.F_USED] = long(sio.lineparts[3])
+            self.field[PFC.F_PRIORITY] = long(sio.lineparts[4])
+
+        self.filename = self.field[PFC.F_FILENAME]
+        self.type = self.field[PFC.F_TYPE]
+        self.size = self.field[PFC.F_SIZE]
+        self.used = self.field[PFC.F_USED]
+        self.priority = self.field[PFC.F_PRIORITY]
+
+        return(self.filename, self.type, self.size, self.used, self.priority)
+#
+RegisterProcFileHandler("/proc/swaps", ProcRootSWAPS)
+RegisterPartialProcFileHandler("swaps", ProcRootSWAPS)
+
+
+
+# ---
+class ProcRootLOCKS(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/locks"""
+# source: fs/locks.c
+#
+#         seq_printf(f, "%lld:%s ", id, pfx);
+#         if (IS_POSIX(fl)) {
+#                 seq_printf(f, "%6s %s ",
+#                              (fl->fl_flags & FL_ACCESS) ? "ACCESS" : "POSIX ",
+#                              (inode == NULL) ? "*NOINODE*" :
+#                              mandatory_lock(inode) ? "MANDATORY" : "ADVISORY ");
+#         } else if (IS_FLOCK(fl)) {
+#                 if (fl->fl_type & LOCK_MAND) {
+#                         seq_printf(f, "FLOCK  MSNFS     ");
+#                 } else {
+#                         seq_printf(f, "FLOCK  ADVISORY  ");
+#                 }
+#         } else if (IS_LEASE(fl)) {
+#                 seq_printf(f, "LEASE  ");
+#                 if (lease_breaking(fl))
+#                         seq_printf(f, "BREAKING  ");
+#                 else if (fl->fl_file)
+#                         seq_printf(f, "ACTIVE    ");
+#                 else
+#                         seq_printf(f, "BREAKER   ");
+#         } else {
+#                 seq_printf(f, "UNKNOWN UNKNOWN  ");
+#         }
+#         if (fl->fl_type & LOCK_MAND) {
+#                 seq_printf(f, "%s ",
+#                                (fl->fl_type & LOCK_READ)
+#                                ? (fl->fl_type & LOCK_WRITE) ? "RW   " : "READ "
+#                                : (fl->fl_type & LOCK_WRITE) ? "WRITE" : "NONE ");
+#         } else {
+#                 seq_printf(f, "%s ",
+#                                (lease_breaking(fl))
+#                                ? (fl->fl_type & F_UNLCK) ? "UNLCK" : "READ "
+#                                : (fl->fl_type & F_WRLCK) ? "WRITE" : "READ ");
+#         }
+#         if (inode) {
+# #ifdef WE_CAN_BREAK_LSLK_NOW
+#                 seq_printf(f, "%d %s:%ld ", fl_pid,
+#                                 inode->i_sb->s_id, inode->i_ino);
+# #else
+#                 /* userspace relies on this representation of dev_t ;-( */
+#                 seq_printf(f, "%d %02x:%02x:%ld ", fl_pid,
+#                                 MAJOR(inode->i_sb->s_dev),
+#                                 MINOR(inode->i_sb->s_dev), inode->i_ino);
+# #endif
+#         } else {
+#                 seq_printf(f, "%d <none>:0 ", fl_pid);
+#         }
+#         if (IS_POSIX(fl)) {
+#                 if (fl->fl_end == OFFSET_MAX)
+#                         seq_printf(f, "%Ld EOF\n", fl->fl_start);
+#                 else
+#                         seq_printf(f, "%Ld %Ld\n", fl->fl_start, fl->fl_end);
+#         } else {
+#                 seq_printf(f, "0 EOF\n");
+#         }
+
+    def extra_init(self, *opts):
+        self.minfields = 8
+
+        self.index = 0
+        self.locktype = ""
+        self.subtype = ""
+        self.ioaction = ""
+        self.pid = 0
+        self.start = 0
+        self.end = 0
+        self.__SkipPrefix = "->"
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# 6: POSIX  ADVISORY  READ  25090 09:01:121767769 1073741826 1073742335
+# 7: POSIX  ADVISORY  READ  25090 09:01:121767788 128 128
+# 8: POSIX  ADVISORY  READ  25090 09:01:121767851 1073741826 1073742335
+# 9: POSIX  ADVISORY  WRITE 25090 09:01:121767662 0 EOF
+# 10: POSIX  ADVISORY  READ  9743 09:01:125042780 128 128
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_INDEX] = 0
+            self.field[PFC.F_LOCK_TYPE] = ""
+            self.field[PFC.F_LOCK_SUBTYPE] = ""
+            self.field[PFC.F_LOCK_IO] = ""
+            self.field[PFC.F_PID] = 0
+            self.field[PFC.F_LOCK_INODE] = ""
+            self.field[PFC.F_START] = 0
+            self.field[PFC.F_END_STRING] = ""
+            self.field[PFC.F_END] = 0
+
+        else:
+            self.field[PFC.F_INDEX] = long(sio.lineparts[0][:-1])
+            if sio.lineparts[1] != self.__SkipPrefix:
+                __offset = 1
+            else:
+                __offset = 2
+            self.field[PFC.F_LOCK_TYPE] = sio.lineparts[__offset]
+            __offset = __offset + 1
+            self.field[PFC.F_LOCK_SUBTYPE] = sio.lineparts[__offset]
+            __offset = __offset + 1
+            self.field[PFC.F_LOCK_IO] = sio.lineparts[__offset]
+            __offset = __offset + 1
+            self.field[PFC.F_PID] = long(sio.lineparts[__offset])
+            __offset = __offset + 1
+            self.field[PFC.F_LOCK_INODE] = sio.lineparts[__offset]
+            __offset = __offset + 1
+            self.field[PFC.F_START] = long(sio.lineparts[__offset])
+            __offset = __offset + 1
+            self.field[PFC.F_END_STRING] = sio.lineparts[__offset]
+            if self.field[PFC.F_END_STRING] == "EOF":
+                self.field[PFC.F_END] = numpy.inf
+            else:
+                self.field[PFC.F_END] = long(self.field[PFC.F_END_STRING])
+
+        self.index = self.field[PFC.F_INDEX]
+        self.locktype = self.field[PFC.F_LOCK_TYPE]
+        self.subtype = self.field[PFC.F_LOCK_SUBTYPE]
+        self.ioaction = self.field[PFC.F_LOCK_IO]
+        self.pid = self.field[PFC.F_PID]
+        self.start = self.field[PFC.F_START]
+        self.end = self.field[PFC.F_END]
+
+        return(self.index, self.locktype, self.subtype, self.ioaction, self.pid, self.start, self.end)
+#
+RegisterProcFileHandler("/proc/locks", ProcRootLOCKS)
+RegisterPartialProcFileHandler("locks", ProcRootLOCKS)
+
+
+
+# ---
+class ProcRootDISKSTATS(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/diskstats"""
+# source: block/genhd.c
+#
+#     while ((hd = disk_part_iter_next(&piter))) {
+#             cpu = part_stat_lock();
+#             part_round_stats(cpu, hd);
+#             part_stat_unlock();
+#             seq_printf(seqf, "%4d %7d %s %lu %lu %lu "
+#                        "%u %lu %lu %lu %u %u %u %u\n",
+#                        MAJOR(part_devt(hd)), MINOR(part_devt(hd)),
+#                        disk_name(gp, hd->partno, buf),
+#                        part_stat_read(hd, ios[READ]),
+#                        part_stat_read(hd, merges[READ]),
+#                        part_stat_read(hd, sectors[READ]),
+#                        jiffies_to_msecs(part_stat_read(hd, ticks[READ])),
+#                        part_stat_read(hd, ios[WRITE]),
+#                        part_stat_read(hd, merges[WRITE]),
+#                        part_stat_read(hd, sectors[WRITE]),
+#                        jiffies_to_msecs(part_stat_read(hd, ticks[WRITE])),
+#                        part_in_flight(hd),
+#                        jiffies_to_msecs(part_stat_read(hd, io_ticks)),
+#                        jiffies_to_msecs(part_stat_read(hd, time_in_queue))
+#                     );
+#     }
+
+    def extra_init(self, *opts):
+        self.minfields = 14
+
+        self.major_dev = 0
+        self.minor_dev = 0
+        self.disk_name = ""
+        self.read_ios = 0
+        self.read_merges = 0
+        self.read_sectors = 0
+        self.read_msecs = 0
+        self.write_ios = 0
+        self.write_merges = 0
+        self.write_sectors = 0
+        self.write_msecs = 0
+        self.part_in_flight = 0
+        self.msecs_io = 0
+        self.msecs_queue_time = 0
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# 7       6 loop6 0 0 0 0 0 0 0 0 0 0 0
+# 7       7 loop7 0 0 0 0 0 0 0 0 0 0 0
+# 8       0 sda 15235018 10980568 3312891398 74957548 8362788 4577595 144647677 114936764 0 90848652 189870564
+# 8       1 sda1 398 1129 4568 1424 1 0 1 0 0 800 1424
+# 8       2 sda2 15185612 10961911 3312352646 74838696 7650568 4513340 143561212 103557888 0 79839900 178373748
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_MAJOR_DEV] = 0
+            self.field[PFC.F_MINOR_DEV] = 0
+            self.field[PFC.F_DISK_NAME] = ""
+            self.field[PFC.F_READ_IOS] = 0
+            self.field[PFC.F_READ_MERGES] = 0
+            self.field[PFC.F_READ_SECTORS] = 0
+            self.field[PFC.F_READ_MSECS] = 0
+            self.field[PFC.F_WRITE_IOS] = 0
+            self.field[PFC.F_WRITE_MERGES] = 0
+            self.field[PFC.F_WRITE_SECTORS] = 0
+            self.field[PFC.F_WRITE_MSECS] = 0
+            self.field[PFC.F_PART_IN_FLIGHT] = 0
+            self.field[PFC.F_IO_MSECS] = 0
+            self.field[PFC.F_QUEUE_TIME_MSECS] = 0
+
+        else:
+            self.field[PFC.F_MAJOR_DEV] = long(sio.lineparts[0])
+            self.field[PFC.F_MINOR_DEV] = long(sio.lineparts[1])
+            self.field[PFC.F_DISK_NAME] = sio.lineparts[2]
+            self.field[PFC.F_READ_IOS] = long(sio.lineparts[3])
+            self.field[PFC.F_READ_MERGES] = long(sio.lineparts[4])
+            self.field[PFC.F_READ_SECTORS] = long(sio.lineparts[5])
+            self.field[PFC.F_READ_MSECS] = long(sio.lineparts[6])
+            self.field[PFC.F_WRITE_IOS] = long(sio.lineparts[7])
+            self.field[PFC.F_WRITE_MERGES] = long(sio.lineparts[8])
+            self.field[PFC.F_WRITE_SECTORS] = long(sio.lineparts[9])
+            self.field[PFC.F_WRITE_MSECS] = long(sio.lineparts[10])
+            self.field[PFC.F_PART_IN_FLIGHT] = long(sio.lineparts[11])
+            self.field[PFC.F_IO_MSECS] = long(sio.lineparts[12])
+            self.field[PFC.F_QUEUE_TIME_MSECS] = long(sio.lineparts[13])
+
+        self.major_dev = self.field[PFC.F_MAJOR_DEV]
+        self.minor_dev = self.field[PFC.F_MINOR_DEV]
+        self.disk_name = self.field[PFC.F_DISK_NAME]
+        self.read_ios = self.field[PFC.F_READ_IOS]
+        self.read_merges = self.field[PFC.F_READ_MERGES]
+        self.read_sectors = self.field[PFC.F_READ_SECTORS]
+        self.read_msecs = self.field[PFC.F_READ_MSECS]
+        self.write_ios = self.field[PFC.F_WRITE_IOS]
+        self.write_merges = self.field[PFC.F_WRITE_MERGES]
+        self.write_sectors = self.field[PFC.F_WRITE_SECTORS]
+        self.write_msecs = self.field[PFC.F_WRITE_MSECS]
+        self.part_in_flight = self.field[PFC.F_PART_IN_FLIGHT]
+        self.io_msecs = self.field[PFC.F_IO_MSECS]
+        self.queue_time_msecs = self.field[PFC.F_QUEUE_TIME_MSECS]
+
+        return(self.major_dev, self.minor_dev, self.disk_name, self.read_ios, self.read_merges,
+          self.read_sectors, self.read_msecs, self.write_ios, self.write_merges, self.write_sectors,
+          self.write_msecs, self.part_in_flight, self.io_msecs, self.queue_time_msecs)
+
+#
+RegisterProcFileHandler("/proc/diskstats", ProcRootDISKSTATS)
+RegisterPartialProcFileHandler("diskstats", ProcRootDISKSTATS)
+
+
+
+# ---
+class ProcRootVMSTAT(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/vmstat"""
+# source: mm/vmstat.c
+#
+#        unsigned long off = l - (unsigned long *)m->private;
+#
+#        seq_printf(m, "%s %lu\n", vmstat_text[off], *l);
+
+    def extra_init(self, *opts):
+        self.minfields = 2
+
+        self.category = ""
+        self.cat_count = 0
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# nr_free_pages 127192
+# nr_inactive_anon 68591
+# nr_active_anon 763003
+# nr_inactive_file 4514318
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_CATEGORY] = ""
+            self.field[PFC.F_COUNT] = 0
+
+        else:
+            self.field[PFC.F_CATEGORY] = sio.lineparts[0]
+            self.field[PFC.F_COUNT] = long(sio.lineparts[1])
+
+        self.category = self.field[PFC.F_CATEGORY]
+        self.cat_count = self.field[PFC.F_COUNT]
+
+        return(self.category, self.cat_count)
+
+#
+RegisterProcFileHandler("/proc/vmstat", ProcRootVMSTAT)
+RegisterPartialProcFileHandler("vmstat", ProcRootVMSTAT)
