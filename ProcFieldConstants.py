@@ -224,7 +224,6 @@ F_ENTER_PRESSURE = "enter_memory_pressure"
 F_SOCKET_POINTER = "socket_pointer"
 F_RUNNING = "running"
 F_RMEM_ALLOC = "rmem_alloc"
-F_UID = "uid"
 
 # -- fields added to support the "connector" data
 F_NAME = "name"
@@ -237,7 +236,6 @@ F_GROUPS = "groups"
 F_WMEM_ALLOC = "wmem_alloc"
 F_DUMP = "dump"
 F_LOCKS = "locks"
-F_DROPS = "drops"
 
 # -- fields added to support the "netfilter/nf_log" data
 F_INDEX = "index"
@@ -377,3 +375,20 @@ F_UNITS = "units"
 F_BLOCKS = "blocks"
 F_PARTITION_NAME = "partition-name"
 
+# -- added for "/proc/kallsyms"
+F_ADDRESS = "address"
+F_SYMBOL = "symbol"
+
+# -- added for "/proc/filesystems"
+F_DEV_FLAG = "requires-device"
+F_FILESYSTEM = "filesystem"
+
+# -- added for "/proc/dma"
+F_CHANNEL = "channel"
+
+# -- added for "/proc/fb"
+F_ID_LIST = "id-list"
+
+# -- added for "/proc/consoles"
+F_DEVICE_NUMBER = "device-number"
+F_IO_TYPE = "io-type"

@@ -1039,3 +1039,355 @@ class ProcRootPARTITIONS(PBR.fixed_delim_format_recs):
 #
 RegisterProcFileHandler("/proc/partitions", ProcRootPARTITIONS)
 RegisterPartialProcFileHandler("partitions", ProcRootPARTITIONS)
+
+
+
+# ---
+class ProcRootMISC(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/misc"""
+# source: drivers/char/misc.c
+#
+#    const struct miscdevice *p = list_entry(v, struct miscdevice, list);
+#
+#    seq_printf(seq, "%3i %s\n", p->minor, p->name ? p->name : "");
+
+
+    def extra_init(self, *opts):
+        self.minfields = 2
+
+        self.minor_dev = 0
+        self.device = ""
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+#  56 vboxnetctl
+#  57 vboxdrv
+#  58 network_throughput
+#  59 network_latency
+#  60 cpu_dma_latency
+# 236 device-mapper
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_MINOR_DEV] = 0
+            self.field[PFC.F_DEVICE] = ""
+
+        else:
+            self.field[PFC.F_MINOR_DEV] = long(sio.lineparts[0])
+            self.field[PFC.F_DEVICE] = sio.lineparts[1]
+
+        self.minor_dev = self.field[PFC.F_MINOR_DEV]
+        self.device = self.field[PFC.F_DEVICE]
+
+        return(self.minor_dev, self.device)
+
+#
+RegisterProcFileHandler("/proc/misc", ProcRootMISC)
+RegisterPartialProcFileHandler("misc", ProcRootMISC)
+
+
+
+# ---
+class ProcRootKALLSYMS(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/kallsyms"""
+# source: kernel/kallsyms.c
+#
+#        if (iter->module_name[0]) {
+#                char type;
+#
+#                /*
+#                 * Label it "global" if it is exported,
+#                 * "local" if not exported.
+#                 */
+#                type = iter->exported ? toupper(iter->type) :
+#                                        tolower(iter->type);
+#                seq_printf(m, "%pK %c %s\t[%s]\n", (void *)iter->value,
+#                           type, iter->name, iter->module_name);
+#        } else
+#                seq_printf(m, "%pK %c %s\n", (void *)iter->value,
+#                           iter->type, iter->name);
+
+    def extra_init(self, *opts):
+        self.minfields = 3
+
+        self.address = 0
+        self.type = ""
+        self.symbol = ""
+        self.module = ""
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records (the first field is all '0's when run from a non-root user)
+#
+# ffffffff8204b000 b .brk.m2p_overrides
+# ffffffff8204f000 b .brk.dmi_alloc
+# ffffffff8205f000 B __brk_limit
+# ffffffffa0382000 t pci_stub_probe       [pci_stub]
+# ffffffffa0384000 d stub_driver  [pci_stub]
+# ffffffffa038202c t pci_stub_exit        [pci_stub]
+
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_ADDRESS] = 0
+            self.field[PFC.F_TYPE] = ""
+            self.field[PFC.F_SYMBOL] = ""
+            self.field[PFC.F_MODULE] = ""
+
+        else:
+            self.field[PFC.F_ADDRESS] = long(sio.lineparts[0], 16)
+            self.field[PFC.F_TYPE] = sio.lineparts[1]
+            self.field[PFC.F_SYMBOL] = sio.lineparts[2]
+            if sio.linewords >= 4:
+                self.field[PFC.F_MODULE] = sio.lineparts[3][1:-1]
+            else:
+                self.field[PFC.F_MODULE] = ""
+
+        self.address = self.field[PFC.F_ADDRESS]
+        self.type = self.field[PFC.F_TYPE]
+        self.symbol = self.field[PFC.F_SYMBOL]
+        self.module = self.field[PFC.F_MODULE]
+
+        return(self.address, self.type, self.symbol, self.module)
+
+#
+RegisterProcFileHandler("/proc/kallsyms", ProcRootKALLSYMS)
+RegisterPartialProcFileHandler("kallsyms", ProcRootKALLSYMS)
+
+
+
+# ---
+class ProcRootFILESYSTEMS(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/filesystems"""
+# source: fs/filesystems.c
+#
+#        while (tmp) {
+#                seq_printf(m, "%s\t%s\n",
+#                        (tmp->fs_flags & FS_REQUIRES_DEV) ? "" : "nodev",
+#                        tmp->name);
+#                tmp = tmp->next;
+#        }
+
+    def extra_init(self, *opts):
+        self.minfields = 1
+
+        self.dev_flag = ""
+        self.filesystem = ""
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# nodev	pipefs
+# nodev	anon_inodefs
+# nodev	devpts
+# 	ext3
+# 	ext4
+# nodev	ramfs
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_DEV_FLAG]
+            self.field[PFC.F_FILESYSTEM]
+
+        else:
+            if sio.linewords >= 2:
+                self.field[PFC.F_DEV_FLAG] = sio.lineparts[0]
+                self.field[PFC.F_FILESYSTEM] = sio.lineparts[1]
+            else:
+                self.field[PFC.F_DEV_FLAG] = ""
+                self.field[PFC.F_FILESYSTEM] = sio.lineparts[0]
+
+        self.dev_flag = self.field[PFC.F_DEV_FLAG]
+        self.filesystem = self.field[PFC.F_FILESYSTEM]
+
+        return(self.dev_flag, self.filesystem)
+
+#
+RegisterProcFileHandler("/proc/filesystems", ProcRootFILESYSTEMS)
+RegisterPartialProcFileHandler("filesystems", ProcRootFILESYSTEMS)
+
+
+
+# ---
+class ProcRootDMA(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/DMA"""
+# source: kernel/dma.c
+#
+# #ifdef MAX_DMA_CHANNELS
+# static int proc_dma_show(struct seq_file *m, void *v)
+# {
+#         int i;
+# 
+#         for (i = 0 ; i < MAX_DMA_CHANNELS ; i++) {
+#                 if (dma_chan_busy[i].lock) {
+#                         seq_printf(m, "%2d: %s\n", i,
+#                                    dma_chan_busy[i].device_id);
+#                 }
+#         }
+#         return 0;
+# }
+# #else
+# static int proc_dma_show(struct seq_file *m, void *v)
+# {
+#         seq_puts(m, "No DMA\n");
+#         return 0;
+# }
+# #endif /* MAX_DMA_CHANNELS */
+
+    def extra_init(self, *opts):
+        self.minfields = 2
+        self.skipped = "No"
+
+        self.channel = 0
+        self.device = ""
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# 4: cascade
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_CHANNEL] = 0
+            self.field[PFC.F_DEVICE_NAME] = ""
+
+        else:
+            self.field[PFC.F_CHANNEL] = long(sio.lineparts[0][:-1])
+            self.field[PFC.F_DEVICE_NAME] = sio.lineparts[1]
+
+        self.channel = self.field[PFC.F_CHANNEL]
+        self.device = self.field[PFC.F_DEVICE_NAME]
+
+        return(self.channel, self.device)
+
+#
+RegisterProcFileHandler("/proc/dma", ProcRootDMA)
+RegisterPartialProcFileHandler("dma", ProcRootDMA)
+
+
+
+# ---
+class ProcRootFB(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/fb"""
+# source: 
+#
+#        struct fb_info *fi = registered_fb[i];
+#
+#        if (fi)
+#                seq_printf(m, "%d %s\n", fi->node, fi->fix.id);
+
+    def extra_init(self, *opts):
+        self.minfields = 2
+
+        self.node = 0
+        self.id = ""
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# 0 EFI VGA
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_NODE] = 0
+            self.field[PFC.F_ID_LIST] = ""
+
+        else:
+            self.field[PFC.F_NODE] = long(sio.lineparts[0])
+            self.field[PFC.F_ID_LIST] = " ".join(sio.lineparts[1:])
+
+        self.node = self.field[PFC.F_NODE]
+        self.id = self.field[PFC.F_ID_LIST]
+
+        return(self.node, self.id)
+
+#
+RegisterProcFileHandler("/proc/fb", ProcRootFB)
+RegisterPartialProcFileHandler("fb", ProcRootFB)
+
+
+
+# ---
+class ProcRootCONSOLES(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/consoles"""
+# source: fs/proc/consoles.c
+#
+#        seq_printf(m, "%s%d%n", con->name, con->index, &len);
+#        len = 21 - len;
+#        if (len < 1)
+#                len = 1;
+#        seq_printf(m, "%*c%c%c%c (%s)", len, ' ', con->read ? 'R' : '-',
+#                        con->write ? 'W' : '-', con->unblank ? 'U' : '-',
+#                        flags);
+#        if (dev)
+#                seq_printf(m, " %4d:%d", MAJOR(dev), MINOR(dev));
+#
+#        seq_printf(m, "\n");
+
+    def extra_init(self, *opts):
+        self.minfields = 4
+
+        self.device_name = ""
+        self.io_type = ""
+        self.flags = ""
+        self.device_num = ""
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# tty0                 -WU (EC p  )    4:7
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_DEVICE_NAME] = ""
+            self.field[PFC.F_IO_TYPE] = ""
+            self.field[PFC.F_FLAGS] = ""
+            self.field[PFC.F_DEVICE_NUMBER] = ""
+
+        else:
+            self.field[PFC.F_DEVICE_NAME] = sio.lineparts[0]
+            self.field[PFC.F_IO_TYPE] = sio.lineparts[1]
+            __subrec = " ".join(sio.lineparts[2:-1])
+            if __subrec[:1] == "(":
+                __subrec = __subrec[1:]
+            if __subrec[-1:] == ")":
+                __subrec = __subrec[:-1]
+            if __subrec[-1:] == " ":
+                __subrec = __subrec[:-1]
+            self.field[PFC.F_FLAGS] = __subrec
+            self.field[PFC.F_DEVICE_NUMBER] = sio.lineparts[-1]
+
+        self.device_name = self.field[PFC.F_DEVICE_NAME]
+        self.io_type = self.field[PFC.F_IO_TYPE]
+        self.flags = self.field[PFC.F_FLAGS]
+        self.device_num = self.field[PFC.F_DEVICE_NUMBER]
+
+        return(self.device_name, self.io_type, self.flags, self.device_num)
+
+#
+RegisterProcFileHandler("/proc/consoles", ProcRootCONSOLES)
+RegisterPartialProcFileHandler("consoles", ProcRootCONSOLES)
