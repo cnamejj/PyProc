@@ -19,7 +19,7 @@ Terms:
 ---
 file-name STATUS FORMAT <Handler> FLAGS
 sysrq-trigger SKIP NOTDATA ROOTONLY
-partitions NEED WSD
+partitions DONE WSD ProcRootPARTITIONS
 diskstats DONE WSD ProcRootDISKSTATS NOHEADER
 crypto NEED NESTED
 key-users NEED WSD one-line NOHEADER
@@ -32,7 +32,7 @@ softirqs NEED FIXEDCOLS VARIES
 version NEED WSD one-line NOHEADER
 uptime NEED WSD one-line NOHEADER
 stat NEED NESTED
-meminfo NEED WSD NOHEADER
+meminfo DONE WSD ProcRootMEMINFO NOHEADER
 loadavg NEED WSD one-line NOHEADER
 interrupts NEED FIXEDCOLS VARIES
 devices NEED NESTED

@@ -369,3 +369,11 @@ F_QUEUE_TIME_MSECS = "queue-time-msecs"
 
 # -- added for "/proc/vmstat"
 F_CATEGORY = "category"
+
+# -- added for "/proc/meminfo"
+F_UNITS = "units"
+
+# -- added for "/proc/partitions"
+F_BLOCKS = "blocks"
+F_PARTITION_NAME = "partition-name"
+

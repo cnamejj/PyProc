@@ -769,3 +769,273 @@ class ProcRootVMSTAT(PBR.fixed_delim_format_recs):
 #
 RegisterProcFileHandler("/proc/vmstat", ProcRootVMSTAT)
 RegisterPartialProcFileHandler("vmstat", ProcRootVMSTAT)
+
+
+
+# ---
+class ProcRootMEMINFO(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/meminfo"""
+# source: fs/proc/meminfo.c
+# --and--
+# source: mm/hugetlb.c
+# --and--
+# source: arch/x86/mm/pageattr.c
+#
+# from: fs/proc/meminfo.c
+# ---
+# 	seq_printf(m,
+# 		"MemTotal:       %8lu kB\n"
+# 		"MemFree:        %8lu kB\n"
+# 		"Buffers:        %8lu kB\n"
+# 		"Cached:         %8lu kB\n"
+# 		"SwapCached:     %8lu kB\n"
+# 		"Active:         %8lu kB\n"
+# 		"Inactive:       %8lu kB\n"
+# 		"Active(anon):   %8lu kB\n"
+# 		"Inactive(anon): %8lu kB\n"
+# 		"Active(file):   %8lu kB\n"
+# 		"Inactive(file): %8lu kB\n"
+# 		"Unevictable:    %8lu kB\n"
+# 		"Mlocked:        %8lu kB\n"
+# #ifdef CONFIG_HIGHMEM
+# 		"HighTotal:      %8lu kB\n"
+# 		"HighFree:       %8lu kB\n"
+# 		"LowTotal:       %8lu kB\n"
+# 		"LowFree:        %8lu kB\n"
+# #endif
+# #ifndef CONFIG_MMU
+# 		"MmapCopy:       %8lu kB\n"
+# #endif
+# 		"SwapTotal:      %8lu kB\n"
+# 		"SwapFree:       %8lu kB\n"
+# 		"Dirty:          %8lu kB\n"
+# 		"Writeback:      %8lu kB\n"
+# 		"AnonPages:      %8lu kB\n"
+# 		"Mapped:         %8lu kB\n"
+# 		"Shmem:          %8lu kB\n"
+# 		"Slab:           %8lu kB\n"
+# 		"SReclaimable:   %8lu kB\n"
+# 		"SUnreclaim:     %8lu kB\n"
+# 		"KernelStack:    %8lu kB\n"
+# 		"PageTables:     %8lu kB\n"
+# #ifdef CONFIG_QUICKLIST
+# 		"Quicklists:     %8lu kB\n"
+# #endif
+# 		"NFS_Unstable:   %8lu kB\n"
+# 		"Bounce:         %8lu kB\n"
+# 		"WritebackTmp:   %8lu kB\n"
+# 		"CommitLimit:    %8lu kB\n"
+# 		"Committed_AS:   %8lu kB\n"
+# 		"VmallocTotal:   %8lu kB\n"
+# 		"VmallocUsed:    %8lu kB\n"
+# 		"VmallocChunk:   %8lu kB\n"
+# #ifdef CONFIG_MEMORY_FAILURE
+# 		"HardwareCorrupted: %5lu kB\n"
+# #endif
+# #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+# 		"AnonHugePages:  %8lu kB\n"
+# #endif
+# 		,
+# 		K(i.totalram),
+# 		K(i.freeram),
+# 		K(i.bufferram),
+# 		K(cached),
+# 		K(total_swapcache_pages),
+# 		K(pages[LRU_ACTIVE_ANON]   + pages[LRU_ACTIVE_FILE]),
+# 		K(pages[LRU_INACTIVE_ANON] + pages[LRU_INACTIVE_FILE]),
+# 		K(pages[LRU_ACTIVE_ANON]),
+# 		K(pages[LRU_INACTIVE_ANON]),
+# 		K(pages[LRU_ACTIVE_FILE]),
+# 		K(pages[LRU_INACTIVE_FILE]),
+# 		K(pages[LRU_UNEVICTABLE]),
+# 		K(global_page_state(NR_MLOCK)),
+# #ifdef CONFIG_HIGHMEM
+# 		K(i.totalhigh),
+# 		K(i.freehigh),
+# 		K(i.totalram-i.totalhigh),
+# 		K(i.freeram-i.freehigh),
+# #endif
+# #ifndef CONFIG_MMU
+# 		K((unsigned long) atomic_long_read(&mmap_pages_allocated)),
+# #endif
+# 		K(i.totalswap),
+# 		K(i.freeswap),
+# 		K(global_page_state(NR_FILE_DIRTY)),
+# 		K(global_page_state(NR_WRITEBACK)),
+# #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+# 		K(global_page_state(NR_ANON_PAGES)
+# 		  + global_page_state(NR_ANON_TRANSPARENT_HUGEPAGES) *
+# 		  HPAGE_PMD_NR),
+# #else
+# 		K(global_page_state(NR_ANON_PAGES)),
+# #endif
+# 		K(global_page_state(NR_FILE_MAPPED)),
+# 		K(global_page_state(NR_SHMEM)),
+# 		K(global_page_state(NR_SLAB_RECLAIMABLE) +
+# 				global_page_state(NR_SLAB_UNRECLAIMABLE)),
+# 		K(global_page_state(NR_SLAB_RECLAIMABLE)),
+# 		K(global_page_state(NR_SLAB_UNRECLAIMABLE)),
+# 		global_page_state(NR_KERNEL_STACK) * THREAD_SIZE / 1024,
+# 		K(global_page_state(NR_PAGETABLE)),
+# #ifdef CONFIG_QUICKLIST
+# 		K(quicklist_total_size()),
+# #endif
+# 		K(global_page_state(NR_UNSTABLE_NFS)),
+# 		K(global_page_state(NR_BOUNCE)),
+# 		K(global_page_state(NR_WRITEBACK_TEMP)),
+# 		K(allowed),
+# 		K(committed),
+# 		(unsigned long)VMALLOC_TOTAL >> 10,
+# 		vmi.used >> 10,
+# 		vmi.largest_chunk >> 10
+# #ifdef CONFIG_MEMORY_FAILURE
+# 		,atomic_long_read(&mce_bad_pages) << (PAGE_SHIFT - 10)
+# #endif
+# #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+# 		,K(global_page_state(NR_ANON_TRANSPARENT_HUGEPAGES) *
+# 		   HPAGE_PMD_NR)
+# #endif
+# 		);
+# 
+# 	hugetlb_report_meminfo(m);
+# 
+# 	arch_report_meminfo(m);
+#
+# from: mm/hugetlb.c
+# ---
+#        seq_printf(m,
+#                        "HugePages_Total:   %5lu\n"
+#                        "HugePages_Free:    %5lu\n"
+#                        "HugePages_Rsvd:    %5lu\n"
+#                        "HugePages_Surp:    %5lu\n"
+#                        "Hugepagesize:   %8lu kB\n",
+#                        h->nr_huge_pages,
+#                        h->free_huge_pages,
+#                        h->resv_huge_pages,
+#                        h->surplus_huge_pages,
+#                        1UL << (huge_page_order(h) + PAGE_SHIFT - 10));
+#
+#
+# from: arch/x86/mm/pageattr.c
+# ---
+#         seq_printf(m, "DirectMap4k:    %8lu kB\n",
+#                         direct_pages_count[PG_LEVEL_4K] << 2);
+# #if defined(CONFIG_X86_64) || defined(CONFIG_X86_PAE)
+#         seq_printf(m, "DirectMap2M:    %8lu kB\n",
+#                         direct_pages_count[PG_LEVEL_2M] << 11);
+# #else
+#         seq_printf(m, "DirectMap4M:    %8lu kB\n",
+#                         direct_pages_count[PG_LEVEL_2M] << 12);
+# #endif
+# #ifdef CONFIG_X86_64
+#         if (direct_gbpages)
+#                 seq_printf(m, "DirectMap1G:    %8lu kB\n",
+#                         direct_pages_count[PG_LEVEL_1G] << 20);
+# #endif
+
+    def extra_init(self, *opts):
+        self.minfields = 2
+        self.skipped = "Filename"
+
+        self.category = ""
+        self.size = 0
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# Committed_AS:    7228044 kB
+# VmallocTotal:   34359738367 kB
+# VmallocUsed:      626600 kB
+# VmallocChunk:   34359103472 kB
+# HardwareCorrupted:     0 kB
+# AnonHugePages:         0 kB
+# HugePages_Total:       0
+# HugePages_Free:        0
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_CATEGORY] = ""
+            self.field[PFC.F_SIZE] = 0
+            self.field[PFC.F_UNITS] = ""
+
+        else:
+            self.field[PFC.F_CATEGORY] = sio.lineparts[0]
+            self.field[PFC.F_SIZE] = long(sio.lineparts[1])
+            if sio.linewords >= 3:
+                self.field[PFC.F_UNITS] = sio.lineparts[2]
+            else:
+                self.field[PFC.F_UNITS] = ""
+
+        self.category = self.field[PFC.F_CATEGORY]
+        self.size = self.field[PFC.F_SIZE]
+
+        return(self.category, self.size)
+
+#
+RegisterProcFileHandler("/proc/meminfo", ProcRootMEMINFO)
+RegisterPartialProcFileHandler("meminfo", ProcRootMEMINFO)
+
+
+
+# ---
+class ProcRootPARTITIONS(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/partitions"""
+# source: block/genhd.c
+#
+#     /* show the full disk and all non-0 size partitions of it */
+#     disk_part_iter_init(&piter, sgp, DISK_PITER_INCL_PART0);
+#     while ((part = disk_part_iter_next(&piter)))
+#             seq_printf(seqf, "%4d  %7d %10llu %s\n",
+#                        MAJOR(part_devt(part)), MINOR(part_devt(part)),
+#                        (unsigned long long)part->nr_sects >> 1,
+#                        disk_name(sgp, part->partno, buf));
+
+    def extra_init(self, *opts):
+        self.minfields = 4
+        self.skipped = "major"
+
+        self.major_dev = 0
+        self.minor_dev = 0
+        self.blocks = ""
+        self.part_name = ""
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# major minor  #blocks  name
+# 
+#    8        0 1953514584 sda
+#    8        1     102400 sda1
+#    8        2 1610612736 sda2
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_MAJOR_DEV] = 0
+            self.field[PFC.F_MINOR_DEV] = 0
+            self.field[PFC.F_BLOCKS] = 0
+            self.field[PFC.F_PARTITION_NAME] = ""
+
+        else:
+            self.field[PFC.F_MAJOR_DEV] = long(sio.lineparts[0])
+            self.field[PFC.F_MINOR_DEV] = long(sio.lineparts[1])
+            self.field[PFC.F_BLOCKS] = long(sio.lineparts[2])
+            self.field[PFC.F_PARTITION_NAME] = sio.lineparts[3]
+
+        self.major_dev = self.field[PFC.F_MAJOR_DEV]
+        self.minor_dev = self.field[PFC.F_MINOR_DEV]
+        self.blocks = self.field[PFC.F_BLOCKS]
+        self.part_name = self.field[PFC.F_PARTITION_NAME]
+
+        return(self.major_dev, self.minor_dev, self.blocks, self.part_name)
+
+#
+RegisterProcFileHandler("/proc/partitions", ProcRootPARTITIONS)
+RegisterPartialProcFileHandler("partitions", ProcRootPARTITIONS)
