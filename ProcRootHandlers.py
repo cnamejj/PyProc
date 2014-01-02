@@ -1198,8 +1198,8 @@ class ProcRootFILESYSTEMS(PBR.fixed_delim_format_recs):
 
             self.field = dict()
 
-            self.field[PFC.F_DEV_FLAG]
-            self.field[PFC.F_FILESYSTEM]
+            self.field[PFC.F_DEV_FLAG] = ""
+            self.field[PFC.F_FILESYSTEM] = ""
 
         else:
             if sio.linewords >= 2:
