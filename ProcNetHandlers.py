@@ -2943,9 +2943,6 @@ class ProcNetSNMP6(PBR.single_name_value_list):
 # DCHK: 11/25/12
 # source: net/ipv6/proc.c
 
-    def extra_init(self, *opts):
-        return
-
 # -- Sample records.  This file a series of key/value entries, one per line.
 # Ip6InReceives                   	1159
 # Ip6InHdrErrors                  	0
@@ -3228,9 +3225,6 @@ class ProcNetSNMP(PBR.twoline_logical_records):
 # seq_putc(seq, '\n');
 #
 
-    def extra_init(self, *opts):
-        return
-
 # -- Sample lines for reference...
 #       
 # Tcp: RtoAlgorithm RtoMin RtoMax MaxConn ActiveOpens PassiveOpens AttemptFails EstabResets CurrEstab InSegs OutSegs RetransSegs InErrs OutRsts
@@ -3273,10 +3267,7 @@ class ProcNetNETSTAT(PBR.twoline_logical_records):
 #                      offsetof(struct ipstats_mib, syncp)));
 #
 # seq_putc(seq, '\n');
-
-    def extra_init(self, *opts):
-        return
-
+#
 # -- Sample lines for reference...
 #
 # IpExt: InNoRoutes InTruncatedPkts InMcastPkts OutMcastPkts InBcastPkts OutBcastPkts InOctets OutOctets InMcastOctets OutMcastOctets InBcastOctets OutBcastOctets
@@ -3374,9 +3365,6 @@ class ProcNetIP6_TABLES_MATCHES(PBR.list_of_terms_format):
 # DCHK: 11/20/12
 # source: net/netfilter/x_tables.c
 
-    def extra_init(self, *opts):
-        return
-
 # -- Sample records.  This file is only readable by root and is just
 # -- a list of words, one per line.
 # limit
@@ -3396,9 +3384,6 @@ class ProcNetIP6_TABLES_NAMES(PBR.list_of_terms_format):
 # DCHK: 11/24/12
 # source: net/netfilter/x_tables.c
 
-    def extra_init(self, *opts):
-        return
-
 # -- Sample records.  This file is only readable by root and is just
 # -- a list of words, one per line.
 # filter
@@ -3414,9 +3399,6 @@ class ProcNetIP6_TABLES_TARGETS(PBR.list_of_terms_format):
     """Pull records from /proc/net/ip6_tables_targets"""
 # DCHK: 11/24/12
 # source: net/netfilter/x_tables.c
-
-    def extra_init(self, *opts):
-        return
 
 # -- Sample records.  This file is only readable by root and is just
 # -- a list of words, one per line.
@@ -3434,9 +3416,6 @@ class ProcNetIP_TABLES_MATCHES(PBR.list_of_terms_format):
     """Pull records from /proc/net/ip_tables_matches"""
 # DCHK: 11/24/12
 # source: net/netfilter/x_tables.c
-
-    def extra_init(self, *opts):
-        return
 
 # -- Sample records.  This file is only readable by root and is just
 # -- a list of words, one per line.
@@ -3457,9 +3436,6 @@ class ProcNetIP_TABLES_NAMES(PBR.list_of_terms_format):
 # DCHK: 11/24/12
 # source: net/netfilter/x_tables.c
 
-    def extra_init(self, *opts):
-        return
-
 # -- Sample records.  This file is only readable by root and is just
 # -- a list of words, one per line.
 # filter
@@ -3475,9 +3451,6 @@ class ProcNetIP_TABLES_TARGETS(PBR.list_of_terms_format):
     """Pull records from /proc/net/ip_tables_targets"""
 # DCHK: 11/24/12
 # source: net/netfilter/x_tables.c
-
-    def extra_init(self, *opts):
-        return
 
 # -- Sample records.  This file is only readable by root and is just
 # -- a list of words, one per line.
