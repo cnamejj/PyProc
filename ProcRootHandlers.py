@@ -1391,3 +1391,740 @@ class ProcRootCONSOLES(PBR.fixed_delim_format_recs):
 #
 RegisterProcFileHandler("/proc/consoles", ProcRootCONSOLES)
 RegisterPartialProcFileHandler("consoles", ProcRootCONSOLES)
+
+
+
+# ---
+class ProcRootKEY_USERS(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/key-users"""
+# source: security/keys/proc.c
+#
+#        seq_printf(m, "%5u: %5d %d/%d %d/%d %d/%d\n",
+#                   user->uid,
+#                   atomic_read(&user->usage),
+#                   atomic_read(&user->nkeys),
+#                   atomic_read(&user->nikeys),
+#                   user->qnkeys,
+#                   maxkeys,
+#                   user->qnbytes,
+#                   maxbytes);
+
+    def extra_init(self, *opts):
+        self.minfields = 5
+        self.__FieldSplitDelim = "/"
+
+        self.uid = 0
+        self.usage = 0
+        self.nkeys = 0
+        self.nikeys = 0
+        self.qnkeys = 0
+        self.maxkeys = 0
+        self.qnbytes = 0
+        self.maxbytes = 0
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+#     0:     4 3/3 0/200 0/20000
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_UID] = 0
+            self.field[PFC.F_USAGE] = 0
+            self.field[PFC.F_NKEYS] = 0
+            self.field[PFC.F_NIKEYS] = 0
+            self.field[PFC.F_QNKEYS] = 0
+            self.field[PFC.F_MAXKEYS] = 0
+            self.field[PFC.F_QNBYTES] = 0
+            self.field[PFC.F_MAXBYTES] = 0
+
+        else:
+            self.field[PFC.F_UID] = long(sio.lineparts[0][:-1])
+            self.field[PFC.F_USAGE] = long(sio.lineparts[1])
+            __split = sio.lineparts[2].partition(self.__FieldSplitDelim)
+            self.field[PFC.F_NKEYS] = long(__split[0])
+            self.field[PFC.F_NIKEYS] = long(__split[2])
+            __split = sio.lineparts[3].partition(self.__FieldSplitDelim)
+            self.field[PFC.F_QNKEYS] = long(__split[0])
+            self.field[PFC.F_MAXKEYS] = long(__split[2])
+            __split = sio.lineparts[4].partition(self.__FieldSplitDelim)
+            self.field[PFC.F_QNBYTES] = long(__split[0])
+            self.field[PFC.F_MAXBYTES] = long(__split[2])
+
+        self.uid = self.field[PFC.F_UID]
+        self.usage = self.field[PFC.F_USAGE]
+        self.nkeys = self.field[PFC.F_NKEYS]
+        self.nikeys = self.field[PFC.F_NIKEYS]
+        self.qnkeys = self.field[PFC.F_QNKEYS]
+        self.maxkeys = self.field[PFC.F_MAXKEYS]
+        self.qnbytes = self.field[PFC.F_QNBYTES]
+        self.maxbytes = self.field[PFC.F_MAXBYTES]
+
+        return(self.uid, self.usage, self.nkeys, self.nikeys, self.qnkeys, self.maxkeys, self.qnbytes, self.maxbytes)
+
+#
+RegisterProcFileHandler("/proc/key-users", ProcRootKEY_USERS)
+RegisterPartialProcFileHandler("key-users", ProcRootKEY_USERS)
+
+
+
+# ---
+class ProcRootVERSION_SIGNATURE(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/version_signature"""
+# source: 
+#
+#         seq_printf(m, "%s\n", CONFIG_VERSION_SIGNATURE);
+
+    def extra_init(self, *opts):
+        self.minfields = 1
+
+        self.version = ""
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# Ubuntu 3.2.0-24.39-generic 3.2.16
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_VERSION_STRING] = ""
+
+        else:
+            self.field[PFC.F_VERSION_STRING] = " ".join(sio.lineparts)
+
+        self.version = self.field[PFC.F_VERSION_STRING]
+
+        return(self.version)
+
+#
+RegisterProcFileHandler("/proc/version_signature", ProcRootVERSION_SIGNATURE)
+RegisterPartialProcFileHandler("version_signature", ProcRootVERSION_SIGNATURE)
+
+
+
+# ---
+class ProcRootVERSION(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/version"""
+# source: fs/proc/version.c
+#
+#        seq_printf(m, linux_proc_banner,
+#                utsname()->sysname,
+#                utsname()->release,
+#                utsname()->version);
+
+    def extra_init(self, *opts):
+        self.minfields = 3
+        self.__FixedBannerPrefix = "Linux"
+        self.__FieldDelim = ") "
+
+        self.full_string = ""
+        self.sysname = ""
+        self.release = ""
+        self.version = ""
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# Linux version 3.2.0-24-generic (buildd@crested) (gcc version 4.6.3 (Ubuntu/Linaro 4.6.3-1ubuntu5) ) #39-Ubuntu SMP Mon May 21 16:52:17 UTC 2012
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_VERSION_STRING] = ""
+            self.field[PFC.F_SYSNAME] = ""
+            self.field[PFC.F_RELEASE] = ""
+            self.field[PFC.F_VERSION] = ""
+
+        else:
+            self.field[PFC.F_VERSION_STRING] = " ".join(sio.lineparts)
+            if sio.linewords < 6 or sio.lineparts[0] != self.__FixedBannerPrefix:
+                self.field[PFC.F_SYSNAME] = ""
+                self.field[PFC.F_RELEASE] = ""
+                self.field[PFC.F_VERSION] = ""
+            else:
+                self.field[PFC.F_SYSNAME] = sio.lineparts[0]
+                self.field[PFC.F_RELEASE] = sio.lineparts[2]
+                __split = " ".join(sio.lineparts).split(self.__FieldDelim)
+                self.field[PFC.F_VERSION] = __split[-1:][0]
+
+        self.full_string = self.field[PFC.F_VERSION_STRING]
+        self.sysname = self.field[PFC.F_SYSNAME]
+        self.release = self.field[PFC.F_RELEASE]
+        self.version = self.field[PFC.F_VERSION]
+
+        return(self.sysname, self.release, self.version, self.full_string)
+#
+RegisterProcFileHandler("/proc/version", ProcRootVERSION)
+RegisterPartialProcFileHandler("version", ProcRootVERSION)
+
+
+
+# ---
+class ProcRootUPTIME(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/uptime"""
+# source: fs/proc/uptime.c
+#
+#        do_posix_clock_monotonic_gettime(&uptime);
+#        monotonic_to_bootbased(&uptime);
+#        nsec = cputime64_to_jiffies64(idletime) * TICK_NSEC;
+#        idle.tv_sec = div_u64_rem(nsec, NSEC_PER_SEC, &rem);
+#        idle.tv_nsec = rem;
+#        seq_printf(m, "%lu.%02lu %lu.%02lu\n",
+#                        (unsigned long) uptime.tv_sec,
+#                        (uptime.tv_nsec / (NSEC_PER_SEC / 100)),
+#                        (unsigned long) idle.tv_sec,
+#                        (idle.tv_nsec / (NSEC_PER_SEC / 100)));
+
+    def extra_init(self, *opts):
+        self.minfields = 2
+
+        self.uptime = 0.0
+        self.idle = 0.0
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# 3815061.73 30116159.34
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_UPTIME] = 0.0
+            self.field[PFC.F_IDLE] = 0.0
+
+        else:
+            self.field[PFC.F_UPTIME] = float(sio.lineparts[0])
+            self.field[PFC.F_IDLE] = float(sio.lineparts[1])
+
+        self.uptime = self.field[PFC.F_UPTIME]
+        self.idle = self.field[PFC.F_IDLE]
+
+        return(self.uptime, self.idle)
+#
+RegisterProcFileHandler("/proc/uptime", ProcRootUPTIME)
+RegisterPartialProcFileHandler("uptime", ProcRootUPTIME)
+
+
+
+# ---
+class ProcRootLOADAVG(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/loadavg"""
+# source: fs/proc/loadavg.c
+#
+#        seq_printf(m, "%lu.%02lu %lu.%02lu %lu.%02lu %ld/%d %d\n",
+#                LOAD_INT(avnrun[0]), LOAD_FRAC(avnrun[0]),
+#                LOAD_INT(avnrun[1]), LOAD_FRAC(avnrun[1]),
+#                LOAD_INT(avnrun[2]), LOAD_FRAC(avnrun[2]),
+#                nr_running(), nr_threads,
+#                task_active_pid_ns(current)->last_pid);
+
+    def extra_init(self, *opts):
+        self.minfields = 5
+        self.__FieldDelim = "/"
+
+        self.load0 = 0.0
+        self.load1 = 0.0
+        self.load2 = 0.0
+        self.running = 0
+        self.threads = 0
+        self.lastpid = 0
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# 0.11 0.25 0.26 1/595 14644
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_LOAD_AV0] = 0.0
+            self.field[PFC.F_LOAD_AV1] = 0.0
+            self.field[PFC.F_LOAD_AV2] = 0.0
+            self.field[PFC.F_NUM_TASKS] = 0
+            self.field[PFC.F_NUM_THREADS] = 0
+            self.field[PFC.F_LAST_PID] = 0
+
+        else:
+            self.field[PFC.F_LOAD_AV0] = float(sio.lineparts[0])
+            self.field[PFC.F_LOAD_AV1] = float(sio.lineparts[1])
+            self.field[PFC.F_LOAD_AV2] = float(sio.lineparts[2])
+            __split = sio.lineparts[3].partition(self.__FieldDelim)
+            self.field[PFC.F_NUM_TASKS] = long(__split[0])
+            self.field[PFC.F_NUM_THREADS] = long(__split[2])
+            self.field[PFC.F_LAST_PID] = long(sio.lineparts[4])
+
+        self.load0 = self.field[PFC.F_LOAD_AV0]
+        self.load1 = self.field[PFC.F_LOAD_AV1]
+        self.load2 = self.field[PFC.F_LOAD_AV2]
+        self.running = self.field[PFC.F_NUM_TASKS]
+        self.threads = self.field[PFC.F_NUM_THREADS]
+        self.lastpid = self.field[PFC.F_LAST_PID]
+
+        return(self.load0, self.load1, self.load2, self.running, self.threads, self.lastpid)
+#
+RegisterProcFileHandler("/proc/loadavg", ProcRootLOADAVG)
+RegisterPartialProcFileHandler("loadavg", ProcRootLOADAVG)
+
+
+
+# ---
+class ProcRootCMDLINE(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/cmdline"""
+# source: fs/proc/cmdline.c
+#
+#         seq_printf(m, "%s\n", saved_command_line);
+
+    def extra_init(self, *opts):
+        self.minfields = 1
+
+        self.cmdline = ""
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# BOOT_IMAGE=/vmlinuz-3.2.0-24-generic root=UUID=a959862a-84b7-4373-b7d6-954ac9005249 ro quiet splash vt.handoff=7
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_CMDLINE] = ""
+
+        else:
+            self.field[PFC.F_CMDLINE] = " ".join(sio.lineparts)
+
+        self.cmdline = self.field[PFC.F_CMDLINE]
+
+        return(self.cmdline)
+#
+RegisterProcFileHandler("/proc/cmdline", ProcRootCMDLINE)
+RegisterPartialProcFileHandler("cmdline", ProcRootCMDLINE)
+
+
+
+# ---
+class ProcRootSLABINFO(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/slabinfo"""
+# source: mm/slub.c
+# --and--
+# source: mm/slab.c
+#
+# This one is tricky...  There's kernel code that appears to create and write
+# "/proc/slabinfo" in two places.  Both "slub.c" and "slab.c" contain lines that
+# would write out info to that file.  I'm including code snippets from both and
+# making sure this routine can handle output generated by either.
+#
+# from:
+# ---
+# source: mm/slub.c
+#        seq_printf(m, "%-17s %6lu %6lu %6u %4u %4d", s->name, nr_inuse,
+#                   nr_objs, s->size, oo_objects(s->oo),
+#                   (1 << oo_order(s->oo)));
+#        seq_printf(m, " : tunables %4u %4u %4u", 0, 0, 0);
+#        seq_printf(m, " : slabdata %6lu %6lu %6lu", nr_slabs, nr_slabs,
+#                   0UL);
+#        seq_putc(m, '\n');
+#
+# from:
+# ---
+# source: mm/slab.c
+#
+# ...header routine...
+# #if STATS
+#         seq_puts(m, "slabinfo - version: 2.1 (statistics)\n");
+# #else
+#         seq_puts(m, "slabinfo - version: 2.1\n");
+# #endif
+#         seq_puts(m, "# name            <active_objs> <num_objs> <objsize> "
+#                  "<objperslab> <pagesperslab>");
+#         seq_puts(m, " : tunables <limit> <batchcount> <sharedfactor>");
+#         seq_puts(m, " : slabdata <active_slabs> <num_slabs> <sharedavail>");
+# #if STATS
+#         seq_puts(m, " : globalstat <listallocs> <maxobjs> <grown> <reaped> "
+#                  "<error> <maxfreeable> <nodeallocs> <remotefrees> <alienoverflow>");
+#         seq_puts(m, " : cpustat <allochit> <allocmiss> <freehit> <freemiss>");
+# #endif
+#         seq_putc(m, '\n');
+#
+# ...data entries...
+# 	seq_printf(m, "%-17s %6lu %6lu %6u %4u %4d",
+# 		   name, active_objs, num_objs, cachep->buffer_size,
+# 		   cachep->num, (1 << cachep->gfporder));
+# 	seq_printf(m, " : tunables %4u %4u %4u",
+# 		   cachep->limit, cachep->batchcount, cachep->shared);
+# 	seq_printf(m, " : slabdata %6lu %6lu %6lu",
+# 		   active_slabs, num_slabs, shared_avail);
+# #if STATS
+# 	{			/* list3 stats */
+# 		unsigned long high = cachep->high_mark;
+# 		unsigned long allocs = cachep->num_allocations;
+# 		unsigned long grown = cachep->grown;
+# 		unsigned long reaped = cachep->reaped;
+# 		unsigned long errors = cachep->errors;
+# 		unsigned long max_freeable = cachep->max_freeable;
+# 		unsigned long node_allocs = cachep->node_allocs;
+# 		unsigned long node_frees = cachep->node_frees;
+# 		unsigned long overflows = cachep->node_overflow;
+# 
+# 		seq_printf(m, " : globalstat %7lu %6lu %5lu %4lu "
+# 			   "%4lu %4lu %4lu %4lu %4lu",
+# 			   allocs, high, grown,
+# 			   reaped, errors, max_freeable, node_allocs,
+# 			   node_frees, overflows);
+# 	}
+# 	/* cpu stats */
+# 	{
+# 		unsigned long allochit = atomic_read(&cachep->allochit);
+# 		unsigned long allocmiss = atomic_read(&cachep->allocmiss);
+# 		unsigned long freehit = atomic_read(&cachep->freehit);
+# 		unsigned long freemiss = atomic_read(&cachep->freemiss);
+# 
+# 		seq_printf(m, " : cpustat %6lu %6lu %6lu %6lu",
+# 			   allochit, allocmiss, freehit, freemiss);
+# 	}
+# #endif
+# 	seq_putc(m, '\n');
+
+    def extra_init(self, *opts):
+        self.minfields = 16
+        self.skipped = "#"
+        self.__ExtendedRec = 33
+
+        self.slab = ""
+        self.act_objs = 0
+        self.num_objs = 0
+        self.obj_size = 0
+        self.obj_per_slab = 0
+        self.pages_per_slab = 0
+        self.limit = 0
+        self.batchcount = 0
+        self.shared = 0
+        self.act_slabs = 0
+        self.num_slabs = 0
+        self.shared_avail = 0
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# slabinfo - version: 2.1
+# # name            <active_objs> <num_objs> <objsize> <objperslab> <pagesperslab> : tunables <limit> <batchcount> <sharedfactor> : slabdata <active_slabs> <num_slabs> <sharedavail>
+# fat_inode_cache      216    216    672   24    4 : tunables    0    0    0 : slabdata      9      9      0
+# fat_cache            714    714     40  102    1 : tunables    0    0    0 : slabdata      7      7      0
+# nf_conntrack_expect      0      0    240   34    2 : tunables    0    0    0 : slabdata      0      0      0
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_SLAB_NAME] = ""
+            self.field[PFC.F_ACTIVE_OBJS] = 0
+            self.field[PFC.F_NUM_OBJS] = 0
+            self.field[PFC.F_OBJ_SIZE] = 0
+            self.field[PFC.F_OBJ_PER_SLAB] = 0
+            self.field[PFC.F_PAGES_PER_SLAB] = 0
+            self.field[PFC.F_LIMIT] = 0
+            self.field[PFC.F_BATCHCOUNT] = 0
+            self.field[PFC.F_SHARED] = 0
+            self.field[PFC.F_ACTIVE_SLABS] = 0
+            self.field[PFC.F_NUM_SLABS] = 0
+            self.field[PFC.F_SHARED_AVAIL] = 0
+            self.field[PFC.F_LIST_ALLOCS] = 0
+            self.field[PFC.F_MAX_OBJS] = 0
+            self.field[PFC.F_GROWN] = 0
+            self.field[PFC.F_REAPED] = 0
+            self.field[PFC.F_ERROR] = 0
+            self.field[PFC.F_MAX_FREEABLE] = 0
+            self.field[PFC.F_NODE_ALLOCS] = 0
+            self.field[PFC.F_REMOTE_FREES] = 0
+            self.field[PFC.F_ALIEN_OVERFLOW] = 0
+            self.field[PFC.F_ALLOC_HIT] = 0
+            self.field[PFC.F_ALLOC_MISS] = 0
+            self.field[PFC.F_FREE_HIT] = 0
+            self.field[PFC.F_FREE_MISS] = 0
+
+        else:
+            self.field[PFC.F_SLAB_NAME] = sio.lineparts[0]
+            self.field[PFC.F_ACTIVE_OBJS] = long(sio.lineparts[1])
+            self.field[PFC.F_NUM_OBJS] = long(sio.lineparts[2])
+            self.field[PFC.F_OBJ_SIZE] = long(sio.lineparts[3])
+            self.field[PFC.F_OBJ_PER_SLAB] = long(sio.lineparts[4])
+            self.field[PFC.F_PAGES_PER_SLAB] = long(sio.lineparts[5])
+            self.field[PFC.F_LIMIT] = long(sio.lineparts[8])
+            self.field[PFC.F_BATCHCOUNT] = long(sio.lineparts[9])
+            self.field[PFC.F_SHARED] = long(sio.lineparts[10])
+            self.field[PFC.F_ACTIVE_SLABS] = long(sio.lineparts[13])
+            self.field[PFC.F_NUM_SLABS] = long(sio.lineparts[14])
+            self.field[PFC.F_SHARED_AVAIL] = long(sio.lineparts[15])
+
+            if sio.linewords >= self.__ExtendedRec:
+                self.field[PFC.F_LIST_ALLOCS] = long(sio.lineparts[18])
+                self.field[PFC.F_MAX_OBJS] = long(sio.lineparts[19])
+                self.field[PFC.F_GROWN] = long(sio.lineparts[20])
+                self.field[PFC.F_REAPED] = long(sio.lineparts[21])
+                self.field[PFC.F_ERROR] = long(sio.lineparts[22])
+                self.field[PFC.F_MAX_FREEABLE] = long(sio.lineparts[23])
+                self.field[PFC.F_NODE_ALLOCS] = long(sio.lineparts[24])
+                self.field[PFC.F_REMOTE_FREES] = long(sio.lineparts[25])
+                self.field[PFC.F_ALIEN_OVERFLOW] = long(sio.lineparts[26])
+                self.field[PFC.F_ALLOC_HIT] = long(sio.lineparts[29])
+                self.field[PFC.F_ALLOC_MISS] = long(sio.lineparts[30])
+                self.field[PFC.F_FREE_HIT] = long(sio.lineparts[31])
+                self.field[PFC.F_FREE_MISS] = long(sio.lineparts[32])
+            else:
+                self.field[PFC.F_LIST_ALLOCS] = 0
+                self.field[PFC.F_MAX_OBJS] = 0
+                self.field[PFC.F_GROWN] = 0
+                self.field[PFC.F_REAPED] = 0
+                self.field[PFC.F_ERROR] = 0
+                self.field[PFC.F_MAX_FREEABLE] = 0
+                self.field[PFC.F_NODE_ALLOCS] = 0
+                self.field[PFC.F_REMOTE_FREES] = 0
+                self.field[PFC.F_ALIEN_OVERFLOW] = 0
+                self.field[PFC.F_ALLOC_HIT] = 0
+                self.field[PFC.F_ALLOC_MISS] = 0
+                self.field[PFC.F_FREE_HIT] = 0
+                self.field[PFC.F_FREE_MISS] = 0
+
+        self.slab = self.field[PFC.F_SLAB_NAME]
+        self.act_objs = self.field[PFC.F_ACTIVE_OBJS]
+        self.num_objs = self.field[PFC.F_NUM_OBJS]
+        self.obj_size = self.field[PFC.F_OBJ_SIZE]
+        self.obj_per_slab = self.field[PFC.F_OBJ_PER_SLAB]
+        self.pages_per_slab = self.field[PFC.F_PAGES_PER_SLAB]
+        self.limit = self.field[PFC.F_LIMIT]
+        self.batchcount = self.field[PFC.F_BATCHCOUNT]
+        self.shared = self.field[PFC.F_SHARED]
+        self.act_slabs = self.field[PFC.F_ACTIVE_SLABS]
+        self.num_slabs = self.field[PFC.F_NUM_SLABS]
+        self.shared_avail = self.field[PFC.F_SHARED_AVAIL]
+
+        return(self.slab, self.act_objs, self.num_objs, self.obj_size, self.obj_per_slab,
+          self.pages_per_slab, self.limit, self.batchcount, self.shared, self.act_slabs,
+          self.num_slabs, self.shared_avail)
+#
+RegisterProcFileHandler("/proc/slabinfo", ProcRootSLABINFO)
+RegisterPartialProcFileHandler("slabinfo", ProcRootSLABINFO)
+
+
+
+# ---
+class ProcRootVMALLOCINFO(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/vmallocinfo"""
+# source: 
+#
+#        seq_printf(m, "0x%p-0x%p %7ld",
+#                v->addr, v->addr + v->size, v->size);
+#
+#        if (v->caller)
+#                seq_printf(m, " %pS", v->caller);
+#
+#        if (v->nr_pages)
+#                seq_printf(m, " pages=%d", v->nr_pages);
+#
+#        if (v->phys_addr)
+#                seq_printf(m, " phys=%llx", (unsigned long long)v->phys_addr);
+#
+#        if (v->flags & VM_IOREMAP)
+#                seq_printf(m, " ioremap");
+#
+#        if (v->flags & VM_ALLOC)
+#                seq_printf(m, " vmalloc");
+#
+#        if (v->flags & VM_MAP)
+#                seq_printf(m, " vmap");
+#
+#        if (v->flags & VM_USERMAP)
+#                seq_printf(m, " user");
+#
+#        if (v->flags & VM_VPAGES)
+#                seq_printf(m, " vpages");
+#
+#        show_numa_info(m, v);
+#        seq_putc(m, '\n');
+#
+# ...and from show_numa_info()...
+#                for_each_node_state(nr, N_HIGH_MEMORY)
+#                        if (counters[nr])
+#                                seq_printf(m, " N%u=%u", nr, counters[nr]);
+
+    def extra_init(self, *opts):
+        self.minfields = 2
+        self.__FieldDelim = "-"
+        self.__NameBracket = "["
+        self.__PrefixPages = "pages="
+        self.__PrefixPhys = "phys="
+        self.__FlagIOREMAP = "ioremap"
+        self.__FlagVMALLOC = "vmalloc"
+        self.__FlagVMAP = "vmap"
+        self.__FlagUSERMAP = "user"
+        self.__FlagVPAGES = "vpages"
+        self.__PrefixNuma = "N"
+
+        self.start_addr = 0
+        self.end_addr = 0
+        self.size = 0
+        self.caller = ""
+        self.flags = ""
+        self.numa = ""
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# 0xffffc900100c0000-0xffffc900100e1000  135168 e1000_probe+0x21b/0xa0b [e1000e] phys=fbf00000 ioremap
+# 0xffffc900100e1000-0xffffc900100ea000   36864 xt_alloc_table_info+0xda/0x10e [x_tables] pages=8 vmalloc N0=8
+# 0xffffc900100ea000-0xffffc900100f3000   36864 xt_alloc_table_info+0xda/0x10e [x_tables] pages=8 vmalloc N0=8
+# 0xffffc900100fb000-0xffffc90010100000   20480 swap_cgroup_swapon+0x60/0x170 pages=4 vmalloc N0=4
+# 0xffffc90010100000-0xffffc90011101000 16781312 efi_ioremap+0x1a/0x57 phys=ff000000 ioremap
+# 0xffffc90011101000-0xffffc90013102000 33558528 alloc_large_system_hash+0x14b/0x215 pages=8192 vmalloc vpages N0=8192
+
+        __flags = ""
+        __numa = ""
+        __invalid = ""
+
+        if sio.buff == "":
+
+            self.field = dict()
+
+            self.field[PFC.F_START] = 0
+            self.field[PFC.F_END] = 0
+            self.field[PFC.F_SIZE] = 0
+            self.field[PFC.F_CALLER] = ""
+            self.field[PFC.F_PAGES] = 0
+            self.field[PFC.F_PHYS_ADDR] = 0
+            self.field[PFC.F_IOREMAP] = 0
+            self.field[PFC.F_VM_ALLOC] = 0
+            self.field[PFC.F_VM_MAP] = 0
+            self.field[PFC.F_USER_MAP] = 0
+            self.field[PFC.F_VM_PAGES] = 0
+            self.field[PFC.F_NUMA_INFO] = ""
+
+        else:
+            __split = sio.lineparts[0].partition(self.__FieldDelim)
+            self.field[PFC.F_START] = long(__split[0][2:], 16)
+            self.field[PFC.F_END] = long(__split[2][2:], 16)
+            self.field[PFC.F_SIZE] = long(sio.lineparts[1])
+
+            self.field[PFC.F_CALLER] = ""
+            self.field[PFC.F_PAGES] = 0
+            self.field[PFC.F_PHYS_ADDR] = 0
+            self.field[PFC.F_IOREMAP] = 0
+            self.field[PFC.F_VM_ALLOC] = 0
+            self.field[PFC.F_VM_MAP] = 0
+            self.field[PFC.F_USER_MAP] = 0
+            self.field[PFC.F_VM_PAGES] = 0
+            self.field[PFC.F_NUMA_INFO] = ""
+
+            __off = 2
+            if sio.linewords > __off:
+                __check = sio.lineparts[__off]
+                __pref = self.__PrefixPages
+                if __check[:len(__pref)] == __pref:
+                    self.field[PFC.F_PAGES] = long(__check[len(__pref):], 16)
+                    __flags = "{flags} {next}".format(flags=__flags, next=sio.lineparts[__off])
+                else:
+                    self.field[PFC.F_CALLER] = __check
+                __off = __off + 1
+
+            if sio.linewords > __off:
+                __check = sio.lineparts[__off]
+                if __check[0:1] == self.__NameBracket:
+                    self.field[PFC.F_CALLER] = "{base} {qual}".format(base=self.field[PFC.F_CALLER], qual=__check)
+                    __off = __off + 1
+
+            if sio.linewords > __off:
+                __check = sio.lineparts[__off]
+                __pref = self.__PrefixPages
+                if __check[:len(__pref)] == __pref:
+                    self.field[PFC.F_PAGES] = long(__check[len(__pref):], 16)
+                    __flags = "{flags} {next}".format(flags=__flags, next=sio.lineparts[__off])
+                    __off = __off + 1
+
+            if sio.linewords > __off:
+                __check = sio.lineparts[__off]
+                __pref = self.__PrefixPhys
+                if __check[:len(__pref)] == __pref:
+                    self.field[PFC.F_PHYS_ADDR] = long(__check[len(__pref):], 16)
+                    __flags = "{flags} {next}".format(flags=__flags, next=sio.lineparts[__off])
+                    __off = __off + 1
+
+            if sio.linewords > __off:
+                if sio.lineparts[__off] == self.__FlagIOREMAP:
+                    self.field[PFC.F_IOREMAP] = 1
+                    __flags = "{flags} {next}".format(flags=__flags, next=sio.lineparts[__off])
+                    __off = __off + 1
+
+            if sio.linewords > __off:
+                if sio.lineparts[__off] == self.__FlagVMALLOC:
+                    self.field[PFC.F_VM_ALLOC] = 1
+                    __flags = "{flags} {next}".format(flags=__flags, next=sio.lineparts[__off])
+                    __off = __off + 1
+
+            if sio.linewords > __off:
+                if sio.lineparts[__off] == self.__FlagVMAP:
+                    self.field[PFC.F_VM_MAP] = 1
+                    __flags = "{flags} {next}".format(flags=__flags, next=sio.lineparts[__off])
+                    __off = __off + 1
+
+            if sio.linewords > __off:
+                if sio.lineparts[__off] == self.__FlagUSERMAP:
+                    self.field[PFC.F_USER_MAP] = 1
+                    __flags = "{flags} {next}".format(flags=__flags, next=sio.lineparts[__off])
+                    __off = __off + 1
+
+            if sio.linewords > __off:
+                if sio.lineparts[__off] == self.__FlagVPAGES:
+                    self.field[PFC.F_VM_PAGES] = 1
+                    __flags = "{flags} {next}".format(flags=__flags, next=sio.lineparts[__off])
+                    __off = __off + 1
+
+            for __rest in range(__off, sio.linewords):
+                __check = sio.lineparts[__rest]
+                if __check[0:1] == self.__PrefixNuma:
+                    __numa = "{curr} {app}".format(curr=__numa, app=__check)
+                else:
+                    __invalid = "{curr} {app}".format(curr=__invalid, app=__check)
+
+            if __numa[0:1] == " ":
+                self.field[PFC.F_NUMA_INFO] = __numa[1:]
+            else:
+                self.field[PFC.F_NUMA_INFO] = __numa
+
+            if __invalid[0:1] == " ":
+                self.field[PFC.F_INVALID] = __invalid[1:]
+            else:
+                self.field[PFC.F_INVALID] = __invalid
+
+        self.start_addr = self.field[PFC.F_START]
+        self.end_addr = self.field[PFC.F_END]
+        self.size = self.field[PFC.F_SIZE]
+        self.caller = self.field[PFC.F_CALLER]
+        self.flags = __flags
+        self.numa = __numa
+
+        return(self.start_addr, self.end_addr, self.size, self.caller, self.flags, self.numa)
+#
+RegisterProcFileHandler("/proc/vmallocinfo", ProcRootVMALLOCINFO)
+RegisterPartialProcFileHandler("vmallocinfo", ProcRootVMALLOCINFO)

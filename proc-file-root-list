@@ -22,28 +22,28 @@ sysrq-trigger SKIP NOTDATA ROOTONLY
 partitions DONE WSD ProcRootPARTITIONS
 diskstats DONE WSD ProcRootDISKSTATS NOHEADER
 crypto NEED NESTED
-key-users NEED WSD one-line NOHEADER
-version_signature NEED WSD one-line NOHEADER
+key-users DONE WSD ProcRootKEY_USERS one-line NOHEADER
+version_signature DONE WSD ProcRootVERSION_SIGNATURE one-line NOHEADER
 kpageflags SKIP BINARY ROOTONLY
 kpagecount SKIP BINARY ROOTONLY
 kmsg SKIP NOTDATA ROOTONLY
 kcore SKIP BINARY ROOTONLY
 softirqs NEED FIXEDCOLS VARIES
-version NEED WSD one-line NOHEADER
-uptime NEED WSD one-line NOHEADER
+version DONE WSD ProcRootVERSION one-line NOHEADER
+uptime DONE WSD ProcRootUPTIME one-line NOHEADER
 stat NEED NESTED VARIES
 meminfo DONE WSD ProcRootMEMINFO NOHEADER
-loadavg NEED WSD one-line NOHEADER
+loadavg DONE WSD ProcRootLOADAVG one-line NOHEADER
 interrupts NEED FIXEDCOLS VARIES
 devices NEED NESTED
 cpuinfo NEED MULTILINE VARIES
 consoles DONE WSD ProcRootCONSOLES one-line NOHEADER
-cmdline NEED WSD one-line NOHEADER
+cmdline DONE WSD ProcRootCMDLINE one-line NOHEADER
 locks DONE WSD ProcRootLOCKS NOHEADER
 filesystems DONE TBD ProcRootFILESYSTEMS
-slabinfo NEED WSD ROOTONLY
+slabinfo DONE WSD ProcRootSLABINFO ROOTONLY
 swaps DONE WSD ProcRootSWAPS
-vmallocinfo NEED WSD NOHEADER ROOTONLY
+vmallocinfo DONE WSD ProcRootVMALLOCINFO NOHEADER ROOTONLY
 zoneinfo NEED REPORT
 vmstat DONE WSD ProcRootVMSTAT NOHEADER
 pagetypeinfo NEED NESTED
