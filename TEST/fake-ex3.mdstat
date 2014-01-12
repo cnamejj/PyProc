@@ -1,0 +1,7 @@
+Personalities : [raid10] 
+md127 : active raid10 sda2[0] sdb1[1]
+      1564531200 blocks super 1.1 2 near-copies [2/1] [_U]
+      [====>................]  recovery = 24.6% (385876032/1564531200) finish=80.2min speed=244751K/sec
+      bitmap: 12/12 pages [48KB], 65536KB chunk, file: /tmp/fake1 with space.file
+
+unused devices: <none>

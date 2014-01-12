@@ -1,0 +1,6 @@
+Personalities : [raid10] 
+md127 : active raid10 sda2[0] sdb1[1]
+      1564531200 blocks super 1.1 2 near-copies [2/2] [UU]
+      bitmap: 0/12 pages [0KB], 65536KB chunk
+
+unused devices: <none>

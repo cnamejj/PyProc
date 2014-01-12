@@ -29,12 +29,15 @@ def ShowRecsFromOneFile( ioh, proc_file, subfile):
                 fseq = fseq + 1
                 currval = active.field[off]
                 if type(currval) == dict:
+                    print "- - {seq}. {key} ...({size})".format(seq=fseq, key=off, size=len(currval))
                     subseq = 0
-                    print "- - {seq}. {key} ...".format(seq=fseq, key=off)
                     for subent in currval:
                         subseq = subseq + 1
                         if type(subent) == str:
                             print "- - - {seq}.{subseq}. {subkey} : {subkeyval}".format(seq=fseq, subseq=subseq, subkey=subent, subkeyval=str(currval[subent]))
+                        else:
+                            __skey = str(subent)
+                            print "- - - {seq}.{subseq}. {subkey} : {subkeyval}".format(seq=fseq, subseq=subseq, subkey=__skey, subkeyval=str(currval[subent]))
                 else:
                     print "- - {seq}. {key} : {keyval}".format(seq=fseq, key=off, keyval=str(currval))
 

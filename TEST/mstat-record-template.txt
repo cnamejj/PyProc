@@ -1,0 +1,91 @@
+
+(0) Personalities : (1)\n
+    (1) [name1] [name2] [name3] ... [nameX]
+(2) unused devices: {3}\n
+    (3) {dev1 dev2 dev3 ... devX} || {<none>}
+(4) mdname : {in}active {5} pers-name (6)
+    (5) {(read-only)} || {(auto-read-only)}
+    (6) devname1[desc_nr1]{7} devname2[desc_nr2] {7} devname3[desc_nr3] {7} ... devnameX[desc_nrX] {7}
+        (7) {(W)}{"(F)"||"(S}"}
+(8) \n ### blocks {9}
+    (9) {super ##.##} || {super external:metadata-type} || {super non-persistent}
+(A) (B) (E)||(G) \n
+    (B) {##K chunks} && {## near-copies} && { {## offset-copies} || {## far-copies} } [##/##] [(C){C}{C}{C}...]
+        (C) "U" || "_"
+    (E) [{=}{=}{=}...>{.}{.}{.}...] (F) =##.##% (##/##) finish=##.##min speed=##K/sec
+        (F) "reshape" || "check" || "resync" || "recovery"
+    (G) {resync=DELAYED}||{resync=PENDING}
+(H) bitmap: ##/## pages [##KB], ##{"KB"||"B"} chunk{I}
+    (I) , file:FILENAME\n
+                        seq_printf(seq, "\n");
+                        spin_unlock_irqrestore(&bitmap->lock, flags);
+                }
+
+                seq_printf(seq, "\n");
+        }
+        mddev_unlock(mddev);
+        
+        return 0;
+}
+
+
+(L1) Personalities : [name1] { {[name2]}, {[name3]}, {[name4]}, ... }\n
+
+(L2) unused devices: { dev1 {dev2} {dev3} {dev4} ... } || {<none>}\n
+
+(L3) mdname : {in}active {(read-only)} || {(auto-read-only)} pers-name (6)\n
+    (6) devname1[desc_nr1]{7} devname2[desc_nr2] {7} devname3[desc_nr3] {7} ...
+        (7) {(W)}{"(F)"||"(S}"}
+
+(L4) ### blocks {super ##.##} || {super external:metadata-type} || {super non-persistent} (B)
+    (B) {##K chunks} && {## near-copies} && { {## offset-copies} || {## far-copies} } [##/##] [ U || _ {U || _} {U || _} {U || _} ... ]
+
+(L5) (E) || (F)
+    (E) [{=}{=}{=}...>{.}{.}{.}...] "reshape" || "check" || "resync" || "recovery" =##.##% (##/##) finish=##.##min speed=##K/sec
+    (F) {resync=DELAYED}||{resync=PENDING}
+
+(L6) bitmap: ##/## pages [##KB], ##{"KB"||"B"} chunk{, file:FILENAME}\n
+
+
+fields:
+
+F#: type 
+
+F1: type pers-list
+F1: "Personalities" "[name1] [name2] [name3] ..."
+
+F2: type dev-list
+F2: "unused devices" "dev1 dev2 dev3 ..."
+F2: "unused devices" "<none>"
+
+F3: type mdname active ro-flag pers-name part-dic part-flag-dic blocks super chunks nearcopy offsetcopy farcopy wtf1 wtf2 breakout1 breakout2 action pc wtf3 wtf4 finish speed
+F3: "md" md1 active read-only raid10 "0:sda1 1:sdb2 2:sdc2 3:sdd1" "0:WF 1:F 2:S 3:WS" 3122 1.2 512 0 0 0 2 2 UU ===>... reshape 20.5 0 0 32.1 999
+F3: "md" md0 active auto-read-only raid10 "0:sda1 1:sdb2 2:sdc2 3:sdd1" "0: 1:WS 2:F 3:" 3213 external:metadata-type 512 2 0 0 2 2 U_ ====>. check 10.1
+F3: "md" md127 inactive auto-read-only raid10 "0:sda1 1:sdb2 2:sdc2 3:sdd1" "0: 1:WS 2:F 3:" 3213 external:non-persistent 512 2 0 0 2 2 __ =>... resync 90.0
+F3: "md" md1 inactive auto-read-only raid10 "0:sda1 1:sdb2 2:sdc2 3:sdd1" "0: 1:WS 2:F 3:" 3213 external:non-persistent 512 2 0 0 2 2 __ =>... recovery 55.3
+
+F4: type wtf5 wtf6 wtf7 chunksize filename
+F4: "bitmap" 4 4 120 40961 path/goes/here
+
+Total of 30 separate fields
+
+
+---- example
+Personalities : [linear] [multipath] [raid0] [raid1] [raid10] [raid6] [raid5] [raid4] 
+md1 : active raid10 sda2[0] sdd1[3] sdb2[1] sdc2[2]
+      3221222400 blocks super 1.2 512K chunks 2 near-copies [4/4] [UUUU]
+      
+md0 : active raid10 sdb1[0] sdc1[1]
+      104856064 blocks super 1.2 2 near-copies [2/2] [UU]
+      
+unused devices: <none>
+
+
+---- example
+Personalities : [raid10] 
+md127 : active raid10 sda2[0] sdb1[1]
+      1564531200 blocks super 1.1 2 near-copies [2/1] [_U]
+      [=>...................]  recovery =  5.2% (82101312/1564531200) finish=115.9min speed=213025K/sec
+      bitmap: 12/12 pages [48KB], 65536KB chunk
+
+unused devices: <none>

@@ -2128,3 +2128,548 @@ class ProcRootVMALLOCINFO(PBR.fixed_delim_format_recs):
 #
 RegisterProcFileHandler("/proc/vmallocinfo", ProcRootVMALLOCINFO)
 RegisterPartialProcFileHandler("vmallocinfo", ProcRootVMALLOCINFO)
+
+
+
+# ---
+class ProcRootMDSTAT(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/mdstat"""
+# source: drivers/md/raid10.c
+# --and--
+# source: drivers/md/md.c
+#
+# from: drivers/md/raid10.c
+# ---
+# static void status(struct seq_file *seq, struct mddev *mddev)
+# {
+#         struct r10conf *conf = mddev->private;
+#         int i;
+# 
+#         if (conf->near_copies < conf->raid_disks)
+#                 seq_printf(seq, " %dK chunks", mddev->chunk_sectors / 2);
+#         if (conf->near_copies > 1)
+#                 seq_printf(seq, " %d near-copies", conf->near_copies);
+#         if (conf->far_copies > 1) {
+#                 if (conf->far_offset)
+#                         seq_printf(seq, " %d offset-copies", conf->far_copies);
+#                 else
+#                         seq_printf(seq, " %d far-copies", conf->far_copies);
+#         }
+#         seq_printf(seq, " [%d/%d] [", conf->raid_disks,
+#                                         conf->raid_disks - mddev->degraded);
+#         for (i = 0; i < conf->raid_disks; i++)
+#                 seq_printf(seq, "%s",
+#                               conf->mirrors[i].rdev &&
+#                               test_bit(In_sync, &conf->mirrors[i].rdev->flags) ? "U" : "_");
+#         seq_printf(seq, "]");
+# }
+#
+# from: drivers/md/raid10.c
+# ---
+# static void status_unused(struct seq_file *seq)
+# {
+# 
+# 	seq_printf(seq, "unused devices: ");
+# 
+# 	list_for_each_entry(rdev, &pending_raid_disks, same_set) {
+# 		char b[BDEVNAME_SIZE];
+# 		i++;
+# 		seq_printf(seq, "%s ",
+# 			      bdevname(rdev->bdev,b));
+# 	}
+# 	if (!i)
+# 		seq_printf(seq, "<none>");
+# 
+# 	seq_printf(seq, "\n");
+# }
+# 
+# 
+# static void status_resync(struct seq_file *seq, struct mddev * mddev)
+# {
+# 	{
+# 		int i, x = per_milli/50, y = 20-x;
+# 		seq_printf(seq, "[");
+# 		for (i = 0; i < x; i++)
+# 			seq_printf(seq, "=");
+# 		seq_printf(seq, ">");
+# 		for (i = 0; i < y; i++)
+# 			seq_printf(seq, ".");
+# 		seq_printf(seq, "] ");
+# 	}
+# 	seq_printf(seq, " %s =%3u.%u%% (%llu/%llu)",
+# 		   (test_bit(MD_RECOVERY_RESHAPE, &mddev->recovery)?
+# 		    "reshape" :
+# 		    (test_bit(MD_RECOVERY_CHECK, &mddev->recovery)?
+# 		     "check" :
+# 		     (test_bit(MD_RECOVERY_SYNC, &mddev->recovery) ?
+# 		      "resync" : "recovery"))),
+# 		   per_milli/10, per_milli % 10,
+# 		   (unsigned long long) resync/2,
+# 		   (unsigned long long) max_sectors/2);
+# ...code deleted...
+# 
+# 	seq_printf(seq, " finish=%lu.%lumin", (unsigned long)rt / 60,
+# 		   ((unsigned long)rt % 60)/6);
+# 
+# 	seq_printf(seq, " speed=%ldK/sec", db/2/dt);
+# }
+# 
+# static int md_seq_show(struct seq_file *seq, void *v)
+# {
+# ...code deleted...
+# 
+# 	if (v == (void*)1) {
+# 		struct md_personality *pers;
+# 		seq_printf(seq, "Personalities : ");
+# 		spin_lock(&pers_lock);
+# 		list_for_each_entry(pers, &pers_list, list)
+# 			seq_printf(seq, "[%s] ", pers->name);
+# 
+# 		spin_unlock(&pers_lock);
+# 		seq_printf(seq, "\n");
+# 		seq->poll_event = atomic_read(&md_event_count);
+# 		return 0;
+# 	}
+# 	if (v == (void*)2) {
+# 		status_unused(seq);
+# 		return 0;
+# 	}
+# 
+# 	if (mddev_lock(mddev) < 0)
+# 		return -EINTR;
+# 
+# 	if (mddev->pers || mddev->raid_disks || !list_empty(&mddev->disks)) {
+# 		seq_printf(seq, "%s : %sactive", mdname(mddev),
+# 						mddev->pers ? "" : "in");
+# 		if (mddev->pers) {
+# 			if (mddev->ro==1)
+# 				seq_printf(seq, " (read-only)");
+# 			if (mddev->ro==2)
+# 				seq_printf(seq, " (auto-read-only)");
+# 			seq_printf(seq, " %s", mddev->pers->name);
+# 		}
+# 
+# 		sectors = 0;
+# 		list_for_each_entry(rdev, &mddev->disks, same_set) {
+# 			char b[BDEVNAME_SIZE];
+# 			seq_printf(seq, " %s[%d]",
+# 				bdevname(rdev->bdev,b), rdev->desc_nr);
+# 			if (test_bit(WriteMostly, &rdev->flags))
+# 				seq_printf(seq, "(W)");
+# 			if (test_bit(Faulty, &rdev->flags)) {
+# 				seq_printf(seq, "(F)");
+# 				continue;
+# 			} else if (rdev->raid_disk < 0)
+# 				seq_printf(seq, "(S)"); /* spare */
+# 			sectors += rdev->sectors;
+# 		}
+# 
+# 		if (!list_empty(&mddev->disks)) {
+# 			if (mddev->pers)
+# 				seq_printf(seq, "\n      %llu blocks",
+# 					   (unsigned long long)
+# 					   mddev->array_sectors / 2);
+# 			else
+# 				seq_printf(seq, "\n      %llu blocks",
+# 					   (unsigned long long)sectors / 2);
+# 		}
+# 		if (mddev->persistent) {
+# 			if (mddev->major_version != 0 ||
+# 			    mddev->minor_version != 90) {
+# 				seq_printf(seq," super %d.%d",
+# 					   mddev->major_version,
+# 					   mddev->minor_version);
+# 			}
+# 		} else if (mddev->external)
+# 			seq_printf(seq, " super external:%s",
+# 				   mddev->metadata_type);
+# 		else
+# 			seq_printf(seq, " super non-persistent");
+# 
+# 		if (mddev->pers) {
+# 			mddev->pers->status(seq, mddev);
+# 	 		seq_printf(seq, "\n      ");
+# 			if (mddev->pers->sync_request) {
+# 				if (mddev->curr_resync > 2) {
+# 					status_resync(seq, mddev);
+# 					seq_printf(seq, "\n      ");
+# 				} else if (mddev->curr_resync == 1 || mddev->curr_resync == 2)
+# 					seq_printf(seq, "\tresync=DELAYED\n      ");
+# 				else if (mddev->recovery_cp < MaxSector)
+# 					seq_printf(seq, "\tresync=PENDING\n      ");
+# 			}
+# 		} else
+# 			seq_printf(seq, "\n       ");
+# 
+# 		if ((bitmap = mddev->bitmap)) {
+# 			unsigned long chunk_kb;
+# 			unsigned long flags;
+# 			spin_lock_irqsave(&bitmap->lock, flags);
+# 			chunk_kb = mddev->bitmap_info.chunksize >> 10;
+# 			seq_printf(seq, "bitmap: %lu/%lu pages [%luKB], "
+# 				"%lu%s chunk",
+# 				bitmap->pages - bitmap->missing_pages,
+# 				bitmap->pages,
+# 				(bitmap->pages - bitmap->missing_pages)
+# 					<< (PAGE_SHIFT - 10),
+# 				chunk_kb ? chunk_kb : mddev->bitmap_info.chunksize,
+# 				chunk_kb ? "KB" : "B");
+# 			if (bitmap->file) {
+# 				seq_printf(seq, ", file: ");
+# 				seq_path(seq, &bitmap->file->f_path, " \t\n");
+# 			}
+# 
+# 			seq_printf(seq, "\n");
+# 			spin_unlock_irqrestore(&bitmap->lock, flags);
+# 		}
+# 
+# 		seq_printf(seq, "\n");
+# 	}
+# 	mddev_unlock(mddev);
+# 	
+# 	return 0;
+# }
+
+    def extra_init(self, *opts):
+        self.__MinWords_first = 1
+        self.__MinWords_second = 0
+        self.minfields = self.__MinWords_first
+
+        self.rec_type = ""
+        self.personalities = []
+        self.device_list = []
+        self.active_stat = ""
+        self.pers_name = ""
+        self.partition_list = dict()
+        self.wrmostly_list = dict()
+        self.faulty_list = dict()
+        self.spare_list = dict()
+        self.readonly = 0
+        self.blocks = 0
+        self.super = ""
+        self.chunk = 0
+        self.nearcopy = 0
+        self.offsetcopy = 0
+        self.farcopy = 0
+        self.activeparts = 0
+        self.totalparts = 0
+        self.part_usemap = ""
+        self.rebuild_prog = ""
+        self.resync_stat = ""
+        self.rebuild_act = ""
+        self.percent = 0
+        self.rebuild_done = 0
+        self.rebuild_total = 0
+        self.finish = 0
+        self.speed = 0
+        self.nomiss_pages = 0
+        self.total_pages = 0
+        self.nomiss_pages_kb = 0
+        self.bitmap_chunk = 0
+        self.bitmap_file = ""
+
+        self.__REC_PERSONALITY = "Personalities"
+        self.__REC_UNUSED = "unused"
+        self.__REC_BITMAP = "bitmap:"
+        self.__READONLY_FLAG = "(read-only)"
+        self.__AUTOREADONLY_FLAG = "(auto-read-only)"
+        self.__SUPER_FLAG = "super"
+        self.__CHUNK_FLAG = "chunks"
+        self.__NEAR_COPY_FLAG = "near-copies"
+        self.__OFFSET_COPY_FLAG = "offset-copies"
+        self.__FAR_COPY_FLAG = "far-copies"
+        self.__OPEN_LIST = "["
+        self.__NUM_SPLIT = "/"
+        self.__PROG_SPLIT = ">"
+        self.__USED_Y = "U"
+        self.__USED_N = "_"
+        self.__BLOCKS_FLAG = "blocks"
+        self.__BITMAP_FLAG = "bitmap:"
+        self.__RESYNC_FLAG = "resync"
+        self.__RESYNC_DELIM = "="
+        self.__VALUE_PREF = "="
+        self.__FINISH_SUFF = "min"
+        self.__SPEED_SUFF = "K/sec"
+        self.__PAGES_SUFF = "KB],"
+        self.__KB_SUFF = "KB"
+        self.__B_SUFF = "B"
+        self.__PATH_PREF = "file:"
+        self.__INFO_DELIM = "("
+        self.__DEV_DELIM = "["
+        self.__WRMOSTLY_FLAG = "W"
+        self.__FAULTY_FLAG = "F"
+        self.__SPARE_FLAG = "S"
+        return
+
+    def parse_personality_record(self, sio):
+        if sio.linewords > 1:
+            self.field[PFC.F_PERSONALITIES] = sio.lineparts[2:]
+        else:
+            self.field[PFC.F_PERSONALITIES] = []
+        return
+
+    def parse_unused_record(self, sio):
+        if sio.linewords > 1:
+            self.field[PFC.F_DEVICE_LIST] = sio.lineparts[2:]
+        else:
+            self.field[PFC.F_DEVICE_LIST] = []
+        return
+
+    def parse_bitmap_subrec(self, sio):
+        __split = sio.lineparts[1].partition(self.__NUM_SPLIT)
+        self.field[PFC.F_PAGES_NOMISS] = long(__split[0])
+        self.field[PFC.F_PAGES_TOTAL] = long(__split[2])
+
+        __curr = sio.lineparts[3]
+        self.field[PFC.F_PAGES_NOMISS_KB] = long(__curr[1:-len(self.__PAGES_SUFF)])
+
+        __curr = sio.lineparts[4]
+        if __curr[-len(self.__KB_SUFF):] == self.__KB_SUFF:
+            self.field[PFC.F_BITMAP_CHUNK] = long(__curr[:-len(self.__KB_SUFF)]) * 1024
+        else:
+            self.field[PFC.F_BITMAP_CHUNK] = long(__curr[:-len(self.__B_SUFF)])
+
+        if sio.linewords >= 7:
+            __curr = " ".join(sio.lineparts[6:])
+            if __curr[:len(self.__PATH_PREF)] == self.__PATH_PREF:
+                __curr = __curr[len(self.__PATH_PREF):]
+
+            if __curr[:1] == " ":
+                __curr = __curr[1:]
+            self.field[PFC.F_FILEPATH] = __curr
+
+        return
+
+    def parse_rebuild_subrec(self, sio):
+        __curr = sio.lineparts[0]
+        if __curr[:len(self.__RESYNC_FLAG)] == self.__RESYNC_FLAG:
+            self.field[PFC.F_RESYNC_STAT] = __curr.partition(self.__RESYNC_DELIM)[2]
+        else:
+            self.field[PFC.F_REBUILD_PROG] = sio.lineparts[0]
+            self.field[PFC.F_REBUILD_ACTION] = sio.lineparts[1]
+
+            __off = 2
+            if sio.lineparts[__off] == self.__VALUE_PREF:
+                __off = __off + 1
+                __curr = sio.lineparts[__off]
+            else:
+                __curr = sio.lineparts[__off][1:]
+            self.field[PFC.F_PERCENT] = float(__curr[:-1])
+
+            __off = __off + 1
+            __split = sio.lineparts[__off].partition(self.__NUM_SPLIT)
+            self.field[PFC.F_REBUILD_DONE] = long(__split[0][1:])
+            self.field[PFC.F_REBUILD_TOTAL] = long(__split[2][:-1])
+
+            __off = __off + 1
+            __split = sio.lineparts[__off].partition(self.__VALUE_PREF)
+            self.field[PFC.F_FIN_TIME] = float(__split[2][:-len(self.__FINISH_SUFF)])
+
+            __off = __off + 1
+            __split = sio.lineparts[__off].partition(self.__VALUE_PREF)
+            self.field[PFC.F_SPEED] = long(__split[2][:-len(self.__SPEED_SUFF)])
+        return
+
+    def parse_blocks_subrec(self, sio):
+        __words = sio.linewords
+        self.field[PFC.F_BLOCKS] = long(sio.lineparts[0])
+        __off = 2
+        if __off < __words and sio.lineparts[__off] == self.__SUPER_FLAG:
+            self.field[PFC.F_SUPER] = sio.lineparts[__off + 1]
+            __off = __off + 2
+        if __off < __words and sio.lineparts[__off + 1] == self.__CHUNK_FLAG:
+            self.field[PFC.F_CHUNK] = long(sio.lineparts[__off][:-1])
+            __off = __off + 2
+        if __off < __words and sio.lineparts[__off + 1] == self.__NEAR_COPY_FLAG:
+            self.field[PFC.F_NEAR_COPY] = long(sio.lineparts[__off])
+            __off = __off + 2
+        if __off < __words and sio.lineparts[__off + 1] == self.__OFFSET_COPY_FLAG:
+            self.field[PFC.F_OFFSET_COPY] = long(sio.lineparts[__off])
+            __off = __off + 2
+        if __off < __words and sio.lineparts[__off + 1] == self.__FAR_COPY_FLAG:
+            self.field[PFC.F_FAR_COPY] = long(sio.lineparts[__off])
+            __off = __off + 2
+
+        for __try in range(2):
+            if __off < __words and sio.lineparts[__off][:1] == self.__OPEN_LIST:
+                __curr = sio.lineparts[__off]
+                __split = __curr.partition(self.__NUM_SPLIT)
+                if __split[0] != __curr:
+                    self.field[PFC.F_TOTAL_PARTS] = long(__split[0][1:])
+                    self.field[PFC.F_ACTIVE_PARTS] = long(__split[2][:-1])
+                elif __curr[1:2] == self.__USED_Y or __curr[1:2] == self.__USED_N:
+                    self.field[PFC.F_PART_USEMAP] = __curr
+                __off = __off + 1
+        return
+
+    def parse_partition_list(self, sio, rawlist):
+        __dplist = rawlist.split(" ")
+        __partmap = dict()
+        __wrmostly = dict()
+        __faulty = dict()
+        __spare = dict()
+
+        for __devinfo in __dplist:
+            __bits = __devinfo.split(self.__INFO_DELIM)
+            __split = __bits[0].partition(self.__DEV_DELIM)
+            __pnum = long(__split[2][:-1])
+
+            __partmap[__pnum] = __split[0]
+            __wrmostly[__pnum] = 0
+            __faulty[__pnum] = 0
+            __spare[__pnum] = 0
+
+            for __flag in __bits[1:]:
+                __flag = __flag[:-1]
+                if __flag == self.__WRMOSTLY_FLAG:
+                    __wrmostly[__pnum] = 1
+                elif __flag == self.__FAULTY_FLAG:
+                    __faulty[__pnum] = 1
+                elif __flag == self.__SPARE_FLAG:
+                    __spare[__pnum] = 1
+
+        self.field[PFC.F_PARTITION_LIST] = __partmap
+        self.field[PFC.F_WRMOSTLY_LIST] = __wrmostly
+        self.field[PFC.F_FAULTY_LIST] = __faulty
+        self.field[PFC.F_SPARE_LIST] = __spare
+        return
+
+    def parse_mddev_record(self, sio):
+        self.field[PFC.F_ACTIVE_STAT] = sio.lineparts[2]
+        __off = 3
+        if sio.lineparts[__off] == self.__READONLY_FLAG:
+            self.field[PFC.F_READONLY] = 1
+            __off = __off + 1
+        if sio.lineparts[__off] == self.__AUTOREADONLY_FLAG:
+            self.field[PFC.F_READONLY] = 2
+            __off = __off + 1
+        self.field[PFC.F_PERS_NAME] = sio.lineparts[__off]
+        __off = __off + 1
+        self.parse_partition_list(sio, " ".join(sio.lineparts[__off:]))
+
+        sio.MinWords = self.__MinWords_second
+        sio.read_line()
+        for __subrec in range(3):
+            if sio.linewords > 0:
+                __keyfield = sio.lineparts[0]
+                if sio.linewords > 1 and sio.lineparts[1] == self.__BLOCKS_FLAG:
+                    self.parse_blocks_subrec(sio)
+                elif __keyfield[:1] == self.__OPEN_LIST:
+                    self.parse_rebuild_subrec(sio)
+                elif __keyfield == self.__BITMAP_FLAG:
+                    self.parse_bitmap_subrec(sio)
+                sio.read_line()
+        sio.MinWords = self.__MinWords_first
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records #1
+# Personalities : [linear] [multipath] [raid0] [raid1] [raid10] [raid6] [raid5] [raid4] 
+# md1 : active raid10 sda2[0] sdd1[3] sdb2[1] sdc2[2]
+#       3221222400 blocks super 1.2 512K chunks 2 near-copies [4/4] [UUUU]
+#       
+# md0 : active raid10 sdb1[0] sdc1[1]
+#       104856064 blocks super 1.2 2 near-copies [2/2] [UU]
+#       
+# unused devices: <none>
+#
+# -- Sample records #2
+# Personalities : [raid10] 
+# md127 : active raid10 sda2[0] sdb1[1]
+#       1564531200 blocks super 1.1 2 near-copies [2/1] [_U]
+#       [=>...................]  recovery =  5.2% (82101312/1564531200) finish=115.9min speed=213025K/sec
+#       bitmap: 12/12 pages [48KB], 65536KB chunk
+# 
+# unused devices: <none>
+
+        self.field = dict()
+
+        self.field[PFC.F_REC_TYPE] = ""
+        self.field[PFC.F_PERSONALITIES] = []
+        self.field[PFC.F_DEVICE_LIST] = []
+        self.field[PFC.F_ACTIVE_STAT] = ""
+        self.field[PFC.F_PERS_NAME] = ""
+        self.field[PFC.F_PARTITION_LIST] = dict()
+        self.field[PFC.F_WRMOSTLY_LIST] = dict()
+        self.field[PFC.F_FAULTY_LIST] = dict()
+        self.field[PFC.F_SPARE_LIST] = dict()
+        self.field[PFC.F_READONLY] = 0
+        self.field[PFC.F_BLOCKS] = 0
+        self.field[PFC.F_SUPER] = ""
+        self.field[PFC.F_CHUNK] = 0
+        self.field[PFC.F_NEAR_COPY] = 0
+        self.field[PFC.F_OFFSET_COPY] = 0
+        self.field[PFC.F_FAR_COPY] = 0
+        self.field[PFC.F_ACTIVE_PARTS] = 0
+        self.field[PFC.F_TOTAL_PARTS] = 0
+        self.field[PFC.F_PART_USEMAP] = ""
+        self.field[PFC.F_REBUILD_PROG] = ""
+        self.field[PFC.F_RESYNC_STAT] = ""
+        self.field[PFC.F_REBUILD_ACTION] = ""
+        self.field[PFC.F_PERCENT] = 0
+        self.field[PFC.F_REBUILD_DONE] = 0
+        self.field[PFC.F_REBUILD_TOTAL] = 0
+        self.field[PFC.F_FIN_TIME] = 0
+        self.field[PFC.F_SPEED] = 0
+        self.field[PFC.F_PAGES_NOMISS] = 0
+        self.field[PFC.F_PAGES_TOTAL] = 0
+        self.field[PFC.F_PAGES_NOMISS_KB] = 0
+        self.field[PFC.F_BITMAP_CHUNK] = 0
+        self.field[PFC.F_FILEPATH] = ""
+
+        if sio.buff != "":
+            __rec = sio.lineparts[0]
+            self.field[PFC.F_REC_TYPE] = __rec
+
+            if __rec == self.__REC_PERSONALITY:
+                self.parse_personality_record(sio)
+
+            elif __rec == self.__REC_UNUSED:
+                self.parse_unused_record(sio)
+
+            elif __rec != "":
+                self.parse_mddev_record(sio)
+
+        self.rec_type = self.field[PFC.F_REC_TYPE]
+        self.personalities = self.field[PFC.F_PERSONALITIES]
+        self.device_list = self.field[PFC.F_DEVICE_LIST]
+        self.active_stat = self.field[PFC.F_ACTIVE_STAT]
+        self.pers_name = self.field[PFC.F_PERS_NAME]
+        self.partition_list = self.field[PFC.F_PARTITION_LIST]
+        self.wrmostly_list = self.field[PFC.F_WRMOSTLY_LIST]
+        self.faulty_list = self.field[PFC.F_FAULTY_LIST]
+        self.spare_list = self.field[PFC.F_SPARE_LIST]
+        self.readonly = self.field[PFC.F_READONLY]
+        self.blocks = self.field[PFC.F_BLOCKS]
+        self.super = self.field[PFC.F_SUPER]
+        self.chunk = self.field[PFC.F_CHUNK]
+        self.nearcopy = self.field[PFC.F_NEAR_COPY]
+        self.offsetcopy = self.field[PFC.F_OFFSET_COPY]
+        self.farcopy = self.field[PFC.F_FAR_COPY]
+        self.activeparts = self.field[PFC.F_ACTIVE_PARTS]
+        self.totalparts = self.field[PFC.F_TOTAL_PARTS]
+        self.part_usemap = self.field[PFC.F_PART_USEMAP]
+        self.rebuild_prog = self.field[PFC.F_REBUILD_PROG]
+        self.resync_stat = self.field[PFC.F_RESYNC_STAT]
+        self.rebuild_act = self.field[PFC.F_REBUILD_ACTION]
+        self.percent = self.field[PFC.F_PERCENT]
+        self.rebuild_done = self.field[PFC.F_REBUILD_DONE]
+        self.rebuild_total = self.field[PFC.F_REBUILD_TOTAL]
+        self.finish = self.field[PFC.F_FIN_TIME]
+        self.speed = self.field[PFC.F_SPEED]
+        self.nomiss_pages = self.field[PFC.F_PAGES_NOMISS]
+        self.total_pages = self.field[PFC.F_PAGES_TOTAL]
+        self.nomiss_pages_kb = self.field[PFC.F_PAGES_NOMISS_KB]
+        self.bitmap_chunk = self.field[PFC.F_BITMAP_CHUNK]
+        self.bitmap_file = self.field[PFC.F_FILEPATH]
+
+        return(self.rec_type, self.personalities, self.device_list, self.active_stat, self.pers_name,
+          self.partition_list, self.wrmostly_list, self.faulty_list, self.spare_list, self.readonly,
+          self.blocks, self.super, self.chunk, self.nearcopy, self.offsetcopy, self.farcopy,
+          self.activeparts, self.totalparts, self.part_usemap, self.rebuild_prog, self.resync_stat,
+          self.rebuild_act, self.percent, self.rebuild_done, self.rebuild_total, self.finish, self.speed,
+          self.nomiss_pages, self.total_pages, self.nomiss_pages_kb, self.bitmap_chunk, self.bitmap_file)
+#
+RegisterProcFileHandler("/proc/mdstat", ProcRootMDSTAT)
+RegisterPartialProcFileHandler("mdstat", ProcRootMDSTAT)
