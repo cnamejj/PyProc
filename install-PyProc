@@ -1,0 +1,5 @@
+#!/bin/bash
+
+INSTALL_DIR="/usr/local/bin/"
+
+rsync -avu --no-owner --exclude .git --exclude .gitignore --exclude TEST --exclude \*.pyc --exclude README.md --exclude install-PyProc . "${INSTALL_DIR}"
