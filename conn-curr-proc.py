@@ -6,7 +6,7 @@ Data is pulled from /proc filesystem.
 
 import sys
 
-from ProcHandlers import ProcNetTCP, ProcNetTCP6
+import ProcHandlers
 import ProcessInfo
 import CachedDNS
 
@@ -16,7 +16,7 @@ if sys.platform == "darwin":
 
 iplookup = CachedDNS.CachedDNS()
 procinfo = ProcessInfo.ProcessInfo()
-socklist = ProcNetTCP()
+socklist = ProcHandlers.GetProcFileHandler("tcp")()
 
 for orig_hexip, dest_hexip, orig_ip, orig_port, dest_ip, dest_port, sock_stat in socklist:
 
@@ -28,7 +28,7 @@ for orig_hexip, dest_hexip, orig_ip, orig_port, dest_ip, dest_port, sock_stat in
 
     print "{0:s}:{1:d} {2:s}:{3:d} {6:s} cmd: {5:s} host: {4:s}".format( orig_ip, orig_port, dest_ip, dest_port, ip2host, proc_summary, sock_stat)
 
-socklist = ProcNetTCP6()
+socklist = ProcHandlers.GetProcFileHandler("tcp6")()
 
 for orig_hexip, dest_hexip, orig_ip, orig_port, dest_ip, dest_port, sock_stat in socklist:
 

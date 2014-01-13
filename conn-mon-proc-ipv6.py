@@ -11,7 +11,7 @@ times each was seen.
 import time
 import sys
 
-from ProcHandlers import ProcNetTCP6
+import ProcHandlers
 import CachedDNS
 import ProcessInfo
     
@@ -34,7 +34,7 @@ try:
     while done != 1:
 
         new_sessions = set()
-        socklist = ProcNetTCP6()
+        socklist = ProcHandlers.GetProcFileHandler("tcp6")()
 
         for orig_hexip, dest_hexip, orig_ip, orig_port, dest_ip, dest_port, sock_stat in socklist:
 #            print "--> ", dest_ip, dest_port, sock_stat
