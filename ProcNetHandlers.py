@@ -623,7 +623,7 @@ class ProcNetDEV_MCAST(PBR.fixed_delim_format_recs):
 #                for (i = 0; i < dev->addr_len; i++)
 #                        seq_printf(seq, "%02x", ha->addr[i]);
 
-    def extra_init__(self, *opts):
+    def extra_init(self, *opts):
         self.minfields = 5
 
         self.device = ""

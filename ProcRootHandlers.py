@@ -651,8 +651,10 @@ class ProcRootDISKSTATS(PBR.fixed_delim_format_recs):
         self.write_sectors = 0
         self.write_msecs = 0
         self.part_in_flight = 0
-        self.msecs_io = 0
-        self.msecs_queue_time = 0
+#        self.msecs_io = 0
+#        self.msecs_queue_time = 0
+        self.io_msecs = 0
+        self.queue_time_msecs = 0
         return
 
     def extra_next(self, sio):
