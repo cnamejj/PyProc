@@ -13,7 +13,7 @@ F_TERM_LIST = PFC.F_TERM_LIST
 PDC = ProcDataConstants
 
 # --
-PROC_PATH_PREFIX_LIST = ( "/proc", "/proc/", "/proc/net/", "/proc/self/net/" )
+PROC_PATH_PREFIX_LIST = ( "/proc", "/proc/", "/proc/net/", "/proc/self/net/", "/proc/self/" )
 
 proc_file_handler_registry = dict()
 proc_partial_file_handler_registry = dict()

@@ -1,0 +1,67 @@
+Terms:
+ WSD - normal whitespace delimited file driver
+
+ NESTED - appears to have multiple groups of info, somewhat inconsistently formatted
+
+ REPORT - looks more like a report than a data file, tricky to parse and then group into "logical records"
+
+ FLIPPED - like a table flipped 90 degrees, each row is a different variable with the values listed on the line
+
+ HUGE - lots and lots of records in the file, unmanageable amount for a person to use directly
+
+ TBD - something about the format suggests that more investigation is needed before deciding how to parse it
+
+ MULTILINE - one logical record is made up of data from multiple records in the file
+
+ FIXEDCOLS - fields appear in specific columns, possibly with embedded spaces, so the WSD logic relying on positions won't work
+
+ VARIES - the fields included vary from system to system
+---
+fd/### NEED LINK
+cwd NEED LINK
+root NEED LINK
+exe NEED LINK
+fdinfo/###
+ns/net
+ns/uts
+ns/ipc
+environ
+auxv
+status NEED REPORT
+personality NEED TBD NOHEADER
+limits NEED FIXEDCOLS
+sched NEED TBD NOHEADER
+autogroup NEED WSD NOHEADER ONE-LINE
+comm NEED WSD NOHEADER ONE-LINE
+syscall NEED WSD NOHEADER ONE-LINE
+cmdline NEED WSD NOHEADER ONE-LINE
+stat NEED WSD NOHEADER ONE-LINE
+statm NEED WSD NOHEADER ONE-LINE
+maps NEED WSD NOHEADER
+numa_maps NEED WSD NOHEADER
+mem SKIP
+mounts NEED WSD NOHEADER
+mountinfo NEED WSD NOHEADER
+mountstats NEED WSD NOHEADER
+clear_refs SKIP
+smaps NEED MULTILINE
+pagemap SKIP BINARY
+attr/current NEED WSD NOHEADER ONE-LINE
+attr/prev TBD
+attr/exec TBD
+attr/fscreate TBD
+attr/keycreate TBD
+attr/sockcreate TBD
+wchan NEED WSD NOHEADER ONE-LINE
+stack NEED WSD NOHEADER
+schedstat NEED WSD NOHEADER ONE-LINE
+latency NEED WSD NOHEADER ONE-LINE
+cpuset NEED WSD NOHEADER ONE-LINE
+cgroup NEED TBD EMPTY
+oom_score NEED WSD NOHEADER ONE-LINE
+oom_adj NEED WSD NOHEADER ONE-LINE
+oom_score_adj NEED WSD NOHEADER ONE-LINE
+loginuid NEED WSD NOHEADER ONE-LINE
+sessionid NEED WSD NOHEADER ONE-LINE
+coredump_filte NEED WSD NOHEADER ONE-LINE
+io NEED WSD NOHEADER

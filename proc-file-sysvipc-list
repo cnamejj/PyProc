@@ -1,0 +1,22 @@
+Terms:
+ WSD - normal whitespace delimited file driver
+
+ NESTED - appears to have multiple groups of info, somewhat inconsistently formatted
+
+ REPORT - looks more like a report than a data file, tricky to parse and then group into "logical records"
+
+ FLIPPED - like a table flipped 90 degrees, each row is a different variable with the values listed on the line
+
+ HUGE - lots and lots of records in the file, unmanageable amount for a person to use directly
+
+ TBD - something about the format suggests that more investigation is needed before deciding how to parse it
+
+ MULTILINE - one logical record is made up of data from multiple records in the file
+
+ FIXEDCOLS - fields appear in specific columns, possibly with embedded spaces, so the WSD logic relying on positions won't work
+
+ VARIES - the fields included vary from system to system
+---
+msg NEED WSD EMPTY
+sem NEED WSD
+shm NEED WSD
