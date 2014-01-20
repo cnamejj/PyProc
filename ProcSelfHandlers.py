@@ -317,3 +317,189 @@ class ProcSelfIO(PBR.single_name_value_list):
 
 RegisterProcFileHandler("/proc/net/io", ProcSelfIO)
 RegisterPartialProcFileHandler("io", ProcSelfIO)
+
+
+
+# ---
+class ProcSelfNUMA_MAPS(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/self/numa_maps"""
+#
+# source: fs/proc/task_mmu.c
+#
+#    seq_printf(m, "%08lx %s", vma->vm_start, buffer);
+#
+#    if (file) {
+#            seq_printf(m, " file=");
+#            seq_path(m, &file->f_path, "\n\t= ");
+#    } else if (vma->vm_start <= mm->brk && vma->vm_end >= mm->start_brk) {
+#            seq_printf(m, " heap");
+#    } else if (vma->vm_start <= mm->start_stack &&
+#                    vma->vm_end >= mm->start_stack) {
+#            seq_printf(m, " stack");
+#    }
+#
+#    if (is_vm_hugetlb_page(vma))
+#            seq_printf(m, " huge");
+#
+#    walk_page_range(vma->vm_start, vma->vm_end, &walk);
+#
+#    if (!md->pages)
+#            goto out;
+#
+#    if (md->anon)
+#            seq_printf(m, " anon=%lu", md->anon);
+#
+#    if (md->dirty)
+#            seq_printf(m, " dirty=%lu", md->dirty);
+#
+#    if (md->pages != md->anon && md->pages != md->dirty)
+#            seq_printf(m, " mapped=%lu", md->pages);
+#
+#    if (md->mapcount_max > 1)
+#            seq_printf(m, " mapmax=%lu", md->mapcount_max);
+#
+#    if (md->swapcache)
+#            seq_printf(m, " swapcache=%lu", md->swapcache);
+#
+#    if (md->active < md->pages && !is_vm_hugetlb_page(vma))
+#            seq_printf(m, " active=%lu", md->active);
+#
+#    if (md->writeback)
+#            seq_printf(m, " writeback=%lu", md->writeback);
+#
+#    for_each_node_state(n, N_HIGH_MEMORY)
+#            if (md->node[n])
+#                    seq_printf(m, " N%d=%lu", n, md->node[n]);
+# out:
+#    seq_putc(m, '\n');
+
+    def extra_init(self, *opts):
+        self.minfields = 2
+
+        self.start = 0
+        self.buffname = ""
+        self.path = ""
+        self.heap = 0
+        self.stack = 0
+        self.huge = 0
+        self.anon = 0
+        self.dirty = 0
+        self.mapped = 0
+        self.mapmax = 0
+        self.swapcache = 0
+        self.activepages = 0
+        self.writeback = 0
+        self.node_list = dict()
+
+        self.__ASSIGN_DELIM = "="
+        self.__PREFIX_PATH = "file="
+        self.__PREFIX_ANON = "anon="
+        self.__PREFIX_DIRTY = "dirty="
+        self.__PREFIX_MAPPED = "mapped="
+        self.__PREFIX_MAPMAX = "mapmax="
+        self.__PREFIX_SWAPCACHE = "swapcache="
+        self.__PREFIX_ACTIVE_PAGES = "active="
+        self.__PREFIX_WRITEBACK = "writeback="
+        self.__PREFIX_NODE = "N"
+        self.__FLAG_HEAP = "heap"
+        self.__FLAG_STACK = "stack"
+        self.__FLAG_HUGE = "huge"
+        return
+
+    def get_long_after_pref(self, sio, offset, prefix, fieldname):
+        if sio.linewords > offset:
+            if sio.lineparts[offset].startswith(prefix):
+                self.field[fieldname] = long(sio.lineparts[offset][len(prefix):])
+                offset = offset + 1
+        return(offset)
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# 00400000 default file=/bin/cat mapped=7 mapmax=2 N0=7
+# 0060a000 default file=/bin/cat anon=1 dirty=1 N0=1
+# 0060b000 default file=/bin/cat anon=1 dirty=1 N0=1
+# 01b69000 default heap anon=3 dirty=3 active=0 N0=3
+# 7f5935a28000 default file=/usr/lib/locale/locale-archive mapped=11 mapmax=88 N0=11
+# 7f5935cf1000 default file=/lib/x86_64-linux-gnu/libc-2.15.so mapped=82 mapmax=167 N0=82
+
+        self.field = dict()
+
+        self.field[PFC.F_START] = 0
+        self.field[PFC.F_BUFFNAME] = ""
+        self.field[PFC.F_FILEPATH] = ""
+        self.field[PFC.F_HEAP] = 0
+        self.field[PFC.F_STACK] = 0
+        self.field[PFC.F_HUGE] = 0
+        self.field[PFC.F_ANON] = 0
+        self.field[PFC.F_DIRTY] = 0
+        self.field[PFC.F_MAPPED] = 0
+        self.field[PFC.F_MAPMAX] = 0
+        self.field[PFC.F_SWAPCACHE] = 0
+        self.field[PFC.F_ACTIVE_PAGES] = 0
+        self.field[PFC.F_WRITEBACK] = 0
+        self.field[PFC.F_NODE_LIST] = dict()
+
+        if sio.buff != "":
+
+            self.field[PFC.F_START] = long(sio.lineparts[0], 16)
+            self.field[PFC.F_BUFFNAME] = sio.lineparts[1]
+
+            __off = 2
+            if sio.linewords > __off:
+                __curr = sio.lineparts[__off]
+                if __curr.startswith(self.__PREFIX_PATH):
+                    self.field[PFC.F_FILEPATH] = __curr[len(self.__PREFIX_PATH):]
+                    __off = __off + 1
+
+            if sio.linewords > __off:
+                if sio.lineparts[__off] == self.__FLAG_HEAP:
+                    self.field[PFC.F_HEAP] = 1
+                    __off = __off + 1
+
+            if sio.linewords > __off:
+                if sio.lineparts[__off] == self.__FLAG_STACK:
+                    self.field[PFC.F_STACK] = 1
+                    __off = __off + 1
+
+            if sio.linewords > __off:
+                if sio.lineparts[__off] == self.__FLAG_HUGE:
+                    self.field[PFC.F_HUGE] = 1
+                    __off = __off + 1
+
+            __off = self.get_long_after_pref(sio, __off, self.__PREFIX_ANON, PFC.F_ANON)
+            __off = self.get_long_after_pref(sio, __off, self.__PREFIX_DIRTY, PFC.F_DIRTY)
+            __off = self.get_long_after_pref(sio, __off, self.__PREFIX_MAPPED, PFC.F_MAPPED)
+            __off = self.get_long_after_pref(sio, __off, self.__PREFIX_MAPMAX, PFC.F_MAPMAX)
+            __off = self.get_long_after_pref(sio, __off, self.__PREFIX_SWAPCACHE, PFC.F_SWAPCACHE)
+            __off = self.get_long_after_pref(sio, __off, self.__PREFIX_ACTIVE_PAGES, PFC.F_ACTIVE_PAGES)
+            __off = self.get_long_after_pref(sio, __off, self.__PREFIX_WRITEBACK, PFC.F_WRITEBACK)
+
+            for __node in range(__off, sio.linewords):
+                __split = sio.lineparts[__node].partition(self.__ASSIGN_DELIM)
+                if len(__split) == 3:
+                    if __split[0][:1] == self.__PREFIX_NODE:
+                        self.field[PFC.F_NODE_LIST][__split[0][1:]] = __split[2]
+            
+        self.start = self.field[PFC.F_START]
+        self.buffname = self.field[PFC.F_BUFFNAME]
+        self.path = self.field[PFC.F_FILEPATH]
+        self.heap = self.field[PFC.F_HEAP]
+        self.stack = self.field[PFC.F_STACK]
+        self.huge = self.field[PFC.F_HUGE]
+        self.anon = self.field[PFC.F_ANON]
+        self.dirty = self.field[PFC.F_DIRTY]
+        self.mapped = self.field[PFC.F_MAPPED]
+        self.mapmax = self.field[PFC.F_MAPMAX]
+        self.swapcache = self.field[PFC.F_SWAPCACHE]
+        self.activepages =  self.field[PFC.F_ACTIVE_PAGES]
+        self.writeback = self.field[PFC.F_WRITEBACK]
+        self.node_list = self.field[PFC.F_NODE_LIST]
+
+        return(self.start, self.buffname, self.path, self.heap, self.stack, self.huge, self.anon,
+          self.dirty, self.mapped, self.mapmax, self.swapcache, self.activepages, self.writeback,
+          self.node_list)
+#
+RegisterProcFileHandler("/proc/self/numa_maps", ProcSelfNUMA_MAPS)
+RegisterPartialProcFileHandler("numa_maps", ProcSelfNUMA_MAPS)
