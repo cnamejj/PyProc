@@ -500,3 +500,9 @@ F_FILEPATH = "filepath"
 F_SOFT_LIMIT = "soft-limit"
 F_HARD_LIMIT = "hard-limit"
 F_UNITS = "units"
+
+# -- added for "/proc/self/maps"
+F_PAGE_OFFSET = "page-offset"
+
+# -- added for "/proc/self/stack"
+F_STACK_ENTRY = "stack-entry"

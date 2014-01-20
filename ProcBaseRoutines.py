@@ -167,32 +167,38 @@ class single_name_value_list:
             self.infile = ShowHandlerFilePath(self)
         self.minfields = 2
         self.skipped = ""
-        self.__keyval = ""
-        self.__words = ()
-        self.__lines = ()
+        self.trim_tail = ""
+        self.debug_level = 0
 
         self.extra_init( *opts)
 
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
-#        print "base:__init__: inp({infile})".format(infile=self.infile)
         self.__sio.open_file(self.infile, self.minfields, self.skipped)
+        if self.debug_level >= 5:
+            print "dbg:: {name:s} reading '{infile}'".format(name=str(self), infile=self.infile)
         return
 
     def __iter__(self):
         return(self)
 
     def next(self):
-#        print "base:next: {this}".format(this=str(self))
-        self.__lines = self.__sio.read_all_lines()
+        if self.debug_level > 0:
+            print "base:next: {this}".format(this=str(self))
+        __lines = self.__sio.read_all_lines()
 
-        if len(self.__lines) == 0:
+        if len(__lines) == 0:
             raise StopIteration
         else:
-            for self.__keyval in self.__lines:
-                self.__words = self.__keyval.split()
-                if len(self.__words) == 2:
-                    self.field[self.__words[0]] = self.__words[1]
+            for __keyval in __lines:
+                if len(__keyval) > 0:
+                    __words = __keyval.split()
+                    if len(__words) == 2:
+                        __name = __words[0]
+                        if __name[-1:] == self.trim_tail:
+                            __name = __name[:-1]
+                        if len(__name) > 0:
+                            self.field[__name] = __words[1]
 
         return(self.field)
 
@@ -268,9 +274,6 @@ class labelled_pair_list_records:
         self.skipped = ""
 
         self.sock_type_list = ()
-        self.__result = set()
-        self.__unknown_label = set()
-        self.__sock_type = ""
 
         self.extra_init( *opts)
 
@@ -292,15 +295,15 @@ class labelled_pair_list_records:
 # RAW: inuse 0
 # FRAG: inuse 0 memory 0
 
-        self.__result = set()
-        self.__unknown_label = set()
+        __result = set()
+        __unknown_label = set()
         self.field = dict()
-        for self.__sock_type in self.sock_type_list:
-            self.field[self.__sock_type] = dict()
+        for __sock_type in self.sock_type_list:
+            self.field[__sock_type] = dict()
 
-        self.__result, self.__unknown_label = self.__sio.read_labelled_pair_list_file(self, self.sock_type_list)
+        __result, __unknown_label = self.__sio.read_labelled_pair_list_file(self, self.sock_type_list)
 
-        return( self.__result)
+        return( __result)
 
 
 
@@ -320,8 +323,6 @@ class list_of_terms_format:
             self.infile = ShowHandlerFilePath(self)
         self.minfields = 1
         self.skipped = ""
-
-        self.__lines = ()
 
         self.extra_init( *opts)
 
@@ -343,15 +344,61 @@ class list_of_terms_format:
 # state
 # hl
 
-        self.__lines = self.__sio.read_all_lines()
+        __lines = self.__sio.read_all_lines()
 
-        if len(self.__lines) == 0:
+        if len(__lines) == 0:
             raise StopIteration
 
-        self.field[F_TERM_LIST] = self.__lines
+        self.field[F_TERM_LIST] = __lines
 
-        return( self.__lines)
+        return( __lines)
 #
+
+
+
+# ---
+class fixed_column_field_recs:
+    """Class used to read files where the fields are consistently in specific columns"""
+
+    def extra_init(self, *opts):
+#        print "base:extra_init: {this}".format(this=str(self))
+        return
+
+    def extra_next(self, sio):
+#        print "base:extra_next: {this}".format(this=str(self))
+        return(sio.buff)
+
+    def __init__(self, *opts):
+#        print "base:__init__: this{this} file{file}".format(this=str(self), file=ShowHandlerFilePath(self))
+        if len(opts) > 0:
+            self.infile = ProcFileToPath(opts[0])
+        else:
+            self.infile = ShowHandlerFilePath(self)
+        self.minfields = 0
+        self.skipped = ""
+        self.fixedcols = dict()
+
+        self.extra_init( *opts)
+
+        self.field = dict()
+        self.__sio = SeqFileIO.SeqFileIO()
+#        print "base:__init__: inp({infile})".format(infile=self.infile)
+        self.__sio.open_file(self.infile, self.minfields, self.skipped)
+        return
+
+    def __iter__(self):
+        return(self)
+
+    def next(self):
+#        print "base:next: {this}".format(this=str(self))
+        sio = self.__sio
+        sio.read_line()
+
+        if type(self.fixedcols) == dict:
+            for __name in self.fixedcols:
+                self.field[__name] = sio.buff[self.fixedcols[__name][0]:self.fixedcols[__name][1]]
+
+        return(self.extra_next(sio))
 
 
 

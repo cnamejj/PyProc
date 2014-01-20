@@ -90,6 +90,9 @@ class SeqFileIO:
 
         __lines = ()
 
+        if not self.is_open:
+            raise StopIteration
+
         if self.is_open != 0:
             __lines = self.pnt_fd.readlines()
 
@@ -107,6 +110,10 @@ class SeqFileIO:
                     if __SkipPrefLen > 1:
                         if __lines[__off][1:__SkipPrefLen] == __SkipPref:
                             __lines[__off:__off+1] = []
+                    elif __lines[__off] == "":
+                        __lines[__off:__off+1] = []
+
+            self.is_open = 0
 
         return __lines
 
