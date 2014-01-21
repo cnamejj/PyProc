@@ -503,3 +503,214 @@ class ProcSelfNUMA_MAPS(PBR.fixed_delim_format_recs):
 #
 RegisterProcFileHandler("/proc/self/numa_maps", ProcSelfNUMA_MAPS)
 RegisterPartialProcFileHandler("numa_maps", ProcSelfNUMA_MAPS)
+
+
+
+# ---
+class ProcSelfMOUNTINFO(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/self/mountinfo"""
+# source: fs/namespace.c
+#
+#        seq_printf(m, "%i %i %u:%u ", mnt->mnt_id, mnt->mnt_parent->mnt_id,
+#                   MAJOR(sb->s_dev), MINOR(sb->s_dev));
+#        if (sb->s_op->show_path)
+#                err = sb->s_op->show_path(m, mnt);
+#        else
+#                seq_dentry(m, mnt->mnt_root, " \t\n\\");
+#        if (err)
+#                goto out;
+#        seq_putc(m, ' ');
+#
+#        /* mountpoints outside of chroot jail will give SEQ_SKIP on this */
+#        err = seq_path_root(m, &mnt_path, &root, " \t\n\\");
+#        if (err)
+#                goto out;
+#
+#        seq_puts(m, mnt->mnt_flags & MNT_READONLY ? " ro" : " rw");
+#        show_mnt_opts(m, mnt);
+#
+#        /* Tagged fields ("foo:X" or "bar") */
+#        if (IS_MNT_SHARED(mnt))
+#                seq_printf(m, " shared:%i", mnt->mnt_group_id);
+#        if (IS_MNT_SLAVE(mnt)) {
+#                int master = mnt->mnt_master->mnt_group_id;
+#                int dom = get_dominating_id(mnt, &p->root);
+#                seq_printf(m, " master:%i", master);
+#                if (dom && dom != master)
+#                        seq_printf(m, " propagate_from:%i", dom);
+#        }
+#        if (IS_MNT_UNBINDABLE(mnt))
+#                seq_puts(m, " unbindable");
+#
+#        /* Filesystem specific data */
+#        seq_puts(m, " - ");
+#        show_type(m, sb);
+#        seq_putc(m, ' ');
+#        if (sb->s_op->show_devname)
+#                err = sb->s_op->show_devname(m, mnt);
+#        else
+#                mangle(m, mnt->mnt_devname ? mnt->mnt_devname : "none");
+#        if (err)
+#                goto out;
+#        seq_puts(m, sb->s_flags & MS_RDONLY ? " ro" : " rw");
+#        err = show_sb_opts(m, sb);
+#        if (err)
+#                goto out;
+#        if (sb->s_op->show_options)
+#                err = sb->s_op->show_options(m, mnt);
+#        seq_putc(m, '\n');
+#
+# --and--
+#
+# static void show_mnt_opts(struct seq_file *m, struct vfsmount *mnt)
+# {
+#        static const struct proc_fs_info mnt_info[] = {
+#                { MNT_NOSUID, ",nosuid" },
+#                { MNT_NODEV, ",nodev" },
+#                { MNT_NOEXEC, ",noexec" },
+#                { MNT_NOATIME, ",noatime" },
+#                { MNT_NODIRATIME, ",nodiratime" },
+#                { MNT_RELATIME, ",relatime" },
+#                { 0, NULL }
+#        };
+#        const struct proc_fs_info *fs_infop;
+#
+#        for (fs_infop = mnt_info; fs_infop->flag; fs_infop++) {
+#                if (mnt->mnt_flags & fs_infop->flag)
+#                        seq_puts(m, fs_infop->str);
+#        }
+# }
+#
+#
+# docs: 
+#
+# 3.5     /proc/<pid>/mountinfo - Information about mounts
+# --------------------------------------------------------
+# 
+# This file contains lines of the form:
+# 
+# 36 35 98:0 /mnt1 /mnt2 rw,noatime master:1 - ext3 /dev/root rw,errors=continue
+# (1)(2)(3)   (4)   (5)      (6)      (7)   (8) (9)   (10)         (11)
+# 
+# (1) mount ID:  unique identifier of the mount (may be reused after umount)
+# (2) parent ID:  ID of parent (or of self for the top of the mount tree)
+# (3) major:minor:  value of st_dev for files on filesystem
+# (4) root:  root of the mount within the filesystem
+# (5) mount point:  mount point relative to the process's root
+# (6) mount options:  per mount options
+# (7) optional fields:  zero or more fields of the form "tag[:value]"
+# (8) separator:  marks the end of the optional fields
+# (9) filesystem type:  name of filesystem of the form "type[.subtype]"
+# (10) mount source:  filesystem specific information or "none"
+# (11) super options:  per super block options
+# 
+# Parsers should ignore all unrecognised optional fields.  Currently the
+# possible optional fields are:
+# 
+# shared:X  mount is shared in peer group X
+# master:X  mount is slave to peer group X
+# propagate_from:X  mount is slave and receives propagation from peer group X (*)
+# unbindable  mount is unbindable
+# 
+# (*) X is the closest dominant peer group under the process's root.  If
+# X is the immediate master of the mount, or if there's no dominant peer
+# group under the same root, then only the "master:X" field is present
+# and not the "propagate_from:X" field.
+
+    def extra_init(self, *opts):
+        self.minfields = 10
+
+        self.__OptionSep = "-"
+        self.__DevDelim = ":"
+
+        self.mntid = 0
+        self.mntid_parent = 0
+        self.major = 0
+        self.minor = 0
+        self.mount_fs = ""
+        self.mount_prel = ""
+        self.mnt_options = ""
+        self.more_options = ""
+        self.fstype = ""
+        self.mnt_source = ""
+        self.super_options = ""
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# 15 20 0:14 / /sys rw,nosuid,nodev,noexec,relatime - sysfs sysfs rw
+# 17 20 0:5 / /dev rw,relatime - devtmpfs udev rw,size=16454700k,nr_inodes=4113675,mode=755
+# 20 1 9:1 / / rw,relatime - ext4 /dev/disk/by-uuid/a959862a-84b7-4373-b7d6-954ac9005249 rw,errors=remount-ro,user_xattr,barrier=1,stripe=256,data=ordered
+# 21 15 0:16 / /sys/fs/fuse/connections rw,relatime - fusectl none rw
+# 27 20 9:0 / /boot rw,relatime - ext4 /dev/md0 rw,user_xattr,barrier=1,stripe=128,data=ordered
+
+        self.field = dict()
+
+        self.field[PFC.F_MOUNT_ID] = 0
+        self.field[PFC.F_PARENT_MOUNT_ID] = 0
+        self.field[PFC.F_MAJOR_DEV] = 0
+        self.field[PFC.F_MINOR_DEV] = 0
+        self.field[PFC.F_MOUNT_FS] = ""
+        self.field[PFC.F_MOUNT_REL] = ""
+        self.field[PFC.F_MOUNT_OPTS] = ""
+        self.field[PFC.F_EXTRA_OPTS] = ""
+        self.field[PFC.F_FS_TYPE] = ""
+        self.field[PFC.F_MOUNT_SRC] = ""
+        self.field[PFC.F_SUPER_OPTS] = ""
+
+        if sio.buff != "":
+            self.field[PFC.F_MOUNT_ID] = long(sio.lineparts[0])
+            self.field[PFC.F_PARENT_MOUNT_ID] = long(sio.lineparts[1])
+            __split = sio.lineparts[2].partition(self.__DevDelim)
+            self.field[PFC.F_MAJOR_DEV] = long(__split[0])
+            self.field[PFC.F_MINOR_DEV] = long(__split[2])
+            self.field[PFC.F_MOUNT_FS] = sio.lineparts[3]
+
+            __off = 4
+            if sio.linewords > __off:
+                self.field[PFC.F_MOUNT_REL] = sio.lineparts[__off]
+                __off = __off + 1
+            if sio.linewords > __off:
+                self.field[PFC.F_MOUNT_OPTS] = sio.lineparts[__off]
+                __off = __off + 1
+
+            __endopts = 0
+            __extras = ""
+            while sio.linewords > __off and not __endopts:
+                __curr = sio.lineparts[__off]
+                if __curr == self.__OptionSep:
+                    __endopts = 1
+                else:
+                    __extras = "{accum} {next}".format(accum=__extras, next=__curr)
+                __off = __off + 1
+            self.field[PFC.F_EXTRA_OPTS] = __extras
+
+            if sio.linewords > __off:
+                self.field[PFC.F_FS_TYPE] = sio.lineparts[__off]
+                __off = __off + 1
+            if sio.linewords > __off:
+                self.field[PFC.F_MOUNT_SRC] = sio.lineparts[__off]
+                __off = __off + 1
+            if sio.linewords > __off:
+                self.field[PFC.F_SUPER_OPTS] = sio.lineparts[__off]
+
+        self.mntid = self.field[PFC.F_MOUNT_ID]
+        self.mntid_parent = self.field[PFC.F_PARENT_MOUNT_ID]
+        self.major = self.field[PFC.F_MAJOR_DEV]
+        self.minor = self.field[PFC.F_MINOR_DEV]
+        self.mount_fs = self.field[PFC.F_MOUNT_FS]
+        self.mount_prel = self.field[PFC.F_MOUNT_REL]
+        self.mnt_options = self.field[PFC.F_MOUNT_OPTS]
+        self.more_options = self.field[PFC.F_EXTRA_OPTS]
+        self.fstype = self.field[PFC.F_FS_TYPE]
+        self.mnt_source = self.field[PFC.F_MOUNT_SRC]
+        self.super_options = self.field[PFC.F_SUPER_OPTS]
+
+        return(self.mntid, self.mntid_parent, self.major, self.minor, self.mount_fs,
+          self.mount_prel, self.mnt_options, self.more_options, self.fstype, self.mnt_source,
+          self.super_options)
+#
+RegisterProcFileHandler("/proc/self/mountinfo", ProcSelfMOUNTINFO)
+RegisterPartialProcFileHandler("mountinfo", ProcSelfMOUNTINFO)
