@@ -1,19 +1,31 @@
 #!/usr/bin/env python
 
 # ---
-# (C) 2012-2013 Jim Jones <cnamejj@gmail.com>
+# (C) 2012-2014 Jim Jones <cnamejj@gmail.com>
 #
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version
-# 2 of the License, or (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
 
 import numpy
 import ProcBaseRoutines
 import ProcFieldConstants
+import ProcDataConstants
 
 PBR = ProcBaseRoutines
 PFC = ProcFieldConstants
+PDC = ProcDataConstants
 
 RegisterProcFileHandler = PBR.RegisterProcFileHandler
 RegisterPartialProcFileHandler = PBR.RegisterPartialProcFileHandler
@@ -37,6 +49,16 @@ def number_or_unlimited(buff):
             result = numpy.nan
 
     return result
+
+
+def array_of_longs(wordlist):
+    __nums = dict()
+
+    for __off in range(0, len(wordlist)):
+        __nums[__off] = long(wordlist[__off])
+
+    return(__nums)
+
 
 # ---
 class ProcSelfLIMITS(PBR.fixed_column_field_recs):
@@ -511,76 +533,8 @@ class ProcSelfMOUNTINFO(PBR.fixed_delim_format_recs):
     """Pull records from /proc/self/mountinfo"""
 # source: fs/namespace.c
 #
-#        seq_printf(m, "%i %i %u:%u ", mnt->mnt_id, mnt->mnt_parent->mnt_id,
-#                   MAJOR(sb->s_dev), MINOR(sb->s_dev));
-#        if (sb->s_op->show_path)
-#                err = sb->s_op->show_path(m, mnt);
-#        else
-#                seq_dentry(m, mnt->mnt_root, " \t\n\\");
-#        if (err)
-#                goto out;
-#        seq_putc(m, ' ');
-#
-#        /* mountpoints outside of chroot jail will give SEQ_SKIP on this */
-#        err = seq_path_root(m, &mnt_path, &root, " \t\n\\");
-#        if (err)
-#                goto out;
-#
-#        seq_puts(m, mnt->mnt_flags & MNT_READONLY ? " ro" : " rw");
-#        show_mnt_opts(m, mnt);
-#
-#        /* Tagged fields ("foo:X" or "bar") */
-#        if (IS_MNT_SHARED(mnt))
-#                seq_printf(m, " shared:%i", mnt->mnt_group_id);
-#        if (IS_MNT_SLAVE(mnt)) {
-#                int master = mnt->mnt_master->mnt_group_id;
-#                int dom = get_dominating_id(mnt, &p->root);
-#                seq_printf(m, " master:%i", master);
-#                if (dom && dom != master)
-#                        seq_printf(m, " propagate_from:%i", dom);
-#        }
-#        if (IS_MNT_UNBINDABLE(mnt))
-#                seq_puts(m, " unbindable");
-#
-#        /* Filesystem specific data */
-#        seq_puts(m, " - ");
-#        show_type(m, sb);
-#        seq_putc(m, ' ');
-#        if (sb->s_op->show_devname)
-#                err = sb->s_op->show_devname(m, mnt);
-#        else
-#                mangle(m, mnt->mnt_devname ? mnt->mnt_devname : "none");
-#        if (err)
-#                goto out;
-#        seq_puts(m, sb->s_flags & MS_RDONLY ? " ro" : " rw");
-#        err = show_sb_opts(m, sb);
-#        if (err)
-#                goto out;
-#        if (sb->s_op->show_options)
-#                err = sb->s_op->show_options(m, mnt);
-#        seq_putc(m, '\n');
-#
-# --and--
-#
-# static void show_mnt_opts(struct seq_file *m, struct vfsmount *mnt)
-# {
-#        static const struct proc_fs_info mnt_info[] = {
-#                { MNT_NOSUID, ",nosuid" },
-#                { MNT_NODEV, ",nodev" },
-#                { MNT_NOEXEC, ",noexec" },
-#                { MNT_NOATIME, ",noatime" },
-#                { MNT_NODIRATIME, ",nodiratime" },
-#                { MNT_RELATIME, ",relatime" },
-#                { 0, NULL }
-#        };
-#        const struct proc_fs_info *fs_infop;
-#
-#        for (fs_infop = mnt_info; fs_infop->flag; fs_infop++) {
-#                if (mnt->mnt_flags & fs_infop->flag)
-#                        seq_puts(m, fs_infop->str);
-#        }
-# }
-#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcNetHandlers" to reduce the size of this module.
 #
 # docs: 
 #
@@ -616,6 +570,7 @@ class ProcSelfMOUNTINFO(PBR.fixed_delim_format_recs):
 # X is the immediate master of the mount, or if there's no dominant peer
 # group under the same root, then only the "master:X" field is present
 # and not the "propagate_from:X" field.
+#
 
     def extra_init(self, *opts):
         self.minfields = 10
@@ -714,3 +669,250 @@ class ProcSelfMOUNTINFO(PBR.fixed_delim_format_recs):
 #
 RegisterProcFileHandler("/proc/self/mountinfo", ProcSelfMOUNTINFO)
 RegisterPartialProcFileHandler("mountinfo", ProcSelfMOUNTINFO)
+
+
+
+# ---
+class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
+    """Pull records from /proc/self/mountstats"""
+#
+# source: fs/namespace.c
+# --and--
+# source: fs/nfs/super.c
+# --and--
+# source: net/sunrpc/stats.c
+# --and--
+# source: net/sunrpc/xprtsock.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcNetHandlers" to reduce the size of this module.
+#
+
+# (A) (1) mounted on !MOUNT! with fstype !FSTYPE! {statvers=!VERSION!}
+#     (1) device !DEVICE!|no device
+#... (B) \topts: (4){,sync}{,noatime}{,nodiratime}(5)(6)(7)(8)(9)(10)(13)
+#...     (4) ro|rw
+#...     (5) ,vers=!INT!,rsize=!INT!,wsize=!INT!{,bsize=!INT!},namelen=!INT!
+#...     (6) {,acregmin=!INT!}{,acregmax=!INT!}{,acdirmin=!INT!}{,acdirmax=!INT!}
+#...     (7) ,soft|,hard
+#...     (8) {,posix}{,nocto}{,noac}{,nolock}{,noacl}{,nordirplus}{,nosharecache}{,noresvport}
+#...     (9) ,proto=!PROTOCOL!{,port=!INT!}{,timeo=!INT!}{,retrans=!INT!}{,sec=!INT!}
+#...     (10) {,mountaddr=(11){,mountvers=!VERSION!}{,mountport=!INT!},mountproto=(12)|,clientaddr=!IP!,minorversion=!INT!}
+#...     (11) !IP4!|!IP6!|unspecified
+#...     (12) !PROTOCOL!|auto
+#...     (13) {,fsc}{,lookupcache={none|pos}}{,local_lock={none|all|flock|posix}}
+# (C) \tage: !INT!
+# (D) \tcaps: caps=0x!HEX!,wtmult=!INT!,dtsize=!INT!,bsize=!INT!,namlen=!INT!
+#... (E) \tnfsv4: bm0=0x!HEX!,bm1=0x!HEX!,acl=0x!HEX!{,sessions}{,pnfs={!NAME!|not configured}}
+#... (F) \tsec: flavor=!INT!{,pseudoflavor=!INT!}
+# (G) \tevents: {!INT! }*
+# (H) \tbytes: {!INT! }*
+# (I) \ttfsc: {!INT! }*
+#... (J) \tRPC iostats version: !VERSION! p/v: !INT!/!INT! (!PROTOCOL!)
+# (K) \tper-op statistics
+#... (L) \t(14): !INT! !INT! !INT! !INT! !INT! !INT! !INT!
+#...     (14)!STATNAME!|NULL
+#... (M) \txprt: (15) !INT! !INT! !INT! !INT! !INT! !INT! !INT!
+#...     (15) local|udp
+#... (N) \txprt: tcp !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT!
+
+    def extra_init(self, *opts):
+        self.minfields = 2
+
+        self.__ASSIGN_DELIM = "="
+        self.__OPTLIST_DELIM = ","
+
+        self.__PREFIX_DEV = "device"
+        self.__PREFIX_NO = "no"
+        self.__PREFIX_OPTS = "opts:"
+        self.__PREFIX_AGE = "age:"
+        self.__PREFIX_CAPS = "caps:"
+        self.__PREFIX_NFSV4 = "nfsv4:"
+        self.__PREFIX_SECURITY = "sec:"
+        self.__PREFIX_EVENTS = "events:"
+        self.__PREFIX_BYTES = "bytes:"
+        self.__PREFIX_FSCACHE = "tfsc:"
+        self.__PREFIX_IOSTATS = "RPC"
+        self.__PREFIX_PER_OP = "per-op"
+        self.__PREFIX_XPRT = "xprt:"
+
+        self.__is_per_op = 0
+        self.__have_partial = 0
+        self.__curr_sio = 0
+        self.__partial = dict()
+        self.__partial[PFC.F_DEVICE] = ""
+        self.__partial[PFC.F_MOUNTPOINT] = ""
+        self.__partial[PFC.F_FSTYPE] = ""
+        self.__partial[PFC.F_STATSVERS] = ""
+
+        self.device = ""
+        self.mountpoint = ""
+        self.fstype = ""
+        self.statsvers = ""
+
+        return
+
+    def parse_device_line(self, sio):
+        self.__have_partial = 1
+
+        if sio.lineparts[0] == self.__PREFIX_DEV:
+            self.__partial[PFC.F_DEVICE] = sio.lineparts[1]
+        else:
+            self.__partial[PFC.F_DEVICE] = PDC.NO_DEVICE
+        self.__partial[PFC.F_MOUNTPOINT] = sio.lineparts[4]
+        self.__partial[PFC.F_FSTYPE] = sio.lineparts[7]
+
+        if sio.linewords >= 9:
+            __split = sio.lineparts[8].partition(self.__ASSIGN_DELIM)
+            self.__partial[PFC.F_STATSVERS] = __split[2]
+        else:
+            self.__partial[PFC.F_STATSVERS] = ""
+        return
+
+    def partial_to_final(self, sio):
+        self.__have_partial = 0
+
+        self.field[PFC.F_DEVICE] = self.__partial[PFC.F_DEVICE]
+        self.field[PFC.F_MOUNTPOINT] = self.__partial[PFC.F_MOUNTPOINT]
+        self.field[PFC.F_FSTYPE] = self.__partial[PFC.F_FSTYPE]
+        self.field[PFC.F_STATSVERS] = self.__partial[PFC.F_STATSVERS]
+
+        self.__partial = dict()
+        self.__partial[PFC.F_DEVICE] = ""
+        self.__partial[PFC.F_MOUNTPOINT] = ""
+        self.__partial[PFC.F_FSTYPE] = ""
+        self.__partial[PFC.F_STATSVERS] = ""
+        return
+
+    def parse_options_line(self, sio):
+        return
+
+    def parse_age_line(self, sio):
+        self.field[PFC.F_AGE] = long(sio.lineparts[0])
+        return
+
+    def parse_caps_line(self, sio):
+        __opts = sio.lineparts[1].split(self.__OPTLIST_DELIM)
+        __caps = dict()
+        for __off in range(0, len(__opts) - 1):
+            __split = __opts[__off].partition(self.__ASSIGN_DELIM)
+            __caps[__split[0]] = __split[2]
+        self.field[PFC.F_CAPS] = long(__caps[PFC.F_CAPS], 16)
+        self.field[PFC.F_WTMULT] = long(__caps[PFC.F_WTMULT])
+        self.field[PFC.F_DTSIZE] = long(__caps[PFC.F_DTSIZE])
+        self.field[PFC.F_BSIZE] = long(__caps[PFC.F_BSIZE])
+        self.field[PFC.F_NAMELEN] = long(__caps[PFC.F_NAMELEN])
+        return
+
+    def parse_nfsv4_line(self, sio):
+        return
+
+    def parse_security_line(self, sio):
+        return
+
+    def parse_events_line(self, sio):
+        sio.field[PFC.F_EVENT_LIST] = array_of_longs(sio.lineparts[1:])
+        return
+
+    def parse_bytes_line(self, sio):
+        sio.field[PFC.F_BYTES_LIST] = array_of_longs(sio.lineparts[1:])
+        return
+
+    def parse_fscache_line(self, sio):
+        sio.field[PFC.F_FSCACHE_LIST] = array_of_longs(sio.lineparts[1:])
+        return
+
+    def parse_iostats_line(self, sio):
+        return
+
+    def parse_xprt_line(self, sio):
+        return
+
+    def parse_per_op_line(self, sio):
+        return
+
+    def accumulate_info(self, sio):
+        __first = sio.lineparts[0]
+        __second = sio.lineparts[1]
+
+        if __first == self.__PREFIX_DEV:
+            self.parse_device_line(sio)
+        elif __first == self.__PREFIX_NO and __second == self.__PREFIX_DEV:
+            self.parse_device_line(sio)
+        elif __first == self.__PREFIX_OPTS:
+            self.parse_options_line(sio)
+        elif __first == self.__PREFIX_AGE:
+            self.parse_age_line(sio)
+        elif __first == self.__PREFIX_CAPS:
+            self.parse_caps_line(sio)
+        elif __first == self.__PREFIX_NFSV4:
+            self.parse_nfsv4_line(sio)
+        elif __first == self.__PREFIX_SECURITY:
+            self.parse_security_line(sio)
+        elif __first == self.__PREFIX_EVENTS:
+            self.parse_events_line(sio)
+        elif __first == self.__PREFIX_BYTES:
+            self.parse_bytes_line(sio)
+        elif __first == self.__PREFIX_FSCACHE:
+            self.parse_fscache_line(sio)
+        elif __first == self.__PREFIX_IOSTATS:
+            self.parse_iostats_line(sio)
+        elif __first == self.__PREFIX_XPRT:
+            self.parse_xprt_line(sio)
+        elif __first == self.__PREFIX_PER_OP:
+            self.__is_per_op = 1
+        elif self.__is_per_op:
+            self.parse_per_op_line(sio)
+        else:
+            print "dbg:: Ignoring rec '{line}'".format(line=sio.buff[:-1])
+
+    def next(self):
+        try:
+            result = super(ProcSelfMOUNTSTATS, self).next()
+        except StopIteration:
+            if self.__have_partial:
+                result = self.extra_next(self.__curr_sio)
+            else:
+                raise StopIteration
+        return(result)
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+
+        self.__curr_sio = sio
+        self.__is_per_op = 0
+        self.field = dict()
+        self.field[PFC.F_DEVICE] = ""
+        self.field[PFC.F_MOUNTPOINT] = ""
+        self.field[PFC.F_FSTYPE] = ""
+        self.field[PFC.F_STATSVERS] = ""
+
+        if sio.buff != "" and not self.__have_partial:
+            self.accumulate_info(sio)
+            sio.read_line()
+
+        self.partial_to_final(sio)
+
+        __complete = 0
+        while sio.buff != "" and not __complete:
+            self.accumulate_info(sio)
+
+            __first = sio.lineparts[0]
+            __second = sio.lineparts[1]
+            if __first == self.__PREFIX_DEV or (__first == self.__PREFIX_NO and __second == self.__PREFIX_DEV):
+                __complete = 1
+            else:
+                sio.read_line()
+
+        self.device = self.field[PFC.F_DEVICE]
+        self.mountpoint = self.field[PFC.F_MOUNTPOINT]
+        self.fstype = self.field[PFC.F_FSTYPE]
+        self.statsvers = self.field[PFC.F_STATSVERS]
+
+        return(self.device, self.mountpoint, self.fstype, self.statsvers)
+
+#
+RegisterProcFileHandler("/proc/self/mountstats", ProcSelfMOUNTSTATS)
+RegisterPartialProcFileHandler("mountstats", ProcSelfMOUNTSTATS)

@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-"""Print all the fields for the indicated /proc/net file
-
-"""
+"""Print all the fields for the indicated /proc/net file"""
 
 import sys
 import ProcHandlers

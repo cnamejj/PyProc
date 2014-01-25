@@ -93,11 +93,12 @@ def ShowPartialProcFileHandlers():
 def ShowHandlerFilePath(cl_instance):
     """Return the fullpath of the /proc file associated with the base class of the instance provided"""
 
-    __key = "{tmod}.{tcl}".format(tmod=cl_instance.__class__.__module__, tcl=cl_instance.__class__.__name__)
+#    __key = "{tmod}.{tcl}".format(tmod=cl_instance.__class__.__module__, tcl=cl_instance.__class__.__name__)
+    __key = "<class '{tmod}.{tcl}'>".format(tmod=cl_instance.__class__.__module__, tcl=cl_instance.__class__.__name__)
     return handler_to_path[__key]
 
 # ---
-class ProcNetNULL:
+class ProcNetNULL(object):
     """Dummy class that just acts like reading from an empty file, returned as the handler
        for unrecognized files."""
     def __init__(self, *opts):
@@ -114,7 +115,7 @@ RegisterProcFileHandler(F_NULL_HANDLER, ProcNetNULL)
 
 
 # ---
-class fixed_delim_format_recs:
+class fixed_delim_format_recs(object):
     """Base class to read simple files with whitespace delimited columns, consistent record format"""
 
     def extra_init(self, *opts):
@@ -155,7 +156,7 @@ class fixed_delim_format_recs:
 
 
 # ---
-class single_name_value_list:
+class single_name_value_list(object):
     """Base class to read files where each line is two fields, one name and an associated value"""
 
     def extra_init(self, *opts):
@@ -208,7 +209,7 @@ class single_name_value_list:
 
 
 # ---
-class twoline_logical_records:
+class twoline_logical_records(object):
     """Base class to read 'netstat', 'snmp' and any others with the same two-line logical record format"""
 
     def extra_init(self, *opts):
@@ -260,7 +261,7 @@ class twoline_logical_records:
 
 
 # ---
-class labelled_pair_list_records:
+class labelled_pair_list_records(object):
     """Base class to read 'sockstat', 'sockstat6' and others files w/ independent records of name/value pairs"""
 
     def extra_init(self, *opts):
@@ -311,7 +312,7 @@ class labelled_pair_list_records:
 
 
 # ---
-class list_of_terms_format:
+class list_of_terms_format(object):
     """Base class to read files that are just a list of terms, one per line, like 'ip_tables_*' files"""
 
     def extra_init(self, *opts):
@@ -360,7 +361,7 @@ class list_of_terms_format:
 
 
 # ---
-class fixed_column_field_recs:
+class fixed_column_field_recs(object):
     """Class used to read files where the fields are consistently in specific columns"""
 
     def extra_init(self, *opts):

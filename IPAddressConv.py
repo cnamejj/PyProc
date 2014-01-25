@@ -1,8 +1,5 @@
 #!/usr/bin/env python
-"""Routines to convert IP addresses to/from various formats
-
-Describe what's in this module and put that info here...
-"""
+"""Routines to convert IP addresses to/from various formats"""
 
 import socket
 import struct

@@ -1,12 +1,22 @@
 #!/usr/bin/env python
 
 # ---
-# (C) 2012-2013 Jim Jones <cnamejj@gmail.com>
+# (C) 2012-2014 Jim Jones <cnamejj@gmail.com>
 #
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version
-# 2 of the License, or (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
 
 import numpy
 import ProcBaseRoutines
@@ -477,61 +487,9 @@ class ProcRootLOCKS(PBR.fixed_delim_format_recs):
     """Pull records from /proc/locks"""
 # source: fs/locks.c
 #
-#         seq_printf(f, "%lld:%s ", id, pfx);
-#         if (IS_POSIX(fl)) {
-#                 seq_printf(f, "%6s %s ",
-#                              (fl->fl_flags & FL_ACCESS) ? "ACCESS" : "POSIX ",
-#                              (inode == NULL) ? "*NOINODE*" :
-#                              mandatory_lock(inode) ? "MANDATORY" : "ADVISORY ");
-#         } else if (IS_FLOCK(fl)) {
-#                 if (fl->fl_type & LOCK_MAND) {
-#                         seq_printf(f, "FLOCK  MSNFS     ");
-#                 } else {
-#                         seq_printf(f, "FLOCK  ADVISORY  ");
-#                 }
-#         } else if (IS_LEASE(fl)) {
-#                 seq_printf(f, "LEASE  ");
-#                 if (lease_breaking(fl))
-#                         seq_printf(f, "BREAKING  ");
-#                 else if (fl->fl_file)
-#                         seq_printf(f, "ACTIVE    ");
-#                 else
-#                         seq_printf(f, "BREAKER   ");
-#         } else {
-#                 seq_printf(f, "UNKNOWN UNKNOWN  ");
-#         }
-#         if (fl->fl_type & LOCK_MAND) {
-#                 seq_printf(f, "%s ",
-#                                (fl->fl_type & LOCK_READ)
-#                                ? (fl->fl_type & LOCK_WRITE) ? "RW   " : "READ "
-#                                : (fl->fl_type & LOCK_WRITE) ? "WRITE" : "NONE ");
-#         } else {
-#                 seq_printf(f, "%s ",
-#                                (lease_breaking(fl))
-#                                ? (fl->fl_type & F_UNLCK) ? "UNLCK" : "READ "
-#                                : (fl->fl_type & F_WRLCK) ? "WRITE" : "READ ");
-#         }
-#         if (inode) {
-# #ifdef WE_CAN_BREAK_LSLK_NOW
-#                 seq_printf(f, "%d %s:%ld ", fl_pid,
-#                                 inode->i_sb->s_id, inode->i_ino);
-# #else
-#                 /* userspace relies on this representation of dev_t ;-( */
-#                 seq_printf(f, "%d %02x:%02x:%ld ", fl_pid,
-#                                 MAJOR(inode->i_sb->s_dev),
-#                                 MINOR(inode->i_sb->s_dev), inode->i_ino);
-# #endif
-#         } else {
-#                 seq_printf(f, "%d <none>:0 ", fl_pid);
-#         }
-#         if (IS_POSIX(fl)) {
-#                 if (fl->fl_end == OFFSET_MAX)
-#                         seq_printf(f, "%Ld EOF\n", fl->fl_start);
-#                 else
-#                         seq_printf(f, "%Ld %Ld\n", fl->fl_start, fl->fl_end);
-#         } else {
-#                 seq_printf(f, "0 EOF\n");
-#         }
+# The kernel source snippets that generate this file are stored in
+# "README.ProcNetHandlers" to reduce the size of this module.
+#
 
     def extra_init(self, *opts):
         self.minfields = 8
@@ -783,157 +741,9 @@ class ProcRootMEMINFO(PBR.fixed_delim_format_recs):
 # --and--
 # source: arch/x86/mm/pageattr.c
 #
-# from: fs/proc/meminfo.c
-# ---
-# 	seq_printf(m,
-# 		"MemTotal:       %8lu kB\n"
-# 		"MemFree:        %8lu kB\n"
-# 		"Buffers:        %8lu kB\n"
-# 		"Cached:         %8lu kB\n"
-# 		"SwapCached:     %8lu kB\n"
-# 		"Active:         %8lu kB\n"
-# 		"Inactive:       %8lu kB\n"
-# 		"Active(anon):   %8lu kB\n"
-# 		"Inactive(anon): %8lu kB\n"
-# 		"Active(file):   %8lu kB\n"
-# 		"Inactive(file): %8lu kB\n"
-# 		"Unevictable:    %8lu kB\n"
-# 		"Mlocked:        %8lu kB\n"
-# #ifdef CONFIG_HIGHMEM
-# 		"HighTotal:      %8lu kB\n"
-# 		"HighFree:       %8lu kB\n"
-# 		"LowTotal:       %8lu kB\n"
-# 		"LowFree:        %8lu kB\n"
-# #endif
-# #ifndef CONFIG_MMU
-# 		"MmapCopy:       %8lu kB\n"
-# #endif
-# 		"SwapTotal:      %8lu kB\n"
-# 		"SwapFree:       %8lu kB\n"
-# 		"Dirty:          %8lu kB\n"
-# 		"Writeback:      %8lu kB\n"
-# 		"AnonPages:      %8lu kB\n"
-# 		"Mapped:         %8lu kB\n"
-# 		"Shmem:          %8lu kB\n"
-# 		"Slab:           %8lu kB\n"
-# 		"SReclaimable:   %8lu kB\n"
-# 		"SUnreclaim:     %8lu kB\n"
-# 		"KernelStack:    %8lu kB\n"
-# 		"PageTables:     %8lu kB\n"
-# #ifdef CONFIG_QUICKLIST
-# 		"Quicklists:     %8lu kB\n"
-# #endif
-# 		"NFS_Unstable:   %8lu kB\n"
-# 		"Bounce:         %8lu kB\n"
-# 		"WritebackTmp:   %8lu kB\n"
-# 		"CommitLimit:    %8lu kB\n"
-# 		"Committed_AS:   %8lu kB\n"
-# 		"VmallocTotal:   %8lu kB\n"
-# 		"VmallocUsed:    %8lu kB\n"
-# 		"VmallocChunk:   %8lu kB\n"
-# #ifdef CONFIG_MEMORY_FAILURE
-# 		"HardwareCorrupted: %5lu kB\n"
-# #endif
-# #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-# 		"AnonHugePages:  %8lu kB\n"
-# #endif
-# 		,
-# 		K(i.totalram),
-# 		K(i.freeram),
-# 		K(i.bufferram),
-# 		K(cached),
-# 		K(total_swapcache_pages),
-# 		K(pages[LRU_ACTIVE_ANON]   + pages[LRU_ACTIVE_FILE]),
-# 		K(pages[LRU_INACTIVE_ANON] + pages[LRU_INACTIVE_FILE]),
-# 		K(pages[LRU_ACTIVE_ANON]),
-# 		K(pages[LRU_INACTIVE_ANON]),
-# 		K(pages[LRU_ACTIVE_FILE]),
-# 		K(pages[LRU_INACTIVE_FILE]),
-# 		K(pages[LRU_UNEVICTABLE]),
-# 		K(global_page_state(NR_MLOCK)),
-# #ifdef CONFIG_HIGHMEM
-# 		K(i.totalhigh),
-# 		K(i.freehigh),
-# 		K(i.totalram-i.totalhigh),
-# 		K(i.freeram-i.freehigh),
-# #endif
-# #ifndef CONFIG_MMU
-# 		K((unsigned long) atomic_long_read(&mmap_pages_allocated)),
-# #endif
-# 		K(i.totalswap),
-# 		K(i.freeswap),
-# 		K(global_page_state(NR_FILE_DIRTY)),
-# 		K(global_page_state(NR_WRITEBACK)),
-# #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-# 		K(global_page_state(NR_ANON_PAGES)
-# 		  + global_page_state(NR_ANON_TRANSPARENT_HUGEPAGES) *
-# 		  HPAGE_PMD_NR),
-# #else
-# 		K(global_page_state(NR_ANON_PAGES)),
-# #endif
-# 		K(global_page_state(NR_FILE_MAPPED)),
-# 		K(global_page_state(NR_SHMEM)),
-# 		K(global_page_state(NR_SLAB_RECLAIMABLE) +
-# 				global_page_state(NR_SLAB_UNRECLAIMABLE)),
-# 		K(global_page_state(NR_SLAB_RECLAIMABLE)),
-# 		K(global_page_state(NR_SLAB_UNRECLAIMABLE)),
-# 		global_page_state(NR_KERNEL_STACK) * THREAD_SIZE / 1024,
-# 		K(global_page_state(NR_PAGETABLE)),
-# #ifdef CONFIG_QUICKLIST
-# 		K(quicklist_total_size()),
-# #endif
-# 		K(global_page_state(NR_UNSTABLE_NFS)),
-# 		K(global_page_state(NR_BOUNCE)),
-# 		K(global_page_state(NR_WRITEBACK_TEMP)),
-# 		K(allowed),
-# 		K(committed),
-# 		(unsigned long)VMALLOC_TOTAL >> 10,
-# 		vmi.used >> 10,
-# 		vmi.largest_chunk >> 10
-# #ifdef CONFIG_MEMORY_FAILURE
-# 		,atomic_long_read(&mce_bad_pages) << (PAGE_SHIFT - 10)
-# #endif
-# #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-# 		,K(global_page_state(NR_ANON_TRANSPARENT_HUGEPAGES) *
-# 		   HPAGE_PMD_NR)
-# #endif
-# 		);
-# 
-# 	hugetlb_report_meminfo(m);
-# 
-# 	arch_report_meminfo(m);
+# The kernel source snippets that generate this file are stored in
+# "README.ProcNetHandlers" to reduce the size of this module.
 #
-# from: mm/hugetlb.c
-# ---
-#        seq_printf(m,
-#                        "HugePages_Total:   %5lu\n"
-#                        "HugePages_Free:    %5lu\n"
-#                        "HugePages_Rsvd:    %5lu\n"
-#                        "HugePages_Surp:    %5lu\n"
-#                        "Hugepagesize:   %8lu kB\n",
-#                        h->nr_huge_pages,
-#                        h->free_huge_pages,
-#                        h->resv_huge_pages,
-#                        h->surplus_huge_pages,
-#                        1UL << (huge_page_order(h) + PAGE_SHIFT - 10));
-#
-#
-# from: arch/x86/mm/pageattr.c
-# ---
-#         seq_printf(m, "DirectMap4k:    %8lu kB\n",
-#                         direct_pages_count[PG_LEVEL_4K] << 2);
-# #if defined(CONFIG_X86_64) || defined(CONFIG_X86_PAE)
-#         seq_printf(m, "DirectMap2M:    %8lu kB\n",
-#                         direct_pages_count[PG_LEVEL_2M] << 11);
-# #else
-#         seq_printf(m, "DirectMap4M:    %8lu kB\n",
-#                         direct_pages_count[PG_LEVEL_2M] << 12);
-# #endif
-# #ifdef CONFIG_X86_64
-#         if (direct_gbpages)
-#                 seq_printf(m, "DirectMap1G:    %8lu kB\n",
-#                         direct_pages_count[PG_LEVEL_1G] << 20);
-# #endif
 
     def extra_init(self, *opts):
         self.minfields = 2
@@ -1730,81 +1540,9 @@ class ProcRootSLABINFO(PBR.fixed_delim_format_recs):
 # --and--
 # source: mm/slab.c
 #
-# This one is tricky...  There's kernel code that appears to create and write
-# "/proc/slabinfo" in two places.  Both "slub.c" and "slab.c" contain lines that
-# would write out info to that file.  I'm including code snippets from both and
-# making sure this routine can handle output generated by either.
+# The kernel source snippets that generate this file are stored in
+# "README.ProcNetHandlers" to reduce the size of this module.
 #
-# from:
-# ---
-# source: mm/slub.c
-#        seq_printf(m, "%-17s %6lu %6lu %6u %4u %4d", s->name, nr_inuse,
-#                   nr_objs, s->size, oo_objects(s->oo),
-#                   (1 << oo_order(s->oo)));
-#        seq_printf(m, " : tunables %4u %4u %4u", 0, 0, 0);
-#        seq_printf(m, " : slabdata %6lu %6lu %6lu", nr_slabs, nr_slabs,
-#                   0UL);
-#        seq_putc(m, '\n');
-#
-# from:
-# ---
-# source: mm/slab.c
-#
-# ...header routine...
-# #if STATS
-#         seq_puts(m, "slabinfo - version: 2.1 (statistics)\n");
-# #else
-#         seq_puts(m, "slabinfo - version: 2.1\n");
-# #endif
-#         seq_puts(m, "# name            <active_objs> <num_objs> <objsize> "
-#                  "<objperslab> <pagesperslab>");
-#         seq_puts(m, " : tunables <limit> <batchcount> <sharedfactor>");
-#         seq_puts(m, " : slabdata <active_slabs> <num_slabs> <sharedavail>");
-# #if STATS
-#         seq_puts(m, " : globalstat <listallocs> <maxobjs> <grown> <reaped> "
-#                  "<error> <maxfreeable> <nodeallocs> <remotefrees> <alienoverflow>");
-#         seq_puts(m, " : cpustat <allochit> <allocmiss> <freehit> <freemiss>");
-# #endif
-#         seq_putc(m, '\n');
-#
-# ...data entries...
-# 	seq_printf(m, "%-17s %6lu %6lu %6u %4u %4d",
-# 		   name, active_objs, num_objs, cachep->buffer_size,
-# 		   cachep->num, (1 << cachep->gfporder));
-# 	seq_printf(m, " : tunables %4u %4u %4u",
-# 		   cachep->limit, cachep->batchcount, cachep->shared);
-# 	seq_printf(m, " : slabdata %6lu %6lu %6lu",
-# 		   active_slabs, num_slabs, shared_avail);
-# #if STATS
-# 	{			/* list3 stats */
-# 		unsigned long high = cachep->high_mark;
-# 		unsigned long allocs = cachep->num_allocations;
-# 		unsigned long grown = cachep->grown;
-# 		unsigned long reaped = cachep->reaped;
-# 		unsigned long errors = cachep->errors;
-# 		unsigned long max_freeable = cachep->max_freeable;
-# 		unsigned long node_allocs = cachep->node_allocs;
-# 		unsigned long node_frees = cachep->node_frees;
-# 		unsigned long overflows = cachep->node_overflow;
-# 
-# 		seq_printf(m, " : globalstat %7lu %6lu %5lu %4lu "
-# 			   "%4lu %4lu %4lu %4lu %4lu",
-# 			   allocs, high, grown,
-# 			   reaped, errors, max_freeable, node_allocs,
-# 			   node_frees, overflows);
-# 	}
-# 	/* cpu stats */
-# 	{
-# 		unsigned long allochit = atomic_read(&cachep->allochit);
-# 		unsigned long allocmiss = atomic_read(&cachep->allocmiss);
-# 		unsigned long freehit = atomic_read(&cachep->freehit);
-# 		unsigned long freemiss = atomic_read(&cachep->freemiss);
-# 
-# 		seq_printf(m, " : cpustat %6lu %6lu %6lu %6lu",
-# 			   allochit, allocmiss, freehit, freemiss);
-# 	}
-# #endif
-# 	seq_putc(m, '\n');
 
     def extra_init(self, *opts):
         self.minfields = 16
@@ -2140,197 +1878,9 @@ class ProcRootMDSTAT(PBR.fixed_delim_format_recs):
 # --and--
 # source: drivers/md/md.c
 #
-# from: drivers/md/raid10.c
-# ---
-# static void status(struct seq_file *seq, struct mddev *mddev)
-# {
-#         struct r10conf *conf = mddev->private;
-#         int i;
-# 
-#         if (conf->near_copies < conf->raid_disks)
-#                 seq_printf(seq, " %dK chunks", mddev->chunk_sectors / 2);
-#         if (conf->near_copies > 1)
-#                 seq_printf(seq, " %d near-copies", conf->near_copies);
-#         if (conf->far_copies > 1) {
-#                 if (conf->far_offset)
-#                         seq_printf(seq, " %d offset-copies", conf->far_copies);
-#                 else
-#                         seq_printf(seq, " %d far-copies", conf->far_copies);
-#         }
-#         seq_printf(seq, " [%d/%d] [", conf->raid_disks,
-#                                         conf->raid_disks - mddev->degraded);
-#         for (i = 0; i < conf->raid_disks; i++)
-#                 seq_printf(seq, "%s",
-#                               conf->mirrors[i].rdev &&
-#                               test_bit(In_sync, &conf->mirrors[i].rdev->flags) ? "U" : "_");
-#         seq_printf(seq, "]");
-# }
+# The kernel source snippets that generate this file are stored in
+# "README.ProcNetHandlers" to reduce the size of this module.
 #
-# from: drivers/md/raid10.c
-# ---
-# static void status_unused(struct seq_file *seq)
-# {
-# 
-# 	seq_printf(seq, "unused devices: ");
-# 
-# 	list_for_each_entry(rdev, &pending_raid_disks, same_set) {
-# 		char b[BDEVNAME_SIZE];
-# 		i++;
-# 		seq_printf(seq, "%s ",
-# 			      bdevname(rdev->bdev,b));
-# 	}
-# 	if (!i)
-# 		seq_printf(seq, "<none>");
-# 
-# 	seq_printf(seq, "\n");
-# }
-# 
-# 
-# static void status_resync(struct seq_file *seq, struct mddev * mddev)
-# {
-# 	{
-# 		int i, x = per_milli/50, y = 20-x;
-# 		seq_printf(seq, "[");
-# 		for (i = 0; i < x; i++)
-# 			seq_printf(seq, "=");
-# 		seq_printf(seq, ">");
-# 		for (i = 0; i < y; i++)
-# 			seq_printf(seq, ".");
-# 		seq_printf(seq, "] ");
-# 	}
-# 	seq_printf(seq, " %s =%3u.%u%% (%llu/%llu)",
-# 		   (test_bit(MD_RECOVERY_RESHAPE, &mddev->recovery)?
-# 		    "reshape" :
-# 		    (test_bit(MD_RECOVERY_CHECK, &mddev->recovery)?
-# 		     "check" :
-# 		     (test_bit(MD_RECOVERY_SYNC, &mddev->recovery) ?
-# 		      "resync" : "recovery"))),
-# 		   per_milli/10, per_milli % 10,
-# 		   (unsigned long long) resync/2,
-# 		   (unsigned long long) max_sectors/2);
-# ...code deleted...
-# 
-# 	seq_printf(seq, " finish=%lu.%lumin", (unsigned long)rt / 60,
-# 		   ((unsigned long)rt % 60)/6);
-# 
-# 	seq_printf(seq, " speed=%ldK/sec", db/2/dt);
-# }
-# 
-# static int md_seq_show(struct seq_file *seq, void *v)
-# {
-# ...code deleted...
-# 
-# 	if (v == (void*)1) {
-# 		struct md_personality *pers;
-# 		seq_printf(seq, "Personalities : ");
-# 		spin_lock(&pers_lock);
-# 		list_for_each_entry(pers, &pers_list, list)
-# 			seq_printf(seq, "[%s] ", pers->name);
-# 
-# 		spin_unlock(&pers_lock);
-# 		seq_printf(seq, "\n");
-# 		seq->poll_event = atomic_read(&md_event_count);
-# 		return 0;
-# 	}
-# 	if (v == (void*)2) {
-# 		status_unused(seq);
-# 		return 0;
-# 	}
-# 
-# 	if (mddev_lock(mddev) < 0)
-# 		return -EINTR;
-# 
-# 	if (mddev->pers || mddev->raid_disks || !list_empty(&mddev->disks)) {
-# 		seq_printf(seq, "%s : %sactive", mdname(mddev),
-# 						mddev->pers ? "" : "in");
-# 		if (mddev->pers) {
-# 			if (mddev->ro==1)
-# 				seq_printf(seq, " (read-only)");
-# 			if (mddev->ro==2)
-# 				seq_printf(seq, " (auto-read-only)");
-# 			seq_printf(seq, " %s", mddev->pers->name);
-# 		}
-# 
-# 		sectors = 0;
-# 		list_for_each_entry(rdev, &mddev->disks, same_set) {
-# 			char b[BDEVNAME_SIZE];
-# 			seq_printf(seq, " %s[%d]",
-# 				bdevname(rdev->bdev,b), rdev->desc_nr);
-# 			if (test_bit(WriteMostly, &rdev->flags))
-# 				seq_printf(seq, "(W)");
-# 			if (test_bit(Faulty, &rdev->flags)) {
-# 				seq_printf(seq, "(F)");
-# 				continue;
-# 			} else if (rdev->raid_disk < 0)
-# 				seq_printf(seq, "(S)"); /* spare */
-# 			sectors += rdev->sectors;
-# 		}
-# 
-# 		if (!list_empty(&mddev->disks)) {
-# 			if (mddev->pers)
-# 				seq_printf(seq, "\n      %llu blocks",
-# 					   (unsigned long long)
-# 					   mddev->array_sectors / 2);
-# 			else
-# 				seq_printf(seq, "\n      %llu blocks",
-# 					   (unsigned long long)sectors / 2);
-# 		}
-# 		if (mddev->persistent) {
-# 			if (mddev->major_version != 0 ||
-# 			    mddev->minor_version != 90) {
-# 				seq_printf(seq," super %d.%d",
-# 					   mddev->major_version,
-# 					   mddev->minor_version);
-# 			}
-# 		} else if (mddev->external)
-# 			seq_printf(seq, " super external:%s",
-# 				   mddev->metadata_type);
-# 		else
-# 			seq_printf(seq, " super non-persistent");
-# 
-# 		if (mddev->pers) {
-# 			mddev->pers->status(seq, mddev);
-# 	 		seq_printf(seq, "\n      ");
-# 			if (mddev->pers->sync_request) {
-# 				if (mddev->curr_resync > 2) {
-# 					status_resync(seq, mddev);
-# 					seq_printf(seq, "\n      ");
-# 				} else if (mddev->curr_resync == 1 || mddev->curr_resync == 2)
-# 					seq_printf(seq, "\tresync=DELAYED\n      ");
-# 				else if (mddev->recovery_cp < MaxSector)
-# 					seq_printf(seq, "\tresync=PENDING\n      ");
-# 			}
-# 		} else
-# 			seq_printf(seq, "\n       ");
-# 
-# 		if ((bitmap = mddev->bitmap)) {
-# 			unsigned long chunk_kb;
-# 			unsigned long flags;
-# 			spin_lock_irqsave(&bitmap->lock, flags);
-# 			chunk_kb = mddev->bitmap_info.chunksize >> 10;
-# 			seq_printf(seq, "bitmap: %lu/%lu pages [%luKB], "
-# 				"%lu%s chunk",
-# 				bitmap->pages - bitmap->missing_pages,
-# 				bitmap->pages,
-# 				(bitmap->pages - bitmap->missing_pages)
-# 					<< (PAGE_SHIFT - 10),
-# 				chunk_kb ? chunk_kb : mddev->bitmap_info.chunksize,
-# 				chunk_kb ? "KB" : "B");
-# 			if (bitmap->file) {
-# 				seq_printf(seq, ", file: ");
-# 				seq_path(seq, &bitmap->file->f_path, " \t\n");
-# 			}
-# 
-# 			seq_printf(seq, "\n");
-# 			spin_unlock_irqrestore(&bitmap->lock, flags);
-# 		}
-# 
-# 		seq_printf(seq, "\n");
-# 	}
-# 	mddev_unlock(mddev);
-# 	
-# 	return 0;
-# }
 
     def extra_init(self, *opts):
         self.__MinWords_first = 1

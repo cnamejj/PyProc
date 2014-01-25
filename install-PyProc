@@ -2,4 +2,4 @@
 
 INSTALL_DIR="/usr/local/bin/"
 
-rsync -avu --no-owner --exclude .git --exclude .gitignore --exclude TEST --exclude \*.pyc --exclude README.md --exclude install-PyProc . "${INSTALL_DIR}"
+rsync -avnu --no-owner --exclude COPYING --exclude .git --exclude .gitignore --exclude TEST --exclude \*.pyc --exclude README.\* --exclude proc-file-\* --exclude .pylintrc --exclude install-PyProc . "${INSTALL_DIR}"

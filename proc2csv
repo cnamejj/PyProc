@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-"""Convert logical records from the indicated /proc/net file to a CSV file
-
-"""
+"""Convert logical records from the indicated /proc/net file to a CSV file"""
 
 import sys
 import ProcHandlers

@@ -1,8 +1,5 @@
 #!/usr/bin/env python
-"""I/O routines for reading column oriented text data files
-
-Describe what's in this module and put that info here...
-"""
+"""I/O routines for reading column oriented text data files"""
 
 def pair_list_to_dictionary(line, start_pos):
 

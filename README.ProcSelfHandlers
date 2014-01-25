@@ -1,0 +1,541 @@
+#
+# This document contains portions of Linux kernel source code, included
+# to demonstrate how various "/proc" files are generated.  That code,
+# while not intended to be compiled/used as presented here, is distributed
+# according to the terms of the following license.
+#
+# (C) 2014 Jim Jones <cnamejj@gmail.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+The module ProcRootHandlers.py contains code snippets from kernel source
+as comments in each "handler" class where the relevant code sample is
+less than 50 lines.  For /proc files where the amount of source code
+involved in generating the contents of the file is longer, the sample
+code is document here instead.
+
+
+--- File: /proc/self/mountinfo
+
+source: fs/namespace.c
+
+Excerpts from that code:
+
+#        seq_printf(m, "%i %i %u:%u ", mnt->mnt_id, mnt->mnt_parent->mnt_id,
+#                   MAJOR(sb->s_dev), MINOR(sb->s_dev));
+#        if (sb->s_op->show_path)
+#                err = sb->s_op->show_path(m, mnt);
+#        else
+#                seq_dentry(m, mnt->mnt_root, " \t\n\\");
+#        if (err)
+#                goto out;
+#        seq_putc(m, ' ');
+#
+#        /* mountpoints outside of chroot jail will give SEQ_SKIP on this */
+#        err = seq_path_root(m, &mnt_path, &root, " \t\n\\");
+#        if (err)
+#                goto out;
+#
+#        seq_puts(m, mnt->mnt_flags & MNT_READONLY ? " ro" : " rw");
+#        show_mnt_opts(m, mnt);
+#
+#        /* Tagged fields ("foo:X" or "bar") */
+#        if (IS_MNT_SHARED(mnt))
+#                seq_printf(m, " shared:%i", mnt->mnt_group_id);
+#        if (IS_MNT_SLAVE(mnt)) {
+#                int master = mnt->mnt_master->mnt_group_id;
+#                int dom = get_dominating_id(mnt, &p->root);
+#                seq_printf(m, " master:%i", master);
+#                if (dom && dom != master)
+#                        seq_printf(m, " propagate_from:%i", dom);
+#        }
+#        if (IS_MNT_UNBINDABLE(mnt))
+#                seq_puts(m, " unbindable");
+#
+#        /* Filesystem specific data */
+#        seq_puts(m, " - ");
+#        show_type(m, sb);
+#        seq_putc(m, ' ');
+#        if (sb->s_op->show_devname)
+#                err = sb->s_op->show_devname(m, mnt);
+#        else
+#                mangle(m, mnt->mnt_devname ? mnt->mnt_devname : "none");
+#        if (err)
+#                goto out;
+#        seq_puts(m, sb->s_flags & MS_RDONLY ? " ro" : " rw");
+#        err = show_sb_opts(m, sb);
+#        if (err)
+#                goto out;
+#        if (sb->s_op->show_options)
+#                err = sb->s_op->show_options(m, mnt);
+#        seq_putc(m, '\n');
+#
+# --and--
+#
+# static void show_mnt_opts(struct seq_file *m, struct vfsmount *mnt)
+# {
+#        static const struct proc_fs_info mnt_info[] = {
+#                { MNT_NOSUID, ",nosuid" },
+#                { MNT_NODEV, ",nodev" },
+#                { MNT_NOEXEC, ",noexec" },
+#                { MNT_NOATIME, ",noatime" },
+#                { MNT_NODIRATIME, ",nodiratime" },
+#                { MNT_RELATIME, ",relatime" },
+#                { 0, NULL }
+#        };
+#        const struct proc_fs_info *fs_infop;
+#
+#        for (fs_infop = mnt_info; fs_infop->flag; fs_infop++) {
+#                if (mnt->mnt_flags & fs_infop->flag)
+#                        seq_puts(m, fs_infop->str);
+#        }
+# }
+
+
+
+
+--- File: /proc/self/mountstats
+
+source: fs/namespace.c
+--and--
+source: fs/nfs/super.c
+--and--
+source: net/sunrpc/xprtsock.c
+--and--
+source: net/sunrpc/stats.c
+
+Excerpts from that code:
+
+# from: fs/namespace.c
+# --------
+# 
+# static int show_vfsstat(struct seq_file *m, void *v)
+# {
+#         struct vfsmount *mnt = list_entry(v, struct vfsmount, mnt_list);
+#         struct path mnt_path = { .dentry = mnt->mnt_root, .mnt = mnt };
+#         int err = 0;
+# 
+#         /* device */
+#         if (mnt->mnt_sb->s_op->show_devname) {
+#                 seq_puts(m, "device ");
+#                 err = mnt->mnt_sb->s_op->show_devname(m, mnt);
+#         } else {
+#                 if (mnt->mnt_devname) {
+#                         seq_puts(m, "device ");
+#                         mangle(m, mnt->mnt_devname);
+#                 } else
+#                         seq_puts(m, "no device");
+#         }
+# 
+#         /* mount point */
+#         seq_puts(m, " mounted on ");
+#         seq_path(m, &mnt_path, " \t\n\\");
+#         seq_putc(m, ' ');
+# 
+#         /* file system type */
+#         seq_puts(m, "with fstype ");
+#         show_type(m, mnt->mnt_sb);
+# 
+#         /* optional statistics */
+#         if (mnt->mnt_sb->s_op->show_stats) {
+#                 seq_putc(m, ' ');
+#                 if (!err)
+#                         err = mnt->mnt_sb->s_op->show_stats(m, mnt);
+#         }
+# 
+#         seq_putc(m, '\n');
+#         return err;
+# }
+# 
+# 
+# from: fs/nfs/super.c
+# --------
+# 
+# static int nfs_show_stats(struct seq_file *m, struct vfsmount *mnt)
+# {
+#         int i, cpu;
+#         struct nfs_server *nfss = NFS_SB(mnt->mnt_sb);
+#         struct rpc_auth *auth = nfss->client->cl_auth;
+#         struct nfs_iostats totals = { };
+# 
+#         seq_printf(m, "statvers=%s", NFS_IOSTAT_VERS);
+# 
+#         /*
+#          * Display all mount option settings
+#          */
+#         seq_printf(m, "\n\topts:\t");
+#         seq_puts(m, mnt->mnt_sb->s_flags & MS_RDONLY ? "ro" : "rw");
+#         seq_puts(m, mnt->mnt_sb->s_flags & MS_SYNCHRONOUS ? ",sync" : "");
+#         seq_puts(m, mnt->mnt_sb->s_flags & MS_NOATIME ? ",noatime" : "");
+#         seq_puts(m, mnt->mnt_sb->s_flags & MS_NODIRATIME ? ",nodiratime" : "");
+#         nfs_show_mount_options(m, nfss, 1);
+# 
+#         seq_printf(m, "\n\tage:\t%lu", (jiffies - nfss->mount_time) / HZ);
+# 
+#         seq_printf(m, "\n\tcaps:\t");
+#         seq_printf(m, "caps=0x%x", nfss->caps);
+#         seq_printf(m, ",wtmult=%u", nfss->wtmult);
+#         seq_printf(m, ",dtsize=%u", nfss->dtsize);
+#         seq_printf(m, ",bsize=%u", nfss->bsize);
+#         seq_printf(m, ",namlen=%u", nfss->namelen);
+# 
+# #ifdef CONFIG_NFS_V4
+#         if (nfss->nfs_client->rpc_ops->version == 4) {
+#                 seq_printf(m, "\n\tnfsv4:\t");
+#                 seq_printf(m, "bm0=0x%x", nfss->attr_bitmask[0]);
+#                 seq_printf(m, ",bm1=0x%x", nfss->attr_bitmask[1]);
+#                 seq_printf(m, ",acl=0x%x", nfss->acl_bitmask);
+#                 show_sessions(m, nfss);
+#                 show_pnfs(m, nfss);
+#         }
+# #endif
+# 
+#         /*
+#          * Display security flavor in effect for this mount
+#          */
+#         seq_printf(m, "\n\tsec:\tflavor=%u", auth->au_ops->au_flavor);
+#         if (auth->au_flavor)
+#                 seq_printf(m, ",pseudoflavor=%u", auth->au_flavor);
+# 
+#         /*
+#          * Display superblock I/O counters
+#          */
+#         for_each_possible_cpu(cpu) {
+#                 struct nfs_iostats *stats;
+# 
+#                 preempt_disable();
+#                 stats = per_cpu_ptr(nfss->io_stats, cpu);
+# 
+#                 for (i = 0; i < __NFSIOS_COUNTSMAX; i++)
+#                         totals.events[i] += stats->events[i];
+#                 for (i = 0; i < __NFSIOS_BYTESMAX; i++)
+#                         totals.bytes[i] += stats->bytes[i];
+# #ifdef CONFIG_NFS_FSCACHE
+#                 for (i = 0; i < __NFSIOS_FSCACHEMAX; i++)
+#                         totals.fscache[i] += stats->fscache[i];
+# #endif
+# 
+#                 preempt_enable();
+#         }
+# 
+#         seq_printf(m, "\n\tevents:\t");
+#         for (i = 0; i < __NFSIOS_COUNTSMAX; i++)
+#                 seq_printf(m, "%lu ", totals.events[i]);
+#         seq_printf(m, "\n\tbytes:\t");
+#         for (i = 0; i < __NFSIOS_BYTESMAX; i++)
+#                 seq_printf(m, "%Lu ", totals.bytes[i]);
+# #ifdef CONFIG_NFS_FSCACHE
+#         if (nfss->options & NFS_OPTION_FSCACHE) {
+#                 seq_printf(m, "\n\tfsc:\t");
+#                 for (i = 0; i < __NFSIOS_FSCACHEMAX; i++)
+#                         seq_printf(m, "%Lu ", totals.bytes[i]);
+#         }
+# #endif
+#         seq_printf(m, "\n");
+# 
+#         rpc_print_iostats(m, nfss->client);
+# 
+#         return 0;
+# }
+# 
+# static void show_sessions(struct seq_file *m, struct nfs_server *server)
+# {
+#         if (nfs4_has_session(server->nfs_client))
+#                 seq_printf(m, ",sessions");
+# }
+# 
+# static void show_pnfs(struct seq_file *m, struct nfs_server *server)
+# {
+#         seq_printf(m, ",pnfs=");
+#         if (server->pnfs_curr_ld)
+#                 seq_printf(m, "%s", server->pnfs_curr_ld->name);
+#         else
+#                 seq_printf(m, "not configured");
+# }
+# 
+# 
+# static void nfs_show_mount_options(struct seq_file *m, struct nfs_server *nfss,
+#                                    int showdefaults)
+# {
+#         static const struct proc_nfs_info {
+#                 int flag;
+#                 const char *str;
+#                 const char *nostr;
+#         } nfs_info[] = {
+#                 { NFS_MOUNT_SOFT, ",soft", ",hard" },
+#                 { NFS_MOUNT_POSIX, ",posix", "" },
+#                 { NFS_MOUNT_NOCTO, ",nocto", "" },
+#                 { NFS_MOUNT_NOAC, ",noac", "" },
+#                 { NFS_MOUNT_NONLM, ",nolock", "" },
+#                 { NFS_MOUNT_NOACL, ",noacl", "" },
+#                 { NFS_MOUNT_NORDIRPLUS, ",nordirplus", "" },
+#                 { NFS_MOUNT_UNSHARED, ",nosharecache", "" },
+#                 { NFS_MOUNT_NORESVPORT, ",noresvport", "" },
+#                 { 0, NULL, NULL }
+#         };
+#         const struct proc_nfs_info *nfs_infop;
+#         struct nfs_client *clp = nfss->nfs_client;
+#         u32 version = clp->rpc_ops->version;
+#         int local_flock, local_fcntl;
+# 
+#         seq_printf(m, ",vers=%u", version);
+#         seq_printf(m, ",rsize=%u", nfss->rsize);
+#         seq_printf(m, ",wsize=%u", nfss->wsize);
+#         if (nfss->bsize != 0)
+#                 seq_printf(m, ",bsize=%u", nfss->bsize);
+#         seq_printf(m, ",namlen=%u", nfss->namelen);
+#         if (nfss->acregmin != NFS_DEF_ACREGMIN*HZ || showdefaults)
+#                 seq_printf(m, ",acregmin=%u", nfss->acregmin/HZ);
+#         if (nfss->acregmax != NFS_DEF_ACREGMAX*HZ || showdefaults)
+#                 seq_printf(m, ",acregmax=%u", nfss->acregmax/HZ);
+#         if (nfss->acdirmin != NFS_DEF_ACDIRMIN*HZ || showdefaults)
+#                 seq_printf(m, ",acdirmin=%u", nfss->acdirmin/HZ);
+#         if (nfss->acdirmax != NFS_DEF_ACDIRMAX*HZ || showdefaults)
+#                 seq_printf(m, ",acdirmax=%u", nfss->acdirmax/HZ);
+#         for (nfs_infop = nfs_info; nfs_infop->flag; nfs_infop++) {
+#                 if (nfss->flags & nfs_infop->flag)
+#                         seq_puts(m, nfs_infop->str);
+#                 else
+#                         seq_puts(m, nfs_infop->nostr);
+#         }
+# 
+#         seq_printf(m, ",proto=%s",
+#                    rpc_peeraddr2str(nfss->client, RPC_DISPLAY_NETID));
+#         if (version == 4) {
+#                 if (nfss->port != NFS_PORT)
+#                         seq_printf(m, ",port=%u", nfss->port);
+#         } else
+#                 if (nfss->port)
+#                         seq_printf(m, ",port=%u", nfss->port);
+# 
+#         seq_printf(m, ",timeo=%lu", 10U * nfss->client->cl_timeout->to_initval / HZ);
+#         seq_printf(m, ",retrans=%u", nfss->client->cl_timeout->to_retries);
+#         seq_printf(m, ",sec=%s", nfs_pseudoflavour_to_name(nfss->client->cl_auth->au_flavor));
+# 
+#         if (version != 4)
+#                 nfs_show_mountd_options(m, nfss, showdefaults);
+#         else
+#                 nfs_show_nfsv4_options(m, nfss, showdefaults);
+# 
+#         if (nfss->options & NFS_OPTION_FSCACHE)
+#                 seq_printf(m, ",fsc");
+# 
+#         if (nfss->flags & NFS_MOUNT_LOOKUP_CACHE_NONEG) {
+#                 if (nfss->flags & NFS_MOUNT_LOOKUP_CACHE_NONE)
+#                         seq_printf(m, ",lookupcache=none");
+#                 else
+#                         seq_printf(m, ",lookupcache=pos");
+#         }
+# 
+#         local_flock = nfss->flags & NFS_MOUNT_LOCAL_FLOCK;
+#         local_fcntl = nfss->flags & NFS_MOUNT_LOCAL_FCNTL;
+# 
+#         if (!local_flock && !local_fcntl)
+#                 seq_printf(m, ",local_lock=none");
+#         else if (local_flock && local_fcntl)
+#                 seq_printf(m, ",local_lock=all");
+#         else if (local_flock)
+#                 seq_printf(m, ",local_lock=flock");
+#         else
+#                 seq_printf(m, ",local_lock=posix");
+# }
+# 
+# static void nfs_show_mountd_options(struct seq_file *m, struct nfs_server *nfss,
+#                                     int showdefaults)
+# {
+#         struct sockaddr *sap = (struct sockaddr *)&nfss->mountd_address;
+# 
+#         if (nfss->flags & NFS_MOUNT_LEGACY_INTERFACE)
+#                 return;
+# 
+#         switch (sap->sa_family) {
+#         case AF_INET: {
+#                 struct sockaddr_in *sin = (struct sockaddr_in *)sap;
+#                 seq_printf(m, ",mountaddr=%pI4", &sin->sin_addr.s_addr);
+#                 break;
+#         }
+#         case AF_INET6: {
+#                 struct sockaddr_in6 *sin6 = (struct sockaddr_in6 *)sap;
+#                 seq_printf(m, ",mountaddr=%pI6c", &sin6->sin6_addr);
+#                 break;
+#         }
+#         default:
+#                 if (showdefaults)
+#                         seq_printf(m, ",mountaddr=unspecified");
+#         }
+# 
+#         if (nfss->mountd_version || showdefaults)
+#                 seq_printf(m, ",mountvers=%u", nfss->mountd_version);
+#         if ((nfss->mountd_port &&
+#                 nfss->mountd_port != (unsigned short)NFS_UNSPEC_PORT) ||
+#                 showdefaults)
+#                 seq_printf(m, ",mountport=%u", nfss->mountd_port);
+# 
+#         nfs_show_mountd_netid(m, nfss, showdefaults);
+# }
+# 
+# static void nfs_show_nfsv4_options(struct seq_file *m, struct nfs_server *nfss,
+#                                     int showdefaults)
+# {
+#         struct nfs_client *clp = nfss->nfs_client;
+# 
+#         seq_printf(m, ",clientaddr=%s", clp->cl_ipaddr);
+#         seq_printf(m, ",minorversion=%u", clp->cl_minorversion);
+# }
+# 
+# static void nfs_show_mountd_netid(struct seq_file *m, struct nfs_server *nfss,
+#                                   int showdefaults)
+# {
+#         struct sockaddr *sap = (struct sockaddr *) &nfss->mountd_address;
+# 
+#         seq_printf(m, ",mountproto=");
+#         switch (sap->sa_family) {
+#         case AF_INET:
+#                 switch (nfss->mountd_protocol) {
+#                 case IPPROTO_UDP:
+#                         seq_printf(m, RPCBIND_NETID_UDP);
+#                         break;
+#                 case IPPROTO_TCP:
+#                         seq_printf(m, RPCBIND_NETID_TCP);
+#                         break;
+#                 default:
+#                         if (showdefaults)
+#                                 seq_printf(m, "auto");
+#                 }
+#                 break;
+#         case AF_INET6:
+#                 switch (nfss->mountd_protocol) {
+#                 case IPPROTO_UDP:
+#                         seq_printf(m, RPCBIND_NETID_UDP6);
+#                         break;
+#                 case IPPROTO_TCP:
+#                         seq_printf(m, RPCBIND_NETID_TCP6);
+#                         break;
+#                 default:
+#                         if (showdefaults)
+#                                 seq_printf(m, "auto");
+#                 }
+#                 break;
+#         default:
+#                 if (showdefaults)
+#                         seq_printf(m, "auto");
+#         }
+# }
+# 
+# 
+# 
+# from: net/sunrpc/stats.c
+# --------
+#
+# static void _print_name(struct seq_file *seq, unsigned int op,
+#                         struct rpc_procinfo *procs)
+# {
+#         if (procs[op].p_name)
+#                 seq_printf(seq, "\t%12s: ", procs[op].p_name);
+#         else if (op == 0)
+#                 seq_printf(seq, "\t        NULL: ");
+#         else
+#                 seq_printf(seq, "\t%12u: ", op);
+# }
+# 
+# void rpc_print_iostats(struct seq_file *seq, struct rpc_clnt *clnt)
+# {
+#         struct rpc_iostats *stats = clnt->cl_metrics;
+#         struct rpc_xprt *xprt = clnt->cl_xprt;
+#         unsigned int op, maxproc = clnt->cl_maxproc;
+# 
+#         if (!stats)
+#                 return;
+# 
+#         seq_printf(seq, "\tRPC iostats version: %s  ", RPC_IOSTATS_VERS);
+#         seq_printf(seq, "p/v: %u/%u (%s)\n",
+#                         clnt->cl_prog, clnt->cl_vers, clnt->cl_protname);
+# 
+#         if (xprt)
+#                 xprt->ops->print_stats(xprt, seq);
+# 
+#         seq_printf(seq, "\tper-op statistics\n");
+#         for (op = 0; op < maxproc; op++) {
+#                 struct rpc_iostats *metrics = &stats[op];
+#                 _print_name(seq, op, clnt->cl_procinfo);
+#                 seq_printf(seq, "%lu %lu %lu %Lu %Lu %Lu %Lu %Lu\n",
+#                                 metrics->om_ops,
+#                                 metrics->om_ntrans,
+#                                 metrics->om_timeouts,
+#                                 metrics->om_bytes_sent,
+#                                 metrics->om_bytes_recv,
+#                                 ktime_to_ms(metrics->om_queue),
+#                                 ktime_to_ms(metrics->om_rtt),
+#                                 ktime_to_ms(metrics->om_execute));
+#         }
+# }
+# 
+# from: net/sunrpc/xprtsock.c
+# --------
+# 
+# static void xs_local_print_stats(struct rpc_xprt *xprt, struct seq_file *seq)
+# {
+#         long idle_time = 0;
+# 
+#         if (xprt_connected(xprt))
+#                 idle_time = (long)(jiffies - xprt->last_used) / HZ;
+# 
+#         seq_printf(seq, "\txprt:\tlocal %lu %lu %lu %ld %lu %lu %lu "
+#                         "%llu %llu\n",
+#                         xprt->stat.bind_count,
+#                         xprt->stat.connect_count,
+#                         xprt->stat.connect_time,
+#                         idle_time,
+#                         xprt->stat.sends,
+#                         xprt->stat.recvs,
+#                         xprt->stat.bad_xids,
+#                         xprt->stat.req_u,
+#                         xprt->stat.bklog_u);
+# }
+# 
+# static void xs_udp_print_stats(struct rpc_xprt *xprt, struct seq_file *seq)
+# {
+#         struct sock_xprt *transport = container_of(xprt, struct sock_xprt, xprt);
+# 
+#         seq_printf(seq, "\txprt:\tudp %u %lu %lu %lu %lu %Lu %Lu\n",
+#                         transport->srcport,
+#                         xprt->stat.bind_count,
+#                         xprt->stat.sends,
+#                         xprt->stat.recvs,
+#                         xprt->stat.bad_xids,
+#                         xprt->stat.req_u,
+#                         xprt->stat.bklog_u);
+# }
+# 
+# static void xs_tcp_print_stats(struct rpc_xprt *xprt, struct seq_file *seq)
+# {
+#         struct sock_xprt *transport = container_of(xprt, struct sock_xprt, xprt);
+#         long idle_time = 0;
+# 
+#         if (xprt_connected(xprt))
+#                 idle_time = (long)(jiffies - xprt->last_used) / HZ;
+# 
+#         seq_printf(seq, "\txprt:\ttcp %u %lu %lu %lu %ld %lu %lu %lu %Lu %Lu\n",
+#                         transport->srcport,
+#                         xprt->stat.bind_count,
+#                         xprt->stat.connect_count,
+#                         xprt->stat.connect_time,
+#                         idle_time,
+#                         xprt->stat.sends,
+#                         xprt->stat.recvs,
+#                         xprt->stat.bad_xids,
+#                         xprt->stat.req_u,
+#                         xprt->stat.bklog_u);
+# }

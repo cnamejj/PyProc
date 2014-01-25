@@ -1,12 +1,21 @@
 #!/usr/bin/env python
 
 # ---
-# (C) 2012-2013 Jim Jones <cnamejj@gmail.com>
+# (C) 2012-2014 Jim Jones <cnamejj@gmail.com>
 #
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version
-# 2 of the License, or (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
 import socket
@@ -920,59 +929,12 @@ RegisterPartialProcFileHandler("igmp6", ProcNetIGMP6)
 # ---
 class ProcNetIP_CONNTRACK(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/ip_conntrack"""
-# DCHK: 11/25/12
+#
 # source: net/ipv4/netfilter/nf_conntrack_l3proto_ipv4_compat.c
 #
-# if (seq_printf(s, "%-8s %u %ld ",
-# 	      l4proto->name, nf_ct_protonum(ct),
-# 	      timer_pending(&ct->timeout)
-# 	      ? (long)(ct->timeout.expires - jiffies)/HZ : 0) != 0)
-# 	goto release;
+# The kernel source snippets that generate this file are stored in
+# "README.ProcNetHandlers" to reduce the size of this module.
 #
-# if (l4proto->print_conntrack && l4proto->print_conntrack(s, ct))
-# 	goto release;
-#
-# if (print_tuple(s, &ct->tuplehash[IP_CT_DIR_ORIGINAL].tuple,
-# 		l3proto, l4proto))
-# 	goto release;
-#
-# if (seq_print_acct(s, ct, IP_CT_DIR_ORIGINAL))
-# 	goto release;
-#
-# if (!(test_bit(IPS_SEEN_REPLY_BIT, &ct->status)))
-# 	if (seq_printf(s, "[UNREPLIED] "))
-# 		goto release;
-#
-# if (print_tuple(s, &ct->tuplehash[IP_CT_DIR_REPLY].tuple,
-# 		l3proto, l4proto))
-# 	goto release;
-#
-# if (seq_print_acct(s, ct, IP_CT_DIR_REPLY))
-# 	goto release;
-#
-# if (test_bit(IPS_ASSURED_BIT, &ct->status))
-# 	if (seq_printf(s, "[ASSURED] "))
-# 		goto release;
-#
-# #ifdef CONFIG_NF_CONNTRACK_MARK
-# if (seq_printf(s, "mark=%u ", ct->mark))
-# 	goto release;
-# #endif
-#
-# if (ct_show_secctx(s, ct))
-# 	goto release;
-#
-# if (seq_printf(s, "use=%u\n", atomic_read(&ct->ct_general.use)))
-#
-# ------------
-# -- from seq_print_acct()
-# return seq_printf(s, "packets=%llu bytes=%llu ",
-#         (unsigned long long)acct[dir].packets,
-#         (unsigned long long)acct[dir].bytes);
-#
-# ------------
-# -- from ct_show_secctx()
-#  ret = seq_printf(s, "secctx=%s ", secctx);
 
     def extra_init(self, *opts):
         self.minfields = 12
@@ -1258,74 +1220,12 @@ RegisterPartialProcFileHandler("ipv6_route", ProcNetIPV6_ROUTE)
 # ---
 class ProcNetNF_CONNTRACK(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/nf_conntrack"""
-# DCHK: 11/25/12
+#
 # source: net/netfilter/nf_conntrack_standalone.c
 #
-#    if (seq_printf(s, "%-8s %u %-8s %u %ld ",
-#                   l3proto->name, nf_ct_l3num(ct),
-#                   l4proto->name, nf_ct_protonum(ct),
-#                   timer_pending(&ct->timeout)
-#                   ? (long)(ct->timeout.expires - jiffies)/HZ : 0) != 0)
-#            goto release;
-# 
-#    if (l4proto->print_conntrack && l4proto->print_conntrack(s, ct))
-#            goto release;
-# 
-#    if (print_tuple(s, &ct->tuplehash[IP_CT_DIR_ORIGINAL].tuple,
-#                    l3proto, l4proto))
-#            goto release;
-# 
-#    if (seq_print_acct(s, ct, IP_CT_DIR_ORIGINAL))
-#            goto release;
-# 
-#    if (!(test_bit(IPS_SEEN_REPLY_BIT, &ct->status)))
-#            if (seq_printf(s, "[UNREPLIED] "))
-#                    goto release;
-# 
-#    if (print_tuple(s, &ct->tuplehash[IP_CT_DIR_REPLY].tuple,
-#                    l3proto, l4proto))
-#            goto release;
-# 
-#    if (seq_print_acct(s, ct, IP_CT_DIR_REPLY))
-#            goto release;
-# 
-#    if (test_bit(IPS_ASSURED_BIT, &ct->status))
-#            if (seq_printf(s, "[ASSURED] "))
-#                    goto release;
-# 
-# #if defined(CONFIG_NF_CONNTRACK_MARK)
-#    if (seq_printf(s, "mark=%u ", ct->mark))
-#            goto release;
-# #endif
-# 
-#    if (ct_show_secctx(s, ct))
-#            goto release;
-# 
-# #ifdef CONFIG_NF_CONNTRACK_ZONES
-#    if (seq_printf(s, "zone=%u ", nf_ct_zone(ct)))
-#            goto release;
-# #endif
-# 
-#    if (ct_show_delta_time(s, ct))
-#            goto release;
-# 
-#    if (seq_printf(s, "use=%u\n", atomic_read(&ct->ct_general.use)))
-#            goto release;
+# The kernel source snippets that generate this file are stored in
+# "README.ProcNetHandlers" to reduce the size of this module.
 #
-# ------------
-# -- from ct_show_delta_time()
-#         return seq_printf(s, "delta-time=%llu ",
-#                          (unsigned long long)delta_time);
-#
-# ------------
-# -- from seq_print_acct()
-# return seq_printf(s, "packets=%llu bytes=%llu ",
-#         (unsigned long long)acct[dir].packets,
-#         (unsigned long long)acct[dir].bytes);
-#
-# ------------
-# -- from ct_show_secctx()
-#  ret = seq_printf(s, "secctx=%s ", secctx);
 
     def extra_init(self, *opts):
         self.minfields = 14
@@ -3124,105 +3024,8 @@ class ProcNetSNMP(PBR.twoline_logical_records):
 #
 # source: net/ipv4/proc.c
 #
-#... from icmpmsg_put()
-# for (i = 0; i < ICMPMSG_MIB_MAX; i++) {
-#     val = snmp_fold_field((void __percpu **) net->mib.icmpmsg_statistics, i);
-#     if (val) {
-#         type[count] = i;
-#         vals[count++] = val;
-#     }
-#     if (count == PERLINE) {
-#         icmpmsg_put_line(seq, vals, type, count);
-#         count = 0;
-#     }
-# }
-# icmpmsg_put_line(seq, vals, type, count);
-#
-#
-#
-#... from icmp_put()
-# seq_puts(seq, "\nIcmp: InMsgs InErrors");
-# for (i=0; icmpmibmap[i].name != NULL; i++)
-#     seq_printf(seq, " In%s", icmpmibmap[i].name);
-# seq_printf(seq, " OutMsgs OutErrors");
-# for (i=0; icmpmibmap[i].name != NULL; i++)
-#     seq_printf(seq, " Out%s", icmpmibmap[i].name);
-# seq_printf(seq, "\nIcmp: %lu %lu",
-#     snmp_fold_field((void __percpu **) net->mib.icmp_statistics, ICMP_MIB_INMSGS),
-#     snmp_fold_field((void __percpu **) net->mib.icmp_statistics, ICMP_MIB_INERRORS));
-# for (i=0; icmpmibmap[i].name != NULL; i++)
-#     seq_printf(seq, " %lu",
-#         snmp_fold_field((void __percpu **) net->mib.icmpmsg_statistics,
-#             icmpmibmap[i].index));
-# seq_printf(seq, " %lu %lu",
-#     snmp_fold_field((void __percpu **) net->mib.icmp_statistics, ICMP_MIB_OUTMSGS),
-#     snmp_fold_field((void __percpu **) net->mib.icmp_statistics, ICMP_MIB_OUTERRORS));
-# for (i=0; icmpmibmap[i].name != NULL; i++)
-#     seq_printf(seq, " %lu",
-#         snmp_fold_field((void __percpu **) net->mib.icmpmsg_statistics,
-#             icmpmibmap[i].index | 0x100));
-#
-#
-#
-#...from snmp_seq_show()
-# seq_puts(seq, "Ip: Forwarding DefaultTTL");
-#
-# for (i = 0; snmp4_ipstats_list[i].name != NULL; i++)
-#     seq_printf(seq, " %s", snmp4_ipstats_list[i].name);
-#
-# seq_printf(seq, "\nIp: %d %d",
-#        IPV4_DEVCONF_ALL(net, FORWARDING) ? 1 : 2,
-#        sysctl_ip_default_ttl);
-#
-# BUILD_BUG_ON(offsetof(struct ipstats_mib, mibs) != 0);
-# for (i = 0; snmp4_ipstats_list[i].name != NULL; i++)
-#     seq_printf(seq, " %llu",
-#            snmp_fold_field64((void __percpu **)net->mib.ip_statistics,
-#                      snmp4_ipstats_list[i].entry,
-#                      offsetof(struct ipstats_mib, syncp)));
-#
-# icmp_put(seq);    /* RFC 2011 compatibility */
-# icmpmsg_put(seq);
-#
-# seq_puts(seq, "\nTcp:");
-# for (i = 0; snmp4_tcp_list[i].name != NULL; i++)
-#     seq_printf(seq, " %s", snmp4_tcp_list[i].name);
-#
-# seq_puts(seq, "\nTcp:");
-# for (i = 0; snmp4_tcp_list[i].name != NULL; i++) {
-#     /* MaxConn field is signed, RFC 2012 */
-#     if (snmp4_tcp_list[i].entry == TCP_MIB_MAXCONN)
-#         seq_printf(seq, " %ld",
-#                snmp_fold_field((void __percpu **)net->mib.tcp_statistics,
-#                        snmp4_tcp_list[i].entry));
-#     else
-#         seq_printf(seq, " %lu",
-#                snmp_fold_field((void __percpu **)net->mib.tcp_statistics,
-#                        snmp4_tcp_list[i].entry));
-# }
-#
-# seq_puts(seq, "\nUdp:");
-# for (i = 0; snmp4_udp_list[i].name != NULL; i++)
-#     seq_printf(seq, " %s", snmp4_udp_list[i].name);
-#
-# seq_puts(seq, "\nUdp:");
-# for (i = 0; snmp4_udp_list[i].name != NULL; i++)
-#     seq_printf(seq, " %lu",
-#            snmp_fold_field((void __percpu **)net->mib.udp_statistics,
-#                    snmp4_udp_list[i].entry));
-#
-# /* the UDP and UDP-Lite MIBs are the same */
-# seq_puts(seq, "\nUdpLite:");
-# for (i = 0; snmp4_udp_list[i].name != NULL; i++)
-#     seq_printf(seq, " %s", snmp4_udp_list[i].name);
-#
-# seq_puts(seq, "\nUdpLite:");
-# for (i = 0; snmp4_udp_list[i].name != NULL; i++)
-#     seq_printf(seq, " %lu",
-#            snmp_fold_field((void __percpu **)net->mib.udplite_statistics,
-#                    snmp4_udp_list[i].entry));
-#
-# seq_putc(seq, '\n');
+# The kernel source snippets that generate this file are stored in
+# "README.ProcNetHandlers" to reduce the size of this module.
 #
 
 # -- Sample lines for reference...

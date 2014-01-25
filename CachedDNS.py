@@ -1,8 +1,5 @@
 #!/usr/bin/env python
-"""DNS lookup with cache
-
-Describe what's in this module and put that info here...
-"""
+"""DNS lookup with cache"""
 
 import socket
 

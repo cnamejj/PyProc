@@ -1,8 +1,5 @@
 #!/usr/bin/env python
-"""Get process related info from ip/port unique socket info
-
-Describe what's in this module and put that info here...
-"""
+"""Get process related info from ip/port unique socket info"""
     
 from subprocess import Popen, PIPE
 

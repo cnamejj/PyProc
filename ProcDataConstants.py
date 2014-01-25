@@ -14,6 +14,7 @@ NULL_MASK_HEX = "00000000"
 PRESENT_ANY_IPV6_ADDR = "::0"
 PRESENT_ANY_IP_ADDR = "0.0.0.0"
 ANY_DEVICE = "any"
+NO_DEVICE = "none"
 
 state_list = dict()
 state_list["01"] = "ESTABLISHED"
