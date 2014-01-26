@@ -60,6 +60,23 @@ def array_of_longs(wordlist):
     return(__nums)
 
 
+def breakout_option_list(combined, delim = ",", assign = "="):
+    __optlist = dict()
+    __entries = combined.split(delim)
+
+    for __off in range(0, len(__entries) - 1):
+        __part = __entries[__off].partition(assign)
+        if len(__part) == 3:
+            __optlist[__part[0]] = __part[2]
+        else:
+            __optlist[__entries[__off]] = ""
+    return(__optlist)
+#        __opts = sio.lineparts[1].split(self.__OPTLIST_DELIM)
+#        __caps = dict()
+#        for __off in range(0, len(__opts) - 1):
+#            __split = __opts[__off].partition(self.__ASSIGN_DELIM)
+#            __caps[__split[0]] = __split[2]
+
 # ---
 class ProcSelfLIMITS(PBR.fixed_column_field_recs):
     """Pull records from /proc/self/limits"""
@@ -687,40 +704,40 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 # The kernel source snippets that generate this file are stored in
 # "README.ProcNetHandlers" to reduce the size of this module.
 #
-
 # (A) (1) mounted on !MOUNT! with fstype !FSTYPE! {statvers=!VERSION!}
 #     (1) device !DEVICE!|no device
-#... (B) \topts: (4){,sync}{,noatime}{,nodiratime}(5)(6)(7)(8)(9)(10)(13)
-#...     (4) ro|rw
-#...     (5) ,vers=!INT!,rsize=!INT!,wsize=!INT!{,bsize=!INT!},namelen=!INT!
-#...     (6) {,acregmin=!INT!}{,acregmax=!INT!}{,acdirmin=!INT!}{,acdirmax=!INT!}
-#...     (7) ,soft|,hard
-#...     (8) {,posix}{,nocto}{,noac}{,nolock}{,noacl}{,nordirplus}{,nosharecache}{,noresvport}
-#...     (9) ,proto=!PROTOCOL!{,port=!INT!}{,timeo=!INT!}{,retrans=!INT!}{,sec=!INT!}
-#...     (10) {,mountaddr=(11){,mountvers=!VERSION!}{,mountport=!INT!},mountproto=(12)|,clientaddr=!IP!,minorversion=!INT!}
-#...     (11) !IP4!|!IP6!|unspecified
-#...     (12) !PROTOCOL!|auto
-#...     (13) {,fsc}{,lookupcache={none|pos}}{,local_lock={none|all|flock|posix}}
+# (B) \topts: (2){,sync}{,noatime}{,nodiratime}(3)(4)(5)(6)(7)(8)(9)
+#     (2) ro|rw
+#     (3) ,vers=!INT!,rsize=!INT!,wsize=!INT!{,bsize=!INT!},namelen=!INT!
+#     (4) {,acregmin=!INT!}{,acregmax=!INT!}{,acdirmin=!INT!}{,acdirmax=!INT!}
+#     (5) ,soft|,hard
+#     (6) {,posix}{,nocto}{,noac}{,nolock}{,noacl}{,nordirplus}{,nosharecache}{,noresvport}
+#     (7) ,proto=!PROTOCOL!{,port=!INT!}{,timeo=!INT!}{,retrans=!INT!}{,sec=!INT!}
+#     (8) {,mountaddr=(10){,mountvers=!VERSION!}{,mountport=!INT!},mountproto=(11)|,clientaddr=!IP!,minorversion=!INT!}
+#         (10) !IP4!|!IP6!|unspecified
+#         (11) !PROTOCOL!|auto
+#     (9) {,fsc}{,lookupcache={none|pos}}{,local_lock={none|all|flock|posix}}
 # (C) \tage: !INT!
 # (D) \tcaps: caps=0x!HEX!,wtmult=!INT!,dtsize=!INT!,bsize=!INT!,namlen=!INT!
-#... (E) \tnfsv4: bm0=0x!HEX!,bm1=0x!HEX!,acl=0x!HEX!{,sessions}{,pnfs={!NAME!|not configured}}
-#... (F) \tsec: flavor=!INT!{,pseudoflavor=!INT!}
+# (E) \tnfsv4: bm0=0x!HEX!,bm1=0x!HEX!,acl=0x!HEX!{,sessions}{,pnfs={!NAME!|not configured}}
+# (F) \tsec: flavor=!INT!{,pseudoflavor=!INT!}
 # (G) \tevents: {!INT! }*
 # (H) \tbytes: {!INT! }*
 # (I) \ttfsc: {!INT! }*
-#... (J) \tRPC iostats version: !VERSION! p/v: !INT!/!INT! (!PROTOCOL!)
+# (J) \tRPC iostats version: !VERSION! p/v: !INT!/!INT! (!PROTOCOL!)
 # (K) \tper-op statistics
-#... (L) \t(14): !INT! !INT! !INT! !INT! !INT! !INT! !INT!
-#...     (14)!STATNAME!|NULL
-#... (M) \txprt: (15) !INT! !INT! !INT! !INT! !INT! !INT! !INT!
-#...     (15) local|udp
-#... (N) \txprt: tcp !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT!
+# (L) \t(14): !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT!
+#     (14)!STATNAME!|!INT!|NULL
+# (M) \txprt: (15) !INT! !INT! !INT! !INT! !INT! !INT! !INT!
+#     (15) local|udp
+# (N) \txprt: tcp !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT!
 
     def extra_init(self, *opts):
         self.minfields = 2
 
         self.__ASSIGN_DELIM = "="
         self.__OPTLIST_DELIM = ","
+        self.__RPC_DELIM = "/"
 
         self.__PREFIX_DEV = "device"
         self.__PREFIX_NO = "no"
@@ -735,6 +752,14 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         self.__PREFIX_IOSTATS = "RPC"
         self.__PREFIX_PER_OP = "per-op"
         self.__PREFIX_XPRT = "xprt:"
+        self.__PREFIX_FLAVOR = "flavor="
+        self.__PREFIX_PSEUDOFLAVOR = "pseudoflavor="
+
+        self.__FLAG_HARD = "hard"
+        self.__FLAG_SOFT = "soft"
+        self.__FLAG_XPRT_LOCAL = "local"
+        self.__FLAG_XPRT_UDP = "udp"
+        self.__FLAG_XPRT_TCP = "tcp"
 
         self.__is_per_op = 0
         self.__have_partial = 0
@@ -745,28 +770,27 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         self.__partial[PFC.F_FSTYPE] = ""
         self.__partial[PFC.F_STATSVERS] = ""
 
+        self.__NFS_MOUNT_OPTS_FLAG = ( PFC.F_SYNC, PFC.F_NOATIME, PFC.F_NODIRATIME, PFC.F_POSIX, 
+          PFC.F_NOCTO, PFC.F_NOAC, PFC.F_NOLOCK, PFC.F_NOACL, PFC.F_NORDIRPLUS, PFC.F_UNSHARED,
+          PFC.F_NORESVPORT, PFC.F_FSCACHE, PFC.F_SESSIONS )
+
+        self.__NFS_MOUNT_OPTS_LONG = ( PFC.F_VERS, PFC.F_RSIZE,  PFC.F_WSIZE,  PFC.F_BSIZE,
+          PFC.F_NAMELEN, PFC.F_ACREGMIN, PFC.F_ACREGMAX, PFC.F_ACDIRMIN, PFC.F_ACDIRMAX, PFC.F_PORT,
+          PFC.F_TIMEO, PFC.F_MOUNTSTATS_RETRANS, PFC.F_MOUNTPORT, PFC.F_MINORVERS, PFC.F_DTSIZE,
+          PFC.F_FLAVOR, PFC.F_PSEUDOFLAVOR, PFC.F_RPC_PROG, PFC.F_RPC_VERS, PFC.F_NAMLEN,
+          PFC.F_WTMULT )
+
+        self.__NFS_MOUNT_OPTS_HEX = ( PFC.F_CAPS, PFC.F_NFSV4_BM0, PFC.F_NFSV4_BM1, PFC.F_NFSV4_ACL )
+
+        self.__NFS_MOUNT_OPTS_STRING = ( PFC.F_PROTO, PFC.F_SECURITYNAME, PFC.F_MOUNTADDR,
+          PFC.F_MOUNTVERS, PFC.F_MOUNTPROTO, PFC.F_CLIENTADDR, PFC.F_LOOKUPCACHE, PFC.F_LOCKLOCAL,
+          PFC.F_PNFS, PFC.F_IOSTATS_VERS )
+
         self.device = ""
         self.mountpoint = ""
         self.fstype = ""
         self.statsvers = ""
 
-        return
-
-    def parse_device_line(self, sio):
-        self.__have_partial = 1
-
-        if sio.lineparts[0] == self.__PREFIX_DEV:
-            self.__partial[PFC.F_DEVICE] = sio.lineparts[1]
-        else:
-            self.__partial[PFC.F_DEVICE] = PDC.NO_DEVICE
-        self.__partial[PFC.F_MOUNTPOINT] = sio.lineparts[4]
-        self.__partial[PFC.F_FSTYPE] = sio.lineparts[7]
-
-        if sio.linewords >= 9:
-            __split = sio.lineparts[8].partition(self.__ASSIGN_DELIM)
-            self.__partial[PFC.F_STATSVERS] = __split[2]
-        else:
-            self.__partial[PFC.F_STATSVERS] = ""
         return
 
     def partial_to_final(self, sio):
@@ -784,19 +808,81 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         self.__partial[PFC.F_STATSVERS] = ""
         return
 
-    def parse_options_line(self, sio):
+# (A) (1) mounted on !MOUNT! with fstype !FSTYPE! {statvers=!VERSION!}
+#     (1) device !DEVICE!|no device
+    def parse_device_line(self, sio):
+        self.__have_partial = 1
+
+        if sio.lineparts[0] == self.__PREFIX_DEV:
+            self.__partial[PFC.F_DEVICE] = sio.lineparts[1]
+        else:
+            self.__partial[PFC.F_DEVICE] = PDC.NO_DEVICE
+        self.__partial[PFC.F_MOUNTPOINT] = sio.lineparts[4]
+        self.__partial[PFC.F_FSTYPE] = sio.lineparts[7]
+
+        if sio.linewords >= 9:
+            __split = sio.lineparts[8].partition(self.__ASSIGN_DELIM)
+            self.__partial[PFC.F_STATSVERS] = __split[2]
+        else:
+            self.__partial[PFC.F_STATSVERS] = ""
         return
 
+# (B) \topts: (2){,sync}{,noatime}{,nodiratime}(3)(4)(5)(6)(7)(8)(9)
+#     (2) ro|rw
+#     (3) ,vers=!INT!,rsize=!INT!,wsize=!INT!{,bsize=!INT!},namelen=!INT!
+#     (4) {,acregmin=!INT!}{,acregmax=!INT!}{,acdirmin=!INT!}{,acdirmax=!INT!}
+#     (5) ,soft|,hard
+#     (6) {,posix}{,nocto}{,noac}{,nolock}{,noacl}{,nordirplus}{,nosharecache}{,noresvport}
+#     (7) ,proto=!PROTOCOL!{,port=!INT!}{,timeo=!INT!}{,retrans=!INT!}{,sec=!SECURITYNAME!}
+#     (8) {,mountaddr=(10){,mountvers=!VERSION!}{,mountport=!INT!},mountproto=(11)|,clientaddr=!IP!,minorversion=!INT!}
+#         (10) !IP4!|!IP6!|unspecified
+#         (11) !PROTOCOL!|auto
+#     (9) {,fsc}{,lookupcache={none|pos}}{,local_lock={none|all|flock|posix}}
+    def parse_options_line(self, sio):
+        __opt = breakout_option_list(sio.lineparts[1])
+
+        self.field[PFC.F_WRITE_STATUS] = __opt[0]
+
+        if __opt.has_key[self.__FLAG_HARD]:
+            self.field[PFC.F_MOUNT_TYPE] = self.__FLAG_HARD
+        elif __opt.has_key[self.__FLAG_SOFT]:
+            self.field[PFC.F_MOUNT_TYPE] = self.__FLAG_SOFT
+        else:
+            self.field[PFC.F_MOUNT_TYPE] = PDC.unknown_state
+
+        for __mount_opt in self.__NFS_MOUNT_OPTS_FLAG:
+            self.field[__mount_opt] = __opt.has_key[__mount_opt]
+
+        for __mount_opt in self.__NFS_MOUNT_OPTS_LONG:
+            try:
+                self.field[__mount_opt] = long(__opt.has_key[__mount_opt])
+            except KeyError:
+                self.field[__mount_opt] = 0
+
+        for __mount_opt in self.__NFS_MOUNT_OPTS_HEX:
+            try:
+                self.field[__mount_opt] = long(__opt.has_key[__mount_opt], 16)
+            except KeyError:
+                self.field[__mount_opt] = 0
+        self.__NFS_MOUNT_OPTS_HEX = ( PFC.F_NFSV4_BM0, PFC.F_NFSV4_BM1, PFC.F_NFSV4_ACL )
+
+        for __mount_opt in self.__NFS_MOUNT_OPTS_STRING:
+            try:
+                self.field[__mount_opt] = __opt.has_key[__mount_opt]
+            except KeyError:
+                self.field[__mount_opt] = ""
+
+        return
+
+# (C) \tage: !INT!
     def parse_age_line(self, sio):
         self.field[PFC.F_AGE] = long(sio.lineparts[0])
         return
 
+# (D) \tcaps: caps=0x!HEX!,wtmult=!INT!,dtsize=!INT!,bsize=!INT!,namlen=!INT!
     def parse_caps_line(self, sio):
-        __opts = sio.lineparts[1].split(self.__OPTLIST_DELIM)
-        __caps = dict()
-        for __off in range(0, len(__opts) - 1):
-            __split = __opts[__off].partition(self.__ASSIGN_DELIM)
-            __caps[__split[0]] = __split[2]
+        __caps = breakout_option_list(sio.lineparts[1])
+
         self.field[PFC.F_CAPS] = long(__caps[PFC.F_CAPS], 16)
         self.field[PFC.F_WTMULT] = long(__caps[PFC.F_WTMULT])
         self.field[PFC.F_DTSIZE] = long(__caps[PFC.F_DTSIZE])
@@ -804,31 +890,154 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         self.field[PFC.F_NAMELEN] = long(__caps[PFC.F_NAMELEN])
         return
 
+# (E) \tnfsv4: bm0=0x!HEX!,bm1=0x!HEX!,acl=0x!HEX!{,sessions}{,pnfs={!NAME!|not configured}}
     def parse_nfsv4_line(self, sio):
+        __opts = breakout_option_list(sio.lineparts[1])
+
+        self.field[PFC.F_NFSV4_BM0] = long(__opts[PFC.F_NFSV4_BM0], 16)
+        self.field[PFC.F_NFSV4_BM1] = long(__opts[PFC.F_NFSV4_BM1], 16)
+        self.field[PFC.F_NFSV4_ACL] = long(__opts[PFC.F_NFSV4_ACL], 16)
+
+        if __opts.has_key[PFC.F_SESSIONS]:
+            self.field[PFC.F_SESSIONS] = 1
+        else:
+            self.field[PFC.F_SESSIONS] = 0
+
+        try:
+            self.field[PFC.F_PNFS] = __opts[PFC.F_PNFS]
+        except KeyError:
+            self.field[PFC.F_PNFS] = ""
+
         return
 
+# (F) \tsec: flavor=!INT!{,pseudoflavor=!INT!}
     def parse_security_line(self, sio):
+        __optlist = breakout_option_list(sio.lineparts[1])
+        self.field[PFC.F_FLAVOR] = long(__optlist[self.__PREFIX_FLAVOR])
+        try:
+            self.field[PFC.F_PSEUDOFLAVOR] = long(__optlist[self.__PREFIX_PSEUDOFLAVOR])
+        except KeyError:
+            self.field[PFC.F_PSEUDOFLAVOR] = 0
         return
 
+# (G) \tevents: {!INT! }*
     def parse_events_line(self, sio):
         sio.field[PFC.F_EVENT_LIST] = array_of_longs(sio.lineparts[1:])
         return
 
+# (H) \tbytes: {!INT! }*
     def parse_bytes_line(self, sio):
         sio.field[PFC.F_BYTES_LIST] = array_of_longs(sio.lineparts[1:])
         return
 
+# (I) \ttfsc: {!INT! }*
     def parse_fscache_line(self, sio):
         sio.field[PFC.F_FSCACHE_LIST] = array_of_longs(sio.lineparts[1:])
         return
 
+# (J) \tRPC iostats version: !VERSION! p/v: !INT!/!INT! (!PROTOCOL!)
     def parse_iostats_line(self, sio):
+        self.field[PFC.F_VERSION] = sio.lineparts[3]
+
+        __part = sio.lineparts[5].partition(self.__RPC_DELIM)
+        self.field[PFC.F_RPC_PROG] = __part[0]
+        self.field[PFC.F_RPC_VERS] = __part[2]
+
+        self.field[PFC.F_PROTOCOL] = sio.lineparts[6][1:-1]
+
         return
 
-    def parse_xprt_line(self, sio):
-        return
-
+# (K) \tper-op statistics
+# (L) \t(14): !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT!
+#     (14)!STATNAME!|!INT!|NULL
     def parse_per_op_line(self, sio):
+
+        __stat = sio.linewords[0]
+        if __stat[-1:] == ":":
+            __stat = __stat[:-1]
+
+        __nums = array_of_longs(sio.linewords[1:])
+        __val = dict()
+        __val[PFC.F_OM_OPS] = __nums[0]
+        __val[PFC.F_OM_NTRANS] = __nums[1]
+        __val[PFC.F_OM_TIMEOUTS] = __nums[2]
+        __val[PFC.F_OM_SENT] = __nums[3]
+        __val[PFC.F_OM_RECV] = __nums[4]
+        __val[PFC.F_OM_QUEUE] = __nums[5]
+        __val[PFC.F_OM_RTT] = __nums[6]
+        __val[PFC.F_OM_EXEC] = __nums[7]
+
+        self.field[PFC.F_PER_OP_STATS][__stat] = __val
+
+        return
+
+    def parse_xprt_local(self, sio):
+        __nums = array_of_longs(sio.linewords[2:])
+
+        __val = dict()
+        __val[PFC.F_XPR_BIND_COUNT] = __nums[0]
+        __val[PFC.F_XPR_CONN_COUNT] = __nums[1]
+        __val[PFC.F_XPR_CONN_TIME] = __nums[2]
+        __val[PFC.F_XPR_IDLE_TIME] = __nums[3]
+        __val[PFC.F_XPR_SEND] = __nums[4]
+        __val[PFC.F_XPR_RECV] = __nums[5]
+        __val[PFC.F_XPR_BAD_XIDS] = __nums[6]
+        __val[PFC.F_XPR_REQ] = __nums[7]
+        __val[PFC.F_XPR_BACKLOG] = __nums[8]
+
+        return(__val)
+
+    def parse_xprt_udp(self, sio):
+        __nums = array_of_longs(sio.linewords[2:])
+
+        __val = dict()
+        __val[PFC.F_XPR_SRC_PORT] = __nums[0]
+        __val[PFC.F_XPR_BIND_COUNT] = __nums[1]
+        __val[PFC.F_XPR_SEND] = __nums[2]
+        __val[PFC.F_XPR_RECV] = __nums[3]
+        __val[PFC.F_XPR_BAD_XIDS] = __nums[4]
+        __val[PFC.F_XPR_REQ] = __nums[5]
+        __val[PFC.F_XPR_BACKLOG] = __nums[6]
+
+        return(__val)
+
+    def parse_xprt_tcp(self, sio):
+        __nums = array_of_longs(sio.linewords[2:])
+
+        __val = dict()
+        __val[PFC.F_XPR_SRC_PORT] = __nums[0]
+        __val[PFC.F_XPR_BIND_COUNT] = __nums[1]
+        __val[PFC.F_XPR_CONN_COUNT] = __nums[2]
+        __val[PFC.F_XPR_CONN_TIME] = __nums[3]
+        __val[PFC.F_XPR_IDLE_TIME] = __nums[4]
+        __val[PFC.F_XPR_SEND] = __nums[5]
+        __val[PFC.F_XPR_RECV] = __nums[6]
+        __val[PFC.F_XPR_BAD_XIDS] = __nums[7]
+        __val[PFC.F_XPR_REQ] = __nums[8]
+        __val[PFC.F_XPR_BACKLOG] = __nums[9]
+
+        return(__val)
+
+# (M) \txprt: (15) !INT! !INT! !INT! !INT! !INT! !INT! !INT!
+#     (15) local|udp
+# (N) \txprt: tcp !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT!
+    def parse_xprt_line(self, sio):
+
+        __rectype = sio.linewords[1]
+
+        if __rectype == self.__FLAG_XPRT_LOCAL:
+            __val = self.parse_xprt_local(sio)
+
+        elif __rectype == self.__FLAG_XPRT_UDP:
+            __val = self.parse_xprt_udp(sio)
+
+        elif __rectype == self.__FLAG_XPRT_TCP:
+            __val = self.parse_xprt_tcp(sio)
+
+        else:
+            print "dbg:: xprt mismatch '{line}'".format(line=sio.buff[:-1])
+
+        self.field[PFC.F_XPRT_STATS][__rectype] = __val
         return
 
     def accumulate_info(self, sio):
@@ -865,6 +1074,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
             self.parse_per_op_line(sio)
         else:
             print "dbg:: Ignoring rec '{line}'".format(line=sio.buff[:-1])
+        return
 
     def next(self):
         try:
@@ -876,18 +1086,46 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
                 raise StopIteration
         return(result)
 
-    def extra_next(self, sio):
-
-# -- Sample records
-#
-
-        self.__curr_sio = sio
-        self.__is_per_op = 0
+    def init_field_values(self):
         self.field = dict()
+
         self.field[PFC.F_DEVICE] = ""
         self.field[PFC.F_MOUNTPOINT] = ""
         self.field[PFC.F_FSTYPE] = ""
         self.field[PFC.F_STATSVERS] = ""
+        self.field[PFC.F_MOUNT_TYPE] = PDC.unknown_state
+        self.field[PFC.F_WRITE_STATUS] = PDC.unknown_state
+        self.field[PFC.F_AGE] = 0
+        self.field[PFC.F_BYTES_LIST] = dict()
+        self.field[PFC.F_EVENT_LIST] = dict()
+        self.field[PFC.F_FSCACHE_LIST] = dict()
+        self.field[PFC.F_PER_OP_STATS] = dict()
+
+        for __mount_opt in self.__NFS_MOUNT_OPTS_FLAG:
+            self.field[__mount_opt] = False
+
+        for __mount_opt in self.__NFS_MOUNT_OPTS_LONG:
+            self.field[__mount_opt] = 0
+
+        for __mount_opt in self.__NFS_MOUNT_OPTS_HEX:
+            self.field[__mount_opt] = 0
+
+        for __mount_opt in self.__NFS_MOUNT_OPTS_STRING:
+            self.field[__mount_opt] = ""
+
+    def extra_next(self, sio):
+
+# -- Sample records (NFS mounts add all the complex sub-records, no sample available yet)
+#
+# device udev mounted on /dev with fstype devtmpfs
+# device devpts mounted on /dev/pts with fstype devpts
+# device tmpfs mounted on /run with fstype tmpfs
+# device /dev/disk/by-uuid/a959862a-84b7-4373-b7d6-954ac9005249 mounted on / with fstype ext4
+# device none mounted on /sys/fs/fuse/connections with fstype fusectl
+
+        self.__curr_sio = sio
+        self.__is_per_op = 0
+        self.init_field_values()
 
         if sio.buff != "" and not self.__have_partial:
             self.accumulate_info(sio)
