@@ -1104,6 +1104,8 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         self.field[PFC.F_FSCACHE_LIST] = dict()
         self.field[PFC.F_PER_OP_STATS] = dict()
         self.field[PFC.F_XPRT_STATS] = dict()
+        self.field[PFC.F_PROTOCOL] = ""
+        self.field[PFC.F_VERSION] = ""
 
         for __mount_opt in self.__NFS_MOUNT_OPTS_FLAG:
             self.field[__mount_opt] = False
@@ -1127,6 +1129,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 # device /dev/disk/by-uuid/a959862a-84b7-4373-b7d6-954ac9005249 mounted on / with fstype ext4
 # device none mounted on /sys/fs/fuse/connections with fstype fusectl
 
+#        print "dbg:: readline: '{line}'".format(line=sio.buff[:-1])
         self.__curr_sio = sio
         self.__is_per_op = 0
         self.init_field_values()
@@ -1134,6 +1137,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         if sio.buff != "" and not self.__have_partial:
             self.accumulate_info(sio)
             sio.read_line()
+#            print "dbg:: readline: '{line}'".format(line=sio.buff[:-1])
 
         self.partial_to_final(sio)
 
@@ -1146,7 +1150,11 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
             if __first == self.__PREFIX_DEV or (__first == self.__PREFIX_NO and __second == self.__PREFIX_DEV):
                 __complete = 1
             else:
-                sio.read_line()
+                try:
+                    sio.read_line()
+#                    print "dbg:: readline: '{line}'".format(line=sio.buff[:-1])
+                except StopIteration:
+                    __complete = 1
 
         self.device = self.field[PFC.F_DEVICE]
         self.mountpoint = self.field[PFC.F_MOUNTPOINT]
