@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+"""Convert logical records from the indicated /proc/net file to JSON format"""
+
+import sys
+import ProcHandlers
+import json
+    
+if sys.platform == "darwin":
+    print "MacOS doesn't have a '/proc' filesystem, quitting."
+    sys.exit(0)
+
+qualify = ""
+seq = 0
+sep = "|"
+nested = 0
+head = ""
+
+DEV_SNMP6 = "dev_snmp6"
+
+if len(sys.argv) > 1:
+    target = sys.argv[1]
+    if len(sys.argv) > 2:
+        qualify = sys.argv[2]
+else:
+    target = "tcp"
+
+handler = ProcHandlers.GetProcFileHandler(target)
+
+if qualify != "":
+    target = '{path}/{file}'.format(path=target, file=qualify)
+    active = handler(target)
+else:
+    if target == DEV_SNMP6:
+        active = handler()
+    else:
+        active = handler(target)
+
+rec = 0
+field_list = dict()
+field_list[0] = { 'source' : target }
+
+for srec in active:
+    if len(active.field) > 0:
+        rec = rec + 1
+        field_list[rec] = dict()
+        for fname in active.field:
+            field_list[rec][fname] = active.field[fname]
+
+
+print json.dumps(field_list, sort_keys=True, indent=4, separators=(',', ': '))
