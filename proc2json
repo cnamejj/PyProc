@@ -10,10 +10,6 @@ if sys.platform == "darwin":
     sys.exit(0)
 
 qualify = ""
-seq = 0
-sep = "|"
-nested = 0
-head = ""
 
 DEV_SNMP6 = "dev_snmp6"
 
@@ -45,6 +41,5 @@ for srec in active:
         field_list[rec] = dict()
         for fname in active.field:
             field_list[rec][fname] = active.field[fname]
-
 
 print json.dumps(field_list, sort_keys=True, indent=4, separators=(',', ': '))
