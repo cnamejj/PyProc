@@ -1,6 +1,11 @@
 #!/bin/bash
 
-INSTALL_DIR="/usr/local/bin/"
+if [ "$1" = "" ]
+then
+	INSTALL_DIR="/usr/local/bin/"
+else
+	INSTALL_DIR="$1"
+fi
 
 rsync -avu --no-owner --exclude COPYING --exclude .git --exclude .gitignore --exclude TEST \
   --exclude \*.pyc --exclude README.\* --exclude proc-file-\* --exclude .pylintrc --exclude install-PyProc\* \

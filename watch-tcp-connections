@@ -101,9 +101,9 @@ try:
 
             print "{0:s}:{1:d} cmd: {3:s} host: {2:s}".format( dest_ip, dest_port, ip2host, proc_summary)
 
-        time.sleep(5)
         if len( new_sessions) > 0:
-            print "%s" % time.ctime(), len(new_sessions)
+            print "{time} : Found {new_sessions}".format(time=time.ctime(), new_sessions=len(new_sessions))
+        time.sleep(5)
 
 
 except KeyboardInterrupt:
