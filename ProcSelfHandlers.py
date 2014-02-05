@@ -18,7 +18,6 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
-import numpy
 import ProcBaseRoutines
 import ProcFieldConstants
 import ProcDataConstants
@@ -26,6 +25,12 @@ import ProcDataConstants
 PBR = ProcBaseRoutines
 PFC = ProcFieldConstants
 PDC = ProcDataConstants
+
+FIELD_NAME = PBR.FIELD_NAME
+FIELD_NUMBER = PBR.FIELD_NUMBER
+CONVERSION = PBR.CONVERSION
+ERROR_VAL = PBR.ERROR_VAL
+NUM_BASE = PBR.NUM_BASE
 
 RegisterProcFileHandler = PBR.RegisterProcFileHandler
 RegisterPartialProcFileHandler = PBR.RegisterPartialProcFileHandler
@@ -35,42 +40,6 @@ RegisterPartialProcFileHandler = PBR.RegisterPartialProcFileHandler
 if __name__ == "__main__":
 
     print "Collection of handlers to parse file in the root /proc/self and /proc/[0-9]* directories"
-
-# ---
-
-def number_or_unlimited(buff):
-
-    if buff.strip() == "unlimited":
-        result = numpy.inf
-    else:
-        try:
-            result = long(buff)
-        except:
-            result = numpy.nan
-
-    return result
-
-
-def array_of_longs(wordlist):
-    __nums = dict()
-
-    for __off in range(0, len(wordlist)):
-        __nums[__off] = long(wordlist[__off])
-
-    return(__nums)
-
-
-def breakout_option_list(combined, delim = ",", assign = "="):
-    __optlist = dict()
-    __entries = combined.split(delim)
-
-    for __off in range(0, len(__entries)):
-        __part = __entries[__off].partition(assign)
-        if len(__part) == 3:
-            __optlist[__part[0]] = __part[2]
-        else:
-            __optlist[__entries[__off]] = ""
-    return(__optlist)
 
 
 # ---
@@ -138,8 +107,8 @@ class ProcSelfLIMITS(PBR.fixed_column_field_recs):
 
         else:
             self.field[PFC.F_LIMIT] = self.field[PFC.F_LIMIT].strip()
-            self.field[PFC.F_SOFT_LIMIT] = number_or_unlimited(self.field[PFC.F_SOFT_LIMIT])
-            self.field[PFC.F_HARD_LIMIT] = number_or_unlimited(self.field[PFC.F_HARD_LIMIT])
+            self.field[PFC.F_SOFT_LIMIT] = PBR.number_or_unlimited(self.field[PFC.F_SOFT_LIMIT])
+            self.field[PFC.F_HARD_LIMIT] = PBR.number_or_unlimited(self.field[PFC.F_HARD_LIMIT])
             self.field[PFC.F_UNITS] = self.field[PFC.F_UNITS].strip()
 
         self.limit = self.field[PFC.F_LIMIT]
@@ -184,6 +153,11 @@ class ProcSelfMAPS(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 5
 
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_FLAGS } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_PAGE_OFFSET, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_INODE, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_PATH } )
+
         self.__AddrSplitDelim = "-"
         self.__DevSplitDelim = ":"
 
@@ -227,20 +201,14 @@ class ProcSelfMAPS(PBR.fixed_delim_format_recs):
             self.field[PFC.F_START] = long(__split[0], 16)
             self.field[PFC.F_END] = long(__split[2], 16)
 
-            self.field[PFC.F_FLAGS] = sio.lineparts[1]
-
-            self.field[PFC.F_PAGE_OFFSET] = long(sio.lineparts[2], 16)
-
             __split = sio.lineparts[3].partition(self.__DevSplitDelim)
             self.field[PFC.F_MAJOR_DEV] = long(__split[0], 16)
             self.field[PFC.F_MINOR_DEV] = long(__split[2], 16)
 
-            self.field[PFC.F_INODE] = long(sio.lineparts[4])
-
-            if sio.linewords > 5:
-                self.field[PFC.F_PATH] = sio.lineparts[5]
-            else:
-                self.field[PFC.F_PATH] = ""
+#            if sio.linewords > 5:
+#                self.field[PFC.F_PATH] = sio.lineparts[5]
+#            else:
+#                self.field[PFC.F_PATH] = ""
 
         self.vm_start = self.field[PFC.F_START]
         self.vm_end = self.field[PFC.F_END]
@@ -275,6 +243,11 @@ class ProcSelfSTACK(PBR.fixed_delim_format_recs):
         self.address_string = ""
         self.address = 0
         self.stack_entry = ""
+
+        self.rules = dict()
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ADDRESS } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_STACK_ENTRY } )
+
         return
 
     def extra_next(self, sio):
@@ -297,8 +270,7 @@ class ProcSelfSTACK(PBR.fixed_delim_format_recs):
             self.field[PFC.F_STACK_ENTRY] = ""
 
         else:
-            self.field[PFC.F_ADDRESS] = long(sio.lineparts[0][2:-2], 16)
-            self.field[PFC.F_STACK_ENTRY] = sio.lineparts[1]
+            self.field[PFC.F_ADDRESS] = long(self.field[PFC.F_ADDRESS][2:-2], 16)
 
         self.address_string = sio.lineparts[0]
         self.address = self.field[PFC.F_ADDRESS]
@@ -411,6 +383,9 @@ class ProcSelfNUMA_MAPS(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 2
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_START, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_BUFFNAME } )
+
         self.start = 0
         self.buffname = ""
         self.path = ""
@@ -459,10 +434,6 @@ class ProcSelfNUMA_MAPS(PBR.fixed_delim_format_recs):
 # 7f5935a28000 default file=/usr/lib/locale/locale-archive mapped=11 mapmax=88 N0=11
 # 7f5935cf1000 default file=/lib/x86_64-linux-gnu/libc-2.15.so mapped=82 mapmax=167 N0=82
 
-        self.field = dict()
-
-        self.field[PFC.F_START] = 0
-        self.field[PFC.F_BUFFNAME] = ""
         self.field[PFC.F_FILEPATH] = ""
         self.field[PFC.F_HEAP] = 0
         self.field[PFC.F_STACK] = 0
@@ -477,9 +448,6 @@ class ProcSelfNUMA_MAPS(PBR.fixed_delim_format_recs):
         self.field[PFC.F_NODE_LIST] = dict()
 
         if sio.buff != "":
-
-            self.field[PFC.F_START] = long(sio.lineparts[0], 16)
-            self.field[PFC.F_BUFFNAME] = sio.lineparts[1]
 
             __off = 2
             if sio.linewords > __off:
@@ -588,6 +556,10 @@ class ProcSelfMOUNTINFO(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 10
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_MOUNT_ID } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_PARENT_MOUNT_ID, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MOUNT_FS } )
+
         self.__OptionSep = "-"
         self.__DevDelim = ":"
 
@@ -614,13 +586,8 @@ class ProcSelfMOUNTINFO(PBR.fixed_delim_format_recs):
 # 21 15 0:16 / /sys/fs/fuse/connections rw,relatime - fusectl none rw
 # 27 20 9:0 / /boot rw,relatime - ext4 /dev/md0 rw,user_xattr,barrier=1,stripe=128,data=ordered
 
-        self.field = dict()
-
-        self.field[PFC.F_MOUNT_ID] = 0
-        self.field[PFC.F_PARENT_MOUNT_ID] = 0
         self.field[PFC.F_MAJOR_DEV] = 0
         self.field[PFC.F_MINOR_DEV] = 0
-        self.field[PFC.F_MOUNT_FS] = ""
         self.field[PFC.F_MOUNT_REL] = ""
         self.field[PFC.F_MOUNT_OPTS] = ""
         self.field[PFC.F_EXTRA_OPTS] = ""
@@ -629,12 +596,9 @@ class ProcSelfMOUNTINFO(PBR.fixed_delim_format_recs):
         self.field[PFC.F_SUPER_OPTS] = ""
 
         if sio.buff != "":
-            self.field[PFC.F_MOUNT_ID] = long(sio.lineparts[0])
-            self.field[PFC.F_PARENT_MOUNT_ID] = long(sio.lineparts[1])
             __split = sio.lineparts[2].partition(self.__DevDelim)
             self.field[PFC.F_MAJOR_DEV] = long(__split[0])
             self.field[PFC.F_MINOR_DEV] = long(__split[2])
-            self.field[PFC.F_MOUNT_FS] = sio.lineparts[3]
 
             __off = 4
             if sio.linewords > __off:
@@ -835,7 +799,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 #         (11) !PROTOCOL!|auto
 #     (9) {,fsc}{,lookupcache={none|pos}}{,local_lock={none|all|flock|posix}}
     def parse_options_line(self, sio):
-        __opt = breakout_option_list(sio.lineparts[1])
+        __opt = PBR.breakout_option_list(sio.lineparts[1])
 
 #        for __key in __opt:
 #            print "dbg:: Opts post-BOL key'{key}' val'{val}'".format(key=__key, val=__opt[__key])
@@ -880,7 +844,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 
 # (D) \tcaps: caps=0x!HEX!,wtmult=!INT!,dtsize=!INT!,bsize=!INT!,namlen=!INT!
     def parse_caps_line(self, sio):
-        __caps = breakout_option_list(sio.lineparts[1])
+        __caps = PBR.breakout_option_list(sio.lineparts[1])
 
 #        print "dbg:: Caps line'{line}'".format(line=sio.buff[:-1])
 #        for __key in __caps:
@@ -895,7 +859,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 
 # (E) \tnfsv4: bm0=0x!HEX!,bm1=0x!HEX!,acl=0x!HEX!{,sessions}{,pnfs={!NAME!|not configured}}
     def parse_nfsv4_line(self, sio):
-        __opts = breakout_option_list(sio.lineparts[1])
+        __opts = PBR.breakout_option_list(sio.lineparts[1])
 
         self.field[PFC.F_NFSV4_BM0] = long(__opts[PFC.F_NFSV4_BM0], 16)
         self.field[PFC.F_NFSV4_BM1] = long(__opts[PFC.F_NFSV4_BM1], 16)
@@ -915,7 +879,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 
 # (F) \tsec: flavor=!INT!{,pseudoflavor=!INT!}
     def parse_security_line(self, sio):
-        __optlist = breakout_option_list(sio.lineparts[1])
+        __optlist = PBR.breakout_option_list(sio.lineparts[1])
         self.field[PFC.F_FLAVOR] = long(__optlist[self.__PREFIX_FLAVOR])
         try:
             self.field[PFC.F_PSEUDOFLAVOR] = long(__optlist[self.__PREFIX_PSEUDOFLAVOR])
@@ -925,17 +889,17 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 
 # (G) \tevents: {!INT! }*
     def parse_events_line(self, sio):
-        self.field[PFC.F_EVENT_LIST] = array_of_longs(sio.lineparts[1:])
+        self.field[PFC.F_EVENT_LIST] = PBR.array_of_longs(sio.lineparts[1:])
         return
 
 # (H) \tbytes: {!INT! }*
     def parse_bytes_line(self, sio):
-        self.field[PFC.F_BYTES_LIST] = array_of_longs(sio.lineparts[1:])
+        self.field[PFC.F_BYTES_LIST] = PBR.array_of_longs(sio.lineparts[1:])
         return
 
 # (I) \ttfsc: {!INT! }*
     def parse_fscache_line(self, sio):
-        self.field[PFC.F_FSCACHE_LIST] = array_of_longs(sio.lineparts[1:])
+        self.field[PFC.F_FSCACHE_LIST] = PBR.array_of_longs(sio.lineparts[1:])
         return
 
 # (J) \tRPC iostats version: !VERSION! p/v: !INT!/!INT! (!PROTOCOL!)
@@ -959,7 +923,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         if __stat[-1:] == ":":
             __stat = __stat[:-1]
 
-        __nums = array_of_longs(sio.lineparts[1:])
+        __nums = PBR.array_of_longs(sio.lineparts[1:])
         __val = dict()
         __val[PFC.F_OM_OPS] = __nums[0]
         __val[PFC.F_OM_NTRANS] = __nums[1]
@@ -975,7 +939,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         return
 
     def parse_xprt_local(self, sio):
-        __nums = array_of_longs(sio.lineparts[2:])
+        __nums = PBR.array_of_longs(sio.lineparts[2:])
 
         __val = dict()
         __val[PFC.F_XPR_BIND_COUNT] = __nums[0]
@@ -991,7 +955,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         return(__val)
 
     def parse_xprt_udp(self, sio):
-        __nums = array_of_longs(sio.lineparts[2:])
+        __nums = PBR.array_of_longs(sio.lineparts[2:])
 
         __val = dict()
         __val[PFC.F_XPR_SRC_PORT] = __nums[0]
@@ -1005,7 +969,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         return(__val)
 
     def parse_xprt_tcp(self, sio):
-        __nums = array_of_longs(sio.lineparts[2:])
+        __nums = PBR.array_of_longs(sio.lineparts[2:])
 
         __val = dict()
         __val[PFC.F_XPR_SRC_PORT] = __nums[0]

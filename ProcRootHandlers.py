@@ -25,6 +25,14 @@ import ProcFieldConstants
 PBR = ProcBaseRoutines
 PFC = ProcFieldConstants
 
+FIELD_NAME = PBR.FIELD_NAME
+FIELD_NUMBER = PBR.FIELD_NUMBER
+CONVERSION = PBR.CONVERSION
+ERROR_VAL = PBR.ERROR_VAL
+NUM_BASE = PBR.NUM_BASE
+PREFIX_VAL = PBR.PREFIX_VAL
+SUFFIX_VAL = PBR.SUFFIX_VAL
+
 RegisterProcFileHandler = PBR.RegisterProcFileHandler
 RegisterPartialProcFileHandler = PBR.RegisterPartialProcFileHandler
 
@@ -47,6 +55,9 @@ class ProcRootEXECDOMAINS(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 3
 
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_EXDOM_NAME } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_EXDOM_MODULE } )
+
         self.pers_low = 0
         self.pers_high = 0
         self.exdom_name = ""
@@ -62,8 +73,6 @@ class ProcRootEXECDOMAINS(PBR.fixed_delim_format_recs):
 
         if sio.buff == "":
 
-            self.field = dict()
-
             self.field[PFC.F_PERSONALITY_LOW] = 0
             self.field[PFC.F_PERSONALITY_HIGH] = 0
             self.field[PFC.F_EXDOM_NAME] = ""
@@ -73,8 +82,6 @@ class ProcRootEXECDOMAINS(PBR.fixed_delim_format_recs):
             __split = sio.lineparts[0].partition(self.__FieldSplitDelim)
             self.field[PFC.F_PERSONALITY_LOW] = long(__split[0])
             self.field[PFC.F_PERSONALITY_HIGH] = long(__split[2])
-            self.field[PFC.F_EXDOM_NAME] = sio.lineparts[1]
-            self.field[PFC.F_EXDOM_MODULE] = sio.lineparts[2]
 
         self.pers_low = self.field[PFC.F_PERSONALITY_LOW]
         self.pers_high = self.field[PFC.F_PERSONALITY_HIGH]
@@ -107,6 +114,11 @@ class ProcRootCGROUPS(PBR.fixed_delim_format_recs):
         self.minfields = 4
         self.skipped = "#subsys_name"
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_SUBSYSTEM } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_HIERARCHY, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_NUM_CGROUPS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_ENABLED, CONVERSION: long } )
+
         self.subsys = ""
         self.hierachy = 0
         self.cgroups = 0
@@ -123,18 +135,10 @@ class ProcRootCGROUPS(PBR.fixed_delim_format_recs):
 
         if sio.buff == "":
 
-            self.field = dict()
-
             self.field[PFC.F_SUBSYSTEM] = ""
             self.field[PFC.F_HIERARCHY] = 0
             self.field[PFC.F_NUM_CGROUPS] = 0
             self.field[PFC.F_ENABLED] = 0
-
-        else:
-            self.field[PFC.F_SUBSYSTEM] = sio.lineparts[0]
-            self.field[PFC.F_HIERARCHY] = long(sio.lineparts[1])
-            self.field[PFC.F_NUM_CGROUPS] = long(sio.lineparts[2])
-            self.field[PFC.F_ENABLED] = long(sio.lineparts[3])
 
         self.subsys = self.field[PFC.F_SUBSYSTEM]
         self.hierachy = self.field[PFC.F_HIERARCHY]
@@ -178,6 +182,10 @@ class ProcRootMTRR(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 6
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INDEX, PREFIX_VAL: "reg", SUFFIX_VAL: ":", CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_BASE_MEMORY, PREFIX_VAL: "base=0x", SUFFIX_VAL: "00000", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_COUNT, PREFIX_VAL: "count=", SUFFIX_VAL: ":", CONVERSION: long } )
+
         self.index = 0
         self.base = 0
         self.size = 0
@@ -207,9 +215,6 @@ class ProcRootMTRR(PBR.fixed_delim_format_recs):
             self.field[PFC.F_TYPE] = ""
 
         else:
-            self.field[PFC.F_INDEX] = long(sio.lineparts[0][-3:-1])
-            self.field[PFC.F_BASE_MEMORY] = long(sio.lineparts[1][-9:-5], 16)
-
             __offset = 3
             if sio.lineparts[__offset] == self.__SizePref:
                 __offset = __offset + 1
@@ -219,10 +224,7 @@ class ProcRootMTRR(PBR.fixed_delim_format_recs):
                     __offset = __offset + 1
             self.field[PFC.F_SIZE] = long(sio.lineparts[__offset][-8:-3])
 
-            __offset = __offset + 1
-            self.field[PFC.F_COUNT] = long(sio.lineparts[__offset][6:-1])
-
-            __offset = __offset + 1
+            __offset = __offset + 2
             self.field[PFC.F_TYPE] = sio.lineparts[__offset]
                 
         self.index = self.field[PFC.F_INDEX]
@@ -286,6 +288,14 @@ class ProcRootMODULES(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 6
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_MODULE } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_SIZE, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_REFCOUNT, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_SOURCE_LIST } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_STATUS } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_MODULE_CORE, PREFIX_VAL: "0x", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_TAINTS } )
+
         self.module = ""
         self.size = 0
         self.refcount = 0
@@ -306,9 +316,6 @@ class ProcRootMODULES(PBR.fixed_delim_format_recs):
 # vboxdrv 287130 3 vboxpci,vboxnetadp,vboxnetflt, Live 0x0000000000000000 (O)
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_MODULE] = ""
             self.field[PFC.F_SIZE] = 0
             self.field[PFC.F_REFCOUNT] = 0
@@ -316,18 +323,6 @@ class ProcRootMODULES(PBR.fixed_delim_format_recs):
             self.field[PFC.F_STATUS] = ""
             self.field[PFC.F_MODULE_CORE] = 0
             self.field[PFC.F_TAINTS] = ""
-
-        else:
-            self.field[PFC.F_MODULE] = sio.lineparts[0]
-            self.field[PFC.F_SIZE] = long(sio.lineparts[1])
-            self.field[PFC.F_REFCOUNT] = long(sio.lineparts[2])
-            self.field[PFC.F_SOURCE_LIST] = sio.lineparts[3]
-            self.field[PFC.F_STATUS] = sio.lineparts[4]
-            self.field[PFC.F_MODULE_CORE] = long(sio.lineparts[5][2:], 16)
-            if sio.linewords > 6:
-                self.field[PFC.F_TAINTS] = sio.lineparts[6]
-            else:
-                self.field[PFC.F_TAINTS] = ""
 
         self.module = self.field[PFC.F_MODULE]
         self.size = self.field[PFC.F_SIZE]
@@ -356,6 +351,20 @@ class ProcRootBUDDYINFO(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 15
 
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_NODE, SUFFIX_VAL: ",", CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_ZONE } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_FRBL_AREA_1 } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_FRBL_AREA_2 } )
+        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_FRBL_AREA_3 } )
+        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_FRBL_AREA_4 } )
+        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_FRBL_AREA_5 } )
+        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_FRBL_AREA_6 } )
+        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_FRBL_AREA_7 } )
+        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_FRBL_AREA_8 } )
+        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_FRBL_AREA_9 } )
+        self.add_parse_rule( { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_FRBL_AREA_10 } )
+        self.add_parse_rule( { FIELD_NUMBER: 14, FIELD_NAME: PFC.F_FRBL_AREA_11 } )
+
         self.node = 0
         self.zone = ""
         return
@@ -370,9 +379,6 @@ class ProcRootBUDDYINFO(PBR.fixed_delim_format_recs):
 
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_NODE] = 0
             self.field[PFC.F_ZONE] = ""
             self.field[PFC.F_FRBL_AREA_1] = 0
@@ -386,21 +392,6 @@ class ProcRootBUDDYINFO(PBR.fixed_delim_format_recs):
             self.field[PFC.F_FRBL_AREA_9] = 0
             self.field[PFC.F_FRBL_AREA_10] = 0
             self.field[PFC.F_FRBL_AREA_11] = 0
-
-        else:
-            self.field[PFC.F_NODE] = long(sio.lineparts[1][:-1])
-            self.field[PFC.F_ZONE] = sio.lineparts[3]
-            self.field[PFC.F_FRBL_AREA_1] = sio.lineparts[4]
-            self.field[PFC.F_FRBL_AREA_2] = sio.lineparts[5]
-            self.field[PFC.F_FRBL_AREA_3] = sio.lineparts[6]
-            self.field[PFC.F_FRBL_AREA_4] = sio.lineparts[7]
-            self.field[PFC.F_FRBL_AREA_5] = sio.lineparts[8]
-            self.field[PFC.F_FRBL_AREA_6] = sio.lineparts[9]
-            self.field[PFC.F_FRBL_AREA_7] = sio.lineparts[10]
-            self.field[PFC.F_FRBL_AREA_8] = sio.lineparts[11]
-            self.field[PFC.F_FRBL_AREA_9] = sio.lineparts[12]
-            self.field[PFC.F_FRBL_AREA_10] = sio.lineparts[13]
-            self.field[PFC.F_FRBL_AREA_11] = sio.lineparts[14]
 
         self.node = self.field[PFC.F_NODE]
         self.zone = self.field[PFC.F_ZONE]
@@ -437,6 +428,12 @@ class ProcRootSWAPS(PBR.fixed_delim_format_recs):
         self.minfields = 5
         self.skipped = "Filename"
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_FILENAME } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_TYPE } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_SIZE, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_USED, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_PRIORITY, CONVERSION: long } )
+
         self.filename = ""
         self.type = ""
         self.size = 0
@@ -453,21 +450,11 @@ class ProcRootSWAPS(PBR.fixed_delim_format_recs):
 # /dev/sdb3                               partition	16777212	0	-2
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_FILENAME] = ""
             self.field[PFC.F_TYPE] = ""
             self.field[PFC.F_SIZE] = 0
             self.field[PFC.F_USED] = 0
             self.field[PFC.F_PRIORITY] = 0
-
-        else:
-            self.field[PFC.F_FILENAME] = sio.lineparts[0]
-            self.field[PFC.F_TYPE] = sio.lineparts[1]
-            self.field[PFC.F_SIZE] = long(sio.lineparts[2])
-            self.field[PFC.F_USED] = long(sio.lineparts[3])
-            self.field[PFC.F_PRIORITY] = long(sio.lineparts[4])
 
         self.filename = self.field[PFC.F_FILENAME]
         self.type = self.field[PFC.F_TYPE]
@@ -597,6 +584,21 @@ class ProcRootDISKSTATS(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 14
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_MAJOR_DEV, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_MINOR_DEV, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DISK_NAME } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_READ_IOS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_READ_MERGES, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_READ_SECTORS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_READ_MSECS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_WRITE_IOS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_WRITE_MERGES, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_WRITE_SECTORS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_WRITE_MSECS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_PART_IN_FLIGHT, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_IO_MSECS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_QUEUE_TIME_MSECS, CONVERSION: long } )
+
         self.major_dev = 0
         self.minor_dev = 0
         self.disk_name = ""
@@ -609,8 +611,6 @@ class ProcRootDISKSTATS(PBR.fixed_delim_format_recs):
         self.write_sectors = 0
         self.write_msecs = 0
         self.part_in_flight = 0
-#        self.msecs_io = 0
-#        self.msecs_queue_time = 0
         self.io_msecs = 0
         self.queue_time_msecs = 0
         return
@@ -626,9 +626,6 @@ class ProcRootDISKSTATS(PBR.fixed_delim_format_recs):
 # 8       2 sda2 15185612 10961911 3312352646 74838696 7650568 4513340 143561212 103557888 0 79839900 178373748
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_MAJOR_DEV] = 0
             self.field[PFC.F_MINOR_DEV] = 0
             self.field[PFC.F_DISK_NAME] = ""
@@ -643,22 +640,6 @@ class ProcRootDISKSTATS(PBR.fixed_delim_format_recs):
             self.field[PFC.F_PART_IN_FLIGHT] = 0
             self.field[PFC.F_IO_MSECS] = 0
             self.field[PFC.F_QUEUE_TIME_MSECS] = 0
-
-        else:
-            self.field[PFC.F_MAJOR_DEV] = long(sio.lineparts[0])
-            self.field[PFC.F_MINOR_DEV] = long(sio.lineparts[1])
-            self.field[PFC.F_DISK_NAME] = sio.lineparts[2]
-            self.field[PFC.F_READ_IOS] = long(sio.lineparts[3])
-            self.field[PFC.F_READ_MERGES] = long(sio.lineparts[4])
-            self.field[PFC.F_READ_SECTORS] = long(sio.lineparts[5])
-            self.field[PFC.F_READ_MSECS] = long(sio.lineparts[6])
-            self.field[PFC.F_WRITE_IOS] = long(sio.lineparts[7])
-            self.field[PFC.F_WRITE_MERGES] = long(sio.lineparts[8])
-            self.field[PFC.F_WRITE_SECTORS] = long(sio.lineparts[9])
-            self.field[PFC.F_WRITE_MSECS] = long(sio.lineparts[10])
-            self.field[PFC.F_PART_IN_FLIGHT] = long(sio.lineparts[11])
-            self.field[PFC.F_IO_MSECS] = long(sio.lineparts[12])
-            self.field[PFC.F_QUEUE_TIME_MSECS] = long(sio.lineparts[13])
 
         self.major_dev = self.field[PFC.F_MAJOR_DEV]
         self.minor_dev = self.field[PFC.F_MINOR_DEV]
@@ -697,6 +678,9 @@ class ProcRootVMSTAT(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 2
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_CATEGORY } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_COUNT, CONVERSION: long } )
+
         self.category = ""
         self.cat_count = 0
         return
@@ -716,10 +700,6 @@ class ProcRootVMSTAT(PBR.fixed_delim_format_recs):
 
             self.field[PFC.F_CATEGORY] = ""
             self.field[PFC.F_COUNT] = 0
-
-        else:
-            self.field[PFC.F_CATEGORY] = sio.lineparts[0]
-            self.field[PFC.F_COUNT] = long(sio.lineparts[1])
 
         self.category = self.field[PFC.F_CATEGORY]
         self.cat_count = self.field[PFC.F_COUNT]
@@ -749,6 +729,10 @@ class ProcRootMEMINFO(PBR.fixed_delim_format_recs):
         self.minfields = 2
         self.skipped = "Filename"
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_CATEGORY } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_SIZE, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_UNITS } )
+
         self.category = ""
         self.size = 0
         return
@@ -767,20 +751,9 @@ class ProcRootMEMINFO(PBR.fixed_delim_format_recs):
 # HugePages_Free:        0
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_CATEGORY] = ""
             self.field[PFC.F_SIZE] = 0
             self.field[PFC.F_UNITS] = ""
-
-        else:
-            self.field[PFC.F_CATEGORY] = sio.lineparts[0]
-            self.field[PFC.F_SIZE] = long(sio.lineparts[1])
-            if sio.linewords >= 3:
-                self.field[PFC.F_UNITS] = sio.lineparts[2]
-            else:
-                self.field[PFC.F_UNITS] = ""
 
         self.category = self.field[PFC.F_CATEGORY]
         self.size = self.field[PFC.F_SIZE]
@@ -810,6 +783,11 @@ class ProcRootPARTITIONS(PBR.fixed_delim_format_recs):
         self.minfields = 4
         self.skipped = "major"
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_MAJOR_DEV, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_MINOR_DEV, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_BLOCKS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_PARTITION_NAME } )
+
         self.major_dev = 0
         self.minor_dev = 0
         self.blocks = ""
@@ -827,19 +805,10 @@ class ProcRootPARTITIONS(PBR.fixed_delim_format_recs):
 #    8        2 1610612736 sda2
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_MAJOR_DEV] = 0
             self.field[PFC.F_MINOR_DEV] = 0
             self.field[PFC.F_BLOCKS] = 0
             self.field[PFC.F_PARTITION_NAME] = ""
-
-        else:
-            self.field[PFC.F_MAJOR_DEV] = long(sio.lineparts[0])
-            self.field[PFC.F_MINOR_DEV] = long(sio.lineparts[1])
-            self.field[PFC.F_BLOCKS] = long(sio.lineparts[2])
-            self.field[PFC.F_PARTITION_NAME] = sio.lineparts[3]
 
         self.major_dev = self.field[PFC.F_MAJOR_DEV]
         self.minor_dev = self.field[PFC.F_MINOR_DEV]

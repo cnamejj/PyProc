@@ -4,6 +4,7 @@ import os
 import SeqFileIO
 import ProcFieldConstants
 import ProcDataConstants
+import numpy
 
 PFC = ProcFieldConstants
 F_NULL_HANDLER = PFC.F_NULL_HANDLER
@@ -13,11 +14,133 @@ F_TERM_LIST = PFC.F_TERM_LIST
 PDC = ProcDataConstants
 
 # --
+
+CONVERSION = "convtype"
+FIELD_NAME = "fieldname"
+FIELD_NUMBER = "fieldnumber"
+ERROR_VAL = "errval"
+NUM_BASE = "base"
+PREFIX_VAL = "prefix"
+SUFFIX_VAL = "suffix"
+
+# --
 PROC_PATH_PREFIX_LIST = ( "/proc", "/proc/", "/proc/net/", "/proc/self/net/", "/proc/self/" )
 
 proc_file_handler_registry = dict()
 proc_partial_file_handler_registry = dict()
 handler_to_path = dict()
+
+# ---
+
+def error_by_rule(rule):
+
+    try:
+        __conv = rule[CONVERSION]
+    except KeyError:
+        __conv = str
+
+    try:
+        __err = rule[ERROR_VAL]
+    except KeyError:
+        if __conv == int:
+            __err = 0
+        elif __conv == long:
+            __err = 0L
+        elif __conv == float:
+            __err = 0.0
+        else:
+            __err = ""
+
+    return __err
+
+def convert_by_rule(rawdata, rule):
+
+    try:
+        __conv = rule[CONVERSION]
+    except KeyError:
+        __conv = str
+
+    try:
+        __base = rule[NUM_BASE]
+    except KeyError:
+        __base = 10
+
+    try:
+        __pref = rule[PREFIX_VAL]
+    except KeyError:
+        __pref = ""
+
+    try:
+        __suff = rule[SUFFIX_VAL]
+    except KeyError:
+        __suff = ""
+
+    __val = rawdata
+
+    if __val.startswith(__pref):
+        __val = __val[len(__pref):]
+
+    if __val.endswith(__suff):
+        __val = __val[:len(__val) - len(__suff)]
+
+#    print "::dbg c-by-r: to:{conv} base:{base:d} raw({raw}) cl({clean}) p({pref}) s({suff})".format(raw=rawdata, clean=__val, conv=str(__conv), base=__base, pref=__pref, suff=__suff)
+
+    if __conv == int:
+        try:
+            __val = int(__val, __base)
+        except:
+            __val = error_by_rule(rule)
+    elif __conv == long:
+        try:
+            __val = long(__val, __base)
+        except:
+            __val = error_by_rule(rule)
+    elif __conv == float:
+        try:
+            __val = float(__val, __base)
+        except:
+            __val = error_by_rule(rule)
+
+    return __val
+
+# ---
+
+def number_or_unlimited(buff):
+
+    if buff.strip() == "unlimited":
+        result = numpy.inf
+    else:
+        try:
+            result = long(buff)
+        except:
+            result = numpy.nan
+
+    return result
+
+
+def array_of_longs(wordlist):
+    __nums = dict()
+
+    for __off in range(0, len(wordlist)):
+        __nums[__off] = long(wordlist[__off])
+
+    return(__nums)
+
+
+def breakout_option_list(combined, delim = ",", assign = "="):
+    __optlist = dict()
+    __entries = combined.split(delim)
+
+    for __off in range(0, len(__entries)):
+        __part = __entries[__off].partition(assign)
+        if len(__part) == 3:
+            __optlist[__part[0]] = __part[2]
+        else:
+            __optlist[__entries[__off]] = ""
+    return(__optlist)
+
+# ---
+
 
 def GetProcFileRegistry():
     return(proc_file_handler_registry)
@@ -118,6 +241,19 @@ RegisterProcFileHandler(F_NULL_HANDLER, ProcNetNULL)
 class fixed_delim_format_recs(object):
     """Base class to read simple files with whitespace delimited columns, consistent record format"""
 
+    def add_parse_rule(self, rule):
+        __rn = len(self.parse_rule)
+
+        if rule.has_key(FIELD_NUMBER) or not rule.has_key(FIELD_NAME):
+            self.floating_rule[__rn] = False
+        elif rule.has_key(PREFIX_VAL) or rule.has_key(SUFFIX_VAL):
+            # -- rules without a field number but that have a prefix and/or suffix check are parsed separately
+            self.floating_rule[__rn] = True
+        else:
+            self.floating_rule[__rn] = False
+
+        self.parse_rule[__rn] = rule
+
     def extra_init(self, *opts):
 #        print "base:extra_init: {this}".format(this=str(self))
         return
@@ -134,8 +270,10 @@ class fixed_delim_format_recs(object):
             self.infile = ShowHandlerFilePath(self)
         self.minfields = 0
         self.skipped = ""
+        self.parse_rule = dict()
+        self.floating_rule = dict()
 
-        self.extra_init( *opts)
+        self.extra_init(*opts)
 
         self.field = dict()
         self.__sio = SeqFileIO.SeqFileIO()
@@ -146,11 +284,46 @@ class fixed_delim_format_recs(object):
     def __iter__(self):
         return(self)
 
+ 
+
     def next(self):
 #        print "base:next: {this}".format(this=str(self))
+        self.field = dict()
         sio = self.__sio
         sio.read_line()
 
+        # -- for each word, see if a floating (position independent) rules applies
+        for __off in range(0, sio.linewords):
+            __val = sio.lineparts[__off]
+            for __rulenum in self.parse_rule:
+                if self.floating_rule[__rulenum]:
+                    __cr = self.parse_rule[__rulenum]
+                    __name = __cr[FIELD_NAME]
+                    __match = 1
+
+                    if __cr.has_key(PREFIX_VAL):
+                        __match = __match and __val.startswith(__cr[PREFIX_VAL])
+
+                    if __cr.has_key(SUFFIX_VAL):
+                        __match = __match and __val.endswith(__cr[SUFFIX_VAL])
+
+                    if __match:
+                        self.field[__name] = convert_by_rule(__val, __cr)
+
+        # -- run through the rules and convert fixed columns as directed, this
+        # -- has to be done separately to make sure error values are set for
+        # -- fields that match columns past the ones we got in the last read.
+        for __rulenum in self.parse_rule:
+            __cr = self.parse_rule[__rulenum]
+            if __cr.has_key(FIELD_NUMBER) and __cr.has_key(FIELD_NAME):
+                __off = __cr[FIELD_NUMBER]
+                __name = __cr[FIELD_NAME]
+
+                if __off >= sio.linewords:
+                    self.field[__name] = error_by_rule(__cr)
+                else:
+                    self.field[__name] = convert_by_rule(sio.lineparts[__off], __cr)
+                 
         return(self.extra_next(sio))
 
 
