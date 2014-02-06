@@ -22,6 +22,8 @@ ERROR_VAL = "errval"
 NUM_BASE = "base"
 PREFIX_VAL = "prefix"
 SUFFIX_VAL = "suffix"
+BEFORE_VAL = "before"
+AFTER_VAL = "after"
 
 # --
 PROC_PATH_PREFIX_LIST = ( "/proc", "/proc/", "/proc/net/", "/proc/self/net/", "/proc/self/" )
@@ -75,6 +77,16 @@ def convert_by_rule(rawdata, rule):
     except KeyError:
         __suff = ""
 
+    try:
+        __before = rule[BEFORE_VAL]
+    except KeyError:
+        __before = ""
+
+    try:
+        __after = rule[AFTER_VAL]
+    except KeyError:
+        __after = ""
+
     __val = rawdata
 
     if __val.startswith(__pref):
@@ -82,6 +94,15 @@ def convert_by_rule(rawdata, rule):
 
     if __val.endswith(__suff):
         __val = __val[:len(__val) - len(__suff)]
+
+    if __before != "":
+        __split = __val.partition(__before)
+        __val = __split[0]
+
+    if __after != "":
+        __split = __val.partition(__after)
+        if len(__split) == 3:
+            __val = __split[2]
 
 #    print "::dbg c-by-r: to:{conv} base:{base:d} raw({raw}) cl({clean}) p({pref}) s({suff})".format(raw=rawdata, clean=__val, conv=str(__conv), base=__base, pref=__pref, suff=__suff)
 
