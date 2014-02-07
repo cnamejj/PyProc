@@ -57,10 +57,10 @@ class ProcRootEXECDOMAINS(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 3
 
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_EXDOM_NAME } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_EXDOM_MODULE } )
         self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_PERSONALITY_LOW, BEFORE_VAL: "-", CONVERSION: long } )
         self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_PERSONALITY_HIGH, AFTER_VAL: "-", CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_EXDOM_NAME } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_EXDOM_MODULE } )
 
         self.pers_low = 0
         self.pers_high = 0
@@ -1048,6 +1048,8 @@ class ProcRootFB(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 2
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_NODE, CONVERSION: long } )
+
         self.node = 0
         self.id = ""
         return
@@ -1059,14 +1061,10 @@ class ProcRootFB(PBR.fixed_delim_format_recs):
 # 0 EFI VGA
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_NODE] = 0
             self.field[PFC.F_ID_LIST] = ""
 
         else:
-            self.field[PFC.F_NODE] = long(sio.lineparts[0])
             self.field[PFC.F_ID_LIST] = " ".join(sio.lineparts[1:])
 
         self.node = self.field[PFC.F_NODE]
@@ -1100,6 +1098,9 @@ class ProcRootCONSOLES(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 4
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_DEVICE_NAME } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_IO_TYPE } )
+
         self.device_name = ""
         self.io_type = ""
         self.flags = ""
@@ -1113,17 +1114,12 @@ class ProcRootCONSOLES(PBR.fixed_delim_format_recs):
 # tty0                 -WU (EC p  )    4:7
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_DEVICE_NAME] = ""
             self.field[PFC.F_IO_TYPE] = ""
             self.field[PFC.F_FLAGS] = ""
             self.field[PFC.F_DEVICE_NUMBER] = ""
 
         else:
-            self.field[PFC.F_DEVICE_NAME] = sio.lineparts[0]
-            self.field[PFC.F_IO_TYPE] = sio.lineparts[1]
             __subrec = " ".join(sio.lineparts[2:-1])
             if __subrec[:1] == "(":
                 __subrec = __subrec[1:]
@@ -1191,9 +1187,6 @@ class ProcRootKEY_USERS(PBR.fixed_delim_format_recs):
 #     0:     4 3/3 0/200 0/20000
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_UID] = 0
             self.field[PFC.F_USAGE] = 0
             self.field[PFC.F_NKEYS] = 0
@@ -1240,9 +1233,6 @@ class ProcRootVERSION_SIGNATURE(PBR.fixed_delim_format_recs):
 # Ubuntu 3.2.0-24.39-generic 3.2.16
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_VERSION_STRING] = ""
 
         else:
@@ -1286,9 +1276,6 @@ class ProcRootVERSION(PBR.fixed_delim_format_recs):
 # Linux version 3.2.0-24-generic (buildd@crested) (gcc version 4.6.3 (Ubuntu/Linaro 4.6.3-1ubuntu5) ) #39-Ubuntu SMP Mon May 21 16:52:17 UTC 2012
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_VERSION_STRING] = ""
             self.field[PFC.F_SYSNAME] = ""
             self.field[PFC.F_RELEASE] = ""
@@ -1337,6 +1324,9 @@ class ProcRootUPTIME(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 2
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_UPTIME, CONVERSION: float } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_IDLE, CONVERSION: float } )
+
         self.uptime = 0.0
         self.idle = 0.0
         return
@@ -1348,15 +1338,8 @@ class ProcRootUPTIME(PBR.fixed_delim_format_recs):
 # 3815061.73 30116159.34
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_UPTIME] = 0.0
             self.field[PFC.F_IDLE] = 0.0
-
-        else:
-            self.field[PFC.F_UPTIME] = float(sio.lineparts[0])
-            self.field[PFC.F_IDLE] = float(sio.lineparts[1])
 
         self.uptime = self.field[PFC.F_UPTIME]
         self.idle = self.field[PFC.F_IDLE]
@@ -1382,7 +1365,13 @@ class ProcRootLOADAVG(PBR.fixed_delim_format_recs):
 
     def extra_init(self, *opts):
         self.minfields = 5
-        self.__FieldDelim = "/"
+
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_LOAD_AV0, CONVERSION: float } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_LOAD_AV1, CONVERSION: float } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_LOAD_AV2, CONVERSION: float } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_NUM_TASKS, CONVERSION: long, BEFORE_VAL: "/" } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_NUM_THREADS, CONVERSION: long, AFTER_VAL: "/" } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_LAST_PID, CONVERSION: long } )
 
         self.load0 = 0.0
         self.load1 = 0.0
@@ -1399,24 +1388,12 @@ class ProcRootLOADAVG(PBR.fixed_delim_format_recs):
 # 0.11 0.25 0.26 1/595 14644
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_LOAD_AV0] = 0.0
             self.field[PFC.F_LOAD_AV1] = 0.0
             self.field[PFC.F_LOAD_AV2] = 0.0
             self.field[PFC.F_NUM_TASKS] = 0
             self.field[PFC.F_NUM_THREADS] = 0
             self.field[PFC.F_LAST_PID] = 0
-
-        else:
-            self.field[PFC.F_LOAD_AV0] = float(sio.lineparts[0])
-            self.field[PFC.F_LOAD_AV1] = float(sio.lineparts[1])
-            self.field[PFC.F_LOAD_AV2] = float(sio.lineparts[2])
-            __split = sio.lineparts[3].partition(self.__FieldDelim)
-            self.field[PFC.F_NUM_TASKS] = long(__split[0])
-            self.field[PFC.F_NUM_THREADS] = long(__split[2])
-            self.field[PFC.F_LAST_PID] = long(sio.lineparts[4])
 
         self.load0 = self.field[PFC.F_LOAD_AV0]
         self.load1 = self.field[PFC.F_LOAD_AV1]
@@ -1452,9 +1429,6 @@ class ProcRootCMDLINE(PBR.fixed_delim_format_recs):
 # BOOT_IMAGE=/vmlinuz-3.2.0-24-generic root=UUID=a959862a-84b7-4373-b7d6-954ac9005249 ro quiet splash vt.handoff=7
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_CMDLINE] = ""
 
         else:
@@ -1483,7 +1457,32 @@ class ProcRootSLABINFO(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 16
         self.skipped = "#"
-        self.__ExtendedRec = 33
+
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_SLAB_NAME } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ACTIVE_OBJS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_NUM_OBJS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_OBJ_SIZE, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_OBJ_PER_SLAB, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_PAGES_PER_SLAB, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_LIMIT, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_BATCHCOUNT, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_SHARED, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_ACTIVE_SLABS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 14, FIELD_NAME: PFC.F_NUM_SLABS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 15, FIELD_NAME: PFC.F_SHARED_AVAIL, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 18, FIELD_NAME: PFC.F_LIST_ALLOCS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 19, FIELD_NAME: PFC.F_MAX_OBJS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 20, FIELD_NAME: PFC.F_GROWN, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 21, FIELD_NAME: PFC.F_REAPED, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 22, FIELD_NAME: PFC.F_ERROR, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 23, FIELD_NAME: PFC.F_MAX_FREEABLE, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 24, FIELD_NAME: PFC.F_NODE_ALLOCS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 25, FIELD_NAME: PFC.F_REMOTE_FREES, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 26, FIELD_NAME: PFC.F_ALIEN_OVERFLOW, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 29, FIELD_NAME: PFC.F_ALLOC_HIT, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 30, FIELD_NAME: PFC.F_ALLOC_MISS, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 31, FIELD_NAME: PFC.F_FREE_HIT, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 32, FIELD_NAME: PFC.F_FREE_MISS, CONVERSION: long } )
 
         self.slab = ""
         self.act_objs = 0
@@ -1510,9 +1509,6 @@ class ProcRootSLABINFO(PBR.fixed_delim_format_recs):
 # nf_conntrack_expect      0      0    240   34    2 : tunables    0    0    0 : slabdata      0      0      0
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_SLAB_NAME] = ""
             self.field[PFC.F_ACTIVE_OBJS] = 0
             self.field[PFC.F_NUM_OBJS] = 0
@@ -1538,49 +1534,6 @@ class ProcRootSLABINFO(PBR.fixed_delim_format_recs):
             self.field[PFC.F_ALLOC_MISS] = 0
             self.field[PFC.F_FREE_HIT] = 0
             self.field[PFC.F_FREE_MISS] = 0
-
-        else:
-            self.field[PFC.F_SLAB_NAME] = sio.lineparts[0]
-            self.field[PFC.F_ACTIVE_OBJS] = long(sio.lineparts[1])
-            self.field[PFC.F_NUM_OBJS] = long(sio.lineparts[2])
-            self.field[PFC.F_OBJ_SIZE] = long(sio.lineparts[3])
-            self.field[PFC.F_OBJ_PER_SLAB] = long(sio.lineparts[4])
-            self.field[PFC.F_PAGES_PER_SLAB] = long(sio.lineparts[5])
-            self.field[PFC.F_LIMIT] = long(sio.lineparts[8])
-            self.field[PFC.F_BATCHCOUNT] = long(sio.lineparts[9])
-            self.field[PFC.F_SHARED] = long(sio.lineparts[10])
-            self.field[PFC.F_ACTIVE_SLABS] = long(sio.lineparts[13])
-            self.field[PFC.F_NUM_SLABS] = long(sio.lineparts[14])
-            self.field[PFC.F_SHARED_AVAIL] = long(sio.lineparts[15])
-
-            if sio.linewords >= self.__ExtendedRec:
-                self.field[PFC.F_LIST_ALLOCS] = long(sio.lineparts[18])
-                self.field[PFC.F_MAX_OBJS] = long(sio.lineparts[19])
-                self.field[PFC.F_GROWN] = long(sio.lineparts[20])
-                self.field[PFC.F_REAPED] = long(sio.lineparts[21])
-                self.field[PFC.F_ERROR] = long(sio.lineparts[22])
-                self.field[PFC.F_MAX_FREEABLE] = long(sio.lineparts[23])
-                self.field[PFC.F_NODE_ALLOCS] = long(sio.lineparts[24])
-                self.field[PFC.F_REMOTE_FREES] = long(sio.lineparts[25])
-                self.field[PFC.F_ALIEN_OVERFLOW] = long(sio.lineparts[26])
-                self.field[PFC.F_ALLOC_HIT] = long(sio.lineparts[29])
-                self.field[PFC.F_ALLOC_MISS] = long(sio.lineparts[30])
-                self.field[PFC.F_FREE_HIT] = long(sio.lineparts[31])
-                self.field[PFC.F_FREE_MISS] = long(sio.lineparts[32])
-            else:
-                self.field[PFC.F_LIST_ALLOCS] = 0
-                self.field[PFC.F_MAX_OBJS] = 0
-                self.field[PFC.F_GROWN] = 0
-                self.field[PFC.F_REAPED] = 0
-                self.field[PFC.F_ERROR] = 0
-                self.field[PFC.F_MAX_FREEABLE] = 0
-                self.field[PFC.F_NODE_ALLOCS] = 0
-                self.field[PFC.F_REMOTE_FREES] = 0
-                self.field[PFC.F_ALIEN_OVERFLOW] = 0
-                self.field[PFC.F_ALLOC_HIT] = 0
-                self.field[PFC.F_ALLOC_MISS] = 0
-                self.field[PFC.F_FREE_HIT] = 0
-                self.field[PFC.F_FREE_MISS] = 0
 
         self.slab = self.field[PFC.F_SLAB_NAME]
         self.act_objs = self.field[PFC.F_ACTIVE_OBJS]
@@ -1646,7 +1599,6 @@ class ProcRootVMALLOCINFO(PBR.fixed_delim_format_recs):
 
     def extra_init(self, *opts):
         self.minfields = 2
-        self.__FieldDelim = "-"
         self.__NameBracket = "["
         self.__PrefixPages = "pages="
         self.__PrefixPhys = "phys="
@@ -1656,6 +1608,12 @@ class ProcRootVMALLOCINFO(PBR.fixed_delim_format_recs):
         self.__FlagUSERMAP = "user"
         self.__FlagVPAGES = "vpages"
         self.__PrefixNuma = "N"
+
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_START, BEFORE_VAL: "-", PREFIX_VAL: "0x", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_END, AFTER_VAL: "-", PREFIX_VAL: "0x", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_SIZE, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_PAGES, PREFIX_VAL: "pages=", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_PHYS_ADDR, PREFIX_VAL: "phys=", CONVERSION: long, NUM_BASE: 16 } )
 
         self.start_addr = 0
         self.end_addr = 0
@@ -1680,46 +1638,27 @@ class ProcRootVMALLOCINFO(PBR.fixed_delim_format_recs):
         __numa = ""
         __invalid = ""
 
+        self.field[PFC.F_CALLER] = ""
+        self.field[PFC.F_VM_MAP] = 0
+        self.field[PFC.F_USER_MAP] = 0
+        self.field[PFC.F_VM_PAGES] = 0
+        self.field[PFC.F_NUMA_INFO] = ""
+        self.field[PFC.F_IOREMAP] = 0
+        self.field[PFC.F_VM_ALLOC] = 0
+
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_START] = 0
             self.field[PFC.F_END] = 0
             self.field[PFC.F_SIZE] = 0
-            self.field[PFC.F_CALLER] = ""
             self.field[PFC.F_PAGES] = 0
             self.field[PFC.F_PHYS_ADDR] = 0
-            self.field[PFC.F_IOREMAP] = 0
-            self.field[PFC.F_VM_ALLOC] = 0
-            self.field[PFC.F_VM_MAP] = 0
-            self.field[PFC.F_USER_MAP] = 0
-            self.field[PFC.F_VM_PAGES] = 0
-            self.field[PFC.F_NUMA_INFO] = ""
 
         else:
-            __split = sio.lineparts[0].partition(self.__FieldDelim)
-            self.field[PFC.F_START] = long(__split[0][2:], 16)
-            self.field[PFC.F_END] = long(__split[2][2:], 16)
-            self.field[PFC.F_SIZE] = long(sio.lineparts[1])
-
-            self.field[PFC.F_CALLER] = ""
-            self.field[PFC.F_PAGES] = 0
-            self.field[PFC.F_PHYS_ADDR] = 0
-            self.field[PFC.F_IOREMAP] = 0
-            self.field[PFC.F_VM_ALLOC] = 0
-            self.field[PFC.F_VM_MAP] = 0
-            self.field[PFC.F_USER_MAP] = 0
-            self.field[PFC.F_VM_PAGES] = 0
-            self.field[PFC.F_NUMA_INFO] = ""
-
             __off = 2
             if sio.linewords > __off:
                 __check = sio.lineparts[__off]
-                __pref = self.__PrefixPages
-                if __check[:len(__pref)] == __pref:
-                    self.field[PFC.F_PAGES] = long(__check[len(__pref):], 16)
-                    __flags = "{flags} {next}".format(flags=__flags, next=sio.lineparts[__off])
+                if __check.startswith(self.__PrefixPages):
+                    __flags = "{flags} {next}".format(flags=__flags, next=__check)
                 else:
                     self.field[PFC.F_CALLER] = __check
                 __off = __off + 1
@@ -1732,18 +1671,14 @@ class ProcRootVMALLOCINFO(PBR.fixed_delim_format_recs):
 
             if sio.linewords > __off:
                 __check = sio.lineparts[__off]
-                __pref = self.__PrefixPages
-                if __check[:len(__pref)] == __pref:
-                    self.field[PFC.F_PAGES] = long(__check[len(__pref):], 16)
-                    __flags = "{flags} {next}".format(flags=__flags, next=sio.lineparts[__off])
+                if __check.startswith(self.__PrefixPages):
+                    __flags = "{flags} {next}".format(flags=__flags, next=__check)
                     __off = __off + 1
 
             if sio.linewords > __off:
                 __check = sio.lineparts[__off]
-                __pref = self.__PrefixPhys
-                if __check[:len(__pref)] == __pref:
-                    self.field[PFC.F_PHYS_ADDR] = long(__check[len(__pref):], 16)
-                    __flags = "{flags} {next}".format(flags=__flags, next=sio.lineparts[__off])
+                if __check.startswith(self.__PrefixPhys):
+                    __flags = "{flags} {next}".format(flags=__flags, next=__check)
                     __off = __off + 1
 
             if sio.linewords > __off:
@@ -2070,8 +2005,6 @@ class ProcRootMDSTAT(PBR.fixed_delim_format_recs):
 #       bitmap: 12/12 pages [48KB], 65536KB chunk
 # 
 # unused devices: <none>
-
-        self.field = dict()
 
         self.field[PFC.F_REC_TYPE] = ""
         self.field[PFC.F_PERSONALITIES] = []

@@ -89,12 +89,6 @@ def convert_by_rule(rawdata, rule):
 
     __val = rawdata
 
-    if __val.startswith(__pref):
-        __val = __val[len(__pref):]
-
-    if __val.endswith(__suff):
-        __val = __val[:len(__val) - len(__suff)]
-
     if __before != "":
         __split = __val.partition(__before)
         __val = __split[0]
@@ -103,6 +97,12 @@ def convert_by_rule(rawdata, rule):
         __split = __val.partition(__after)
         if len(__split) == 3:
             __val = __split[2]
+
+    if __val.startswith(__pref):
+        __val = __val[len(__pref):]
+
+    if __val.endswith(__suff):
+        __val = __val[:len(__val) - len(__suff)]
 
 #    print "::dbg c-by-r: to:{conv} base:{base:d} raw({raw}) cl({clean}) p({pref}) s({suff})".format(raw=rawdata, clean=__val, conv=str(__conv), base=__base, pref=__pref, suff=__suff)
 
@@ -118,7 +118,7 @@ def convert_by_rule(rawdata, rule):
             __val = error_by_rule(rule)
     elif __conv == float:
         try:
-            __val = float(__val, __base)
+            __val = float(__val)
         except:
             __val = error_by_rule(rule)
 
@@ -264,6 +264,7 @@ class fixed_delim_format_recs(object):
 
     def add_parse_rule(self, rule):
         __rn = len(self.parse_rule)
+#        print "dbg:: apr: n:{rn:d} r({rule})".format(rn=__rn, rule=str(rule))
 
         if rule.has_key(FIELD_NUMBER) or not rule.has_key(FIELD_NAME):
             self.floating_rule[__rn] = False
@@ -313,6 +314,8 @@ class fixed_delim_format_recs(object):
         sio = self.__sio
         sio.read_line()
 
+        __hit_rule = dict()
+
         # -- for each word, see if a floating (position independent) rules applies
         for __off in range(0, sio.linewords):
             __val = sio.lineparts[__off]
@@ -330,6 +333,8 @@ class fixed_delim_format_recs(object):
 
                     if __match:
                         self.field[__name] = convert_by_rule(__val, __cr)
+#                        print "dbg:: nx/float: n:{rn:d} v({field}) v({val}) x({rez}) r({rule})".format(val=__val, rule=str(__cr), rn=__rulenum, rez=str(self.field[__name]), field=__name)
+                        __hit_rule[__rulenum] = 1
 
         # -- run through the rules and convert fixed columns as directed, this
         # -- has to be done separately to make sure error values are set for
@@ -337,14 +342,22 @@ class fixed_delim_format_recs(object):
         for __rulenum in self.parse_rule:
             __cr = self.parse_rule[__rulenum]
             if __cr.has_key(FIELD_NUMBER) and __cr.has_key(FIELD_NAME):
+                __hit_rule[__rulenum] = 1
                 __off = __cr[FIELD_NUMBER]
                 __name = __cr[FIELD_NAME]
 
                 if __off >= sio.linewords:
                     self.field[__name] = error_by_rule(__cr)
                 else:
+#                    print "dbg:: nx/fixed: v({val}) r({rule})".format(val=sio.lineparts[__off], rule=str(__cr))
                     self.field[__name] = convert_by_rule(sio.lineparts[__off], __cr)
-                 
+
+        for __rulenum in self.parse_rule:
+            __cr = self.parse_rule[__rulenum]
+            if __cr.has_key(FIELD_NAME) and not __hit_rule.has_key(__rulenum):
+                self.field[__cr[FIELD_NAME]] = error_by_rule(__cr)
+#                print "dbg:: nx/nohit: n:{rn:d} f({field}) r({rule})".format(rn=__rulenum, rule=str(__cr), field=__cr[FIELD_NAME])
+
         return(self.extra_next(sio))
 
 
