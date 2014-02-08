@@ -31,6 +31,10 @@ FIELD_NUMBER = PBR.FIELD_NUMBER
 CONVERSION = PBR.CONVERSION
 ERROR_VAL = PBR.ERROR_VAL
 NUM_BASE = PBR.NUM_BASE
+PREFIX_VAL = PBR.PREFIX_VAL
+SUFFIX_VAL = PBR.SUFFIX_VAL
+BEFORE_VAL = PBR.BEFORE_VAL
+AFTER_VAL = PBR.AFTER_VAL
 
 RegisterProcFileHandler = PBR.RegisterProcFileHandler
 RegisterPartialProcFileHandler = PBR.RegisterPartialProcFileHandler
@@ -153,13 +157,14 @@ class ProcSelfMAPS(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 5
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_START, BEFORE_VAL: "-", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_END, AFTER_VAL: "-", CONVERSION: long, NUM_BASE: 16 } )
         self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_FLAGS } )
         self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_PAGE_OFFSET, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MAJOR_DEV, BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MINOR_DEV, AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
         self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_INODE, CONVERSION: long } )
         self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_PATH } )
-
-        self.__AddrSplitDelim = "-"
-        self.__DevSplitDelim = ":"
 
         self.vm_start = 0
         self.vm_end = 0
@@ -184,9 +189,6 @@ class ProcSelfMAPS(PBR.fixed_delim_format_recs):
 # 7facddd1b000-7facddf1a000 ---p 00018000 09:01 75238943                   /lib/x86_64-linux-gnu/libpthread-2.15.so
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_START] = 0
             self.field[PFC.F_END] = 0
             self.field[PFC.F_FLAGS] = ""
@@ -195,20 +197,6 @@ class ProcSelfMAPS(PBR.fixed_delim_format_recs):
             self.field[PFC.F_MINOR_DEV] = 0
             self.field[PFC.F_INODE] = 0
             self.field[PFC.F_PATH] = ""
-
-        else:
-            __split = sio.lineparts[0].partition(self.__AddrSplitDelim)
-            self.field[PFC.F_START] = long(__split[0], 16)
-            self.field[PFC.F_END] = long(__split[2], 16)
-
-            __split = sio.lineparts[3].partition(self.__DevSplitDelim)
-            self.field[PFC.F_MAJOR_DEV] = long(__split[0], 16)
-            self.field[PFC.F_MINOR_DEV] = long(__split[2], 16)
-
-#            if sio.linewords > 5:
-#                self.field[PFC.F_PATH] = sio.lineparts[5]
-#            else:
-#                self.field[PFC.F_PATH] = ""
 
         self.vm_start = self.field[PFC.F_START]
         self.vm_end = self.field[PFC.F_END]
@@ -245,7 +233,7 @@ class ProcSelfSTACK(PBR.fixed_delim_format_recs):
         self.stack_entry = ""
 
         self.rules = dict()
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ADDRESS } )
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ADDRESS, PREFIX_VAL: "[<", SUFFIX_VAL: ">]", CONVERSION: long, NUM_BASE: 16 } )
         self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_STACK_ENTRY } )
 
         return
@@ -263,14 +251,8 @@ class ProcSelfSTACK(PBR.fixed_delim_format_recs):
 # [<ffffffff81177ec0>] vfs_read+0xb0/0x180
 
         if sio.buff == "":
-
-            self.field = dict()
-
             self.field[PFC.F_ADDRESS] = 0
             self.field[PFC.F_STACK_ENTRY] = ""
-
-        else:
-            self.field[PFC.F_ADDRESS] = long(self.field[PFC.F_ADDRESS][2:-2], 16)
 
         self.address_string = sio.lineparts[0]
         self.address = self.field[PFC.F_ADDRESS]
@@ -385,6 +367,14 @@ class ProcSelfNUMA_MAPS(PBR.fixed_delim_format_recs):
 
         self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_START, CONVERSION: long, NUM_BASE: 16 } )
         self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_BUFFNAME } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_FILEPATH, PREFIX_VAL: "file=" } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_ANON, PREFIX_VAL: "anon=", CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_DIRTY, PREFIX_VAL: "dirty=", CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_MAPPED, PREFIX_VAL: "mapped=", CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_MAPMAX, PREFIX_VAL: "mapmax=", CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_SWAPCACHE, PREFIX_VAL: "swapcache=", CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_ACTIVE_PAGES, PREFIX_VAL: "active=", CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_WRITEBACK, PREFIX_VAL: "writeback=", CONVERSION: long } )
 
         self.start = 0
         self.buffname = ""
@@ -402,26 +392,11 @@ class ProcSelfNUMA_MAPS(PBR.fixed_delim_format_recs):
         self.node_list = dict()
 
         self.__ASSIGN_DELIM = "="
-        self.__PREFIX_PATH = "file="
-        self.__PREFIX_ANON = "anon="
-        self.__PREFIX_DIRTY = "dirty="
-        self.__PREFIX_MAPPED = "mapped="
-        self.__PREFIX_MAPMAX = "mapmax="
-        self.__PREFIX_SWAPCACHE = "swapcache="
-        self.__PREFIX_ACTIVE_PAGES = "active="
-        self.__PREFIX_WRITEBACK = "writeback="
         self.__PREFIX_NODE = "N"
         self.__FLAG_HEAP = "heap"
         self.__FLAG_STACK = "stack"
         self.__FLAG_HUGE = "huge"
         return
-
-    def get_long_after_pref(self, sio, offset, prefix, fieldname):
-        if sio.linewords > offset:
-            if sio.lineparts[offset].startswith(prefix):
-                self.field[fieldname] = long(sio.lineparts[offset][len(prefix):])
-                offset = offset + 1
-        return(offset)
 
     def extra_next(self, sio):
 
@@ -434,56 +409,30 @@ class ProcSelfNUMA_MAPS(PBR.fixed_delim_format_recs):
 # 7f5935a28000 default file=/usr/lib/locale/locale-archive mapped=11 mapmax=88 N0=11
 # 7f5935cf1000 default file=/lib/x86_64-linux-gnu/libc-2.15.so mapped=82 mapmax=167 N0=82
 
-        self.field[PFC.F_FILEPATH] = ""
         self.field[PFC.F_HEAP] = 0
         self.field[PFC.F_STACK] = 0
         self.field[PFC.F_HUGE] = 0
-        self.field[PFC.F_ANON] = 0
-        self.field[PFC.F_DIRTY] = 0
-        self.field[PFC.F_MAPPED] = 0
-        self.field[PFC.F_MAPMAX] = 0
-        self.field[PFC.F_SWAPCACHE] = 0
-        self.field[PFC.F_ACTIVE_PAGES] = 0
-        self.field[PFC.F_WRITEBACK] = 0
         self.field[PFC.F_NODE_LIST] = dict()
 
         if sio.buff != "":
 
-            __off = 2
-            if sio.linewords > __off:
-                __curr = sio.lineparts[__off]
-                if __curr.startswith(self.__PREFIX_PATH):
-                    self.field[PFC.F_FILEPATH] = __curr[len(self.__PREFIX_PATH):]
-                    __off = __off + 1
+            for __off in range(2, sio.linewords):
+                __word = sio.lineparts[__off]
 
-            if sio.linewords > __off:
-                if sio.lineparts[__off] == self.__FLAG_HEAP:
+                if __word == self.__FLAG_HEAP:
                     self.field[PFC.F_HEAP] = 1
-                    __off = __off + 1
 
-            if sio.linewords > __off:
-                if sio.lineparts[__off] == self.__FLAG_STACK:
+                elif __word == self.__FLAG_STACK:
                     self.field[PFC.F_STACK] = 1
-                    __off = __off + 1
 
-            if sio.linewords > __off:
-                if sio.lineparts[__off] == self.__FLAG_HUGE:
+                elif __word == self.__FLAG_HUGE:
                     self.field[PFC.F_HUGE] = 1
-                    __off = __off + 1
 
-            __off = self.get_long_after_pref(sio, __off, self.__PREFIX_ANON, PFC.F_ANON)
-            __off = self.get_long_after_pref(sio, __off, self.__PREFIX_DIRTY, PFC.F_DIRTY)
-            __off = self.get_long_after_pref(sio, __off, self.__PREFIX_MAPPED, PFC.F_MAPPED)
-            __off = self.get_long_after_pref(sio, __off, self.__PREFIX_MAPMAX, PFC.F_MAPMAX)
-            __off = self.get_long_after_pref(sio, __off, self.__PREFIX_SWAPCACHE, PFC.F_SWAPCACHE)
-            __off = self.get_long_after_pref(sio, __off, self.__PREFIX_ACTIVE_PAGES, PFC.F_ACTIVE_PAGES)
-            __off = self.get_long_after_pref(sio, __off, self.__PREFIX_WRITEBACK, PFC.F_WRITEBACK)
-
-            for __node in range(__off, sio.linewords):
-                __split = sio.lineparts[__node].partition(self.__ASSIGN_DELIM)
-                if len(__split) == 3:
-                    if __split[0][:1] == self.__PREFIX_NODE:
-                        self.field[PFC.F_NODE_LIST][__split[0][1:]] = __split[2]
+                else:
+                    __split = __word.partition(self.__ASSIGN_DELIM)
+                    if len(__split) == 3:
+                        if __split[0][:1] == self.__PREFIX_NODE:
+                            self.field[PFC.F_NODE_LIST][__split[0][1:]] = __split[2]
             
         self.start = self.field[PFC.F_START]
         self.buffname = self.field[PFC.F_BUFFNAME]
@@ -558,10 +507,13 @@ class ProcSelfMOUNTINFO(PBR.fixed_delim_format_recs):
 
         self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_MOUNT_ID } )
         self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_PARENT_MOUNT_ID, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_MAJOR_DEV, BEFORE_VAL: ":", CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_MINOR_DEV, AFTER_VAL: ":", CONVERSION: long } )
         self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MOUNT_FS } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_MOUNT_REL } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_MOUNT_OPTS } )
 
         self.__OptionSep = "-"
-        self.__DevDelim = ":"
 
         self.mntid = 0
         self.mntid_parent = 0
@@ -586,28 +538,14 @@ class ProcSelfMOUNTINFO(PBR.fixed_delim_format_recs):
 # 21 15 0:16 / /sys/fs/fuse/connections rw,relatime - fusectl none rw
 # 27 20 9:0 / /boot rw,relatime - ext4 /dev/md0 rw,user_xattr,barrier=1,stripe=128,data=ordered
 
-        self.field[PFC.F_MAJOR_DEV] = 0
-        self.field[PFC.F_MINOR_DEV] = 0
-        self.field[PFC.F_MOUNT_REL] = ""
-        self.field[PFC.F_MOUNT_OPTS] = ""
         self.field[PFC.F_EXTRA_OPTS] = ""
         self.field[PFC.F_FS_TYPE] = ""
         self.field[PFC.F_MOUNT_SRC] = ""
         self.field[PFC.F_SUPER_OPTS] = ""
 
         if sio.buff != "":
-            __split = sio.lineparts[2].partition(self.__DevDelim)
-            self.field[PFC.F_MAJOR_DEV] = long(__split[0])
-            self.field[PFC.F_MINOR_DEV] = long(__split[2])
 
-            __off = 4
-            if sio.linewords > __off:
-                self.field[PFC.F_MOUNT_REL] = sio.lineparts[__off]
-                __off = __off + 1
-            if sio.linewords > __off:
-                self.field[PFC.F_MOUNT_OPTS] = sio.lineparts[__off]
-                __off = __off + 1
-
+            __off = 6
             __endopts = 0
             __extras = ""
             while sio.linewords > __off and not __endopts:
