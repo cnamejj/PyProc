@@ -1669,6 +1669,24 @@ class ProcNetStatIP_CONNTRACK(PBR.fixed_delim_format_recs):
         self.minfields = 17
         self.skipped = "entries"
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ENTRIES, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_SEARCHED, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_FOUND, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_NEW, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_INVALID, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_IGNORE, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_DELETE, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_DELETE_LIST, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_INSERT, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_INSERT_FAILED, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_DROP, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_DROP_EARLY, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_ICMP_ERROR, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_EXP_NEW, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 14, FIELD_NAME: PFC.F_EXP_CREATE, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 15, FIELD_NAME: PFC.F_EXP_DELETE, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 16, FIELD_NAME: PFC.F_SEARCH_RESTART, CONVERSION: long, NUM_BASE: 16 } )
+
         self.insert = 0
         self.drop = 0
         self.found = 0
@@ -1687,18 +1705,6 @@ class ProcNetStatIP_CONNTRACK(PBR.fixed_delim_format_recs):
 # 00000084  00000c51 00053265 0001cc23 00000041 0000d313 00006987 00006986 0001cc22 00000000 00000000 00000000 00000000  00000000 0000000f 00000000 00000000
 
         if sio.buff == "":
-            self.entries = 0
-            self.searched = 0
-            self.found = 0
-            self.new = 0
-            self.invalid = 0
-            self.ignore = 0
-            self.delete = 0
-            self.insert = 0
-            self.drop = 0
-
-            self.field = dict()
-
             self.field[PFC.F_ENTRIES] = 0
             self.field[PFC.F_SEARCHED] = 0
             self.field[PFC.F_FOUND] = 0
@@ -1717,34 +1723,15 @@ class ProcNetStatIP_CONNTRACK(PBR.fixed_delim_format_recs):
             self.field[PFC.F_EXP_DELETE] = 0
             self.field[PFC.F_SEARCH_RESTART] = 0
 
-        else:
-            self.field[PFC.F_ENTRIES] = long(sio.lineparts[0], 16)
-            self.field[PFC.F_SEARCHED] = long(sio.lineparts[1], 16)
-            self.field[PFC.F_FOUND] = long(sio.lineparts[2], 16)
-            self.field[PFC.F_NEW] = long(sio.lineparts[3], 16)
-            self.field[PFC.F_INVALID] = long(sio.lineparts[4], 16)
-            self.field[PFC.F_IGNORE] = long(sio.lineparts[5], 16)
-            self.field[PFC.F_DELETE] = long(sio.lineparts[6], 16)
-            self.field[PFC.F_DELETE_LIST] = long(sio.lineparts[7], 16)
-            self.field[PFC.F_INSERT] = long(sio.lineparts[8], 16)
-            self.field[PFC.F_INSERT_FAILED] = long(sio.lineparts[9], 16)
-            self.field[PFC.F_DROP] = long(sio.lineparts[10], 16)
-            self.field[PFC.F_DROP_EARLY] = long(sio.lineparts[11], 16)
-            self.field[PFC.F_ICMP_ERROR] = long(sio.lineparts[12], 16)
-            self.field[PFC.F_EXP_NEW] = long(sio.lineparts[13], 16)
-            self.field[PFC.F_EXP_CREATE] = long(sio.lineparts[14], 16)
-            self.field[PFC.F_EXP_DELETE] = long(sio.lineparts[15], 16)
-            self.field[PFC.F_SEARCH_RESTART] = long(sio.lineparts[16], 16)
-
-            self.entries = self.field[PFC.F_ENTRIES]
-            self.searched = self.field[PFC.F_SEARCHED]
-            self.found = self.field[PFC.F_FOUND]
-            self.new = self.field[PFC.F_NEW]
-            self.invalid = self.field[PFC.F_INVALID]
-            self.ignore = self.field[PFC.F_IGNORE]
-            self.delete = self.field[PFC.F_DELETE]
-            self.insert = self.field[PFC.F_INSERT]
-            self.drop = self.field[PFC.F_DROP]
+        self.entries = self.field[PFC.F_ENTRIES]
+        self.searched = self.field[PFC.F_SEARCHED]
+        self.found = self.field[PFC.F_FOUND]
+        self.new = self.field[PFC.F_NEW]
+        self.invalid = self.field[PFC.F_INVALID]
+        self.ignore = self.field[PFC.F_IGNORE]
+        self.delete = self.field[PFC.F_DELETE]
+        self.insert = self.field[PFC.F_INSERT]
+        self.drop = self.field[PFC.F_DROP]
 
         return( self.entries, self.searched, self.found, self.new, self.invalid, self.ignore, self.delete, self.insert, self.drop)
 #
@@ -1774,10 +1761,22 @@ class ProcNetStatNDISC_CACHE(PBR.fixed_delim_format_recs):
 #                   st->unres_discards
 #                   );
 
-
     def extra_init(self, *opts):
         self.minfields = 12
         self.skipped = "entries"
+
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ARP_ENTRIES, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ALLOC, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DESTROY, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_HASH_GROW, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_LOOKUP, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_HIT, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RES_FAIL, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_RCV_MCAST_PROBE, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_RCV_UCAST_PROBE, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_GC_PERIODIC, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_GC_FORCED, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_UNRES_DISCARD, CONVERSION: long, NUM_BASE: 16 } )
 
         self.entries = 0
         self.lookups = 0
@@ -1793,12 +1792,6 @@ class ProcNetStatNDISC_CACHE(PBR.fixed_delim_format_recs):
 # 00000003  00000008 00000000 00000000  00000003 00000001  00000000  00000000 00000000  00000000 00000000 00000000
 
         if sio.buff == "":
-            self.entries = 0
-            self.lookups = 0
-            self.hits = 0
-    
-            self.field = dict()
-    
             self.field[PFC.F_ARP_ENTRIES] = 0
             self.field[PFC.F_ALLOC] = 0
             self.field[PFC.F_DESTROY] = 0
@@ -1812,23 +1805,9 @@ class ProcNetStatNDISC_CACHE(PBR.fixed_delim_format_recs):
             self.field[PFC.F_GC_FORCED] = 0
             self.field[PFC.F_UNRES_DISCARD] = 0
     
-        else:
-            self.field[PFC.F_ARP_ENTRIES] = long(sio.lineparts[0], 16)
-            self.field[PFC.F_ALLOC] = long(sio.lineparts[1], 16)
-            self.field[PFC.F_DESTROY] = long(sio.lineparts[2], 16)
-            self.field[PFC.F_HASH_GROW] = long(sio.lineparts[3], 16)
-            self.field[PFC.F_LOOKUP] = long(sio.lineparts[4], 16)
-            self.field[PFC.F_HIT] = long(sio.lineparts[5], 16)
-            self.field[PFC.F_RES_FAIL] = long(sio.lineparts[6], 16)
-            self.field[PFC.F_RCV_MCAST_PROBE] = long(sio.lineparts[7], 16)
-            self.field[PFC.F_RCV_UCAST_PROBE] = long(sio.lineparts[8], 16)
-            self.field[PFC.F_GC_PERIODIC] = long(sio.lineparts[9], 16)
-            self.field[PFC.F_GC_FORCED] = long(sio.lineparts[10], 16)
-            self.field[PFC.F_UNRES_DISCARD] = long(sio.lineparts[11], 16)
-
-            self.entries = self.field[PFC.F_ARP_ENTRIES]
-            self.lookups = self.field[PFC.F_LOOKUP]
-            self.hits = self.field[PFC.F_HIT]
+        self.entries = self.field[PFC.F_ARP_ENTRIES]
+        self.lookups = self.field[PFC.F_LOOKUP]
+        self.hits = self.field[PFC.F_HIT]
 
         return( self.entries, self.lookups, self.hits)
 #
@@ -1867,6 +1846,24 @@ class ProcNetStatNF_CONNTRACK(PBR.fixed_delim_format_recs):
         self.minfields = 17
         self.skipped = "entries"
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ENTRIES, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_SEARCHED, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_FOUND, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_NEW, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_INVALID, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_IGNORE, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_DELETE, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_DELETE_LIST, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_INSERT, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_INSERT_FAILED, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_DROP, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_DROP_EARLY, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_ICMP_ERROR, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_EXP_NEW, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 14, FIELD_NAME: PFC.F_EXP_CREATE, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 15, FIELD_NAME: PFC.F_EXP_DELETE, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 16, FIELD_NAME: PFC.F_SEARCH_RESTART, CONVERSION: long, NUM_BASE: 16 } )
+
         self.insert = 0
         self.drop = 0
         self.found = 0
@@ -1885,18 +1882,6 @@ class ProcNetStatNF_CONNTRACK(PBR.fixed_delim_format_recs):
 # 00000085  00000c5f 00053a15 0001ce59 00000041 0000d3b2 000069ca 000069c9 0001ce58 00000000 00000000 00000000 00000000  00000000 0000000f 00000000 00000000
 
         if sio.buff == "":
-            self.entries = 0
-            self.searched = 0
-            self.found = 0
-            self.new = 0
-            self.invalid = 0
-            self.ignore = 0
-            self.delete = 0
-            self.insert = 0
-            self.drop = 0
-    
-            self.field = dict()
-    
             self.field[PFC.F_ENTRIES] = 0
             self.field[PFC.F_SEARCHED] = 0
             self.field[PFC.F_FOUND] = 0
@@ -1915,34 +1900,15 @@ class ProcNetStatNF_CONNTRACK(PBR.fixed_delim_format_recs):
             self.field[PFC.F_EXP_DELETE] = 0
             self.field[PFC.F_SEARCH_RESTART] = 0
 
-        else:
-            self.field[PFC.F_ENTRIES] = long(sio.lineparts[0], 16)
-            self.field[PFC.F_SEARCHED] = long(sio.lineparts[1], 16)
-            self.field[PFC.F_FOUND] = long(sio.lineparts[2], 16)
-            self.field[PFC.F_NEW] = long(sio.lineparts[3], 16)
-            self.field[PFC.F_INVALID] = long(sio.lineparts[4], 16)
-            self.field[PFC.F_IGNORE] = long(sio.lineparts[5], 16)
-            self.field[PFC.F_DELETE] = long(sio.lineparts[6], 16)
-            self.field[PFC.F_DELETE_LIST] = long(sio.lineparts[7], 16)
-            self.field[PFC.F_INSERT] = long(sio.lineparts[8], 16)
-            self.field[PFC.F_INSERT_FAILED] = long(sio.lineparts[9], 16)
-            self.field[PFC.F_DROP] = long(sio.lineparts[10], 16)
-            self.field[PFC.F_DROP_EARLY] = long(sio.lineparts[11], 16)
-            self.field[PFC.F_ICMP_ERROR] = long(sio.lineparts[12], 16)
-            self.field[PFC.F_EXP_NEW] = long(sio.lineparts[13], 16)
-            self.field[PFC.F_EXP_CREATE] = long(sio.lineparts[14], 16)
-            self.field[PFC.F_EXP_DELETE] = long(sio.lineparts[15], 16)
-            self.field[PFC.F_SEARCH_RESTART] = long(sio.lineparts[16], 16)
-
-            self.entries = self.field[PFC.F_ENTRIES]
-            self.searched = self.field[PFC.F_SEARCHED]
-            self.found = self.field[PFC.F_FOUND]
-            self.new = self.field[PFC.F_NEW]
-            self.invalid = self.field[PFC.F_INVALID]
-            self.ignore = self.field[PFC.F_IGNORE]
-            self.delete = self.field[PFC.F_DELETE]
-            self.insert = self.field[PFC.F_INSERT]
-            self.drop = self.field[PFC.F_DROP]
+        self.entries = self.field[PFC.F_ENTRIES]
+        self.searched = self.field[PFC.F_SEARCHED]
+        self.found = self.field[PFC.F_FOUND]
+        self.new = self.field[PFC.F_NEW]
+        self.invalid = self.field[PFC.F_INVALID]
+        self.ignore = self.field[PFC.F_IGNORE]
+        self.delete = self.field[PFC.F_DELETE]
+        self.insert = self.field[PFC.F_INSERT]
+        self.drop = self.field[PFC.F_DROP]
 
         return( self.entries, self.searched, self.found, self.new, self.invalid, self.ignore, self.delete, self.insert, self.drop)
 #
@@ -1983,6 +1949,24 @@ class ProcNetStatRT_CACHE(PBR.fixed_delim_format_recs):
         self.minfields = 17
         self.skipped = "entries"
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ENTRIES, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_IN_HIT, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_IN_SLOW_TOT, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_IN_SLOW_MC, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_IN_NO_ROUTE, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_IN_BRD, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_IN_MARTIAN_DST, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_IN_MARTIAN_SRC, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_OUT_HIT, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_OUT_SLOW_TOT, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_OUT_SLOW_MC, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_GC_TOTAL, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_GC_IGNORED, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_GC_GOAL_MISS, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 14, FIELD_NAME: PFC.F_GC_DST_OVERFLOW, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 15, FIELD_NAME: PFC.F_IN_HL_SEARCH, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 16, FIELD_NAME: PFC.F_OUT_HL_SEARCH, CONVERSION: long, NUM_BASE: 16 } )
+
         self.entries = 0
         self.in_hit = 0
         self.in_slow = 0
@@ -1997,14 +1981,6 @@ class ProcNetStatRT_CACHE(PBR.fixed_delim_format_recs):
 # 000000a4  00000000 00000002 00000000 00000000 00000001 00000000 00000000  0006f479 000027b4 00000000 00000000 00000000 00000000 00000000 00000000 00000008 
 
         if sio.buff == "":
-            self.entries = 0
-            self.in_hit = 0
-            self.in_slow = 0
-            self.out_hit = 0
-            self.out_slow = 0
-    
-            self.field = dict()
-    
             self.field[PFC.F_ENTRIES] = 0
             self.field[PFC.F_IN_HIT] = 0
             self.field[PFC.F_IN_SLOW_TOT] = 0
@@ -2023,30 +1999,11 @@ class ProcNetStatRT_CACHE(PBR.fixed_delim_format_recs):
             self.field[PFC.F_IN_HL_SEARCH] = 0
             self.field[PFC.F_OUT_HL_SEARCH] = 0
     
-        else:
-            self.field[PFC.F_ENTRIES] = long(sio.lineparts[0], 16)
-            self.field[PFC.F_IN_HIT] = long(sio.lineparts[1], 16)
-            self.field[PFC.F_IN_SLOW_TOT] = long(sio.lineparts[2], 16)
-            self.field[PFC.F_IN_SLOW_MC] = long(sio.lineparts[3], 16)
-            self.field[PFC.F_IN_NO_ROUTE] = long(sio.lineparts[4], 16)
-            self.field[PFC.F_IN_BRD] = long(sio.lineparts[5], 16)
-            self.field[PFC.F_IN_MARTIAN_DST] = long(sio.lineparts[6], 16)
-            self.field[PFC.F_IN_MARTIAN_SRC] = long(sio.lineparts[7], 16)
-            self.field[PFC.F_OUT_HIT] = long(sio.lineparts[8], 16)
-            self.field[PFC.F_OUT_SLOW_TOT] = long(sio.lineparts[9], 16)
-            self.field[PFC.F_OUT_SLOW_MC] = long(sio.lineparts[10], 16)
-            self.field[PFC.F_GC_TOTAL] = long(sio.lineparts[11], 16)
-            self.field[PFC.F_GC_IGNORED] = long(sio.lineparts[12], 16)
-            self.field[PFC.F_GC_GOAL_MISS] = long(sio.lineparts[13], 16)
-            self.field[PFC.F_GC_DST_OVERFLOW] = long(sio.lineparts[14], 16)
-            self.field[PFC.F_IN_HL_SEARCH] = long(sio.lineparts[15], 16)
-            self.field[PFC.F_OUT_HL_SEARCH] = long(sio.lineparts[16], 16)
-
-            self.entries = self.field[PFC.F_ENTRIES]
-            self.in_hit = self.field[PFC.F_IN_HIT]
-            self.in_slow = self.field[PFC.F_IN_SLOW_TOT]
-            self.out_hit = self.field[PFC.F_OUT_HIT]
-            self.out_slow = self.field[PFC.F_OUT_SLOW_TOT]
+        self.entries = self.field[PFC.F_ENTRIES]
+        self.in_hit = self.field[PFC.F_IN_HIT]
+        self.in_slow = self.field[PFC.F_IN_SLOW_TOT]
+        self.out_hit = self.field[PFC.F_OUT_HIT]
+        self.out_slow = self.field[PFC.F_OUT_SLOW_TOT]
 
         return( self.entries, self.in_hit, self.in_slow, self.out_hit, self.out_slow)
 #
