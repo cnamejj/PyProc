@@ -2293,6 +2293,25 @@ class ProcNetUDP6(PBR.fixed_delim_format_recs):
         self.__FieldSplitDelim = ":"
         self.ipconv = IPAddressConv
 
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXIP, BEFORE_VAL: ":" } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXPORT, AFTER_VAL: ":" } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_PORT, AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+	self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXIP, BEFORE_VAL: ":" } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXPORT, AFTER_VAL: ":" } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_PORT, AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_HEXSTATE } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_TXQUEUE, BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_RXQUEUE, AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER, BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER_WHEN, AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RETRANS, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_UID, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_TIMEOUT, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_INODE, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_REFCOUNT, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_POINTER, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_DROPS, CONVERSION: long } )
+
         self.orig_hexip = self.dest_hexip = self.orig_ip = self.dest_ip = self.state = ""
         self.orig_port = self.dest_port = 0
         self.orig_hexport = ""
@@ -2307,10 +2326,6 @@ class ProcNetUDP6(PBR.fixed_delim_format_recs):
 # 2777: 00000000000000000000000000000000:0202 00000000000000000000000000000000:0000 07 00000000:00000000 00:00000000 00000000     0        0 1899 2 0000000000000000 0
 
         if sio.buff == "":
-            self.orig_hexip = self.dest_hexip = self.orig_ip = self.dest_ip = self.state = ""
-            self.orig_port = self.dest_port = 0
-
-            self.field = dict()
             self.field[PFC.F_ORIG_HEXIP] = "00000000000000000000000000000000"
             self.field[PFC.F_DEST_HEXIP] = "00000000000000000000000000000000"
             self.field[PFC.F_ORIG_HEXPORT] = "0000"
@@ -2334,44 +2349,21 @@ class ProcNetUDP6(PBR.fixed_delim_format_recs):
             self.field[PFC.F_DROPS] = 0
 
         else:
-            self.orig_hexip = sio.lineparts[1].partition(self.__FieldSplitDelim)[0]
-            self.dest_hexip = sio.lineparts[2].partition(self.__FieldSplitDelim)[0]
+            self.field[PFC.F_ORIG_IP] = self.ipconv.ipv6_hexstring_to_presentation(self.field[PFC.F_ORIG_HEXIP])
+            self.field[PFC.F_DEST_IP] = self.ipconv.ipv6_hexstring_to_presentation(self.field[PFC.F_DEST_HEXIP])
 
-            self.orig_hexport = sio.lineparts[1].partition(self.__FieldSplitDelim)[2]
-            self.dest_hexport = sio.lineparts[2].partition(self.__FieldSplitDelim)[2]
-
-            self.orig_ip = self.ipconv.ipv6_hexstring_to_presentation(self.orig_hexip)
-            self.dest_ip = self.ipconv.ipv6_hexstring_to_presentation(self.dest_hexip)
-
-            self.orig_port = long(sio.lineparts[1].partition(self.__FieldSplitDelim)[2], 16)
-            self.dest_port = long(sio.lineparts[2].partition(self.__FieldSplitDelim)[2], 16)
-
-            if sio.lineparts[3] in state_list:
-                self.state = state_list[sio.lineparts[3]]
+            if self.field[PFC.F_HEXSTATE] in state_list:
+                self.field[PFC.F_STATE] = state_list[self.field[PFC.F_HEXSTATE]]
             else:
-                self.state = PDC.unknown_state
+                self.field[PFC.F_STATE] = PDC.unknown_state
 
-            self.field[PFC.F_ORIG_HEXIP] = self.orig_hexip
-            self.field[PFC.F_DEST_HEXIP] = self.dest_hexip
-            self.field[PFC.F_ORIG_HEXPORT] = self.orig_hexport
-            self.field[PFC.F_DEST_HEXPORT] = self.dest_hexport
-            self.field[PFC.F_ORIG_IP] = self.orig_ip
-            self.field[PFC.F_DEST_IP] = self.dest_ip
-            self.field[PFC.F_ORIG_PORT] = self.orig_port
-            self.field[PFC.F_DEST_PORT] = self.dest_port
-            self.field[PFC.F_HEXSTATE] = sio.lineparts[3]
-            self.field[PFC.F_STATE] = self.state
-            self.field[PFC.F_TXQUEUE] = long(sio.lineparts[4].partition(self.__FieldSplitDelim)[0], 16)
-            self.field[PFC.F_RXQUEUE] = long(sio.lineparts[4].partition(self.__FieldSplitDelim)[2], 16)
-            self.field[PFC.F_TIMER] = long(sio.lineparts[5].partition(self.__FieldSplitDelim)[0], 16)
-            self.field[PFC.F_TIMER_WHEN] = long(sio.lineparts[5].partition(self.__FieldSplitDelim)[2], 16)
-            self.field[PFC.F_RETRANS] = long(sio.lineparts[6], 16)
-            self.field[PFC.F_UID] = long(sio.lineparts[7])
-            self.field[PFC.F_TIMEOUT] = long(sio.lineparts[8])
-            self.field[PFC.F_INODE] = long(sio.lineparts[9])
-            self.field[PFC.F_REFCOUNT] = long(sio.lineparts[10])
-            self.field[PFC.F_POINTER] = long(sio.lineparts[11], 16)
-            self.field[PFC.F_DROPS] = long(sio.lineparts[12])
+        self.orig_hexip = self.field[PFC.F_ORIG_HEXIP]
+        self.dest_hexip = self.field[PFC.F_DEST_HEXIP]
+        self.orig_ip = self.field[PFC.F_ORIG_IP]
+        self.orig_port = self.field[PFC.F_ORIG_PORT]
+        self.dest_ip = self.field[PFC.F_DEST_IP]
+        self.dest_port = self.field[PFC.F_DEST_PORT]
+        self.state = self.field[PFC.F_STATE]
 
         return( self.orig_hexip, self.dest_hexip, self.orig_ip, self.orig_port, self.dest_ip, self.dest_port, self.state)
 #
@@ -2399,6 +2391,25 @@ class ProcNetUDP(PBR.fixed_delim_format_recs):
         self.skipped = "sl"
         self.__FieldSplitDelim = ":"
 
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXIP, BEFORE_VAL: ":" } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXPORT, AFTER_VAL: ":" } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_PORT, AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+	self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXIP, BEFORE_VAL: ":" } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXPORT, AFTER_VAL: ":" } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_PORT, AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_HEXSTATE } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_TXQUEUE, BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_RXQUEUE, AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER, BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER_WHEN, AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RETRANS, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_UID, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_TIMEOUT, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_INODE, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_REFCOUNT, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_POINTER, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_DROPS, CONVERSION: long } )
+
         self.orig_hexip = self.dest_hexip = self.orig_ip = self.dest_ip = self.state = ""
         self.orig_port = self.dest_port = 0
         self.orig_hexport = ""
@@ -2414,10 +2425,6 @@ class ProcNetUDP(PBR.fixed_delim_format_recs):
 # 2777: 00000000:0202 00000000:0000 07 00000000:00000000 00:00000000 00000000     0        0 1898 2 0000000000000000 0
 
         if sio.buff == "":
-            self.orig_hexip = self.dest_hexip = self.orig_ip = self.dest_ip = self.state = ""
-            self.orig_port = self.dest_port = 0
-
-            self.field = dict()
             self.field[PFC.F_ORIG_HEXIP] = "00000000"
             self.field[PFC.F_DEST_HEXIP] = "00000000"
             self.field[PFC.F_ORIG_HEXPORT] = "0000"
@@ -2441,45 +2448,21 @@ class ProcNetUDP(PBR.fixed_delim_format_recs):
             self.field[PFC.F_DROPS] = 0
 
         else:
-            self.orig_hexip = sio.lineparts[1].partition(self.__FieldSplitDelim)[0]
-            self.dest_hexip = sio.lineparts[2].partition(self.__FieldSplitDelim)[0]
+            self.field[PFC.F_ORIG_IP] = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.field[PFC.F_ORIG_HEXIP], 16)))))
+            self.field[PFC.F_DEST_IP] = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.field[PFC.F_DEST_HEXIP], 16)))))
 
-            self.orig_hexport = sio.lineparts[1].partition(self.__FieldSplitDelim)[2]
-            self.dest_hexport = sio.lineparts[2].partition(self.__FieldSplitDelim)[2]
-
-            self.orig_ip = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.orig_hexip, 16)))))
-            self.dest_ip = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.dest_hexip, 16)))))
-
-            self.orig_port = long(sio.lineparts[1].partition(self.__FieldSplitDelim)[2], 16)
-            self.dest_port = long(sio.lineparts[2].partition(self.__FieldSplitDelim)[2], 16)
-
-            if sio.lineparts[3] in state_list:
-                self.state = state_list[sio.lineparts[3]]
+            if self.field[PFC.F_HEXSTATE] in state_list:
+                self.field[PFC.F_STATE] = state_list[self.field[PFC.F_HEXSTATE]]
             else:
-                self.state = PDC.unknown_state
+                self.field[PFC.F_STATE] = PDC.unknown_state
 
-            self.field[PFC.F_ORIG_HEXIP] = self.orig_hexip
-            self.field[PFC.F_DEST_HEXIP] = self.dest_hexip
-            self.field[PFC.F_ORIG_HEXPORT] = self.orig_hexport
-            self.field[PFC.F_DEST_HEXPORT] = self.dest_hexport
-            self.field[PFC.F_ORIG_IP] = self.orig_ip
-            self.field[PFC.F_DEST_IP] = self.dest_ip
-            self.field[PFC.F_ORIG_PORT] = self.orig_port
-            self.field[PFC.F_DEST_PORT] = self.dest_port
-            self.field[PFC.F_HEXSTATE] = sio.lineparts[3]
-            self.field[PFC.F_STATE] = self.state
-            self.field[PFC.F_TXQUEUE] = long(sio.lineparts[4].partition(self.__FieldSplitDelim)[0], 16)
-            self.field[PFC.F_RXQUEUE] = long(sio.lineparts[4].partition(self.__FieldSplitDelim)[2], 16)
-            self.field[PFC.F_TIMER] = long(sio.lineparts[5].partition(self.__FieldSplitDelim)[0], 16)
-            self.field[PFC.F_TIMER_WHEN] = long(sio.lineparts[5].partition(self.__FieldSplitDelim)[2], 16)
-            self.field[PFC.F_RETRANS] = long(sio.lineparts[6], 16)
-            self.field[PFC.F_UID] = long(sio.lineparts[7])
-            self.field[PFC.F_TIMEOUT] = long(sio.lineparts[8])
-            self.field[PFC.F_INODE] = long(sio.lineparts[9])
-            self.field[PFC.F_REFCOUNT] = long(sio.lineparts[10])
-            self.field[PFC.F_POINTER] = long(sio.lineparts[11], 16)
-            self.field[PFC.F_DROPS] = long(sio.lineparts[12])
-
+        self.orig_hexip = self.field[PFC.F_ORIG_HEXIP]
+        self.dest_hexip = self.field[PFC.F_DEST_HEXIP]
+        self.orig_ip = self.field[PFC.F_ORIG_IP]
+        self.orig_port = self.field[PFC.F_ORIG_PORT]
+        self.dest_ip = self.field[PFC.F_DEST_IP]
+        self.dest_port = self.field[PFC.F_DEST_PORT]
+        self.state = self.field[PFC.F_STATE]
 
         return( self.orig_hexip, self.dest_hexip, self.orig_ip, self.orig_port, self.dest_ip, self.dest_port, self.state)
 #
