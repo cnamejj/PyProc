@@ -52,7 +52,6 @@ state_list = PDC.state_list
 # ---
 class ProcNetNETLINK(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/netlink"""
-# DCHK: 11/19/12
 # source: net/netlink/af_netlink.c
 #        seq_printf(seq, "%pK %-3d %-6d %08x %-8d %-8d %pK %-8d %-8d %-8lu\n",
 #                   s,
@@ -126,7 +125,6 @@ RegisterPartialProcFileHandler("netlink", ProcNetNETLINK)
 # ---
 class ProcNetCONNECTOR(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/connector"""
-# DCHK: 11/19/12
 # source: drivers/connector/connector.c
 #  list_for_each_entry(cbq, &dev->queue_list, callback_entry) {
 #          seq_printf(m, "%-15s %u:%u\n",
@@ -137,7 +135,6 @@ class ProcNetCONNECTOR(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 2
         self.skipped = "Name"
-        self.__FieldSplitDelim = ":"
 
         self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_NAME } )
         self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ID_IDX, BEFORE_VAL: ":", CONVERSION: long }) 
@@ -172,7 +169,6 @@ RegisterPartialProcFileHandler("connector", ProcNetCONNECTOR)
 # ---
 class ProcNetPROTOCOLS(PBR.fixed_delim_format_recs):
     """Specific use of simple col reading class, for /proc/net/protocols file"""
-# DCHK: 11/18/12
 # source: net/core/sock.c
 #    seq_printf(seq, "%-9s %4u %6d  %6ld   %-3s %6u   %-3s  %-10s "
 #                    "%2c %2c %2c %2c %2c %2c %2c %2c %2c %2c %2c %2c %2c %2c %2c %2c %2c %2c %2c\n",
@@ -295,7 +291,6 @@ RegisterPartialProcFileHandler("protocols", ProcNetPROTOCOLS)
 # ---
 class ProcNetROUTE(PBR.fixed_delim_format_recs):
     """Specific use of simple col reading class, for /proc/net/route file"""
-# DCHK: 11/16/12
 # source: net/ipv4/fib_trie.c
 #                        if (fi)
 #                                seq_printf(seq,
@@ -382,7 +377,6 @@ RegisterPartialProcFileHandler("route", ProcNetROUTE)
 # ---
 class ProcNetPACKET(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/packet"""
-# DCHK: 11/18/12
 # source: net/packet/af_packet.c
 #        seq_printf(seq,
 #                   "%pK %-6d %-4d %04x   %-5d %1d %-6u %-6u %-6lu\n",
@@ -450,7 +444,6 @@ RegisterPartialProcFileHandler("packet", ProcNetPACKET)
 # ---
 class ProcNetSOFTNET_STAT(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/softnet_stat"""
-# DCHK: 11/18/12
 # source: net/core/dev.c
 #         seq_printf(seq, "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x\n",
 #                   sd->processed, sd->dropped, sd->time_squeeze, 0,
@@ -514,7 +507,6 @@ RegisterPartialProcFileHandler("softnet_stat", ProcNetSOFTNET_STAT)
 # ---
 class ProcNetARP(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/arp"""
-# DCHK: 11/16/12
 # source: net/ipv4/arp.c
 #        seq_printf(seq, "%-16s 0x%-10x0x%-10x%s     *        %s\n",
 #                   tbuf, hatype, arp_state_to_flags(n), hbuffer, dev->name);
@@ -564,7 +556,6 @@ RegisterPartialProcFileHandler("arp", ProcNetARP)
 # ---
 class ProcNetDEV_MCAST(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/dev_mcast"""
-# DCHK: 11/17/12
 # source: net/core/dev_addr_lists.ca
 #                seq_printf(seq, "%-4d %-15s %-5d %-5d ", dev->ifindex,
 #                           dev->name, ha->refcount, ha->global_use);
@@ -615,7 +606,6 @@ RegisterPartialProcFileHandler("dev_mcast", ProcNetDEV_MCAST)
 # ---
 class ProcNetDEV(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/dev"""
-# DCHK: 11/16/12
 # source: net/core/dev.c
 #        seq_printf(seq, "%6s: %7llu %7llu %4llu %4llu %4llu %5llu %10llu %9llu "
 #                   "%8llu %7llu %4llu %4llu %4llu %5llu %7llu %10llu\n",
@@ -706,7 +696,6 @@ RegisterPartialProcFileHandler("dev", ProcNetDEV)
 # ---
 class ProcNetIF_INET6(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/if_inet6"""
-# DCHK: 11/16/12
 # source: net/ipv6/addrconf.c
 #        seq_printf(seq, "%pi6 %02x %02x %02x %02x %8s\n",
 #                   &ifp->addr,
@@ -775,7 +764,6 @@ RegisterPartialProcFileHandler("if_inet6", ProcNetIF_INET6)
 # ---
 class ProcNetIGMP6(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/igmp6"""
-# DCHK: 11/17/12
 # source: net/ipv6/mcast.c
 #        seq_printf(seq,
 #                   "%-4d %-15s %pi6 %5d %08X %ld\n",
@@ -855,7 +843,6 @@ class ProcNetIP_CONNTRACK(PBR.fixed_delim_format_recs):
         self.__UNREPLIED_PREF = "["
         self.__PACKETS_PREF = "packets="
         self.__BYTES_PREF = "bytes="
-        self.__USE_PREF = "use="
         self.__ASSURED_PREF = "["
         self.__MARK_PREF = "mark="
         self.__SECCTX_PREF = "secctx="
@@ -1001,7 +988,6 @@ RegisterPartialProcFileHandler("net/ip_conntrack", ProcNetIP_CONNTRACK)
 # ---
 class ProcNetIPV6_ROUTE(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/ipv6_route"""
-# DCHK: 11/17/12
 # source: net/ipv6/route.c
 #         seq_printf(m, "%pi6 %02x ", &rt->rt6i_dst.addr, rt->rt6i_dst.plen);
 # 
@@ -1114,7 +1100,6 @@ class ProcNetNF_CONNTRACK(PBR.fixed_delim_format_recs):
         self.__UNREPLIED_PREF = "["
         self.__PACKETS_PREF = "packets="
         self.__BYTES_PREF = "bytes="
-        self.__USE_PREF = "use="
         self.__ASSURED_PREF = "["
         self.__MARK_PREF = "mark="
         self.__SECCTX_PREF = "secctx="
@@ -1277,7 +1262,6 @@ RegisterPartialProcFileHandler("net/nf_conntrack", ProcNetNF_CONNTRACK)
 # ---
 class ProcNetPSCHED(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/psched"""
-# DCHK: 11/18/12
 # source: net/sched/sch_api.c
 #       seq_printf(seq, "%08x %08x %08x %08x\n",
 #                  (u32)NSEC_PER_USEC, (u32)PSCHED_TICKS2NS(1),
@@ -1324,8 +1308,6 @@ RegisterPartialProcFileHandler("psched", ProcNetPSCHED)
 # ---
 class ProcNetPTYPE(PBR.fixed_delim_format_recs):
     """Abstraction layer to pull records from /proc/net/ptype"""
-# DCHK: 2/5/13
-#
 # source: net/core/dev.c
 #
 # if (v == SEQ_START_TOKEN)
@@ -1392,7 +1374,6 @@ RegisterPartialProcFileHandler("ptype", ProcNetPTYPE)
 # ---
 class ProcNetRT6_STATS(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/rt6_stats"""
-# DCHK: 11/18/12
 # source: net/ipv6/route.c
 #    seq_printf(seq, "%04x %04x %04x %04x %04x %04x %04x\n",
 #               net->ipv6.rt6_stats->fib_nodes,
@@ -1452,7 +1433,6 @@ RegisterPartialProcFileHandler("rt6_stats", ProcNetRT6_STATS)
 # ---
 class ProcNetRT_CACHE(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/rt_cache"""
-# DCHK: 11/16/12
 # source: net/ipv4/route.c
 #                seq_printf(seq, "%s\t%08X\t%08X\t%8X\t%d\t%u\t%d\t"
 #                              "%08X\t%d\t%u\t%u\t%02X\t%d\t%1d\t%08X%n",
@@ -1553,7 +1533,6 @@ RegisterPartialProcFileHandler("net/rt_cache", ProcNetRT_CACHE)
 # ---
 class ProcNetStatARP_CACHE(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/stat/arp_cache"""
-# DCHK: 11/16/12
 # source: net/core/neighbour.c
 #        seq_printf(seq, "%08x  %08lx %08lx %08lx  %08lx %08lx  %08lx  "
 #                        "%08lx %08lx  %08lx %08lx %08lx\n",
@@ -1642,7 +1621,6 @@ RegisterPartialProcFileHandler("arp_cache", ProcNetStatARP_CACHE)
 # ---
 class ProcNetStatIP_CONNTRACK(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/stat/ip_conntrack"""
-# DCHK: 11/16/12
 # source: net/ipv4/netfilter/nf_conntrack_l3proto_ipv4_compat.c
 #       seq_printf(seq, "%08x  %08x %08x %08x %08x %08x %08x %08x "
 #                        "%08x %08x %08x %08x %08x  %08x %08x %08x %08x\n",
@@ -1743,7 +1721,6 @@ RegisterPartialProcFileHandler("stat/ip_conntrack", ProcNetStatIP_CONNTRACK)
 # ---
 class ProcNetStatNDISC_CACHE(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/stat/ndisc_cache"""
-# DCHK: 11/16/12
 # source: net/core/neighbour.c
 #        seq_printf(seq, "%08x  %08lx %08lx %08lx  %08lx %08lx  %08lx  "
 #                        "%08lx %08lx  %08lx %08lx %08lx\n",
@@ -1819,7 +1796,6 @@ RegisterPartialProcFileHandler("ndisc_cache", ProcNetStatNDISC_CACHE)
 # ---
 class ProcNetStatNF_CONNTRACK(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/stat/nf_conntrack"""
-# DCHK: 11/16/12
 # source: net/netfilter/nf_conntrack_standalone.c
 #        seq_printf(seq, "%08x  %08x %08x %08x %08x %08x %08x %08x "
 #                        "%08x %08x %08x %08x %08x  %08x %08x %08x %08x\n",
@@ -1920,7 +1896,6 @@ RegisterPartialProcFileHandler("stat/nf_conntrack", ProcNetStatNF_CONNTRACK)
 # ---
 class ProcNetStatRT_CACHE(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/stat/rt_cache"""
-# DCHK: 11/16/12
 # source: net/ipv4/route.c
 #        seq_printf(seq,"%08x  %08x %08x %08x %08x %08x %08x %08x "
 #                   " %08x %08x %08x %08x %08x %08x %08x %08x %08x \n",
@@ -2015,7 +1990,6 @@ RegisterPartialProcFileHandler("stat/rt_cache", ProcNetStatRT_CACHE)
 # ---
 class ProcNetTCP6(PBR.fixed_delim_format_recs):
     """Abstraction layer to pull records from /proc/net/tcp6"""
-# DCHK: 2/3/13
 # source: net/ipv6/tcp_ipv6.c
 # Note: Just as with the "tcp4" code, the source has three separate sections that
 #       write data to this proc file.  And the one used depends on the state of the
@@ -2054,7 +2028,6 @@ class ProcNetTCP6(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 12
         self.skipped = "sl"
-        self.__FieldSplitDelim = ":"
         self.ipconv = IPAddressConv
 
         self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXIP, BEFORE_VAL: ":" } )
@@ -2145,7 +2118,6 @@ RegisterPartialProcFileHandler("tcp6", ProcNetTCP6)
 # ---
 class ProcNetTCP(PBR.fixed_delim_format_recs):
     """Abstraction layer to pull records from /proc/net/tcp"""
-# DCHK: 11/17/12
 # source: net/ipv4/tcp_ipv4.c
 # Note: The sample code include is one of three spots where this data is written out.
 #       The choice of which code to call depends on the status of the socket and only
@@ -2175,7 +2147,6 @@ class ProcNetTCP(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 12
         self.skipped = "sl"
-        self.__FieldSplitDelim = ":"
 
         self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXIP, BEFORE_VAL: ":" } )
         self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXPORT, AFTER_VAL: ":" } )
@@ -2268,7 +2239,6 @@ RegisterPartialProcFileHandler("tcp", ProcNetTCP)
 # ---
 class ProcNetUDP6(PBR.fixed_delim_format_recs):
     """Abstraction layer to pull records from /proc/net/udp6"""
-# DCHK: 11/16/12 
 # source: net/ipv6/udp.c
 #        seq_printf(seq,
 #                   "%5d: %08X%08X%08X%08X:%04X %08X%08X%08X%08X:%04X "
@@ -2290,7 +2260,6 @@ class ProcNetUDP6(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 12
         self.skipped = "sl"
-        self.__FieldSplitDelim = ":"
         self.ipconv = IPAddressConv
 
         self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXIP, BEFORE_VAL: ":" } )
@@ -2375,7 +2344,6 @@ RegisterPartialProcFileHandler("udp6", ProcNetUDP6)
 # ---
 class ProcNetUDP(PBR.fixed_delim_format_recs):
     """Abstraction layer to pull records from /proc/net/udp"""
-# DCHK: 11/17/12
 # source: net/ipv4/udp.c
 #        seq_printf(f, "%5d: %08X:%04X %08X:%04X"
 #                " %02X %08X:%08X %02X:%08lX %08X %5d %8d %lu %d %pK %d%n",
@@ -2389,7 +2357,6 @@ class ProcNetUDP(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 12
         self.skipped = "sl"
-        self.__FieldSplitDelim = ":"
 
         self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXIP, BEFORE_VAL: ":" } )
         self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXPORT, AFTER_VAL: ":" } )
@@ -2474,7 +2441,6 @@ RegisterPartialProcFileHandler("udp", ProcNetUDP)
 # ---
 class ProcNetUNIX(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/unix"""
-# DCHK: 11/16/12
 # source: net/unix/af_unix.c
 #                seq_printf(seq, "%pK: %08X %08X %08X %04X %02X %5lu",
 #                        s,
@@ -2507,6 +2473,15 @@ class ProcNetUNIX(PBR.fixed_delim_format_recs):
         self.minfields = 7
         self.skipped = "Num"
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_NUM, BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_REFCOUNT, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_PROTOCOL, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_FLAGS, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_TYPE, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_STATE, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_INODE, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_PATH } )
+
         self.protocol = 0
         self.refcount = 0
         self.flags = 0
@@ -2524,16 +2499,6 @@ class ProcNetUNIX(PBR.fixed_delim_format_recs):
 # 0000000000000000: 00000002 00000000 00010000 0001 01 16649 /tmp/keyring-OUNO20/control
 
         if sio.buff == "":
-            self.protocol = 0
-            self.refcount = 0
-            self.flags = 0
-            self.type = 0
-            self.state = 0
-            self.inode = 0
-            self.path = ""
-
-            self.field = dict()
-
             self.field[PFC.F_NUM] = 0
             self.field[PFC.F_REFCOUNT] = 0
             self.field[PFC.F_PROTOCOL] = 0
@@ -2543,29 +2508,13 @@ class ProcNetUNIX(PBR.fixed_delim_format_recs):
             self.field[PFC.F_INODE] = 0
             self.field[PFC.F_PATH] = ""
 
-        else:
-            __seq = sio.lineparts[0]
-            if __seq[-1:] == ":":
-                __seq = __seq[:-1]
-            self.field[PFC.F_NUM] = long(__seq, 16)
-            self.field[PFC.F_REFCOUNT] = long(sio.lineparts[1], 16)
-            self.field[PFC.F_PROTOCOL] = long(sio.lineparts[2], 16)
-            self.field[PFC.F_FLAGS] = long(sio.lineparts[3], 16)
-            self.field[PFC.F_TYPE] = long(sio.lineparts[4], 16)
-            self.field[PFC.F_STATE] = long(sio.lineparts[5], 16)
-            self.field[PFC.F_INODE] = long(sio.lineparts[6])
-            if sio.linewords > sio.MinWords:
-                self.field[PFC.F_PATH] = sio.lineparts[7]
-            else:
-                self.field[PFC.F_PATH] = ""
-
-            self.protocol = self.field[PFC.F_PROTOCOL]
-            self.refcount = self.field[PFC.F_REFCOUNT]
-            self.flags = self.field[PFC.F_FLAGS]
-            self.type = self.field[PFC.F_TYPE]
-            self.state = self.field[PFC.F_STATE]
-            self.inode = self.field[PFC.F_INODE]
-            self.path = self.field[PFC.F_PATH]
+        self.protocol = self.field[PFC.F_PROTOCOL]
+        self.refcount = self.field[PFC.F_REFCOUNT]
+        self.flags = self.field[PFC.F_FLAGS]
+        self.type = self.field[PFC.F_TYPE]
+        self.state = self.field[PFC.F_STATE]
+        self.inode = self.field[PFC.F_INODE]
+        self.path = self.field[PFC.F_PATH]
 
         return( self.refcount, self.protocol, self.flags, self.type, self.state, self.inode, self.path)
 #
@@ -2577,7 +2526,6 @@ RegisterPartialProcFileHandler("unix", ProcNetUNIX)
 # ---
 class ProcNetSNMP6(PBR.single_name_value_list):
     """Pull records from /proc/net/snmp6"""
-# DCHK: 11/25/12
 # source: net/ipv6/proc.c
 
 # -- Sample records.  This file a series of key/value entries, one per line.
@@ -2597,7 +2545,6 @@ RegisterPartialProcFileHandler("snmp6", ProcNetSNMP6)
 # ---
 class ProcNetDEV_SNMP6(PBR.single_name_value_list):
     """Pull records from a device specific file in the /proc/net/dev_snmp6/ directory"""
-# DCHK: 11/25/12
 # source: net/ipv6/proc.c
 #
 #  seq_printf(seq, "%-32s\t%u\n", "ifIndex", idev->dev->ifindex);
@@ -2637,7 +2584,6 @@ RegisterPartialProcFileHandler("dev_snmp6", ProcNetDEV_SNMP6)
 # ---
 class ProcNetIGMP(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/igmp"""
-# DCHK: 11/20/12
 # source: net/ipv4/igmp.c
 #        if (rcu_dereference(state->in_dev->mc_list) == im) {
 #                seq_printf(seq, "%d\t%-10s: %5d %7s\n",
@@ -2658,6 +2604,11 @@ class ProcNetIGMP(PBR.fixed_delim_format_recs):
         self.skipped = "Idx"
         self.__FieldSplitDelim = ":"
 
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INDEX, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_DEVICE } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_COUNT, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_QUERIER } )
+
         self.count = 0
         self.index = 0
         self.group = 0
@@ -2677,17 +2628,6 @@ class ProcNetIGMP(PBR.fixed_delim_format_recs):
 # 				010000E0     1 0:00000000		0
 
         if sio.buff == "":
-
-            self.index = 0
-            self.device = PDC.ANY_DEVICE
-            self.count = 0
-            self.querier = ""
-            self.group = 0
-            self.users = 0
-            self.timer = 0
-        
-            self.field = dict()
-
             self.field[PFC.F_INDEX] = 0
             self.field[PFC.F_DEVICE] = PDC.ANY_DEVICE
             self.field[PFC.F_COUNT] = 0
@@ -2699,10 +2639,6 @@ class ProcNetIGMP(PBR.fixed_delim_format_recs):
             self.field[PFC.F_REPORTER] = 0
 
         else:
-            self.field[PFC.F_INDEX] = long(sio.lineparts[0])
-            self.field[PFC.F_DEVICE] = sio.lineparts[1]
-            self.field[PFC.F_COUNT] = long(sio.lineparts[3])
-            self.field[PFC.F_QUERIER] = sio.lineparts[4]
 
 # ... need to read the next line for the rest.
             sio.MinWords = self.__MinWords_second
@@ -2710,17 +2646,6 @@ class ProcNetIGMP(PBR.fixed_delim_format_recs):
             sio.MinWords = self.__MinWords_first
 
             if sio.buff == "":
-
-                self.index = 0
-                self.device = PDC.ANY_DEVICE
-                self.count = 0
-                self.querier = ""
-                self.group = 0
-                self.users = 0
-                self.timer = 0
-
-                self.field = dict()
-
                 self.field[PFC.F_INDEX] = 0
                 self.field[PFC.F_DEVICE] = PDC.ANY_DEVICE
                 self.field[PFC.F_COUNT] = 0
@@ -2739,13 +2664,13 @@ class ProcNetIGMP(PBR.fixed_delim_format_recs):
                 self.field[PFC.F_ZERO1] = long(__split[2], 16)
                 self.field[PFC.F_REPORTER] = long(sio.lineparts[3])
 
-                self.index = self.field[PFC.F_INDEX]
-                self.device = self.field[PFC.F_DEVICE]
-                self.count = self.field[PFC.F_COUNT]
-                self.querier = self.field[PFC.F_QUERIER]
-                self.group = self.field[PFC.F_GROUP]
-                self.users = self.field[PFC.F_USERS]
-                self.timer = self.field[PFC.F_TIMER]
+        self.index = self.field[PFC.F_INDEX]
+        self.device = self.field[PFC.F_DEVICE]
+        self.count = self.field[PFC.F_COUNT]
+        self.querier = self.field[PFC.F_QUERIER]
+        self.group = self.field[PFC.F_GROUP]
+        self.users = self.field[PFC.F_USERS]
+        self.timer = self.field[PFC.F_TIMER]
 
         return( self.index, self.device, self.count, self.querier, self.group, self.users, self.timer)
 #
@@ -2757,8 +2682,6 @@ RegisterPartialProcFileHandler("igmp", ProcNetIGMP)
 # ---
 class ProcNetSNMP(PBR.twoline_logical_records):
     """Abstraction layer to pull records from /proc/net/snmp"""
-# DCHK: 4/8/13
-#
 # source: net/ipv4/proc.c
 #
 # The kernel source snippets that generate this file are stored in
@@ -2781,8 +2704,6 @@ RegisterPartialProcFileHandler("snmp", ProcNetSNMP)
 # ---
 class ProcNetNETSTAT(PBR.twoline_logical_records):
     """Abstraction layer to pull records from /proc/net/netstat"""
-# DCHK: 4/8/13
-#
 # source: net/ipv4/proc.c
 #
 # seq_puts(seq, "TcpExt:");
@@ -2822,7 +2743,6 @@ RegisterPartialProcFileHandler("netstat", ProcNetNETSTAT)
 # ---
 class ProcNetSOCKSTAT(PBR.labelled_pair_list_records):
     """Abstraction layer to pull records from /proc/net/sockstat"""
-# DCHK: 2/4/13
 # Note: Two different ".c" files write data to /net/sockstat.  They are called
 #       in the order listed here.
 #
@@ -2866,8 +2786,6 @@ RegisterPartialProcFileHandler("sockstat", ProcNetSOCKSTAT)
 # ---
 class ProcNetSOCKSTAT6(PBR.labelled_pair_list_records):
     """Abstraction layer to pull records from /proc/net/sockstat6"""
-# DCHK: 2/4/13
-#
 # source: net/ipv6/proc.c
 #
 #  seq_printf(seq, "TCP6: inuse %d\n",
@@ -2902,7 +2820,6 @@ RegisterPartialProcFileHandler("sockstat6", ProcNetSOCKSTAT6)
 # ---
 class ProcNetIP6_TABLES_MATCHES(PBR.list_of_terms_format):
     """Pull records from /proc/net/ip6_tables_matches"""
-# DCHK: 11/20/12
 # source: net/netfilter/x_tables.c
 
 # -- Sample records.  This file is only readable by root and is just
@@ -2921,7 +2838,6 @@ RegisterPartialProcFileHandler("ip6_tables_matches", ProcNetIP6_TABLES_MATCHES)
 # ---
 class ProcNetIP6_TABLES_NAMES(PBR.list_of_terms_format):
     """Pull records from /proc/net/ip6_tables_names"""
-# DCHK: 11/24/12
 # source: net/netfilter/x_tables.c
 
 # -- Sample records.  This file is only readable by root and is just
@@ -2937,7 +2853,6 @@ RegisterPartialProcFileHandler("ip6_tables_names", ProcNetIP6_TABLES_NAMES)
 # ---
 class ProcNetIP6_TABLES_TARGETS(PBR.list_of_terms_format):
     """Pull records from /proc/net/ip6_tables_targets"""
-# DCHK: 11/24/12
 # source: net/netfilter/x_tables.c
 
 # -- Sample records.  This file is only readable by root and is just
@@ -2954,7 +2869,6 @@ RegisterPartialProcFileHandler("ip6_tables_targets", ProcNetIP6_TABLES_TARGETS)
 # ---
 class ProcNetIP_TABLES_MATCHES(PBR.list_of_terms_format):
     """Pull records from /proc/net/ip_tables_matches"""
-# DCHK: 11/24/12
 # source: net/netfilter/x_tables.c
 
 # -- Sample records.  This file is only readable by root and is just
@@ -2973,7 +2887,6 @@ RegisterPartialProcFileHandler("ip_tables_matches", ProcNetIP_TABLES_MATCHES)
 # ---
 class ProcNetIP_TABLES_NAMES(PBR.list_of_terms_format):
     """Pull records from /proc/net/ip_tables_names"""
-# DCHK: 11/24/12
 # source: net/netfilter/x_tables.c
 
 # -- Sample records.  This file is only readable by root and is just
@@ -2989,7 +2902,6 @@ RegisterPartialProcFileHandler("ip_tables_names", ProcNetIP_TABLES_NAMES)
 # ---
 class ProcNetIP_TABLES_TARGETS(PBR.list_of_terms_format):
     """Pull records from /proc/net/ip_tables_targets"""
-# DCHK: 11/24/12
 # source: net/netfilter/x_tables.c
 
 # -- Sample records.  This file is only readable by root and is just
@@ -3007,7 +2919,6 @@ RegisterPartialProcFileHandler("ip_tables_targets", ProcNetIP_TABLES_TARGETS)
 # ---
 class ProcNetNetfilterNF_LOG(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/netfilter/nf_log"""
-# DCHK: 11/19/12
 # source: net/netfilter/nf_log.c
 #  if (!logger)
 #          ret = seq_printf(s, "%2lld NONE (", *pos);
@@ -3032,6 +2943,11 @@ class ProcNetNetfilterNF_LOG(PBR.fixed_delim_format_recs):
 
     def extra_init(self, *opts):
         self.minfields = 3
+
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INDEX, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_NAME } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_LOGGER_LIST, PREFIX_VAL: "(", SUFFIX_VAL: ")" } )
+
         self.index = 0
         self.name = ""
         self.log_list = ""
@@ -3046,28 +2962,13 @@ class ProcNetNetfilterNF_LOG(PBR.fixed_delim_format_recs):
 #  2 ipt_LOG (ipt_LOG)
 
         if sio.buff == "":
-
-            self.index = 0
-            self.name = ""
-            self.log_list = ""
-
-            self.field = dict()
-
             self.field[PFC.F_INDEX] = 0
             self.field[PFC.F_NAME] = ""
             self.field[PFC.F_LOGGER_LIST] = ""
 
-        else:
-            self.field[PFC.F_INDEX] = long(sio.lineparts[0])
-            self.field[PFC.F_NAME] = sio.lineparts[1]
-            __clean = sio.lineparts[2]
-            if __clean[:1] == "(" and __clean[-1:] == ")":
-                __clean = __clean[2:-1]
-            self.field[PFC.F_LOGGER_LIST] = __clean
-
-            self.index = self.field[PFC.F_INDEX]
-            self.name = self.field[PFC.F_NAME]
-            self.log_list = self.field[PFC.F_LOGGER_LIST]
+        self.index = self.field[PFC.F_INDEX]
+        self.name = self.field[PFC.F_NAME]
+        self.log_list = self.field[PFC.F_LOGGER_LIST]
 
         return( self.index, self.name, self.log_list)
 #
@@ -3079,7 +2980,6 @@ RegisterPartialProcFileHandler("nf_log", ProcNetNetfilterNF_LOG)
 # ---
 class ProcNetNetfilterNF_QUEUE(PBR.fixed_delim_format_recs):
     """Pull records from /proc/net/netfilter/nf_queue"""
-# DCHK: 11/19/12
 # source: net/netfilter/nf_queue.c
 #  if (!qh)
 #          ret = seq_printf(s, "%2lld NONE\n", *pos);
@@ -3088,6 +2988,10 @@ class ProcNetNetfilterNF_QUEUE(PBR.fixed_delim_format_recs):
 
     def extra_init(self, *opts):
         self.minfields = 2
+
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INDEX, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_NAME } )
+
         self.index = 0
         self.name = ""
         return
@@ -3101,21 +3005,11 @@ class ProcNetNetfilterNF_QUEUE(PBR.fixed_delim_format_recs):
 # 2 NONE
 
         if sio.buff == "":
-
-            self.index = 0
-            self.name = ""
-        
-            self.field = dict()
-
             self.field[PFC.F_INDEX] = 0
             self.field[PFC.F_NAME] = ""
 
-        else:
-            self.field[PFC.F_INDEX] = long(sio.lineparts[0])
-            self.field[PFC.F_NAME] = sio.lineparts[1]
-
-            self.index = self.field[PFC.F_INDEX]
-            self.name = self.field[PFC.F_NAME]
+        self.index = self.field[PFC.F_INDEX]
+        self.name = self.field[PFC.F_NAME]
 
         return( self.index, self.name)
 #
