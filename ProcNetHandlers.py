@@ -344,13 +344,13 @@ class ProcNetROUTE(PBR.fixed_delim_format_recs):
 
         if sio.buff == "":
             self.field[PFC.F_INTERFACE] = PDC.ANY_INTERFACE
-            self.field[PFC.F_DEST_HEXIP] = str(PDC.ANY_IP_ADDR_HEX)
-            self.field[PFC.F_GATE_HEXIP] = str(PDC.ANY_IP_ADDR_HEX)
+            self.field[PFC.F_DEST_HEXIP] = PDC.ANY_IP_ADDR_HEX
+            self.field[PFC.F_GATE_HEXIP] = PDC.ANY_IP_ADDR_HEX
             self.field[PFC.F_FLAGS] = 0
             self.field[PFC.F_REFCOUNT] = 0
             self.field[PFC.F_USECOUNT] = 0
             self.field[PFC.F_METRIC] = 0
-            self.field[PFC.F_MASK_HEXIP] = str(PDC.ANY_IP_ADDR_HEX)
+            self.field[PFC.F_MASK_HEXIP] = PDC.ANY_IP_ADDR_HEX
             self.field[PFC.F_MTU] = 0
             self.field[PFC.F_WINDOW] = 0
             self.field[PFC.F_IRTT] = 0
@@ -898,14 +898,14 @@ class ProcNetIP_CONNTRACK(PBR.fixed_delim_format_recs):
             __off = 3
             if __off < sio.linewords:
                 if not sio.lineparts[__off].startswith(self.__TUPLE_PREF):
-                    self.field[PFC.F_STATE] = str(sio.lineparts[__off])
+                    self.field[PFC.F_STATE] = sio.lineparts[__off]
                     __off += 1
 
             if __off < sio.linewords:
-                self.field[PFC.F_OR_SRC_IP] = str(sio.lineparts[__off].partition(self.__Val_Delim)[2])
+                self.field[PFC.F_OR_SRC_IP] = sio.lineparts[__off].partition(self.__Val_Delim)[2]
                 __off += 1
             if __off < sio.linewords:
-                self.field[PFC.F_OR_DST_IP] = str(sio.lineparts[__off].partition(self.__Val_Delim)[2])
+                self.field[PFC.F_OR_DST_IP] = sio.lineparts[__off].partition(self.__Val_Delim)[2]
                 __off += 1
             if __off < sio.linewords:
                 self.field[PFC.F_OR_SRC_PORT] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
@@ -916,7 +916,7 @@ class ProcNetIP_CONNTRACK(PBR.fixed_delim_format_recs):
 
             if __off < sio.linewords:
                 if sio.lineparts[__off].startswith(self.__UNREPLIED_PREF):
-                    self.field[PFC.F_UNREPLIED] = str(sio.lineparts[__off])
+                    self.field[PFC.F_UNREPLIED] = sio.lineparts[__off]
                     __off += 1
 
             if __off < sio.linewords:
@@ -930,10 +930,10 @@ class ProcNetIP_CONNTRACK(PBR.fixed_delim_format_recs):
                     __off += 1
 
             if __off < sio.linewords:
-                self.field[PFC.F_RE_SRC_IP] = str(sio.lineparts[__off].partition(self.__Val_Delim)[2])
+                self.field[PFC.F_RE_SRC_IP] = sio.lineparts[__off].partition(self.__Val_Delim)[2]
                 __off += 1
             if __off < sio.linewords:
-                self.field[PFC.F_RE_DST_IP] = str(sio.lineparts[__off].partition(self.__Val_Delim)[2])
+                self.field[PFC.F_RE_DST_IP] = sio.lineparts[__off].partition(self.__Val_Delim)[2]
                 __off += 1
             if __off < sio.linewords:
                 self.field[PFC.F_RE_SRC_PORT] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
@@ -954,7 +954,7 @@ class ProcNetIP_CONNTRACK(PBR.fixed_delim_format_recs):
 
             if __off < sio.linewords:
                 if sio.lineparts[__off].startswith(self.__ASSURED_PREF):
-                    self.field[PFC.F_ASSURED] = str(sio.lineparts[__off])
+                    self.field[PFC.F_ASSURED] = sio.lineparts[__off]
                     __off += 1
 
             if __off < sio.linewords:
@@ -1491,20 +1491,20 @@ class ProcNetRT_CACHE(PBR.fixed_delim_format_recs):
 
         if sio.buff == "":
             self.field[PFC.F_INTERFACE] = PDC.ANY_INTERFACE
-            self.field[PFC.F_DEST_HEXIP] = str(PDC.ANY_IP_ADDR_HEX)
-            self.field[PFC.F_GATE_HEXIP] = str(PDC.ANY_IP_ADDR_HEX)
+            self.field[PFC.F_DEST_HEXIP] = PDC.ANY_IP_ADDR_HEX
+            self.field[PFC.F_GATE_HEXIP] = PDC.ANY_IP_ADDR_HEX
             self.field[PFC.F_FLAGS] = 0
             self.field[PFC.F_REFCOUNT] = 0
             self.field[PFC.F_USECOUNT] = 0
             self.field[PFC.F_METRIC] = 0
-            self.field[PFC.F_SRCE_HEXIP] = str(PDC.ANY_IP_ADDR_HEX)
+            self.field[PFC.F_SRCE_HEXIP] = PDC.ANY_IP_ADDR_HEX
             self.field[PFC.F_MTU] = 0
             self.field[PFC.F_WINDOW] = 0
             self.field[PFC.F_IRTT] = 0
             self.field[PFC.F_TOS] = 0
             self.field[PFC.F_HHREF] = 0
             self.field[PFC.F_HHUPTOD] = 0
-            self.field[PFC.F_SPEC_HEXIP] = str(PDC.ANY_IP_ADDR_HEX)
+            self.field[PFC.F_SPEC_HEXIP] = PDC.ANY_IP_ADDR_HEX
             self.field[PFC.F_DEST_IP] = PDC.ANY_IP_ADDR
             self.field[PFC.F_GATEWAY] = PDC.ANY_IP_ADDR
             self.field[PFC.F_SOURCE] = PDC.ANY_IP_ADDR
@@ -1592,20 +1592,6 @@ class ProcNetStatARP_CACHE(PBR.fixed_delim_format_recs):
             self.field[PFC.F_GC_PERIODIC] = 0
             self.field[PFC.F_GC_FORCED] = 0
             self.field[PFC.F_UNRES_DISCARD] = 0
-
-#        else:
-#            self.field[PFC.F_ARP_ENTRIES] = long(sio.lineparts[0], 16)
-#            self.field[PFC.F_ALLOC] = long(sio.lineparts[1], 16)
-#            self.field[PFC.F_DESTROY] = long(sio.lineparts[2], 16)
-#            self.field[PFC.F_HASH_GROW] = long(sio.lineparts[3], 16)
-#            self.field[PFC.F_LOOKUP] = long(sio.lineparts[4], 16)
-#            self.field[PFC.F_HIT] = long(sio.lineparts[5], 16)
-#            self.field[PFC.F_RES_FAIL] = long(sio.lineparts[6], 16)
-#            self.field[PFC.F_RCV_MCAST_PROBE] = long(sio.lineparts[7], 16)
-#            self.field[PFC.F_RCV_UCAST_PROBE] = long(sio.lineparts[8], 16)
-#            self.field[PFC.F_GC_PERIODIC] = long(sio.lineparts[9], 16)
-#            self.field[PFC.F_GC_FORCED] = long(sio.lineparts[10], 16)
-#            self.field[PFC.F_UNRES_DISCARD] = long(sio.lineparts[11], 16)
 
         self.entries = self.field[PFC.F_ARP_ENTRIES]
         self.lookups = self.field[PFC.F_LOOKUP]

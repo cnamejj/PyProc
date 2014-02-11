@@ -35,6 +35,8 @@ SUFFIX_VAL = PBR.SUFFIX_VAL
 BEFORE_VAL = PBR.BEFORE_VAL
 AFTER_VAL = PBR.AFTER_VAL
 
+convert_by_rule = PBR.convert_by_rule
+
 RegisterProcFileHandler = PBR.RegisterProcFileHandler
 RegisterPartialProcFileHandler = PBR.RegisterPartialProcFileHandler
 
@@ -213,11 +215,11 @@ class ProcRootMTRR(PBR.fixed_delim_format_recs):
             __offset = 3
             if sio.lineparts[__offset] == self.__SizePref:
                 __offset = __offset + 1
-            elif sio.lineparts[__offset][:len(self.__SizePref)] != self.__SizePref:
+            elif not sio.lineparts[__offset].startswith(self.__SizePref):
                 __offset = __offset + 1
                 if sio.lineparts[__offset] == self.__SizePref:
                     __offset = __offset + 1
-            self.field[PFC.F_SIZE] = long(sio.lineparts[__offset][-8:-3])
+            self.field[PFC.F_SIZE] = convert_by_rule(sio.lineparts[__offset][-8:], { CONVERSION: long, SUFFIX_VAL: "MB," } )
 
             __offset = __offset + 2
             self.field[PFC.F_TYPE] = sio.lineparts[__offset]
@@ -508,7 +510,7 @@ class ProcRootLOCKS(PBR.fixed_delim_format_recs):
             self.field[PFC.F_END] = 0
 
         else:
-            self.field[PFC.F_INDEX] = long(sio.lineparts[0][:-1])
+            self.field[PFC.F_INDEX] = convert_by_rule(sio.lineparts[0], { CONVERSION: long, SUFFIX_VAL: ":" } )
             if sio.lineparts[1] != self.__SkipPrefix:
                 __offset = 1
             else:
@@ -519,17 +521,17 @@ class ProcRootLOCKS(PBR.fixed_delim_format_recs):
             __offset = __offset + 1
             self.field[PFC.F_LOCK_IO] = sio.lineparts[__offset]
             __offset = __offset + 1
-            self.field[PFC.F_PID] = long(sio.lineparts[__offset])
+            self.field[PFC.F_PID] = convert_by_rule(sio.lineparts[__offset], { CONVERSION: long} )
             __offset = __offset + 1
             self.field[PFC.F_LOCK_INODE] = sio.lineparts[__offset]
             __offset = __offset + 1
-            self.field[PFC.F_START] = long(sio.lineparts[__offset])
+            self.field[PFC.F_START] = convert_by_rule(sio.lineparts[__offset], { CONVERSION: long } )
             __offset = __offset + 1
             self.field[PFC.F_END_STRING] = sio.lineparts[__offset]
             if self.field[PFC.F_END_STRING] == "EOF":
                 self.field[PFC.F_END] = numpy.inf
             else:
-                self.field[PFC.F_END] = long(self.field[PFC.F_END_STRING])
+                self.field[PFC.F_END] = convert_by_rule(self.field[PFC.F_END_STRING], { CONVERSION: long } )
 
         self.index = self.field[PFC.F_INDEX]
         self.locktype = self.field[PFC.F_LOCK_TYPE]
@@ -1847,14 +1849,16 @@ class ProcRootMDSTAT(PBR.fixed_delim_format_recs):
         self.field[PFC.F_PAGES_NOMISS_KB] = long(__curr[1:-len(self.__PAGES_SUFF)])
 
         __curr = sio.lineparts[4]
-        if __curr[-len(self.__KB_SUFF):] == self.__KB_SUFF:
+#        if __curr[-len(self.__KB_SUFF):] == self.__KB_SUFF:
+        if __curr.endswith(self.__KB_SUFF):
             self.field[PFC.F_BITMAP_CHUNK] = long(__curr[:-len(self.__KB_SUFF)]) * 1024
         else:
             self.field[PFC.F_BITMAP_CHUNK] = long(__curr[:-len(self.__B_SUFF)])
 
         if sio.linewords >= 7:
             __curr = " ".join(sio.lineparts[6:])
-            if __curr[:len(self.__PATH_PREF)] == self.__PATH_PREF:
+#            if __curr[:len(self.__PATH_PREF)] == self.__PATH_PREF:
+            if __curr.startswith(self.__PATH_PREF):
                 __curr = __curr[len(self.__PATH_PREF):]
 
             if __curr[:1] == " ":
@@ -1865,7 +1869,8 @@ class ProcRootMDSTAT(PBR.fixed_delim_format_recs):
 
     def parse_rebuild_subrec(self, sio):
         __curr = sio.lineparts[0]
-        if __curr[:len(self.__RESYNC_FLAG)] == self.__RESYNC_FLAG:
+#        if __curr[:len(self.__RESYNC_FLAG)] == self.__RESYNC_FLAG:
+        if __curr.startswith(self.__RESYNC_FLAG):
             self.field[PFC.F_RESYNC_STAT] = __curr.partition(self.__RESYNC_DELIM)[2]
         else:
             self.field[PFC.F_REBUILD_PROG] = sio.lineparts[0]

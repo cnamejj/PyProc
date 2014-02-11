@@ -125,7 +125,7 @@ class SeqFileIO:
             self.__unknown_label = set()
 
             while self.read_line():
-                self.__sock_type = str(self.lineparts[0])
+                self.__sock_type = self.lineparts[0]
                 if self.__sock_type in label_set:
                     self.__result.add(self.__sock_type)
                     handler.field[self.__sock_type] = pair_list_to_dictionary(self.buff, 2)

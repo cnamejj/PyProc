@@ -201,10 +201,9 @@ def GetProcFileHandler(proc_file):
     if __handler == 0:
         __matchlen = 0
         for __patt in proc_partial_file_handler_registry:
-            if len(__patt) > __matchlen:
-                if __patt == proc_file[-len(__patt):]:
-                    __matchlen = len(__patt)
-                    __handler = proc_partial_file_handler_registry[__patt]
+            if len(__patt) > __matchlen and proc_file.endswith(__patt):
+                __matchlen = len(__patt)
+                __handler = proc_partial_file_handler_registry[__patt]
 
     if __handler == 0:
         __handler = proc_file_handler_registry[F_NULL_HANDLER]

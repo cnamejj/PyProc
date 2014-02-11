@@ -36,6 +36,8 @@ SUFFIX_VAL = PBR.SUFFIX_VAL
 BEFORE_VAL = PBR.BEFORE_VAL
 AFTER_VAL = PBR.AFTER_VAL
 
+convert_by_rule = PBR.convert_by_rule
+
 RegisterProcFileHandler = PBR.RegisterProcFileHandler
 RegisterPartialProcFileHandler = PBR.RegisterPartialProcFileHandler
 
@@ -756,13 +758,13 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 
         for __mount_opt in self.__NFS_MOUNT_OPTS_LONG:
             try:
-                self.field[__mount_opt] = long(__opt[__mount_opt])
+                self.field[__mount_opt] = convert_by_rule(__opt[__mount_opt], { CONVERSION: long } )
             except KeyError:
                 self.field[__mount_opt] = 0
 
         for __mount_opt in self.__NFS_MOUNT_OPTS_HEX:
             try:
-                self.field[__mount_opt] = long(__opt[__mount_opt], 16)
+                self.field[__mount_opt] = convert_by_rule(__opt[__mount_opt], { CONVERSION: long, NUM_BASE: 16 } )
             except KeyError:
                 self.field[__mount_opt] = 0
         self.__NFS_MOUNT_OPTS_HEX = ( PFC.F_NFSV4_BM0, PFC.F_NFSV4_BM1, PFC.F_NFSV4_ACL )
@@ -777,7 +779,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 
 # (C) \tage: !INT!
     def parse_age_line(self, sio):
-        self.field[PFC.F_AGE] = long(sio.lineparts[1])
+        self.field[PFC.F_AGE] = convert_by_rule( sio.lineparts[1], { CONVERSION: long } )
         return
 
 # (D) \tcaps: caps=0x!HEX!,wtmult=!INT!,dtsize=!INT!,bsize=!INT!,namlen=!INT!
@@ -788,20 +790,20 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 #        for __key in __caps:
 #            print "dbg:: Caps post-BOL key'{key}' val'{val}'".format(key=__key, val=__caps[__key])
 
-        self.field[PFC.F_CAPS] = long(__caps[PFC.F_CAPS][2:], 16)
-        self.field[PFC.F_WTMULT] = long(__caps[PFC.F_WTMULT])
-        self.field[PFC.F_DTSIZE] = long(__caps[PFC.F_DTSIZE])
-        self.field[PFC.F_BSIZE] = long(__caps[PFC.F_BSIZE])
-        self.field[PFC.F_NAMELEN] = long(__caps[PFC.F_NAMELEN])
+        self.field[PFC.F_CAPS] = convert_by_rule(__caps[PFC.F_CAPS], { CONVERSION: long, NUM_BASE: 16, PREFIX_VAL: "0x" } )
+        self.field[PFC.F_WTMULT] = convert_by_rule(__caps[PFC.F_WTMULT], { CONVERSION: long } )
+        self.field[PFC.F_DTSIZE] = convert_by_rule(__caps[PFC.F_DTSIZE], { CONVERSION: long } )
+        self.field[PFC.F_BSIZE] = convert_by_rule(__caps[PFC.F_BSIZE], { CONVERSION: long } )
+        self.field[PFC.F_NAMELEN] = convert_by_rule(__caps[PFC.F_NAMELEN], { CONVERSION: long } )
         return
 
 # (E) \tnfsv4: bm0=0x!HEX!,bm1=0x!HEX!,acl=0x!HEX!{,sessions}{,pnfs={!NAME!|not configured}}
     def parse_nfsv4_line(self, sio):
         __opts = PBR.breakout_option_list(sio.lineparts[1])
 
-        self.field[PFC.F_NFSV4_BM0] = long(__opts[PFC.F_NFSV4_BM0], 16)
-        self.field[PFC.F_NFSV4_BM1] = long(__opts[PFC.F_NFSV4_BM1], 16)
-        self.field[PFC.F_NFSV4_ACL] = long(__opts[PFC.F_NFSV4_ACL], 16)
+        self.field[PFC.F_NFSV4_BM0] = convert_by_rule(__opts[PFC.F_NFSV4_BM0], { CONVERSION: long, NUM_BASE: 16 } )
+        self.field[PFC.F_NFSV4_BM1] = convert_by_rule(__opts[PFC.F_NFSV4_BM1], { CONVERSION: long, NUM_BASE: 16 } )
+        self.field[PFC.F_NFSV4_ACL] = convert_by_rule(__opts[PFC.F_NFSV4_ACL], { CONVERSION: long, NUM_BASE: 16 } )
 
         if __opts.has_key(PFC.F_SESSIONS):
             self.field[PFC.F_SESSIONS] = 1
@@ -818,9 +820,9 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 # (F) \tsec: flavor=!INT!{,pseudoflavor=!INT!}
     def parse_security_line(self, sio):
         __optlist = PBR.breakout_option_list(sio.lineparts[1])
-        self.field[PFC.F_FLAVOR] = long(__optlist[self.__PREFIX_FLAVOR])
+        self.field[PFC.F_FLAVOR] = convert_by_rule(__optlist[self.__PREFIX_FLAVOR], { CONVERSION: long } )
         try:
-            self.field[PFC.F_PSEUDOFLAVOR] = long(__optlist[self.__PREFIX_PSEUDOFLAVOR])
+            self.field[PFC.F_PSEUDOFLAVOR] = convert_by_rule( __optlist[self.__PREFIX_PSEUDOFLAVOR], { CONVERSION: long } )
         except KeyError:
             self.field[PFC.F_PSEUDOFLAVOR] = 0
         return
