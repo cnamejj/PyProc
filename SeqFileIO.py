@@ -44,6 +44,15 @@ class SeqFileIO:
                 self.SkipLine = options[1]
 
 
+    def get_word(self, which):
+        if which < self.linewords:
+            __word = self.lineparts[which]
+        else:
+            __word = ""
+
+        return __word
+
+
     def read_line(self):
 
         self.lineparts = dict()

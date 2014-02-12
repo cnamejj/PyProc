@@ -663,7 +663,6 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 
         self.__is_per_op = 0
         self.__have_partial = 0
-        self.__curr_sio = 0
         self.__partial = dict()
         self.__partial[PFC.F_DEVICE] = ""
         self.__partial[PFC.F_MOUNTPOINT] = ""
@@ -988,7 +987,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
             result = super(ProcSelfMOUNTSTATS, self).next()
         except StopIteration:
             if self.__have_partial:
-                result = self.extra_next(self.__curr_sio)
+                result = self.extra_next(self.curr_sio)
             else:
                 raise StopIteration
         return(result)
@@ -1034,7 +1033,6 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 # device none mounted on /sys/fs/fuse/connections with fstype fusectl
 
 #        print "dbg:: readline: '{line}'".format(line=sio.buff[:-1])
-        self.__curr_sio = sio
         self.__is_per_op = 0
         self.init_field_values()
 

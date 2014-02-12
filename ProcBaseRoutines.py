@@ -297,9 +297,9 @@ class fixed_delim_format_recs(object):
         self.extra_init(*opts)
 
         self.field = dict()
-        self.__sio = SeqFileIO.SeqFileIO()
+        self.curr_sio = SeqFileIO.SeqFileIO()
 #        print "base:__init__: inp({infile})".format(infile=self.infile)
-        self.__sio.open_file(self.infile, self.minfields, self.skipped)
+        self.curr_sio.open_file(self.infile, self.minfields, self.skipped)
         return
 
     def __iter__(self):
@@ -310,7 +310,7 @@ class fixed_delim_format_recs(object):
     def next(self):
 #        print "base:next: {this}".format(this=str(self))
         self.field = dict()
-        sio = self.__sio
+        sio = self.curr_sio
         sio.read_line()
 
         __hit_rule = dict()
@@ -383,8 +383,8 @@ class single_name_value_list(object):
         self.extra_init( *opts)
 
         self.field = dict()
-        self.__sio = SeqFileIO.SeqFileIO()
-        self.__sio.open_file(self.infile, self.minfields, self.skipped)
+        self.curr_sio = SeqFileIO.SeqFileIO()
+        self.curr_sio.open_file(self.infile, self.minfields, self.skipped)
         if self.debug_level >= 5:
             print "dbg:: {name:s} reading '{infile}'".format(name=str(self), infile=self.infile)
         return
@@ -395,7 +395,7 @@ class single_name_value_list(object):
     def next(self):
         if self.debug_level > 0:
             print "base:next: {this}".format(this=str(self))
-        __lines = self.__sio.read_all_lines()
+        __lines = self.curr_sio.read_all_lines()
 
         if len(__lines) == 0:
             raise StopIteration
@@ -435,9 +435,9 @@ class twoline_logical_records(object):
         self.extra_init( *opts)
 
         self.field = dict()
-        self.__sio = SeqFileIO.SeqFileIO()
+        self.curr_sio = SeqFileIO.SeqFileIO()
 #        print "base:__init__: inp({infile})".format(infile=self.infile)
-        self.__sio.open_file(self.infile, self.minfields, self.skipped)
+        self.curr_sio.open_file(self.infile, self.minfields, self.skipped)
         return
 
     def __iter__(self):
@@ -455,7 +455,7 @@ class twoline_logical_records(object):
 #       followed by the values for each of the fields.  Both lines are
 #       blank delimited.
 
-        self.__sio.read_twoline_logical_record(self, F_PROTOCOL)
+        self.curr_sio.read_twoline_logical_record(self, F_PROTOCOL)
 
         try:
             self.protocol_type = self.field[F_PROTOCOL]
@@ -488,9 +488,9 @@ class labelled_pair_list_records(object):
         self.extra_init( *opts)
 
         self.field = dict()
-        self.__sio = SeqFileIO.SeqFileIO()
+        self.curr_sio = SeqFileIO.SeqFileIO()
 #        print "base:__init__: inp({infile})".format(infile=self.infile)
-        self.__sio.open_file(self.infile, self.minfields, self.skipped)
+        self.curr_sio.open_file(self.infile, self.minfields, self.skipped)
         return
 
     def __iter__(self):
@@ -511,7 +511,7 @@ class labelled_pair_list_records(object):
         for __sock_type in self.sock_type_list:
             self.field[__sock_type] = dict()
 
-        __result, __unknown_label = self.__sio.read_labelled_pair_list_file(self, self.sock_type_list)
+        __result, __unknown_label = self.curr_sio.read_labelled_pair_list_file(self, self.sock_type_list)
 
         return( __result)
 
@@ -537,9 +537,9 @@ class list_of_terms_format(object):
         self.extra_init( *opts)
 
         self.field = dict()
-        self.__sio = SeqFileIO.SeqFileIO()
+        self.curr_sio = SeqFileIO.SeqFileIO()
 #        print "base:__init__: inp({infile})".format(infile=self.infile)
-        self.__sio.open_file(self.infile, self.minfields, self.skipped)
+        self.curr_sio.open_file(self.infile, self.minfields, self.skipped)
         return
 
     def __iter__(self):
@@ -554,7 +554,7 @@ class list_of_terms_format(object):
 # state
 # hl
 
-        __lines = self.__sio.read_all_lines()
+        __lines = self.curr_sio.read_all_lines()
 
         if len(__lines) == 0:
             raise StopIteration
@@ -591,9 +591,9 @@ class fixed_column_field_recs(object):
         self.extra_init( *opts)
 
         self.field = dict()
-        self.__sio = SeqFileIO.SeqFileIO()
+        self.curr_sio = SeqFileIO.SeqFileIO()
 #        print "base:__init__: inp({infile})".format(infile=self.infile)
-        self.__sio.open_file(self.infile, self.minfields, self.skipped)
+        self.curr_sio.open_file(self.infile, self.minfields, self.skipped)
         return
 
     def __iter__(self):
@@ -601,7 +601,7 @@ class fixed_column_field_recs(object):
 
     def next(self):
 #        print "base:next: {this}".format(this=str(self))
-        sio = self.__sio
+        sio = self.curr_sio
         sio.read_line()
 
         if type(self.fixedcols) == dict:

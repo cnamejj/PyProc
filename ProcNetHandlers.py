@@ -34,6 +34,8 @@ RegisterPartialProcFileHandler = PBR.RegisterPartialProcFileHandler
 ShowHandlerFilePath = PBR.ShowHandlerFilePath
 ProcFileToPath = PBR.ProcFileToPath
 
+convert_by_rule = PBR.convert_by_rule
+
 FIELD_NAME = PBR.FIELD_NAME
 FIELD_NUMBER = PBR.FIELD_NUMBER
 CONVERSION = PBR.CONVERSION
@@ -676,7 +678,7 @@ class ProcNetDEV(PBR.fixed_delim_format_recs):
             self.field[PFC.F_TX_ERRORS] = 0
             self.field[PFC.F_TX_DROP] = 0
             self.field[PFC.F_TX_FIFO] = 0
-            self.field[PFC.F_TX_COLLISION] = 0 
+            self.field[PFC.F_TX_COLLISION] = 0
             self.field[PFC.F_TX_CARRIER] = 0
             self.field[PFC.F_TX_COMPRESSED] = 0
 
@@ -747,7 +749,7 @@ class ProcNetIF_INET6(PBR.fixed_delim_format_recs):
             self.field[PFC.F_FLAGS] = 0
 
         else:
-            self.field[PFC.F_IPV6] = self.ipconv.ipv6_hexstring_to_presentation(sio.lineparts[0])
+            self.field[PFC.F_IPV6] = self.ipconv.ipv6_hexstring_to_presentation(sio.get_word(0))
 
         self.ipv6 = self.field[PFC.F_IPV6]
         self.ipv6_hex = self.field[PFC.F_IPV6_HEX]
@@ -808,7 +810,7 @@ class ProcNetIGMP6(PBR.fixed_delim_format_recs):
             self.field[PFC.F_TIMER_EXPIRE] = 0
 
         else:
-            self.field[PFC.F_MCAST_ADDR] = self.ipconv.ipv6_hexstring_to_presentation(sio.lineparts[2])
+            self.field[PFC.F_MCAST_ADDR] = self.ipconv.ipv6_hexstring_to_presentation(sio.get_word(2))
 
         self.device = self.field[PFC.F_DEVICE]
         self.mcast_addr = self.field[PFC.F_MCAST_ADDR]
@@ -846,6 +848,7 @@ class ProcNetIP_CONNTRACK(PBR.fixed_delim_format_recs):
         self.__ASSURED_PREF = "["
         self.__MARK_PREF = "mark="
         self.__SECCTX_PREF = "secctx="
+        self.__USE_PREF = "use="
         self.__Val_Delim = "="
 
         self.protocol = ""
@@ -896,79 +899,73 @@ class ProcNetIP_CONNTRACK(PBR.fixed_delim_format_recs):
 
         else:
             __off = 3
-            if __off < sio.linewords:
-                if not sio.lineparts[__off].startswith(self.__TUPLE_PREF):
-                    self.field[PFC.F_STATE] = sio.lineparts[__off]
-                    __off += 1
-
-            if __off < sio.linewords:
-                self.field[PFC.F_OR_SRC_IP] = sio.lineparts[__off].partition(self.__Val_Delim)[2]
-                __off += 1
-            if __off < sio.linewords:
-                self.field[PFC.F_OR_DST_IP] = sio.lineparts[__off].partition(self.__Val_Delim)[2]
-                __off += 1
-            if __off < sio.linewords:
-                self.field[PFC.F_OR_SRC_PORT] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
-                __off += 1
-            if __off < sio.linewords:
-                self.field[PFC.F_OR_DST_PORT] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
+            __word = sio.get_word(__off)
+            if not __word.startswith(self.__TUPLE_PREF):
+                self.field[PFC.F_STATE] = __word
                 __off += 1
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__UNREPLIED_PREF):
-                    self.field[PFC.F_UNREPLIED] = sio.lineparts[__off]
-                    __off += 1
+            self.field[PFC.F_OR_SRC_IP] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=" } )
+            __off += 1
+            self.field[PFC.F_OR_DST_IP] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=" } )
+            __off += 1
+            self.field[PFC.F_OR_SRC_PORT] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=", CONVERSION: long } )
+            __off += 1
+            self.field[PFC.F_OR_DST_PORT] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=", CONVERSION: long } )
+            __off += 1
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__PACKETS_PREF):
-                    self.field[PFC.F_OR_PACKETS] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
-                    __off += 1
-
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__BYTES_PREF):
-                    self.field[PFC.F_OR_BYTES] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
-                    __off += 1
-
-            if __off < sio.linewords:
-                self.field[PFC.F_RE_SRC_IP] = sio.lineparts[__off].partition(self.__Val_Delim)[2]
+            __word = sio.get_word(__off)
+            if __word.startswith(self.__UNREPLIED_PREF):
+                self.field[PFC.F_UNREPLIED] = __word
                 __off += 1
-            if __off < sio.linewords:
-                self.field[PFC.F_RE_DST_IP] = sio.lineparts[__off].partition(self.__Val_Delim)[2]
+                __word = sio.get_word(__off)
+
+            if __word.startswith(self.__PACKETS_PREF):
+                self.field[PFC.F_OR_PACKETS] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__PACKETS_PREF, AFTER_VAL: self.__Val_Delim } )
                 __off += 1
-            if __off < sio.linewords:
-                self.field[PFC.F_RE_SRC_PORT] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
+                __word = sio.get_word(__off)
+
+            if __word.startswith(self.__BYTES_PREF):
+                self.field[PFC.F_OR_BYTES] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__BYTES_PREF, AFTER_VAL: self.__Val_Delim } )
                 __off += 1
-            if __off < sio.linewords:
-                self.field[PFC.F_RE_DST_PORT] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
+                __word = sio.get_word(__off)
+
+            self.field[PFC.F_RE_SRC_IP] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=" } )
+            __off += 1
+            self.field[PFC.F_RE_DST_IP] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=" } )
+            __off += 1
+            self.field[PFC.F_RE_SRC_PORT] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=", CONVERSION: long } )
+            __off += 1
+            self.field[PFC.F_RE_DST_PORT] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=", CONVERSION: long } )
+            __off += 1
+
+            __word = sio.get_word(__off)
+            if __word.startswith(self.__PACKETS_PREF):
+                self.field[PFC.F_RE_PACKETS] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__PACKETS_PREF, AFTER_VAL: self.__Val_Delim } )
                 __off += 1
+                __word = sio.get_word(__off)
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__PACKETS_PREF):
-                    self.field[PFC.F_RE_PACKETS] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
-                    __off += 1
+            if __word.startswith(self.__BYTES_PREF):
+                self.field[PFC.F_RE_BYTES] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__BYTES_PREF, AFTER_VAL: self.__Val_Delim } )
+                __off += 1
+                __word = sio.get_word(__off)
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__BYTES_PREF):
-                    self.field[PFC.F_RE_BYTES] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
-                    __off += 1
+            if __word.startswith(self.__ASSURED_PREF):
+                self.field[PFC.F_ASSURED] = __word
+                __off += 1
+                __word = sio.get_word(__off)
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__ASSURED_PREF):
-                    self.field[PFC.F_ASSURED] = sio.lineparts[__off]
-                    __off += 1
+            if __word.startswith(self.__MARK_PREF):
+                self.field[PFC.F_MARK] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__MARK_PREF, AFTER_VAL: self.__Val_Delim } )
+                __off += 1
+                __word = sio.get_word(__off)
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__MARK_PREF):
-                    self.field[PFC.F_MARK] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
-                    __off += 1
+            if __word.startswith(self.__SECCTX_PREF):
+                self.field[PFC.F_SECCTX] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__SECCTX_PREF, AFTER_VAL: self.__Val_Delim } )
+                __off += 1
+                __word = sio.get_word(__off)
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__SECCTX_PREF):
-                    self.field[PFC.F_SECCTX] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
-                    __off += 1
-
-            if __off < sio.linewords:
-                self.field[PFC.F_USE] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
+            if __word.startswith(self.__USE_PREF):
+                self.field[PFC.F_USE] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__USE_PREF, AFTER_VAL: self.__Val_Delim } )
            
         self.protocol = self.field[PFC.F_PROTOCOL]
         self.timeout = self.field[PFC.F_TIMEOUT]
@@ -1105,6 +1102,7 @@ class ProcNetNF_CONNTRACK(PBR.fixed_delim_format_recs):
         self.__SECCTX_PREF = "secctx="
         self.__ZONE_PREF = "zone="
         self.__DELTA_TIME_PREF = "delta-time="
+        self.__USE_PREF = "use="
 
         self.__Val_Delim = "="
 
@@ -1159,89 +1157,83 @@ class ProcNetNF_CONNTRACK(PBR.fixed_delim_format_recs):
 
         else:
             __off = 5
-            if __off < sio.linewords:
-                if not sio.lineparts[__off].startswith(self.__TUPLE_PREF):
-                    self.field[PFC.F_STATE] = sio.lineparts[__off]
-                    __off += 1
-
-            if __off < sio.linewords:
-                self.field[PFC.F_OR_SRC_IP] = sio.lineparts[__off].partition(self.__Val_Delim)[2]
-                __off += 1
-            if __off < sio.linewords:
-                self.field[PFC.F_OR_DST_IP] = sio.lineparts[__off].partition(self.__Val_Delim)[2]
-                __off += 1
-            if __off < sio.linewords:
-                self.field[PFC.F_OR_SRC_PORT] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
-                __off += 1
-            if __off < sio.linewords:
-                self.field[PFC.F_OR_DST_PORT] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
+            __word = sio.get_word(__off)
+            if not __word.startswith(self.__TUPLE_PREF):
+                self.field[PFC.F_STATE] = __word
                 __off += 1
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__UNREPLIED_PREF):
-                    self.field[PFC.F_UNREPLIED] = sio.lineparts[__off]
-                    __off += 1
+            self.field[PFC.F_OR_SRC_IP] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=" } )
+            __off += 1
+            self.field[PFC.F_OR_DST_IP] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=" } )
+            __off += 1
+            self.field[PFC.F_OR_SRC_PORT] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=", CONVERSION: long } )
+            __off += 1
+            self.field[PFC.F_OR_DST_PORT] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=", CONVERSION: long } )
+            __off += 1
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__PACKETS_PREF):
-                    self.field[PFC.F_OR_PACKETS] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
-                    __off += 1
-
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__BYTES_PREF):
-                    self.field[PFC.F_OR_BYTES] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
-                    __off += 1
-
-            if __off < sio.linewords:
-                self.field[PFC.F_RE_SRC_IP] = sio.lineparts[__off].partition(self.__Val_Delim)[2]
+            __word = sio.get_word(__off)
+            if __word.startswith(self.__UNREPLIED_PREF):
+                self.field[PFC.F_UNREPLIED] = __word
                 __off += 1
-            if __off < sio.linewords:
-                self.field[PFC.F_RE_DST_IP] = sio.lineparts[__off].partition(self.__Val_Delim)[2]
+                __word = sio.get_word(__off)
+
+            if __word.startswith(self.__PACKETS_PREF):
+                self.field[PFC.F_OR_PACKETS] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__PACKETS_PREF, AFTER_VAL: self.__Val_Delim } )
                 __off += 1
-            if __off < sio.linewords:
-                self.field[PFC.F_RE_SRC_PORT] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
+                __word = sio.get_word(__off)
+
+            if __word.startswith(self.__BYTES_PREF):
+                self.field[PFC.F_OR_BYTES] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__BYTES_PREF, AFTER_VAL: self.__Val_Delim } )
                 __off += 1
-            if __off < sio.linewords:
-                self.field[PFC.F_RE_DST_PORT] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
+                __word = sio.get_word(__off)
+
+            self.field[PFC.F_RE_SRC_IP] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=" } )
+            __off += 1
+            self.field[PFC.F_RE_DST_IP] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=" } )
+            __off += 1
+            self.field[PFC.F_RE_SRC_PORT] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=", CONVERSION: long } )
+            __off += 1
+            self.field[PFC.F_RE_DST_PORT] = convert_by_rule(sio.get_word(__off), { AFTER_VAL: "=", CONVERSION: long } )
+            __off += 1
+
+            __word = sio.get_word(__off)
+            if __word.startswith(self.__PACKETS_PREF):
+                self.field[PFC.F_RE_PACKETS] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__PACKETS_PREF, AFTER_VAL: self.__Val_Delim } )
                 __off += 1
+                __word = sio.get_word(__off)
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__PACKETS_PREF):
-                    self.field[PFC.F_RE_PACKETS] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
-                    __off += 1
+            if __word.startswith(self.__BYTES_PREF):
+                self.field[PFC.F_RE_BYTES] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__BYTES_PREF, AFTER_VAL: self.__Val_Delim } )
+                __off += 1
+                __word = sio.get_word(__off)
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__BYTES_PREF):
-                    self.field[PFC.F_RE_BYTES] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
-                    __off += 1
+            if __word.startswith(self.__ASSURED_PREF):
+                self.field[PFC.F_ASSURED] = __word
+                __off += 1
+                __word = sio.get_word(__off)
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__ASSURED_PREF):
-                    self.field[PFC.F_ASSURED] = sio.lineparts[__off]
-                    __off += 1
+            if __word.startswith(self.__MARK_PREF):
+                self.field[PFC.F_MARK] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__MARK_PREF, AFTER_VAL: self.__Val_Delim } )
+                __off += 1
+                __word = sio.get_word(__off)
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__MARK_PREF):
-                    self.field[PFC.F_MARK] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
-                    __off += 1
+            if __word.startswith(self.__SECCTX_PREF):
+                self.field[PFC.F_SECCTX] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__SECCTX_PREF, AFTER_VAL: self.__Val_Delim } )
+                __off += 1
+                __word = sio.get_word(__off)
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__SECCTX_PREF):
-                    self.field[PFC.F_SECCTX] = sio.lineparts[__off].partition(self.__Val_Delim)[2]
-                    __off += 1
+            if __word.startswith(self.__ZONE_PREF):
+                self.field[PFC.F_ZONE] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__ZONE_PREF, AFTER_VAL: self.__Val_Delim } )
+                __off += 1
+                __word = sio.get_word(__off)
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__ZONE_PREF):
-                    self.field[PFC.F_ZONE] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
-                    __off += 1
+            if __word.startswith(self.__DELTA_TIME_PREF):
+                self.field[PFC.F_DELTA_TIME_PREF] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__ZONE_DELTA_TIME_PREF, AFTER_VAL: self.__Val_Delim } )
+                __off += 1
+                __word = sio.get_word(__off)
 
-            if __off < sio.linewords:
-                if sio.lineparts[__off].startswith(self.__DELTA_TIME_PREF):
-                    self.field[PFC.F_DELTA_TIME] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
-                    __off += 1
-
-            if __off < sio.linewords:
-                self.field[PFC.F_USE] = long(sio.lineparts[__off].partition(self.__Val_Delim)[2])
+            if __word.startswith(self.__USE_PREF):
+                self.field[PFC.F_USE] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__USE_PREF, AFTER_VAL: self.__Val_Delim } )
            
         self.l3_protocol = self.field[PFC.F_L3_PROTOCOL]
         self.protocol = self.field[PFC.F_PROTOCOL]
@@ -1354,11 +1346,11 @@ class ProcNetPTYPE(PBR.fixed_delim_format_recs):
 
         else:
             if sio.linewords > 2:
-                self.field[PFC.F_DEVICE_NAME] = sio.lineparts[1]
-                self.field[PFC.F_DEVICE_FUNC] = sio.lineparts[2]
+                self.field[PFC.F_DEVICE_NAME] = sio.get_word(1)
+                self.field[PFC.F_DEVICE_FUNC] = sio.get_word(2)
             else:
                 self.field[PFC.F_DEVICE_NAME] = ""
-                self.field[PFC.F_DEVICE_FUNC] = sio.lineparts[1]
+                self.field[PFC.F_DEVICE_FUNC] = sio.get_word(1)
 
         self.device_type = self.field[PFC.F_DEVICE_TYPE]
         self.device_name = self.field[PFC.F_DEVICE_NAME]
@@ -2643,12 +2635,11 @@ class ProcNetIGMP(PBR.fixed_delim_format_recs):
                 self.field[PFC.F_REPORTER] = 0
 
             else:
-                self.field[PFC.F_GROUP] = long(sio.lineparts[0], 16)
-                self.field[PFC.F_USERS] = long(sio.lineparts[1])
-                __split = sio.lineparts[2].partition(self.__FieldSplitDelim)
-                self.field[PFC.F_TIMER] = long(__split[0])
-                self.field[PFC.F_ZERO1] = long(__split[2], 16)
-                self.field[PFC.F_REPORTER] = long(sio.lineparts[3])
+                self.field[PFC.F_GROUP] = convert_by_rule(sio.get_word(0), { CONVERSION: long, NUM_BASE: 16 } )
+                self.field[PFC.F_USERS] = convert_by_rule(sio.get_word(1), { CONVERSION: long } )
+                self.field[PFC.F_TIMER] = convert_by_rule(sio.get_word(2), { CONVERSION: long, BEFORE_VAL: ":" } )
+                self.field[PFC.F_ZERO1] = convert_by_rule(sio.get_word(2), { CONVERSION: long, NUM_BASE: 16, AFTER_VAL: ":" } )
+                self.field[PFC.F_REPORTER] = convert_by_rule(sio.get_word(3), { CONVERSION: long } )
 
         self.index = self.field[PFC.F_INDEX]
         self.device = self.field[PFC.F_DEVICE]
