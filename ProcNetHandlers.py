@@ -1228,7 +1228,7 @@ class ProcNetNF_CONNTRACK(PBR.fixed_delim_format_recs):
                 __word = sio.get_word(__off)
 
             if __word.startswith(self.__DELTA_TIME_PREF):
-                self.field[PFC.F_DELTA_TIME_PREF] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__ZONE_DELTA_TIME_PREF, AFTER_VAL: self.__Val_Delim } )
+                self.field[PFC.F_DELTA_TIME] = convert_by_rule(__word, { CONVERSION: long, PREFIX_VAL: self.__DELTA_TIME_PREF, AFTER_VAL: self.__Val_Delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
