@@ -25,11 +25,6 @@ class SeqFileIO:
         self.SkipLine = ""
 
 #       For 'pylint'
-        self.__pss_varcount = 0
-        self.__unknown_label = set()
-        self.__result = set()
-        self.__pss_varlist = ()
-        self.__sock_type = ""
 
     def open_file(self, procfile, *options):
         try:
@@ -130,20 +125,21 @@ class SeqFileIO:
             raise StopIteration
 
         try:
-            self.__result = set()
-            self.__unknown_label = set()
+            __result = set()
+            __unknown_label = set()
 
             while self.read_line():
-                self.__sock_type = self.lineparts[0]
-                if self.__sock_type in label_set:
-                    self.__result.add(self.__sock_type)
-                    handler.field[self.__sock_type] = pair_list_to_dictionary(self.buff, 2)
+                __sock_type = self.lineparts[0]
+                if __sock_type in label_set:
+                    __result.add(__sock_type)
+                    handler.field[__sock_type] = pair_list_to_dictionary(
+                                                     self.buff, 2)
                 else:
-                    self.__unknown_label.add(self.__sock_type)
+                    __unknown_label.add(__sock_type)
         except StopIteration:
             self.is_open = 0
 
-        return(self.__result, self.__unknown_label)
+        return(__result, __unknown_label)
 
 
     def read_twoline_logical_record(self, handler, prot_field):
@@ -157,11 +153,11 @@ class SeqFileIO:
 
         try:
             self.read_line()
-            self.__pss_varlist = self.lineparts
-            self.__pss_varcount = self.linewords
+            __pss_varlist = self.lineparts
+            __pss_varcount = self.linewords
 
             self.read_line()
-            if self.linewords != self.__pss_varcount:
+            if self.linewords != __pss_varcount:
                 self.lineparts = dict()
                 self.linewords = 0
                 raise StopIteration
@@ -169,7 +165,8 @@ class SeqFileIO:
                 handler.field[prot_field] = self.lineparts[0][0:-1]
 
                 for __varnum in range(0, self.linewords, 1):
-                    handler.field[self.__pss_varlist[__varnum]] = self.lineparts[__varnum]
+                    __field_name = __pss_varlist[__varnum] 
+                    handler.field[__field_name] = self.lineparts[__varnum]
 
         except StopIteration:
             self.lineparts = dict()
@@ -182,4 +179,4 @@ class SeqFileIO:
 
 if __name__ == "__main__":
 
-    print "This is a library of routines that provides access to text files via Python iterators"
+    print "A library providing access to text files via Python iterators"

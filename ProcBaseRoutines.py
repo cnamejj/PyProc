@@ -4,7 +4,7 @@ import os
 import SeqFileIO
 import ProcFieldConstants
 import ProcDataConstants
-import numpy
+#import numpy
 
 PFC = ProcFieldConstants
 F_NULL_HANDLER = PFC.F_NULL_HANDLER
@@ -128,12 +128,14 @@ def convert_by_rule(rawdata, rule):
 def number_or_unlimited(buff):
 
     if buff.strip() == "unlimited":
-        result = numpy.inf
+#        result = numpy.inf
+        result = PDC.INF
     else:
         try:
             result = long(buff)
         except:
-            result = numpy.nan
+#            result = numpy.nan
+            result = PDC.NAN
 
     return result
 

@@ -18,7 +18,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
-import numpy
+#import numpy
 import ProcBaseRoutines
 import ProcFieldConstants
 
@@ -529,7 +529,8 @@ class ProcRootLOCKS(PBR.fixed_delim_format_recs):
             __offset = __offset + 1
             self.field[PFC.F_END_STRING] = sio.lineparts[__offset]
             if self.field[PFC.F_END_STRING] == "EOF":
-                self.field[PFC.F_END] = numpy.inf
+#                self.field[PFC.F_END] = numpy.inf
+                self.field[PFC.F_END] = PDC.INF
             else:
                 self.field[PFC.F_END] = convert_by_rule(self.field[PFC.F_END_STRING], { CONVERSION: long } )
 

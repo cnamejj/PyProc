@@ -1,6 +1,15 @@
 #!/usr/bin/env python
 """Constants used as 'no value' or other placeholders in several modules, also network state mapping array, no code here"""
 
+try:
+    import numpy
+    NAN = numpy.nan
+    INF = numpy.inf
+except ImportError:
+    import pickle
+    NAN = pickle.loads('Fnan\n.')
+    INF = pickle.loads('Finf\n.')
+
 unknown_state = "UNRECOGNIZED"
 
 ANY_HW_ADDR = "00:00:00:00:00:00"
