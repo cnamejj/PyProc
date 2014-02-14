@@ -65,19 +65,19 @@ else:
 
 if TARGET == "all":
 
-    for TARGET in ProcHandlers.proc_file_handler_registry:
+    for TARGET in ProcHandlers.FILE_HANDLER_REGISTRY:
         print "- Logical records from {file} using {handler}".format(
                 file=TARGET,
-                handler=str(ProcHandlers.proc_file_handler_registry[TARGET]))
+                handler=str(ProcHandlers.FILE_HANDLER_REGISTRY[TARGET]))
 
         show_recs_from_one_file(
-                ProcHandlers.proc_file_handler_registry[TARGET],
+                ProcHandlers.FILE_HANDLER_REGISTRY[TARGET],
                 TARGET, "")
         print ""
 
 else:
-    HANDLER = ProcHandlers.GetProcFileHandler(TARGET)
-    NOHANDLER = ProcHandlers.GetProcFileHandler("null")
+    HANDLER = ProcHandlers.GET_HANDLER(TARGET)
+    NOHANDLER = ProcHandlers.GET_HANDLER("null")
 
     if HANDLER == NOHANDLER:
         print "- No handler available for file {file}".format(file=FULLTARGET)

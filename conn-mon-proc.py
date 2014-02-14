@@ -35,7 +35,7 @@ try:
     while DONE != 1:
 
         NEW_SESSIONS = set()
-        SOCKLIST = ProcHandlers.GetProcFileHandler("tcp")()
+        SOCKLIST = ProcHandlers.GET_HANDLER("tcp")()
 
         for orig_hexip, \
             dest_hexip, \

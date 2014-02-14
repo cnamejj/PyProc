@@ -17,7 +17,7 @@ import ProcessInfo
 import ProcHandlers
 import ProcFieldConstants
 
-GET_HANDLER = ProcHandlers.GetProcFileHandler
+GET_HANDLER = ProcHandlers.GET_HANDLER
 
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."

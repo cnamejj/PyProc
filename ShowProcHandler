@@ -19,11 +19,11 @@ else:
 
 if TARGET == "all":
 
-    ProcHandlers.ShowProcFileHandlers()
+    ProcHandlers.show_proc_file_handlers()
 
 else:
 
-    HANDLER = ProcHandlers.GetProcFileHandler(TARGET)
+    HANDLER = ProcHandlers.GET_HANDLER(TARGET)
 
     if QUALIFY != "":
         ACTIVE = HANDLER(QUALIFY)

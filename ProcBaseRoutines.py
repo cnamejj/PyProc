@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+Base classes and general purpose utility methods
+"""
+
 import os
 import SeqFileIO
 import ProcFieldConstants
@@ -29,13 +33,14 @@ AFTER_VAL = "after"
 PROC_PATH_PREFIX_LIST = ( "/proc", "/proc/", "/proc/net/", "/proc/self/net/",
         "/proc/self/" )
 
-proc_file_handler_registry = dict()
-proc_partial_file_handler_registry = dict()
-handler_to_path = dict()
+FILE_HANDLER_REGISTRY = dict()
+PARTIAL_HANDLER_REGISTRY = dict()
+HANDLER_TO_PATH = dict()
 
 # ---
 
 def error_by_rule(rule):
+    """Return an appropriate error value based on the ruleset supplied."""
 
     try:
         __conv = rule[CONVERSION]
@@ -57,6 +62,7 @@ def error_by_rule(rule):
     return __err
 
 def convert_by_rule(rawdata, rule):
+    """Apply the given ruleset to the specified string and return the result"""
 
     try:
         __conv = rule[CONVERSION]
@@ -108,17 +114,17 @@ def convert_by_rule(rawdata, rule):
     if __conv == int:
         try:
             __val = int(__val, __base)
-        except:
+        except ValueError:
             __val = error_by_rule(rule)
     elif __conv == long:
         try:
             __val = long(__val, __base)
-        except:
+        except ValueError:
             __val = error_by_rule(rule)
     elif __conv == float:
         try:
             __val = float(__val)
-        except:
+        except ValueError:
             __val = error_by_rule(rule)
 
     return __val
@@ -126,21 +132,23 @@ def convert_by_rule(rawdata, rule):
 # ---
 
 def number_or_unlimited(buff):
+    """Convert a string to a long, or set to an error value"""
+
 
     if buff.strip() == "unlimited":
-#        result = numpy.inf
         result = PDC.INF
     else:
         try:
             result = long(buff)
-        except:
-#            result = numpy.nan
+        except ValueError:
             result = PDC.NAN
 
     return result
 
 
 def array_of_longs(wordlist):
+    """Convert a list of strings to long's"""
+
     __nums = dict()
 
     for __off in range(0, len(wordlist)):
@@ -150,6 +158,8 @@ def array_of_longs(wordlist):
 
 
 def breakout_option_list(combined, delim = ",", assign = "="):
+    """Convert a string of name=value pairs to a dictionary"""
+
     __optlist = dict()
     __entries = combined.split(delim)
 
@@ -164,13 +174,17 @@ def breakout_option_list(combined, delim = ",", assign = "="):
 # ---
 
 
-def GetProcFileRegistry():
-    return(proc_file_handler_registry)
+def get_file_registry():
+    """Return the file handler registry"""
 
-def GetProcPartialFileRegistry():
-    return(proc_partial_file_handler_registry)
+    return(FILE_HANDLER_REGISTRY)
 
-def ProcFileToPath(proc_file):
+def get_partial_file_registry():
+    """Return the file handler registry for partial file path matches"""
+
+    return(PARTIAL_HANDLER_REGISTRY)
+
+def proc_file_to_path(proc_file):
     """
     If the arg passed in doesn't exist, try prepending well known directories to find the file.
     """
@@ -187,7 +201,7 @@ def ProcFileToPath(proc_file):
 
     return __path
 
-def GetProcFileHandler(proc_file):
+def get_handler(proc_file):
     """
     Lookup routine to find the code that knows how to parse the requested /proc/net/ datafile
     """
@@ -195,57 +209,57 @@ def GetProcFileHandler(proc_file):
     __handler = 0
     __append_list = PROC_PATH_PREFIX_LIST
 
-    if proc_file in proc_file_handler_registry:
-        __handler = proc_file_handler_registry[proc_file]
+    if proc_file in FILE_HANDLER_REGISTRY:
+        __handler = FILE_HANDLER_REGISTRY[proc_file]
     else:
         for __prefix in __append_list:
             __exp_file = "{prefix}{procfile}".format(prefix=__prefix,
                              procfile=proc_file)
-            if __exp_file in proc_file_handler_registry:
-                __handler = proc_file_handler_registry[__exp_file]
+            if __exp_file in FILE_HANDLER_REGISTRY:
+                __handler = FILE_HANDLER_REGISTRY[__exp_file]
 
     if __handler == 0:
         __matchlen = 0
-        for __patt in proc_partial_file_handler_registry:
+        for __patt in PARTIAL_HANDLER_REGISTRY:
             if len(__patt) > __matchlen and proc_file.endswith(__patt):
                 __matchlen = len(__patt)
-                __handler = proc_partial_file_handler_registry[__patt]
+                __handler = PARTIAL_HANDLER_REGISTRY[__patt]
 
     if __handler == 0:
-        __handler = proc_file_handler_registry[F_NULL_HANDLER]
+        __handler = FILE_HANDLER_REGISTRY[F_NULL_HANDLER]
 
     return __handler
 
-def RegisterProcFileHandler(proc_file, handler):
+def register_file(proc_file, handler):
     """Associate the given code object with a specific /proc/net datafile"""
 
-    proc_file_handler_registry[proc_file] = handler
-    handler_to_path[str(handler)] = proc_file
+    FILE_HANDLER_REGISTRY[proc_file] = handler
+    HANDLER_TO_PATH[str(handler)] = proc_file
 
-def RegisterPartialProcFileHandler(end_of_path, handler):
+def register_partial_file(end_of_path, handler):
     """
     Associate the given code object with a filename pattern to allow partial matches
     """
 
-    proc_partial_file_handler_registry[end_of_path] = handler
+    PARTIAL_HANDLER_REGISTRY[end_of_path] = handler
 
-def ShowProcFileHandlers():
+def show_proc_file_handlers():
     """Print a list of all the known file to handler mappings"""
 
-    for __file in proc_file_handler_registry:
+    for __file in FILE_HANDLER_REGISTRY:
         print "For {file} use {handler}".format(file=__file,
-               handler=str(proc_file_handler_registry[__file]))
+               handler=str(FILE_HANDLER_REGISTRY[__file]))
 
-def ShowPartialProcFileHandlers():
+def show_partial_proc_file_handlers():
     """
     Print a list of all the known 'end of path' file patterns and their handler mappings
     """
 
-    for __patt in proc_partial_file_handler_registry:
+    for __patt in PARTIAL_HANDLER_REGISTRY:
         print "Path {patt} matches {handler}".format(patt=__patt,
-                handler=str(proc_partial_file_handler_registry[__patt]))
+                handler=str(PARTIAL_HANDLER_REGISTRY[__patt]))
 
-def ShowHandlerFilePath(cl_instance):
+def show_handler_file_path(cl_instance):
     """
     Return the fullpath of the /proc file associated with the base class of the instance
     provided
@@ -254,7 +268,7 @@ def ShowHandlerFilePath(cl_instance):
     __key = "<class '{tmod}.{tcl}'>".format(
                 tmod=cl_instance.__class__.__module__,
                 tcl=cl_instance.__class__.__name__)
-    return handler_to_path[__key]
+    return HANDLER_TO_PATH[__key]
 
 # ---
 class ProcNetNULL(object):
@@ -262,26 +276,35 @@ class ProcNetNULL(object):
     Dummy class that just acts like reading from an empty file, returned as the handler
     for unrecognized files.
     """
+
     def __init__(self, *opts):
+        """For the dummy handler, just need to make an empty results field."""
         self.field = dict()
 
     def __iter__(self):
+        """Standard component of an iterator class"""
         return(self)
 
     def next(self):
+        """The dummy iterator signals EOF when a record is requested."""    
         raise StopIteration
 #
-RegisterProcFileHandler(F_NULL_HANDLER, ProcNetNULL)
+register_file(F_NULL_HANDLER, ProcNetNULL)
 
 
 
 # ---
-class fixed_delim_format_recs(object):
+class FixedWhitespaceDelimRecs(object):
     """
     Base class to read simple files with whitespace delimited columns, consistent record format
     """
 
     def add_parse_rule(self, rule):
+        """
+        Append the supplied ruleset to the list of parsing rules defined
+        for the instance of the file parser.
+        """
+
         __rn = len(self.parse_rule)
 #        print "dbg:: apr: n:{rn:d} r({rule})".format(rn=__rn, rule=str(rule))
 
@@ -297,20 +320,24 @@ class fixed_delim_format_recs(object):
         self.parse_rule[__rn] = rule
 
     def extra_init(self, *opts):
+        """No-op version of optional call-out from '__init__' method"""
+
 #        print "base:extra_init: {this}".format(this=str(self))
         return
 
     def extra_next(self, sio):
+        """No-op version of optional call-out from 'next' method"""
+
 #        print "base:extra_next: {this}".format(this=str(self))
         return(sio.buff)
 
     def __init__(self, *opts):
 #        print "base:__init__: this{this} file{file}".format(this=str(self),
-#               file=ShowHandlerFilePath(self))
+#               file=show_handler_file_path(self))
         if len(opts) > 0:
-            self.infile = ProcFileToPath(opts[0])
+            self.infile = proc_file_to_path(opts[0])
         else:
-            self.infile = ShowHandlerFilePath(self)
+            self.infile = show_handler_file_path(self)
         self.minfields = 0
         self.skipped = ""
         self.parse_rule = dict()
@@ -330,6 +357,11 @@ class fixed_delim_format_recs(object):
  
 
     def next(self):
+        """
+        Called to process and return the next logical record in the
+        currently open file.
+        """
+
 #        print "base:next: {this}".format(this=str(self))
         self.field = dict()
         sio = self.curr_sio
@@ -386,22 +418,24 @@ class fixed_delim_format_recs(object):
 
 
 # ---
-class single_name_value_list(object):
+class SingleNameValueList(object):
     """
     Base class to read files where each line is two fields, one name and an associated value
     """
 
     def extra_init(self, *opts):
+        """No-op version of optional call-out from '__init__' method"""
+
 #        print "base:extra_init: {this}".format(this=str(self))
         return
 
     def __init__(self, *opts):
 #        print "base:__init__: this{this} file{file}".format(this=str(self),
-#                file=ShowHandlerFilePath(self))
+#                file=show_handler_file_path(self))
         if len(opts) > 0:
-            self.infile = ProcFileToPath(opts[0])
+            self.infile = proc_file_to_path(opts[0])
         else:
-            self.infile = ShowHandlerFilePath(self)
+            self.infile = show_handler_file_path(self)
         self.minfields = 2
         self.skipped = ""
         self.trim_tail = ""
@@ -421,6 +455,11 @@ class single_name_value_list(object):
         return(self)
 
     def next(self):
+        """
+        Called to process and return the next logical record in the
+        currently open file.
+        """
+
         if self.debug_level > 0:
             print "base:next: {this}".format(this=str(self))
         __lines = self.curr_sio.read_all_lines()
@@ -443,22 +482,24 @@ class single_name_value_list(object):
 
 
 # ---
-class twoline_logical_records(object):
+class TwoLineLogicalRecs(object):
     """
     Base class to read 'netstat', 'snmp' and any others with the same two-line logical record format
     """
 
     def extra_init(self, *opts):
+        """No-op version of optional call-out from '__init__' method"""
+
 #        print "base:extra_init: {this}".format(this=str(self))
         return
 
     def __init__(self, *opts):
 #        print "base:__init__: this{this} file{file}".format(this=str(self),
-#                file=ShowHandlerFilePath(self))
+#                file=show_handler_file_path(self))
         if len(opts) > 0:
-            self.infile = ProcFileToPath(opts[0])
+            self.infile = proc_file_to_path(opts[0])
         else:
-            self.infile = ShowHandlerFilePath(self)
+            self.infile = show_handler_file_path(self)
         self.minfields = 1
         self.skipped = ""
         self.protocol_type = ""
@@ -475,6 +516,11 @@ class twoline_logical_records(object):
         return(self)
 
     def next(self):
+        """
+        Called to process and return the next logical record in the
+        currently open file.
+        """
+
 #        print "base:next: {this}".format(this=str(self))
 
 # Note: Only a couple of the /proc/net files use this format and it can't
@@ -498,22 +544,24 @@ class twoline_logical_records(object):
 
 
 # ---
-class labelled_pair_list_records(object):
+class LabelledPairList(object):
     """
     Base class to read 'sockstat', 'sockstat6' and others files w/ independent records of name/value pairs
     """
 
     def extra_init(self, *opts):
+        """No-op version of optional call-out from '__init__' method"""
+
 #        print "base:extra_init: {this}".format(this=str(self))
         return
 
     def __init__(self, *opts):
 #        print "base:__init__: this{this} file{file}".format(this=str(self),
-#                file=ShowHandlerFilePath(self))
+#                file=show_handler_file_path(self))
         if len(opts) > 0:
-            self.infile = ProcFileToPath(opts[0])
+            self.infile = proc_file_to_path(opts[0])
         else:
-            self.infile = ShowHandlerFilePath(self)
+            self.infile = show_handler_file_path(self)
         self.minfields = 1
         self.skipped = ""
 
@@ -531,6 +579,10 @@ class labelled_pair_list_records(object):
         return(self)
 
     def next(self):
+        """
+        Called to process and return the next logical record in the
+        currently open file.
+        """
 
 # -- Sample lines for reference...
 # TCP: inuse 26 orphan 0 tw 1 alloc 30 mem 2
@@ -553,22 +605,24 @@ class labelled_pair_list_records(object):
 
 
 # ---
-class list_of_terms_format(object):
+class ListOfTerms(object):
     """
     Base class to read files that are just a list of terms, one per line, like 'ip_tables_*' files
     """
 
     def extra_init(self, *opts):
+        """No-op version of optional call-out from '__init__' method"""
+
 #        print "base:extra_init: {this}".format(this=str(self))
         return
 
     def __init__(self, *opts):
 #        print "base:__init__: this{this} file{file}".format(this=str(self),
-#                file=ShowHandlerFilePath(self))
+#                file=show_handler_file_path(self))
         if len(opts) > 0:
-            self.infile = ProcFileToPath(opts[0])
+            self.infile = proc_file_to_path(opts[0])
         else:
-            self.infile = ShowHandlerFilePath(self)
+            self.infile = show_handler_file_path(self)
         self.minfields = 1
         self.skipped = ""
 
@@ -584,6 +638,10 @@ class list_of_terms_format(object):
         return(self)
 
     def next(self):
+        """
+        Called to process and return the next logical record in the
+        currently open file.
+        """
 
 # -- Sample records.  This file is only readable by root and is just
 # -- a list of words, one per line.
@@ -605,26 +663,30 @@ class list_of_terms_format(object):
 
 
 # ---
-class fixed_column_field_recs(object):
+class FixedColumnRecs(object):
     """
     Class used to read files where the fields are consistently in specific columns
     """
 
     def extra_init(self, *opts):
+        """No-op version of optional call-out from '__init__' method"""
+
 #        print "base:extra_init: {this}".format(this=str(self))
         return
 
     def extra_next(self, sio):
+        """No-op version of optional call-out from 'next' method"""
+
 #        print "base:extra_next: {this}".format(this=str(self))
         return(sio.buff)
 
     def __init__(self, *opts):
 #        print "base:__init__: this{this} file{file}".format(this=str(self),
-#                file=ShowHandlerFilePath(self))
+#                file=show_handler_file_path(self))
         if len(opts) > 0:
-            self.infile = ProcFileToPath(opts[0])
+            self.infile = proc_file_to_path(opts[0])
         else:
-            self.infile = ShowHandlerFilePath(self)
+            self.infile = show_handler_file_path(self)
         self.minfields = 0
         self.skipped = ""
         self.fixedcols = dict()
@@ -638,9 +700,15 @@ class fixed_column_field_recs(object):
         return
 
     def __iter__(self):
+        """Standard iterator method"""
         return(self)
 
     def next(self):
+        """
+        Called to process and return the next logical record in the
+        currently open file.
+        """
+
 #        print "base:next: {this}".format(this=str(self))
         sio = self.curr_sio
         sio.read_line()

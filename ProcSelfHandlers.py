@@ -17,6 +17,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+"""
+Handlers for file in the /proc/PID or /proc/self directories
+"""
 
 import ProcBaseRoutines
 import ProcFieldConstants
@@ -36,46 +39,45 @@ SUFFIX_VAL = PBR.SUFFIX_VAL
 BEFORE_VAL = PBR.BEFORE_VAL
 AFTER_VAL = PBR.AFTER_VAL
 
-convert_by_rule = PBR.convert_by_rule
-
-RegisterProcFileHandler = PBR.RegisterProcFileHandler
-RegisterPartialProcFileHandler = PBR.RegisterPartialProcFileHandler
+REGISTER_FILE = PBR.register_file
+REGISTER_PARTIAL_FILE = PBR.register_partial_file
 
 
 # --- !!! move to the end once all the handlers are added !!!
 if __name__ == "__main__":
 
-    print "Collection of handlers to parse file in the root /proc/self and /proc/[0-9]* directories"
+    print "Collection of handlers to parse file in the root /proc/self and \
+/proc/[0-9]* directories"
 
 
 # ---
-class ProcSelfLIMITS(PBR.fixed_column_field_recs):
+class ProcSelfLIMITS(PBR.FixedColumnRecs):
     """Pull records from /proc/self/limits"""
 # source: fs/proc/base.c
 #
-#        count += sprintf(&bufptr[count], "%-25s %-20s %-20s %-10s\n",
-#                        "Limit", "Soft Limit", "Hard Limit", "Units");
+#    count += sprintf(&bufptr[count], "%-25s %-20s %-20s %-10s\n",
+#                    "Limit", "Soft Limit", "Hard Limit", "Units");
 #
-#        for (i = 0; i < RLIM_NLIMITS; i++) {
-#                if (rlim[i].rlim_cur == RLIM_INFINITY)
-#                        count += sprintf(&bufptr[count], "%-25s %-20s ",
-#                                         lnames[i].name, "unlimited");
-#                else
-#                        count += sprintf(&bufptr[count], "%-25s %-20lu ",
-#                                         lnames[i].name, rlim[i].rlim_cur);
+#    for (i = 0; i < RLIM_NLIMITS; i++) {
+#            if (rlim[i].rlim_cur == RLIM_INFINITY)
+#                    count += sprintf(&bufptr[count], "%-25s %-20s ",
+#                                     lnames[i].name, "unlimited");
+#            else
+#                    count += sprintf(&bufptr[count], "%-25s %-20lu ",
+#                                     lnames[i].name, rlim[i].rlim_cur);
 #
-#                if (rlim[i].rlim_max == RLIM_INFINITY)
-#                        count += sprintf(&bufptr[count], "%-20s ", "unlimited");
-#                else
-#                        count += sprintf(&bufptr[count], "%-20lu ",
-#                                         rlim[i].rlim_max);
+#            if (rlim[i].rlim_max == RLIM_INFINITY)
+#                    count += sprintf(&bufptr[count], "%-20s ", "unlimited");
+#            else
+#                    count += sprintf(&bufptr[count], "%-20lu ",
+#                                     rlim[i].rlim_max);
 #
-#                if (lnames[i].unit)
-#                        count += sprintf(&bufptr[count], "%-10s\n",
-#                                         lnames[i].unit);
-#                else
-#                        count += sprintf(&bufptr[count], "\n");
-#        }
+#            if (lnames[i].unit)
+#                    count += sprintf(&bufptr[count], "%-10s\n",
+#                                     lnames[i].unit);
+#            else
+#                    count += sprintf(&bufptr[count], "\n");
+#    }
 
     def extra_init(self, *opts):
         self.minfields = 4
@@ -113,8 +115,10 @@ class ProcSelfLIMITS(PBR.fixed_column_field_recs):
 
         else:
             self.field[PFC.F_LIMIT] = self.field[PFC.F_LIMIT].strip()
-            self.field[PFC.F_SOFT_LIMIT] = PBR.number_or_unlimited(self.field[PFC.F_SOFT_LIMIT])
-            self.field[PFC.F_HARD_LIMIT] = PBR.number_or_unlimited(self.field[PFC.F_HARD_LIMIT])
+            self.field[PFC.F_SOFT_LIMIT] = PBR.number_or_unlimited(
+                    self.field[PFC.F_SOFT_LIMIT])
+            self.field[PFC.F_HARD_LIMIT] = PBR.number_or_unlimited(
+                    self.field[PFC.F_HARD_LIMIT])
             self.field[PFC.F_UNITS] = self.field[PFC.F_UNITS].strip()
 
         self.limit = self.field[PFC.F_LIMIT]
@@ -125,13 +129,13 @@ class ProcSelfLIMITS(PBR.fixed_column_field_recs):
         return(self.limit, self.soft_limit, self.hard_limit, self.units)
 
 #
-RegisterProcFileHandler("/proc/self/limits", ProcSelfLIMITS)
-RegisterPartialProcFileHandler("limits", ProcSelfLIMITS)
+REGISTER_FILE("/proc/self/limits", ProcSelfLIMITS)
+REGISTER_PARTIAL_FILE("limits", ProcSelfLIMITS)
 
 
 
 # ---
-class ProcSelfMAPS(PBR.fixed_delim_format_recs):
+class ProcSelfMAPS(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/self/maps"""
 # source: fs/proc/nommu.c
 #
@@ -159,13 +163,19 @@ class ProcSelfMAPS(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 5
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_START, BEFORE_VAL: "-", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_END, AFTER_VAL: "-", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_START,
+                BEFORE_VAL: "-", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_END,
+                AFTER_VAL: "-", CONVERSION: long, NUM_BASE: 16 } )
         self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_FLAGS } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_PAGE_OFFSET, CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MAJOR_DEV, BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MINOR_DEV, AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_INODE, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_PAGE_OFFSET,
+                CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MAJOR_DEV,
+                BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MINOR_DEV,
+                AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_INODE,
+                CONVERSION: long } )
         self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_PATH } )
 
         self.vm_start = 0
@@ -209,16 +219,17 @@ class ProcSelfMAPS(PBR.fixed_delim_format_recs):
         self.inode = self.field[PFC.F_INODE]
         self.path = self.field[PFC.F_PATH]
 
-        return(self.vm_start, self.vm_end, self.flags, self.vm_page, self.major, self.minor, self.inode, self.path)
+        return(self.vm_start, self.vm_end, self.flags, self.vm_page,
+                self.major, self.minor, self.inode, self.path)
 
 #
-RegisterProcFileHandler("/proc/self/maps", ProcSelfMAPS)
-RegisterPartialProcFileHandler("maps", ProcSelfMAPS)
+REGISTER_FILE("/proc/self/maps", ProcSelfMAPS)
+REGISTER_PARTIAL_FILE("maps", ProcSelfMAPS)
 
 
 
 # ---
-class ProcSelfSTACK(PBR.fixed_delim_format_recs):
+class ProcSelfSTACK(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/self/stack"""
 # source: fs/proc/base.c
 #
@@ -235,8 +246,11 @@ class ProcSelfSTACK(PBR.fixed_delim_format_recs):
         self.stack_entry = ""
 
         self.rules = dict()
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ADDRESS, PREFIX_VAL: "[<", SUFFIX_VAL: ">]", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_STACK_ENTRY } )
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ADDRESS,
+                PREFIX_VAL: "[<", SUFFIX_VAL: ">]", CONVERSION: long,
+                NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 1,
+                FIELD_NAME: PFC.F_STACK_ENTRY } )
 
         return
 
@@ -263,13 +277,13 @@ class ProcSelfSTACK(PBR.fixed_delim_format_recs):
         return(self.address_string, self.address, self.stack_entry)
 
 #
-RegisterProcFileHandler("/proc/self/stack", ProcSelfSTACK)
-RegisterPartialProcFileHandler("stack", ProcSelfSTACK)
+REGISTER_FILE("/proc/self/stack", ProcSelfSTACK)
+REGISTER_PARTIAL_FILE("stack", ProcSelfSTACK)
 
 
 
 # ---
-class ProcSelfIO(PBR.single_name_value_list):
+class ProcSelfIO(PBR.SingleNameValueList):
     """Pull records from /proc/net/io"""
 #
 # source: fs/proc/base.c
@@ -306,13 +320,13 @@ class ProcSelfIO(PBR.single_name_value_list):
 #        self.debug_level = 1
         return
 
-RegisterProcFileHandler("/proc/net/io", ProcSelfIO)
-RegisterPartialProcFileHandler("io", ProcSelfIO)
+REGISTER_FILE("/proc/net/io", ProcSelfIO)
+REGISTER_PARTIAL_FILE("io", ProcSelfIO)
 
 
 
 # ---
-class ProcSelfNUMA_MAPS(PBR.fixed_delim_format_recs):
+class ProcSelfNUMAMAPS(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/self/numa_maps"""
 #
 # source: fs/proc/task_mmu.c
@@ -367,16 +381,25 @@ class ProcSelfNUMA_MAPS(PBR.fixed_delim_format_recs):
     def extra_init(self, *opts):
         self.minfields = 2
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_START, CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_START,
+                CONVERSION: long, NUM_BASE: 16 } )
         self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_BUFFNAME } )
-        self.add_parse_rule( { FIELD_NAME: PFC.F_FILEPATH, PREFIX_VAL: "file=" } )
-        self.add_parse_rule( { FIELD_NAME: PFC.F_ANON, PREFIX_VAL: "anon=", CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NAME: PFC.F_DIRTY, PREFIX_VAL: "dirty=", CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NAME: PFC.F_MAPPED, PREFIX_VAL: "mapped=", CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NAME: PFC.F_MAPMAX, PREFIX_VAL: "mapmax=", CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NAME: PFC.F_SWAPCACHE, PREFIX_VAL: "swapcache=", CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NAME: PFC.F_ACTIVE_PAGES, PREFIX_VAL: "active=", CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NAME: PFC.F_WRITEBACK, PREFIX_VAL: "writeback=", CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_FILEPATH,
+                PREFIX_VAL: "file=" } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_ANON, PREFIX_VAL: "anon=",
+                CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_DIRTY, PREFIX_VAL: "dirty=",
+                CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_MAPPED, PREFIX_VAL: "mapped=",
+                CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_MAPMAX, PREFIX_VAL: "mapmax=",
+                CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_SWAPCACHE,
+                PREFIX_VAL: "swapcache=", CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_ACTIVE_PAGES,
+                PREFIX_VAL: "active=", CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NAME: PFC.F_WRITEBACK,
+                PREFIX_VAL: "writeback=", CONVERSION: long } )
 
         self.start = 0
         self.buffname = ""
@@ -393,11 +416,11 @@ class ProcSelfNUMA_MAPS(PBR.fixed_delim_format_recs):
         self.writeback = 0
         self.node_list = dict()
 
-        self.__ASSIGN_DELIM = "="
-        self.__PREFIX_NODE = "N"
-        self.__FLAG_HEAP = "heap"
-        self.__FLAG_STACK = "stack"
-        self.__FLAG_HUGE = "huge"
+        self.__assign_delim = "="
+        self.__prefix_node = "N"
+        self.__flag_heap = "heap"
+        self.__flag_stack = "stack"
+        self.__flag_huge = "huge"
         return
 
     def extra_next(self, sio):
@@ -421,20 +444,21 @@ class ProcSelfNUMA_MAPS(PBR.fixed_delim_format_recs):
             for __off in range(2, sio.linewords):
                 __word = sio.lineparts[__off]
 
-                if __word == self.__FLAG_HEAP:
+                if __word == self.__flag_heap:
                     self.field[PFC.F_HEAP] = 1
 
-                elif __word == self.__FLAG_STACK:
+                elif __word == self.__flag_stack:
                     self.field[PFC.F_STACK] = 1
 
-                elif __word == self.__FLAG_HUGE:
+                elif __word == self.__flag_huge:
                     self.field[PFC.F_HUGE] = 1
 
                 else:
-                    __split = __word.partition(self.__ASSIGN_DELIM)
+                    __split = __word.partition(self.__assign_delim)
                     if len(__split) == 3:
-                        if __split[0][:1] == self.__PREFIX_NODE:
-                            self.field[PFC.F_NODE_LIST][__split[0][1:]] = __split[2]
+                        if __split[0][:1] == self.__prefix_node:
+                            self.field[PFC.F_NODE_LIST][__split[0][1:]] = \
+                                    __split[2]
             
         self.start = self.field[PFC.F_START]
         self.buffname = self.field[PFC.F_BUFFNAME]
@@ -451,17 +475,18 @@ class ProcSelfNUMA_MAPS(PBR.fixed_delim_format_recs):
         self.writeback = self.field[PFC.F_WRITEBACK]
         self.node_list = self.field[PFC.F_NODE_LIST]
 
-        return(self.start, self.buffname, self.path, self.heap, self.stack, self.huge, self.anon,
-          self.dirty, self.mapped, self.mapmax, self.swapcache, self.activepages, self.writeback,
-          self.node_list)
+        return(self.start, self.buffname, self.path, self.heap, self.stack,
+                self.huge, self.anon, self.dirty, self.mapped, self.mapmax,
+                self.swapcache, self.activepages, self.writeback,
+                self.node_list)
 #
-RegisterProcFileHandler("/proc/self/numa_maps", ProcSelfNUMA_MAPS)
-RegisterPartialProcFileHandler("numa_maps", ProcSelfNUMA_MAPS)
+REGISTER_FILE("/proc/self/numa_maps", ProcSelfNUMAMAPS)
+REGISTER_PARTIAL_FILE("numa_maps", ProcSelfNUMAMAPS)
 
 
 
 # ---
-class ProcSelfMOUNTINFO(PBR.fixed_delim_format_recs):
+class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/self/mountinfo"""
 # source: fs/namespace.c
 #
@@ -495,7 +520,7 @@ class ProcSelfMOUNTINFO(PBR.fixed_delim_format_recs):
 # 
 # shared:X  mount is shared in peer group X
 # master:X  mount is slave to peer group X
-# propagate_from:X  mount is slave and receives propagation from peer group X (*)
+# propagate_from:X  mount is slave and receives propagation from peer group X(*)
 # unbindable  mount is unbindable
 # 
 # (*) X is the closest dominant peer group under the process's root.  If
@@ -508,14 +533,17 @@ class ProcSelfMOUNTINFO(PBR.fixed_delim_format_recs):
         self.minfields = 10
 
         self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_MOUNT_ID } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_PARENT_MOUNT_ID, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_MAJOR_DEV, BEFORE_VAL: ":", CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_MINOR_DEV, AFTER_VAL: ":", CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 1,
+                FIELD_NAME: PFC.F_PARENT_MOUNT_ID, CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_MAJOR_DEV,
+                BEFORE_VAL: ":", CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_MINOR_DEV,
+                AFTER_VAL: ":", CONVERSION: long } )
         self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MOUNT_FS } )
         self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_MOUNT_REL } )
         self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_MOUNT_OPTS } )
 
-        self.__OptionSep = "-"
+        self.__option_sep = "-"
 
         self.mntid = 0
         self.mntid_parent = 0
@@ -552,10 +580,11 @@ class ProcSelfMOUNTINFO(PBR.fixed_delim_format_recs):
             __extras = ""
             while sio.linewords > __off and not __endopts:
                 __curr = sio.lineparts[__off]
-                if __curr == self.__OptionSep:
+                if __curr == self.__option_sep:
                     __endopts = 1
                 else:
-                    __extras = "{accum} {next}".format(accum=__extras, next=__curr)
+                    __extras = "{accum} {next}".format(accum=__extras,
+                            next=__curr)
                 __off = __off + 1
             self.field[PFC.F_EXTRA_OPTS] = __extras
 
@@ -580,17 +609,17 @@ class ProcSelfMOUNTINFO(PBR.fixed_delim_format_recs):
         self.mnt_source = self.field[PFC.F_MOUNT_SRC]
         self.super_options = self.field[PFC.F_SUPER_OPTS]
 
-        return(self.mntid, self.mntid_parent, self.major, self.minor, self.mount_fs,
-          self.mount_prel, self.mnt_options, self.more_options, self.fstype, self.mnt_source,
-          self.super_options)
+        return(self.mntid, self.mntid_parent, self.major, self.minor,
+          self.mount_fs, self.mount_prel, self.mnt_options, self.more_options,
+          self.fstype, self.mnt_source, self.super_options)
 #
-RegisterProcFileHandler("/proc/self/mountinfo", ProcSelfMOUNTINFO)
-RegisterPartialProcFileHandler("mountinfo", ProcSelfMOUNTINFO)
+REGISTER_FILE("/proc/self/mountinfo", ProcSelfMOUNTINFO)
+REGISTER_PARTIAL_FILE("mountinfo", ProcSelfMOUNTINFO)
 
 
 
 # ---
-class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
+class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/self/mountstats"""
 #
 # source: fs/namespace.c
@@ -633,33 +662,34 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 # (N) \txprt: tcp !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT!
 
     def extra_init(self, *opts):
+        """Custom processing for the record just read"""
+
         self.minfields = 2
 
-        self.__ASSIGN_DELIM = "="
-        self.__OPTLIST_DELIM = ","
-        self.__RPC_DELIM = "/"
+        self.__assign_delim = "="
+        self.__rpc_delim = "/"
 
-        self.__PREFIX_DEV = "device"
-        self.__PREFIX_NO = "no"
-        self.__PREFIX_OPTS = "opts:"
-        self.__PREFIX_AGE = "age:"
-        self.__PREFIX_CAPS = "caps:"
-        self.__PREFIX_NFSV4 = "nfsv4:"
-        self.__PREFIX_SECURITY = "sec:"
-        self.__PREFIX_EVENTS = "events:"
-        self.__PREFIX_BYTES = "bytes:"
-        self.__PREFIX_FSCACHE = "tfsc:"
-        self.__PREFIX_IOSTATS = "RPC"
-        self.__PREFIX_PER_OP = "per-op"
-        self.__PREFIX_XPRT = "xprt:"
-        self.__PREFIX_FLAVOR = "flavor"
-        self.__PREFIX_PSEUDOFLAVOR = "pseudoflavor"
+        self.__prefix_dev = "device"
+        self.__prefix_no = "no"
+        self.__prefix_opts = "opts:"
+        self.__prefix_age = "age:"
+        self.__prefix_caps = "caps:"
+        self.__prefix_nfsv4 = "nfsv4:"
+        self.__prefix_security = "sec:"
+        self.__prefix_events = "events:"
+        self.__prefix_bytes = "bytes:"
+        self.__prefix_fscache = "tfsc:"
+        self.__prefix_iostats = "RPC"
+        self.__prefix_per_op = "per-op"
+        self.__prefix_xprt = "xprt:"
+        self.__prefix_flavor = "flavor"
+        self.__prefix_pseudoflavor = "pseudoflavor"
 
-        self.__FLAG_HARD = "hard"
-        self.__FLAG_SOFT = "soft"
-        self.__FLAG_XPRT_LOCAL = "local"
-        self.__FLAG_XPRT_UDP = "udp"
-        self.__FLAG_XPRT_TCP = "tcp"
+        self.__flag_hard = "hard"
+        self.__flag_soft = "soft"
+        self.__flag_xprt_local = "local"
+        self.__flag_xprt_udp = "udp"
+        self.__flag_xprt_tcp = "tcp"
 
         self.__is_per_op = 0
         self.__have_partial = 0
@@ -669,21 +699,25 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         self.__partial[PFC.F_FSTYPE] = ""
         self.__partial[PFC.F_STATSVERS] = ""
 
-        self.__NFS_MOUNT_OPTS_FLAG = ( PFC.F_SYNC, PFC.F_NOATIME, PFC.F_NODIRATIME, PFC.F_POSIX, 
-          PFC.F_NOCTO, PFC.F_NOAC, PFC.F_NOLOCK, PFC.F_NOACL, PFC.F_NORDIRPLUS, PFC.F_UNSHARED,
-          PFC.F_NORESVPORT, PFC.F_FSCACHE, PFC.F_SESSIONS )
+        self.__nfs_mount_opts_flag = ( PFC.F_SYNC, PFC.F_NOATIME,
+                PFC.F_NODIRATIME, PFC.F_POSIX, PFC.F_NOCTO, PFC.F_NOAC,
+                PFC.F_NOLOCK, PFC.F_NOACL, PFC.F_NORDIRPLUS, PFC.F_UNSHARED,
+                PFC.F_NORESVPORT, PFC.F_FSCACHE, PFC.F_SESSIONS )
 
-        self.__NFS_MOUNT_OPTS_LONG = ( PFC.F_VERS, PFC.F_RSIZE,  PFC.F_WSIZE,  PFC.F_BSIZE,
-          PFC.F_NAMELEN, PFC.F_ACREGMIN, PFC.F_ACREGMAX, PFC.F_ACDIRMIN, PFC.F_ACDIRMAX, PFC.F_PORT,
-          PFC.F_TIMEO, PFC.F_MOUNTSTATS_RETRANS, PFC.F_MOUNTPORT, PFC.F_MINORVERS, PFC.F_DTSIZE,
-          PFC.F_FLAVOR, PFC.F_PSEUDOFLAVOR, PFC.F_RPC_PROG, PFC.F_RPC_VERS, PFC.F_NAMLEN,
-          PFC.F_WTMULT )
+        self.__nfs_mount_opts_long = ( PFC.F_VERS, PFC.F_RSIZE,  PFC.F_WSIZE,
+                PFC.F_BSIZE, PFC.F_NAMELEN, PFC.F_ACREGMIN, PFC.F_ACREGMAX,
+                PFC.F_ACDIRMIN, PFC.F_ACDIRMAX, PFC.F_PORT, PFC.F_TIMEO,
+                PFC.F_MOUNTSTATS_RETRANS, PFC.F_MOUNTPORT, PFC.F_MINORVERS,
+                PFC.F_DTSIZE, PFC.F_FLAVOR, PFC.F_PSEUDOFLAVOR, PFC.F_RPC_PROG,
+                PFC.F_RPC_VERS, PFC.F_NAMLEN, PFC.F_WTMULT )
 
-        self.__NFS_MOUNT_OPTS_HEX = ( PFC.F_CAPS, PFC.F_NFSV4_BM0, PFC.F_NFSV4_BM1, PFC.F_NFSV4_ACL )
+        self.__nfs_mount_opts_hex = ( PFC.F_CAPS, PFC.F_NFSV4_BM0,
+                PFC.F_NFSV4_BM1, PFC.F_NFSV4_ACL )
 
-        self.__NFS_MOUNT_OPTS_STRING = ( PFC.F_PROTO, PFC.F_SECURITYNAME, PFC.F_MOUNTADDR,
-          PFC.F_MOUNTVERS, PFC.F_MOUNTPROTO, PFC.F_CLIENTADDR, PFC.F_LOOKUPCACHE, PFC.F_LOCKLOCAL,
-          PFC.F_PNFS, PFC.F_IOSTATS_VERS )
+        self.__nfs_mount_opts_string = ( PFC.F_PROTO, PFC.F_SECURITYNAME,
+                PFC.F_MOUNTADDR, PFC.F_MOUNTVERS, PFC.F_MOUNTPROTO,
+                PFC.F_CLIENTADDR, PFC.F_LOOKUPCACHE, PFC.F_LOCKLOCAL,
+                PFC.F_PNFS, PFC.F_IOSTATS_VERS )
 
         self.device = ""
         self.mountpoint = ""
@@ -692,7 +726,12 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 
         return
 
-    def partial_to_final(self, sio):
+    def partial_to_final(self):
+        """
+        Copy queued data from a previous iteration to the current
+        logical record.
+        """
+
         self.__have_partial = 0
 
         self.field[PFC.F_DEVICE] = self.__partial[PFC.F_DEVICE]
@@ -710,9 +749,11 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 # (A) (1) mounted on !MOUNT! with fstype !FSTYPE! {statvers=!VERSION!}
 #     (1) device !DEVICE!|no device
     def parse_device_line(self, sio):
+        """Parse device subrecord"""
+
         self.__have_partial = 1
 
-        if sio.lineparts[0] == self.__PREFIX_DEV:
+        if sio.lineparts[0] == self.__prefix_dev:
             self.__partial[PFC.F_DEVICE] = sio.lineparts[1]
         else:
             self.__partial[PFC.F_DEVICE] = PDC.NO_DEVICE
@@ -720,7 +761,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         self.__partial[PFC.F_FSTYPE] = sio.lineparts[7]
 
         if sio.linewords >= 9:
-            __split = sio.lineparts[8].partition(self.__ASSIGN_DELIM)
+            __split = sio.lineparts[8].partition(self.__assign_delim)
             self.__partial[PFC.F_STATSVERS] = __split[2]
         else:
             self.__partial[PFC.F_STATSVERS] = ""
@@ -738,37 +779,45 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 #         (11) !PROTOCOL!|auto
 #     (9) {,fsc}{,lookupcache={none|pos}}{,local_lock={none|all|flock|posix}}
     def parse_options_line(self, sio):
+        """Driver for parsing options subrecords"""
+
         __opt = PBR.breakout_option_list(sio.lineparts[1])
 
 #        for __key in __opt:
-#            print "dbg:: Opts post-BOL key'{key}' val'{val}'".format(key=__key, val=__opt[__key])
+#            print "dbg:: Opts post-BOL key'{key}' val'{val}'".format(
+#                    key=__key, val=__opt[__key])
 
         self.field[PFC.F_WRITE_STATUS] = sio.lineparts[1][0:2]
 
-        if __opt.has_key(self.__FLAG_HARD):
-            self.field[PFC.F_MOUNT_TYPE] = self.__FLAG_HARD
-        elif __opt.has_key(self.__FLAG_SOFT):
-            self.field[PFC.F_MOUNT_TYPE] = self.__FLAG_SOFT
+        if __opt.has_key(self.__flag_hard):
+            self.field[PFC.F_MOUNT_TYPE] = self.__flag_hard
+        elif __opt.has_key(self.__flag_soft):
+            self.field[PFC.F_MOUNT_TYPE] = self.__flag_soft
         else:
             self.field[PFC.F_MOUNT_TYPE] = PDC.UNKNOWN_STATE
 
-        for __mount_opt in self.__NFS_MOUNT_OPTS_FLAG:
+        for __mount_opt in self.__nfs_mount_opts_flag:
             self.field[__mount_opt] = __opt.has_key(__mount_opt)
 
-        for __mount_opt in self.__NFS_MOUNT_OPTS_LONG:
+        for __mount_opt in self.__nfs_mount_opts_long:
             try:
-                self.field[__mount_opt] = convert_by_rule(__opt[__mount_opt], { CONVERSION: long } )
+                self.field[__mount_opt] = PBR.convert_by_rule(
+                        __opt[__mount_opt],
+                        { CONVERSION: long } )
             except KeyError:
                 self.field[__mount_opt] = 0
 
-        for __mount_opt in self.__NFS_MOUNT_OPTS_HEX:
+        for __mount_opt in self.__nfs_mount_opts_hex:
             try:
-                self.field[__mount_opt] = convert_by_rule(__opt[__mount_opt], { CONVERSION: long, NUM_BASE: 16 } )
+                self.field[__mount_opt] = PBR.convert_by_rule(
+                        __opt[__mount_opt],
+                        { CONVERSION: long, NUM_BASE: 16 } )
             except KeyError:
                 self.field[__mount_opt] = 0
-        self.__NFS_MOUNT_OPTS_HEX = ( PFC.F_NFSV4_BM0, PFC.F_NFSV4_BM1, PFC.F_NFSV4_ACL )
+        self.__nfs_mount_opts_hex = ( PFC.F_NFSV4_BM0, PFC.F_NFSV4_BM1,
+                PFC.F_NFSV4_ACL )
 
-        for __mount_opt in self.__NFS_MOUNT_OPTS_STRING:
+        for __mount_opt in self.__nfs_mount_opts_string:
             try:
                 self.field[__mount_opt] = __opt.has_key(__mount_opt)
             except KeyError:
@@ -778,31 +827,47 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 
 # (C) \tage: !INT!
     def parse_age_line(self, sio):
-        self.field[PFC.F_AGE] = convert_by_rule( sio.lineparts[1], { CONVERSION: long } )
+        """Parse an 'age' subrecord"""
+
+        self.field[PFC.F_AGE] = PBR.convert_by_rule( sio.lineparts[1],
+                { CONVERSION: long } )
         return
 
 # (D) \tcaps: caps=0x!HEX!,wtmult=!INT!,dtsize=!INT!,bsize=!INT!,namlen=!INT!
     def parse_caps_line(self, sio):
+        """Parse a 'caps' subrecord"""
+
         __caps = PBR.breakout_option_list(sio.lineparts[1])
 
 #        print "dbg:: Caps line'{line}'".format(line=sio.buff[:-1])
 #        for __key in __caps:
-#            print "dbg:: Caps post-BOL key'{key}' val'{val}'".format(key=__key, val=__caps[__key])
+#            print "dbg:: Caps post-BOL key'{key}' val'{val}'".format(key=__key,
+#                    val=__caps[__key])
 
-        self.field[PFC.F_CAPS] = convert_by_rule(__caps[PFC.F_CAPS], { CONVERSION: long, NUM_BASE: 16, PREFIX_VAL: "0x" } )
-        self.field[PFC.F_WTMULT] = convert_by_rule(__caps[PFC.F_WTMULT], { CONVERSION: long } )
-        self.field[PFC.F_DTSIZE] = convert_by_rule(__caps[PFC.F_DTSIZE], { CONVERSION: long } )
-        self.field[PFC.F_BSIZE] = convert_by_rule(__caps[PFC.F_BSIZE], { CONVERSION: long } )
-        self.field[PFC.F_NAMELEN] = convert_by_rule(__caps[PFC.F_NAMELEN], { CONVERSION: long } )
+        self.field[PFC.F_CAPS] = PBR.convert_by_rule(__caps[PFC.F_CAPS],
+                { CONVERSION: long, NUM_BASE: 16, PREFIX_VAL: "0x" } )
+        self.field[PFC.F_WTMULT] = PBR.convert_by_rule(__caps[PFC.F_WTMULT],
+                { CONVERSION: long } )
+        self.field[PFC.F_DTSIZE] = PBR.convert_by_rule(__caps[PFC.F_DTSIZE],
+                { CONVERSION: long } )
+        self.field[PFC.F_BSIZE] = PBR.convert_by_rule(__caps[PFC.F_BSIZE],
+                { CONVERSION: long } )
+        self.field[PFC.F_NAMELEN] = PBR.convert_by_rule(__caps[PFC.F_NAMELEN],
+                { CONVERSION: long } )
         return
 
 # (E) \tnfsv4: bm0=0x!HEX!,bm1=0x!HEX!,acl=0x!HEX!{,sessions}{,pnfs={!NAME!|not configured}}
     def parse_nfsv4_line(self, sio):
+        """Parse a subrecord with NFS v4 info"""
+
         __opts = PBR.breakout_option_list(sio.lineparts[1])
 
-        self.field[PFC.F_NFSV4_BM0] = convert_by_rule(__opts[PFC.F_NFSV4_BM0], { CONVERSION: long, NUM_BASE: 16 } )
-        self.field[PFC.F_NFSV4_BM1] = convert_by_rule(__opts[PFC.F_NFSV4_BM1], { CONVERSION: long, NUM_BASE: 16 } )
-        self.field[PFC.F_NFSV4_ACL] = convert_by_rule(__opts[PFC.F_NFSV4_ACL], { CONVERSION: long, NUM_BASE: 16 } )
+        self.field[PFC.F_NFSV4_BM0] = PBR.convert_by_rule(
+                __opts[PFC.F_NFSV4_BM0], { CONVERSION: long, NUM_BASE: 16 } )
+        self.field[PFC.F_NFSV4_BM1] = PBR.convert_by_rule(
+                __opts[PFC.F_NFSV4_BM1], { CONVERSION: long, NUM_BASE: 16 } )
+        self.field[PFC.F_NFSV4_ACL] = PBR.convert_by_rule(
+                __opts[PFC.F_NFSV4_ACL], { CONVERSION: long, NUM_BASE: 16 } )
 
         if __opts.has_key(PFC.F_SESSIONS):
             self.field[PFC.F_SESSIONS] = 1
@@ -818,34 +883,48 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 
 # (F) \tsec: flavor=!INT!{,pseudoflavor=!INT!}
     def parse_security_line(self, sio):
+        """Parse security subrecord"""
+
         __optlist = PBR.breakout_option_list(sio.lineparts[1])
-        self.field[PFC.F_FLAVOR] = convert_by_rule(__optlist[self.__PREFIX_FLAVOR], { CONVERSION: long } )
+        self.field[PFC.F_FLAVOR] = PBR.convert_by_rule(
+                __optlist[self.__prefix_flavor],
+                { CONVERSION: long } )
         try:
-            self.field[PFC.F_PSEUDOFLAVOR] = convert_by_rule( __optlist[self.__PREFIX_PSEUDOFLAVOR], { CONVERSION: long } )
+            self.field[PFC.F_PSEUDOFLAVOR] = PBR.convert_by_rule(
+                    __optlist[self.__prefix_pseudoflavor],
+                    { CONVERSION: long } )
         except KeyError:
             self.field[PFC.F_PSEUDOFLAVOR] = 0
         return
 
 # (G) \tevents: {!INT! }*
     def parse_events_line(self, sio):
+        """Parse an 'events' subrecord"""
+
         self.field[PFC.F_EVENT_LIST] = PBR.array_of_longs(sio.lineparts[1:])
         return
 
 # (H) \tbytes: {!INT! }*
     def parse_bytes_line(self, sio):
+        """Parse a 'bytes' subrecord"""
+
         self.field[PFC.F_BYTES_LIST] = PBR.array_of_longs(sio.lineparts[1:])
         return
 
 # (I) \ttfsc: {!INT! }*
     def parse_fscache_line(self, sio):
+        """Parse a list of NFS cache stats numbers"""
+
         self.field[PFC.F_FSCACHE_LIST] = PBR.array_of_longs(sio.lineparts[1:])
         return
 
 # (J) \tRPC iostats version: !VERSION! p/v: !INT!/!INT! (!PROTOCOL!)
     def parse_iostats_line(self, sio):
+        """Parse a subrecord with I/O stats info"""
+
         self.field[PFC.F_VERSION] = sio.lineparts[3]
 
-        __part = sio.lineparts[5].partition(self.__RPC_DELIM)
+        __part = sio.lineparts[5].partition(self.__rpc_delim)
         self.field[PFC.F_RPC_PROG] = __part[0]
         self.field[PFC.F_RPC_VERS] = __part[2]
 
@@ -857,6 +936,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 # (L) \t(14): !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT!
 #     (14)!STATNAME!|!INT!|NULL
     def parse_per_op_line(self, sio):
+        """Parse line containing and option name followed by a list of vals"""
 
         __stat = sio.lineparts[0]
         if __stat[-1:] == ":":
@@ -878,6 +958,8 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         return
 
     def parse_xprt_local(self, sio):
+        """Parse a local-network version of an 'xprt' subrecord"""
+
         __nums = PBR.array_of_longs(sio.lineparts[2:])
 
         __val = dict()
@@ -894,6 +976,8 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         return(__val)
 
     def parse_xprt_udp(self, sio):
+        """Parse a udp version of an 'xprt' subrecord"""
+
         __nums = PBR.array_of_longs(sio.lineparts[2:])
 
         __val = dict()
@@ -908,6 +992,8 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         return(__val)
 
     def parse_xprt_tcp(self, sio):
+        """Parse a tcp version of an 'xprt' subrecord"""
+
         __nums = PBR.array_of_longs(sio.lineparts[2:])
 
         __val = dict()
@@ -928,16 +1014,17 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 #     (15) local|udp
 # (N) \txprt: tcp !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT!
     def parse_xprt_line(self, sio):
+        """Parse an 'xprt' subrecord"""
 
         __rectype = sio.lineparts[1]
 
-        if __rectype == self.__FLAG_XPRT_LOCAL:
+        if __rectype == self.__flag_xprt_local:
             __val = self.parse_xprt_local(sio)
 
-        elif __rectype == self.__FLAG_XPRT_UDP:
+        elif __rectype == self.__flag_xprt_udp:
             __val = self.parse_xprt_udp(sio)
 
-        elif __rectype == self.__FLAG_XPRT_TCP:
+        elif __rectype == self.__flag_xprt_tcp:
             __val = self.parse_xprt_tcp(sio)
 
         else:
@@ -947,34 +1034,36 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         return
 
     def accumulate_info(self, sio):
+        """Add a physical record to the accumulated logical record"""
+
         __first = sio.lineparts[0]
         __second = sio.lineparts[1]
 
-        if __first == self.__PREFIX_DEV:
+        if __first == self.__prefix_dev:
             self.parse_device_line(sio)
-        elif __first == self.__PREFIX_NO and __second == self.__PREFIX_DEV:
+        elif __first == self.__prefix_no and __second == self.__prefix_dev:
             self.parse_device_line(sio)
-        elif __first == self.__PREFIX_OPTS:
+        elif __first == self.__prefix_opts:
             self.parse_options_line(sio)
-        elif __first == self.__PREFIX_AGE:
+        elif __first == self.__prefix_age:
             self.parse_age_line(sio)
-        elif __first == self.__PREFIX_CAPS:
+        elif __first == self.__prefix_caps:
             self.parse_caps_line(sio)
-        elif __first == self.__PREFIX_NFSV4:
+        elif __first == self.__prefix_nfsv4:
             self.parse_nfsv4_line(sio)
-        elif __first == self.__PREFIX_SECURITY:
+        elif __first == self.__prefix_security:
             self.parse_security_line(sio)
-        elif __first == self.__PREFIX_EVENTS:
+        elif __first == self.__prefix_events:
             self.parse_events_line(sio)
-        elif __first == self.__PREFIX_BYTES:
+        elif __first == self.__prefix_bytes:
             self.parse_bytes_line(sio)
-        elif __first == self.__PREFIX_FSCACHE:
+        elif __first == self.__prefix_fscache:
             self.parse_fscache_line(sio)
-        elif __first == self.__PREFIX_IOSTATS:
+        elif __first == self.__prefix_iostats:
             self.parse_iostats_line(sio)
-        elif __first == self.__PREFIX_XPRT:
+        elif __first == self.__prefix_xprt:
             self.parse_xprt_line(sio)
-        elif __first == self.__PREFIX_PER_OP:
+        elif __first == self.__prefix_per_op:
             self.__is_per_op = 1
         elif self.__is_per_op:
             self.parse_per_op_line(sio)
@@ -993,6 +1082,8 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         return(result)
 
     def init_field_values(self):
+        """Reset field dictionary to startng values"""
+
         self.field = dict()
 
         self.field[PFC.F_DEVICE] = ""
@@ -1010,16 +1101,16 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         self.field[PFC.F_PROTOCOL] = ""
         self.field[PFC.F_VERSION] = ""
 
-        for __mount_opt in self.__NFS_MOUNT_OPTS_FLAG:
+        for __mount_opt in self.__nfs_mount_opts_flag:
             self.field[__mount_opt] = False
 
-        for __mount_opt in self.__NFS_MOUNT_OPTS_LONG:
+        for __mount_opt in self.__nfs_mount_opts_long:
             self.field[__mount_opt] = 0
 
-        for __mount_opt in self.__NFS_MOUNT_OPTS_HEX:
+        for __mount_opt in self.__nfs_mount_opts_hex:
             self.field[__mount_opt] = 0
 
-        for __mount_opt in self.__NFS_MOUNT_OPTS_STRING:
+        for __mount_opt in self.__nfs_mount_opts_string:
             self.field[__mount_opt] = ""
 
     def extra_next(self, sio):
@@ -1041,7 +1132,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
             sio.read_line()
 #            print "dbg:: readline: '{line}'".format(line=sio.buff[:-1])
 
-        self.partial_to_final(sio)
+        self.partial_to_final()
 
         __complete = 0
         while sio.buff != "" and not __complete:
@@ -1049,7 +1140,9 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
 
             __first = sio.lineparts[0]
             __second = sio.lineparts[1]
-            if __first == self.__PREFIX_DEV or (__first == self.__PREFIX_NO and __second == self.__PREFIX_DEV):
+            if __first == self.__prefix_dev or \
+                    (__first == self.__prefix_no
+                    and __second == self.__prefix_dev):
                 __complete = 1
             else:
                 try:
@@ -1066,5 +1159,5 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         return(self.device, self.mountpoint, self.fstype, self.statsvers)
 
 #
-RegisterProcFileHandler("/proc/self/mountstats", ProcSelfMOUNTSTATS)
-RegisterPartialProcFileHandler("mountstats", ProcSelfMOUNTSTATS)
+REGISTER_FILE("/proc/self/mountstats", ProcSelfMOUNTSTATS)
+REGISTER_PARTIAL_FILE("mountstats", ProcSelfMOUNTSTATS)

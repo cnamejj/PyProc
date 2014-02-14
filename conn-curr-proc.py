@@ -17,7 +17,7 @@ if sys.platform == "darwin":
 
 IPLOOKUP = CachedDNS.CachedDNS()
 PSI = ProcessInfo
-SOCKLIST = ProcHandlers.GetProcFileHandler("tcp")()
+SOCKLIST = ProcHandlers.GET_HANDLER("tcp")()
 
 for orig_hexip, \
     dest_hexip, \
@@ -37,7 +37,7 @@ for orig_hexip, \
             orig_ip, orig_port, dest_ip, dest_port, ip2host, proc_summary,
             sock_stat)
 
-SOCKLIST = ProcHandlers.GetProcFileHandler("tcp6")()
+SOCKLIST = ProcHandlers.GET_HANDLER("tcp6")()
 
 for orig_hexip, \
     dest_hexip, \

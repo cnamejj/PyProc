@@ -39,8 +39,8 @@ AFTER_VAL = PBR.AFTER_VAL
 
 convert_by_rule = PBR.convert_by_rule
 
-RegisterProcFileHandler = PBR.RegisterProcFileHandler
-RegisterPartialProcFileHandler = PBR.RegisterPartialProcFileHandler
+REGISTER_FILE = PBR.register_file
+REGISTER_PARTIAL_FILE = PBR.register_partial_file
 
 
 # --- !!! move to the end once all the handlers are added !!!
@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
 
 # ---
-class ProcRootEXECDOMAINS(PBR.fixed_delim_format_recs):
+class ProcRootEXECDOMAINS(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/execdomains"""
 # source: kernel/exec_domain.c
 #   for (ep = exec_domains; ep; ep = ep->next)
@@ -92,13 +92,13 @@ class ProcRootEXECDOMAINS(PBR.fixed_delim_format_recs):
 
         return( self.pers_low, self.pers_high, self.exdom_name, self.exdom_module)
 #
-RegisterProcFileHandler("/proc/execdomains", ProcRootEXECDOMAINS)
-RegisterPartialProcFileHandler("execdomains", ProcRootEXECDOMAINS)
+REGISTER_FILE("/proc/execdomains", ProcRootEXECDOMAINS)
+REGISTER_PARTIAL_FILE("execdomains", ProcRootEXECDOMAINS)
 
 
 
 # ---
-class ProcRootCGROUPS(PBR.fixed_delim_format_recs):
+class ProcRootCGROUPS(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/cgroups"""
 # source: kernel/cgroup.c
 #
@@ -149,13 +149,13 @@ class ProcRootCGROUPS(PBR.fixed_delim_format_recs):
 
         return( self.subsys, self.hierachy, self.cgroups, self.enabled)
 #
-RegisterProcFileHandler("/proc/cgroups", ProcRootCGROUPS)
-RegisterPartialProcFileHandler("cgroups", ProcRootCGROUPS)
+REGISTER_FILE("/proc/cgroups", ProcRootCGROUPS)
+REGISTER_PARTIAL_FILE("cgroups", ProcRootCGROUPS)
 
 
 
 # ---
-class ProcRootMTRR(PBR.fixed_delim_format_recs):
+class ProcRootMTRR(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/mtrr"""
 # source: arch/x86/kernel/cpu/mtrr/if.c
 #
@@ -234,13 +234,13 @@ class ProcRootMTRR(PBR.fixed_delim_format_recs):
 
         return( self.index, self.base, self.size, self.count, self.type)
 #
-RegisterProcFileHandler("/proc/mtrr", ProcRootMTRR)
-RegisterPartialProcFileHandler("mtrr", ProcRootMTRR)
+REGISTER_FILE("/proc/mtrr", ProcRootMTRR)
+REGISTER_PARTIAL_FILE("mtrr", ProcRootMTRR)
 
 
 
 # ---
-class ProcRootMODULES(PBR.fixed_delim_format_recs):
+class ProcRootMODULES(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/modules"""
 # source: kernel/module.c
 #
@@ -333,12 +333,12 @@ class ProcRootMODULES(PBR.fixed_delim_format_recs):
 
         return(self.module, self.size, self.refcount, self.source_list, self.status, self.module_core, self.taints)
 #
-RegisterProcFileHandler("/proc/modules", ProcRootMODULES)
-RegisterPartialProcFileHandler("modules", ProcRootMODULES)
+REGISTER_FILE("/proc/modules", ProcRootMODULES)
+REGISTER_PARTIAL_FILE("modules", ProcRootMODULES)
 
 
 # ---
-class ProcRootBUDDYINFO(PBR.fixed_delim_format_recs):
+class ProcRootBUDDYINFO(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/buddyinfo"""
 # source: mm/vmstat.c
 #
@@ -397,13 +397,13 @@ class ProcRootBUDDYINFO(PBR.fixed_delim_format_recs):
 
         return(self.node, self.zone)
 #
-RegisterProcFileHandler("/proc/buddyinfo", ProcRootBUDDYINFO)
-RegisterPartialProcFileHandler("buddyinfo", ProcRootBUDDYINFO)
+REGISTER_FILE("/proc/buddyinfo", ProcRootBUDDYINFO)
+REGISTER_PARTIAL_FILE("buddyinfo", ProcRootBUDDYINFO)
 
 
 
 # ---
-class ProcRootSWAPS(PBR.fixed_delim_format_recs):
+class ProcRootSWAPS(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/swaps"""
 # source: mm/swapfile.c
 #
@@ -463,13 +463,13 @@ class ProcRootSWAPS(PBR.fixed_delim_format_recs):
 
         return(self.filename, self.type, self.size, self.used, self.priority)
 #
-RegisterProcFileHandler("/proc/swaps", ProcRootSWAPS)
-RegisterPartialProcFileHandler("swaps", ProcRootSWAPS)
+REGISTER_FILE("/proc/swaps", ProcRootSWAPS)
+REGISTER_PARTIAL_FILE("swaps", ProcRootSWAPS)
 
 
 
 # ---
-class ProcRootLOCKS(PBR.fixed_delim_format_recs):
+class ProcRootLOCKS(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/locks"""
 # source: fs/locks.c
 #
@@ -546,13 +546,13 @@ class ProcRootLOCKS(PBR.fixed_delim_format_recs):
 
         return(self.index, self.locktype, self.subtype, self.ioaction, self.pid, self.start, self.end)
 #
-RegisterProcFileHandler("/proc/locks", ProcRootLOCKS)
-RegisterPartialProcFileHandler("locks", ProcRootLOCKS)
+REGISTER_FILE("/proc/locks", ProcRootLOCKS)
+REGISTER_PARTIAL_FILE("locks", ProcRootLOCKS)
 
 
 
 # ---
-class ProcRootDISKSTATS(PBR.fixed_delim_format_recs):
+class ProcRootDISKSTATS(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/diskstats"""
 # source: block/genhd.c
 #
@@ -658,13 +658,13 @@ class ProcRootDISKSTATS(PBR.fixed_delim_format_recs):
           self.write_msecs, self.part_in_flight, self.io_msecs, self.queue_time_msecs)
 
 #
-RegisterProcFileHandler("/proc/diskstats", ProcRootDISKSTATS)
-RegisterPartialProcFileHandler("diskstats", ProcRootDISKSTATS)
+REGISTER_FILE("/proc/diskstats", ProcRootDISKSTATS)
+REGISTER_PARTIAL_FILE("diskstats", ProcRootDISKSTATS)
 
 
 
 # ---
-class ProcRootVMSTAT(PBR.fixed_delim_format_recs):
+class ProcRootVMSTAT(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/vmstat"""
 # source: mm/vmstat.c
 #
@@ -701,13 +701,13 @@ class ProcRootVMSTAT(PBR.fixed_delim_format_recs):
         return(self.category, self.cat_count)
 
 #
-RegisterProcFileHandler("/proc/vmstat", ProcRootVMSTAT)
-RegisterPartialProcFileHandler("vmstat", ProcRootVMSTAT)
+REGISTER_FILE("/proc/vmstat", ProcRootVMSTAT)
+REGISTER_PARTIAL_FILE("vmstat", ProcRootVMSTAT)
 
 
 
 # ---
-class ProcRootMEMINFO(PBR.fixed_delim_format_recs):
+class ProcRootMEMINFO(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/meminfo"""
 # source: fs/proc/meminfo.c
 # --and--
@@ -755,13 +755,13 @@ class ProcRootMEMINFO(PBR.fixed_delim_format_recs):
         return(self.category, self.size)
 
 #
-RegisterProcFileHandler("/proc/meminfo", ProcRootMEMINFO)
-RegisterPartialProcFileHandler("meminfo", ProcRootMEMINFO)
+REGISTER_FILE("/proc/meminfo", ProcRootMEMINFO)
+REGISTER_PARTIAL_FILE("meminfo", ProcRootMEMINFO)
 
 
 
 # ---
-class ProcRootPARTITIONS(PBR.fixed_delim_format_recs):
+class ProcRootPARTITIONS(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/partitions"""
 # source: block/genhd.c
 #
@@ -812,13 +812,13 @@ class ProcRootPARTITIONS(PBR.fixed_delim_format_recs):
         return(self.major_dev, self.minor_dev, self.blocks, self.part_name)
 
 #
-RegisterProcFileHandler("/proc/partitions", ProcRootPARTITIONS)
-RegisterPartialProcFileHandler("partitions", ProcRootPARTITIONS)
+REGISTER_FILE("/proc/partitions", ProcRootPARTITIONS)
+REGISTER_PARTIAL_FILE("partitions", ProcRootPARTITIONS)
 
 
 
 # ---
-class ProcRootMISC(PBR.fixed_delim_format_recs):
+class ProcRootMISC(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/misc"""
 # source: drivers/char/misc.c
 #
@@ -858,13 +858,13 @@ class ProcRootMISC(PBR.fixed_delim_format_recs):
         return(self.minor_dev, self.device)
 
 #
-RegisterProcFileHandler("/proc/misc", ProcRootMISC)
-RegisterPartialProcFileHandler("misc", ProcRootMISC)
+REGISTER_FILE("/proc/misc", ProcRootMISC)
+REGISTER_PARTIAL_FILE("misc", ProcRootMISC)
 
 
 
 # ---
-class ProcRootKALLSYMS(PBR.fixed_delim_format_recs):
+class ProcRootKALLSYMS(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/kallsyms"""
 # source: kernel/kallsyms.c
 #
@@ -923,13 +923,13 @@ class ProcRootKALLSYMS(PBR.fixed_delim_format_recs):
         return(self.address, self.type, self.symbol, self.module)
 
 #
-RegisterProcFileHandler("/proc/kallsyms", ProcRootKALLSYMS)
-RegisterPartialProcFileHandler("kallsyms", ProcRootKALLSYMS)
+REGISTER_FILE("/proc/kallsyms", ProcRootKALLSYMS)
+REGISTER_PARTIAL_FILE("kallsyms", ProcRootKALLSYMS)
 
 
 
 # ---
-class ProcRootFILESYSTEMS(PBR.fixed_delim_format_recs):
+class ProcRootFILESYSTEMS(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/filesystems"""
 # source: fs/filesystems.c
 #
@@ -977,13 +977,13 @@ class ProcRootFILESYSTEMS(PBR.fixed_delim_format_recs):
         return(self.dev_flag, self.filesystem)
 
 #
-RegisterProcFileHandler("/proc/filesystems", ProcRootFILESYSTEMS)
-RegisterPartialProcFileHandler("filesystems", ProcRootFILESYSTEMS)
+REGISTER_FILE("/proc/filesystems", ProcRootFILESYSTEMS)
+REGISTER_PARTIAL_FILE("filesystems", ProcRootFILESYSTEMS)
 
 
 
 # ---
-class ProcRootDMA(PBR.fixed_delim_format_recs):
+class ProcRootDMA(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/DMA"""
 # source: kernel/dma.c
 #
@@ -1035,13 +1035,13 @@ class ProcRootDMA(PBR.fixed_delim_format_recs):
         return(self.channel, self.device)
 
 #
-RegisterProcFileHandler("/proc/dma", ProcRootDMA)
-RegisterPartialProcFileHandler("dma", ProcRootDMA)
+REGISTER_FILE("/proc/dma", ProcRootDMA)
+REGISTER_PARTIAL_FILE("dma", ProcRootDMA)
 
 
 
 # ---
-class ProcRootFB(PBR.fixed_delim_format_recs):
+class ProcRootFB(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/fb"""
 # source: 
 #
@@ -1078,13 +1078,13 @@ class ProcRootFB(PBR.fixed_delim_format_recs):
         return(self.node, self.id)
 
 #
-RegisterProcFileHandler("/proc/fb", ProcRootFB)
-RegisterPartialProcFileHandler("fb", ProcRootFB)
+REGISTER_FILE("/proc/fb", ProcRootFB)
+REGISTER_PARTIAL_FILE("fb", ProcRootFB)
 
 
 
 # ---
-class ProcRootCONSOLES(PBR.fixed_delim_format_recs):
+class ProcRootCONSOLES(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/consoles"""
 # source: fs/proc/consoles.c
 #
@@ -1143,13 +1143,13 @@ class ProcRootCONSOLES(PBR.fixed_delim_format_recs):
         return(self.device_name, self.io_type, self.flags, self.device_num)
 
 #
-RegisterProcFileHandler("/proc/consoles", ProcRootCONSOLES)
-RegisterPartialProcFileHandler("consoles", ProcRootCONSOLES)
+REGISTER_FILE("/proc/consoles", ProcRootCONSOLES)
+REGISTER_PARTIAL_FILE("consoles", ProcRootCONSOLES)
 
 
 
 # ---
-class ProcRootKEY_USERS(PBR.fixed_delim_format_recs):
+class ProcRootKEY_USERS(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/key-users"""
 # source: security/keys/proc.c
 #
@@ -1213,13 +1213,13 @@ class ProcRootKEY_USERS(PBR.fixed_delim_format_recs):
         return(self.uid, self.usage, self.nkeys, self.nikeys, self.qnkeys, self.maxkeys, self.qnbytes, self.maxbytes)
 
 #
-RegisterProcFileHandler("/proc/key-users", ProcRootKEY_USERS)
-RegisterPartialProcFileHandler("key-users", ProcRootKEY_USERS)
+REGISTER_FILE("/proc/key-users", ProcRootKEY_USERS)
+REGISTER_PARTIAL_FILE("key-users", ProcRootKEY_USERS)
 
 
 
 # ---
-class ProcRootVERSION_SIGNATURE(PBR.fixed_delim_format_recs):
+class ProcRootVERSION_SIGNATURE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/version_signature"""
 # source: 
 #
@@ -1248,13 +1248,13 @@ class ProcRootVERSION_SIGNATURE(PBR.fixed_delim_format_recs):
         return(self.version)
 
 #
-RegisterProcFileHandler("/proc/version_signature", ProcRootVERSION_SIGNATURE)
-RegisterPartialProcFileHandler("version_signature", ProcRootVERSION_SIGNATURE)
+REGISTER_FILE("/proc/version_signature", ProcRootVERSION_SIGNATURE)
+REGISTER_PARTIAL_FILE("version_signature", ProcRootVERSION_SIGNATURE)
 
 
 
 # ---
-class ProcRootVERSION(PBR.fixed_delim_format_recs):
+class ProcRootVERSION(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/version"""
 # source: fs/proc/version.c
 #
@@ -1305,13 +1305,13 @@ class ProcRootVERSION(PBR.fixed_delim_format_recs):
 
         return(self.sysname, self.release, self.version, self.full_string)
 #
-RegisterProcFileHandler("/proc/version", ProcRootVERSION)
-RegisterPartialProcFileHandler("version", ProcRootVERSION)
+REGISTER_FILE("/proc/version", ProcRootVERSION)
+REGISTER_PARTIAL_FILE("version", ProcRootVERSION)
 
 
 
 # ---
-class ProcRootUPTIME(PBR.fixed_delim_format_recs):
+class ProcRootUPTIME(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/uptime"""
 # source: fs/proc/uptime.c
 #
@@ -1351,13 +1351,13 @@ class ProcRootUPTIME(PBR.fixed_delim_format_recs):
 
         return(self.uptime, self.idle)
 #
-RegisterProcFileHandler("/proc/uptime", ProcRootUPTIME)
-RegisterPartialProcFileHandler("uptime", ProcRootUPTIME)
+REGISTER_FILE("/proc/uptime", ProcRootUPTIME)
+REGISTER_PARTIAL_FILE("uptime", ProcRootUPTIME)
 
 
 
 # ---
-class ProcRootLOADAVG(PBR.fixed_delim_format_recs):
+class ProcRootLOADAVG(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/loadavg"""
 # source: fs/proc/loadavg.c
 #
@@ -1409,13 +1409,13 @@ class ProcRootLOADAVG(PBR.fixed_delim_format_recs):
 
         return(self.load0, self.load1, self.load2, self.running, self.threads, self.lastpid)
 #
-RegisterProcFileHandler("/proc/loadavg", ProcRootLOADAVG)
-RegisterPartialProcFileHandler("loadavg", ProcRootLOADAVG)
+REGISTER_FILE("/proc/loadavg", ProcRootLOADAVG)
+REGISTER_PARTIAL_FILE("loadavg", ProcRootLOADAVG)
 
 
 
 # ---
-class ProcRootCMDLINE(PBR.fixed_delim_format_recs):
+class ProcRootCMDLINE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/cmdline"""
 # source: fs/proc/cmdline.c
 #
@@ -1443,13 +1443,13 @@ class ProcRootCMDLINE(PBR.fixed_delim_format_recs):
 
         return(self.cmdline)
 #
-RegisterProcFileHandler("/proc/cmdline", ProcRootCMDLINE)
-RegisterPartialProcFileHandler("cmdline", ProcRootCMDLINE)
+REGISTER_FILE("/proc/cmdline", ProcRootCMDLINE)
+REGISTER_PARTIAL_FILE("cmdline", ProcRootCMDLINE)
 
 
 
 # ---
-class ProcRootSLABINFO(PBR.fixed_delim_format_recs):
+class ProcRootSLABINFO(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/slabinfo"""
 # source: mm/slub.c
 # --and--
@@ -1557,13 +1557,13 @@ class ProcRootSLABINFO(PBR.fixed_delim_format_recs):
           self.pages_per_slab, self.limit, self.batchcount, self.shared, self.act_slabs,
           self.num_slabs, self.shared_avail)
 #
-RegisterProcFileHandler("/proc/slabinfo", ProcRootSLABINFO)
-RegisterPartialProcFileHandler("slabinfo", ProcRootSLABINFO)
+REGISTER_FILE("/proc/slabinfo", ProcRootSLABINFO)
+REGISTER_PARTIAL_FILE("slabinfo", ProcRootSLABINFO)
 
 
 
 # ---
-class ProcRootVMALLOCINFO(PBR.fixed_delim_format_recs):
+class ProcRootVMALLOCINFO(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/vmallocinfo"""
 # source: 
 #
@@ -1742,13 +1742,13 @@ class ProcRootVMALLOCINFO(PBR.fixed_delim_format_recs):
 
         return(self.start_addr, self.end_addr, self.size, self.caller, self.flags, self.numa)
 #
-RegisterProcFileHandler("/proc/vmallocinfo", ProcRootVMALLOCINFO)
-RegisterPartialProcFileHandler("vmallocinfo", ProcRootVMALLOCINFO)
+REGISTER_FILE("/proc/vmallocinfo", ProcRootVMALLOCINFO)
+REGISTER_PARTIAL_FILE("vmallocinfo", ProcRootVMALLOCINFO)
 
 
 
 # ---
-class ProcRootMDSTAT(PBR.fixed_delim_format_recs):
+class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/mdstat"""
 # source: drivers/md/raid10.c
 # --and--
@@ -2100,5 +2100,5 @@ class ProcRootMDSTAT(PBR.fixed_delim_format_recs):
           self.rebuild_act, self.percent, self.rebuild_done, self.rebuild_total, self.finish, self.speed,
           self.nomiss_pages, self.total_pages, self.nomiss_pages_kb, self.bitmap_chunk, self.bitmap_file)
 #
-RegisterProcFileHandler("/proc/mdstat", ProcRootMDSTAT)
-RegisterPartialProcFileHandler("mdstat", ProcRootMDSTAT)
+REGISTER_FILE("/proc/mdstat", ProcRootMDSTAT)
+REGISTER_PARTIAL_FILE("mdstat", ProcRootMDSTAT)

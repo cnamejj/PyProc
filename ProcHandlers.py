@@ -42,22 +42,16 @@ PBR = ProcBaseRoutines
 PFC = ProcFieldConstants
 PDC = ProcDataConstants
 
-RegisterProcFileHandler = PBR.RegisterProcFileHandler
-RegisterPartialProcFileHandler = PBR.RegisterPartialProcFileHandler
-ShowProcFileHandlers = PBR.ShowProcFileHandlers
-GetProcFileHandler = PBR.GetProcFileHandler
-GetProcPartialFileRegistry = PBR.GetProcPartialFileRegistry
-ShowHandlerFilePath = PBR.ShowHandlerFilePath
-ProcFileToPath = PBR.ProcFileToPath
-
-proc_file_handler_registry = PBR.proc_file_handler_registry
+REGISTER_FILE = PBR.register_file
+REGISTER_PARTIAL_FILE = PBR.register_partial_file
+GET_HANDLER = PBR.get_handler
+FILE_HANDLER_REGISTRY = PBR.FILE_HANDLER_REGISTRY
 
 # ---
 def display_handler_name(filepatt):
     """Display the name of the handler associated with the given file."""
 
-
-    __hand = GetProcFileHandler(filepatt)()
+    __hand = GET_HANDLER(filepatt)()
     print "------------ File {inpfile} via {handler}".format(inpfile=filepatt,
             handler=__hand.__class__.__name__)
 
@@ -77,9 +71,9 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         WHICH = sys.argv[1]
         if WHICH == "all":
-            FLIST = GetProcPartialFileRegistry()
+            FLIST = PBR.PARTIAL_HANDLER_REGISTRY
         else:
-            FLIST[WHICH] = GetProcFileHandler(WHICH)
+            FLIST[WHICH] = GET_HANDLER(WHICH)
     else:
         WHICH = "show"
 
@@ -95,7 +89,7 @@ if __name__ == "__main__":
     NO_PROCESS_SUMMARY = PSI.NO_PROCESS_SUMMARY
 
     if WHICH == "show":
-        ShowProcFileHandlers()
+        PBR.show_proc_file_handlers()
 
     else:
         for __file in FLIST:
@@ -133,7 +127,6 @@ if __name__ == "__main__":
                     print __template.format(file=__file, stat=sock_stat,
                             orip=orig_ip, orport=orig_port, dsip=dest_ip,
                             dsport=dest_port, host=dest_host, ps=psumm)
-#                    print "{7:s} {0:s} {1:s}:{2:d} -> {3:s}:{4:d} PTR:{5:s} psumm:'{6:s}'".format(sock_stat, orig_ip, orig_port, dest_ip, dest_port, dest_host, psumm, __file)
 
             elif __file == "igmp":
 

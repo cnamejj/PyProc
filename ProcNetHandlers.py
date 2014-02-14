@@ -29,10 +29,8 @@ PBR = ProcBaseRoutines
 PFC = ProcFieldConstants
 PDC = ProcDataConstants
 
-RegisterProcFileHandler = PBR.RegisterProcFileHandler
-RegisterPartialProcFileHandler = PBR.RegisterPartialProcFileHandler
-ShowHandlerFilePath = PBR.ShowHandlerFilePath
-ProcFileToPath = PBR.ProcFileToPath
+REGISTER_FILE = PBR.register_file
+REGISTER_PARTIAL_FILE = PBR.register_partial_file
 
 convert_by_rule = PBR.convert_by_rule
 
@@ -52,7 +50,7 @@ STATE_LIST = PDC.STATE_LIST
 
 
 # ---
-class ProcNetNETLINK(PBR.fixed_delim_format_recs):
+class ProcNetNETLINK(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/netlink"""
 # source: net/netlink/af_netlink.c
 #        seq_printf(seq, "%pK %-3d %-6d %08x %-8d %-8d %pK %-8d %-8d %-8lu\n",
@@ -120,12 +118,12 @@ class ProcNetNETLINK(PBR.fixed_delim_format_recs):
 
         return( self.protocol, self.pid, self.groups, self.dump, self.locks, self.drops)
 #
-RegisterProcFileHandler("/proc/net/netlink", ProcNetNETLINK)
-RegisterPartialProcFileHandler("netlink", ProcNetNETLINK)
+REGISTER_FILE("/proc/net/netlink", ProcNetNETLINK)
+REGISTER_PARTIAL_FILE("netlink", ProcNetNETLINK)
 
 
 # ---
-class ProcNetCONNECTOR(PBR.fixed_delim_format_recs):
+class ProcNetCONNECTOR(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/connector"""
 # source: drivers/connector/connector.c
 #  list_for_each_entry(cbq, &dev->queue_list, callback_entry) {
@@ -164,12 +162,12 @@ class ProcNetCONNECTOR(PBR.fixed_delim_format_recs):
 
         return( self.name, self.id_idx, self.id_val)
 #
-RegisterProcFileHandler("/proc/net/connector", ProcNetCONNECTOR)
-RegisterPartialProcFileHandler("connector", ProcNetCONNECTOR)
+REGISTER_FILE("/proc/net/connector", ProcNetCONNECTOR)
+REGISTER_PARTIAL_FILE("connector", ProcNetCONNECTOR)
 
 
 # ---
-class ProcNetPROTOCOLS(PBR.fixed_delim_format_recs):
+class ProcNetPROTOCOLS(PBR.FixedWhitespaceDelimRecs):
     """Specific use of simple col reading class, for /proc/net/protocols file"""
 # source: net/core/sock.c
 #    seq_printf(seq, "%-9s %4u %6d  %6ld   %-3s %6u   %-3s  %-10s "
@@ -286,12 +284,12 @@ class ProcNetPROTOCOLS(PBR.fixed_delim_format_recs):
 
         return( self.protocol, self.size, self.sockets, self.memory, self.module)
 #
-RegisterProcFileHandler("/proc/net/protocols", ProcNetPROTOCOLS)
-RegisterPartialProcFileHandler("protocols", ProcNetPROTOCOLS)
+REGISTER_FILE("/proc/net/protocols", ProcNetPROTOCOLS)
+REGISTER_PARTIAL_FILE("protocols", ProcNetPROTOCOLS)
 
 
 # ---
-class ProcNetROUTE(PBR.fixed_delim_format_recs):
+class ProcNetROUTE(PBR.FixedWhitespaceDelimRecs):
     """Specific use of simple col reading class, for /proc/net/route file"""
 # source: net/ipv4/fib_trie.c
 #                        if (fi)
@@ -372,12 +370,12 @@ class ProcNetROUTE(PBR.fixed_delim_format_recs):
 
         return( self.interface, self.destination, self.gateway, self.netmask)
 #
-RegisterProcFileHandler("/proc/net/route", ProcNetROUTE)
-RegisterPartialProcFileHandler("route", ProcNetROUTE)
+REGISTER_FILE("/proc/net/route", ProcNetROUTE)
+REGISTER_PARTIAL_FILE("route", ProcNetROUTE)
 
 
 # ---
-class ProcNetPACKET(PBR.fixed_delim_format_recs):
+class ProcNetPACKET(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/packet"""
 # source: net/packet/af_packet.c
 #        seq_printf(seq,
@@ -439,12 +437,12 @@ class ProcNetPACKET(PBR.fixed_delim_format_recs):
 
         return( self.type, self.protocol, self.interface_index, self.running, self.rmem_alloc, self.uid)
 #
-RegisterProcFileHandler("/proc/net/packet", ProcNetPACKET)
-RegisterPartialProcFileHandler("packet", ProcNetPACKET)
+REGISTER_FILE("/proc/net/packet", ProcNetPACKET)
+REGISTER_PARTIAL_FILE("packet", ProcNetPACKET)
 
 
 # ---
-class ProcNetSOFTNET_STAT(PBR.fixed_delim_format_recs):
+class ProcNetSOFTNET_STAT(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/softnet_stat"""
 # source: net/core/dev.c
 #         seq_printf(seq, "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x\n",
@@ -501,13 +499,13 @@ class ProcNetSOFTNET_STAT(PBR.fixed_delim_format_recs):
 
         return( self.processed, self.dropped, self.time_squeeze, self.cpu_coll, self.received_rps)
 #
-RegisterProcFileHandler("/proc/net/softnet_stat", ProcNetSOFTNET_STAT)
-RegisterPartialProcFileHandler("softnet_stat", ProcNetSOFTNET_STAT)
+REGISTER_FILE("/proc/net/softnet_stat", ProcNetSOFTNET_STAT)
+REGISTER_PARTIAL_FILE("softnet_stat", ProcNetSOFTNET_STAT)
 
 
 
 # ---
-class ProcNetARP(PBR.fixed_delim_format_recs):
+class ProcNetARP(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/arp"""
 # source: net/ipv4/arp.c
 #        seq_printf(seq, "%-16s 0x%-10x0x%-10x%s     *        %s\n",
@@ -550,13 +548,13 @@ class ProcNetARP(PBR.fixed_delim_format_recs):
 
         return( self.ip_addr, self.hw_addr, self.device)
 #
-RegisterProcFileHandler("/proc/net/arp", ProcNetARP)
-RegisterPartialProcFileHandler("arp", ProcNetARP)
+REGISTER_FILE("/proc/net/arp", ProcNetARP)
+REGISTER_PARTIAL_FILE("arp", ProcNetARP)
 
 
 
 # ---
-class ProcNetDEV_MCAST(PBR.fixed_delim_format_recs):
+class ProcNetDEV_MCAST(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/dev_mcast"""
 # source: net/core/dev_addr_lists.ca
 #                seq_printf(seq, "%-4d %-15s %-5d %-5d ", dev->ifindex,
@@ -600,13 +598,13 @@ class ProcNetDEV_MCAST(PBR.fixed_delim_format_recs):
 
         return( self.device, self.ref_count, self.global_use)
 #
-RegisterProcFileHandler("/proc/net/dev_mcast", ProcNetDEV_MCAST)
-RegisterPartialProcFileHandler("dev_mcast", ProcNetDEV_MCAST)
+REGISTER_FILE("/proc/net/dev_mcast", ProcNetDEV_MCAST)
+REGISTER_PARTIAL_FILE("dev_mcast", ProcNetDEV_MCAST)
 
 
 
 # ---
-class ProcNetDEV(PBR.fixed_delim_format_recs):
+class ProcNetDEV(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/dev"""
 # source: net/core/dev.c
 #        seq_printf(seq, "%6s: %7llu %7llu %4llu %4llu %4llu %5llu %10llu %9llu "
@@ -690,13 +688,13 @@ class ProcNetDEV(PBR.fixed_delim_format_recs):
 
         return( self.device, self.rx_packets, self.rx_errors, self.tx_packets, self.tx_errors)
 #
-RegisterProcFileHandler("/proc/net/dev", ProcNetDEV)
-RegisterPartialProcFileHandler("dev", ProcNetDEV)
+REGISTER_FILE("/proc/net/dev", ProcNetDEV)
+REGISTER_PARTIAL_FILE("dev", ProcNetDEV)
 
 
 
 # ---
-class ProcNetIF_INET6(PBR.fixed_delim_format_recs):
+class ProcNetIF_INET6(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/if_inet6"""
 # source: net/ipv6/addrconf.c
 #        seq_printf(seq, "%pi6 %02x %02x %02x %02x %8s\n",
@@ -758,13 +756,13 @@ class ProcNetIF_INET6(PBR.fixed_delim_format_recs):
 
         return( self.ipv6, self.ipv6_hex, self.scope, self.device)
 #
-RegisterProcFileHandler("/proc/net/if_inet6", ProcNetIF_INET6)
-RegisterPartialProcFileHandler("if_inet6", ProcNetIF_INET6)
+REGISTER_FILE("/proc/net/if_inet6", ProcNetIF_INET6)
+REGISTER_PARTIAL_FILE("if_inet6", ProcNetIF_INET6)
 
 
 
 # ---
-class ProcNetIGMP6(PBR.fixed_delim_format_recs):
+class ProcNetIGMP6(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/igmp6"""
 # source: net/ipv6/mcast.c
 #        seq_printf(seq,
@@ -819,13 +817,13 @@ class ProcNetIGMP6(PBR.fixed_delim_format_recs):
 
         return( self.device, self.mcast_addr, self.mcast_users, self.mcast_flags)
 #
-RegisterProcFileHandler("/proc/net/igmp6", ProcNetIGMP6)
-RegisterPartialProcFileHandler("igmp6", ProcNetIGMP6)
+REGISTER_FILE("/proc/net/igmp6", ProcNetIGMP6)
+REGISTER_PARTIAL_FILE("igmp6", ProcNetIGMP6)
 
 
 
 # ---
-class ProcNetIP_CONNTRACK(PBR.fixed_delim_format_recs):
+class ProcNetIP_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/ip_conntrack"""
 #
 # source: net/ipv4/netfilter/nf_conntrack_l3proto_ipv4_compat.c
@@ -977,13 +975,13 @@ class ProcNetIP_CONNTRACK(PBR.fixed_delim_format_recs):
 
         return( self.protocol, self.timeout, self.state, self.src_ip, self.src_port, self.dst_ip, self.dst_port)
 #
-RegisterProcFileHandler("/proc/net/ip_conntrack", ProcNetIP_CONNTRACK)
-RegisterPartialProcFileHandler("net/ip_conntrack", ProcNetIP_CONNTRACK)
+REGISTER_FILE("/proc/net/ip_conntrack", ProcNetIP_CONNTRACK)
+REGISTER_PARTIAL_FILE("net/ip_conntrack", ProcNetIP_CONNTRACK)
 
 
 
 # ---
-class ProcNetIPV6_ROUTE(PBR.fixed_delim_format_recs):
+class ProcNetIPV6_ROUTE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/ipv6_route"""
 # source: net/ipv6/route.c
 #         seq_printf(m, "%pi6 %02x ", &rt->rt6i_dst.addr, rt->rt6i_dst.plen);
@@ -1069,13 +1067,13 @@ class ProcNetIPV6_ROUTE(PBR.fixed_delim_format_recs):
 
         return( self.dest_ip, self.dest_pref_len, self.src_ip, self.src_pref_len, self.dest_refcount, self.device)
 #
-RegisterProcFileHandler("/proc/net/ipv6_route", ProcNetIPV6_ROUTE)
-RegisterPartialProcFileHandler("ipv6_route", ProcNetIPV6_ROUTE)
+REGISTER_FILE("/proc/net/ipv6_route", ProcNetIPV6_ROUTE)
+REGISTER_PARTIAL_FILE("ipv6_route", ProcNetIPV6_ROUTE)
 
 
 
 # ---
-class ProcNetNF_CONNTRACK(PBR.fixed_delim_format_recs):
+class ProcNetNF_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/nf_conntrack"""
 #
 # source: net/netfilter/nf_conntrack_standalone.c
@@ -1246,13 +1244,13 @@ class ProcNetNF_CONNTRACK(PBR.fixed_delim_format_recs):
 
         return( self.l3_protocol, self.protocol, self.timeout, self.state, self.src_ip, self.src_port, self.dst_ip, self.dst_port)
 #
-RegisterProcFileHandler("/proc/net/nf_conntrack", ProcNetNF_CONNTRACK)
-RegisterPartialProcFileHandler("net/nf_conntrack", ProcNetNF_CONNTRACK)
+REGISTER_FILE("/proc/net/nf_conntrack", ProcNetNF_CONNTRACK)
+REGISTER_PARTIAL_FILE("net/nf_conntrack", ProcNetNF_CONNTRACK)
 
 
 
 # ---
-class ProcNetPSCHED(PBR.fixed_delim_format_recs):
+class ProcNetPSCHED(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/psched"""
 # source: net/sched/sch_api.c
 #       seq_printf(seq, "%08x %08x %08x %08x\n",
@@ -1292,13 +1290,13 @@ class ProcNetPSCHED(PBR.fixed_delim_format_recs):
 
         return( self.nsec_per_usec, self.psched_ticks, self.nsec_per_hrtime)
 #
-RegisterProcFileHandler("/proc/net/psched", ProcNetPSCHED)
-RegisterPartialProcFileHandler("psched", ProcNetPSCHED)
+REGISTER_FILE("/proc/net/psched", ProcNetPSCHED)
+REGISTER_PARTIAL_FILE("psched", ProcNetPSCHED)
 
 
 
 # ---
-class ProcNetPTYPE(PBR.fixed_delim_format_recs):
+class ProcNetPTYPE(PBR.FixedWhitespaceDelimRecs):
     """Abstraction layer to pull records from /proc/net/ptype"""
 # source: net/core/dev.c
 #
@@ -1358,13 +1356,13 @@ class ProcNetPTYPE(PBR.fixed_delim_format_recs):
 
         return( self.device_type, self.device_name, self.device_function)
 #
-RegisterProcFileHandler("/proc/net/ptype", ProcNetPTYPE)
-RegisterPartialProcFileHandler("ptype", ProcNetPTYPE)
+REGISTER_FILE("/proc/net/ptype", ProcNetPTYPE)
+REGISTER_PARTIAL_FILE("ptype", ProcNetPTYPE)
 
 
 
 # ---
-class ProcNetRT6_STATS(PBR.fixed_delim_format_recs):
+class ProcNetRT6_STATS(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/rt6_stats"""
 # source: net/ipv6/route.c
 #    seq_printf(seq, "%04x %04x %04x %04x %04x %04x %04x\n",
@@ -1417,13 +1415,13 @@ class ProcNetRT6_STATS(PBR.fixed_delim_format_recs):
 
         return( self.nodes, self.route_nodes, self.route_entries, self.route_cache, self.discarded)
 #
-RegisterProcFileHandler("/proc/net/rt6_stats", ProcNetRT6_STATS)
-RegisterPartialProcFileHandler("rt6_stats", ProcNetRT6_STATS)
+REGISTER_FILE("/proc/net/rt6_stats", ProcNetRT6_STATS)
+REGISTER_PARTIAL_FILE("rt6_stats", ProcNetRT6_STATS)
 
 
 
 # ---
-class ProcNetRT_CACHE(PBR.fixed_delim_format_recs):
+class ProcNetRT_CACHE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/rt_cache"""
 # source: net/ipv4/route.c
 #                seq_printf(seq, "%s\t%08X\t%08X\t%8X\t%d\t%u\t%d\t"
@@ -1517,13 +1515,13 @@ class ProcNetRT_CACHE(PBR.fixed_delim_format_recs):
 
         return( self.interface, self.destination, self.gateway, self.usecount, self.source, self.spec_dst)
 #
-RegisterProcFileHandler("/proc/net/rt_cache", ProcNetRT_CACHE)
-RegisterPartialProcFileHandler("net/rt_cache", ProcNetRT_CACHE)
+REGISTER_FILE("/proc/net/rt_cache", ProcNetRT_CACHE)
+REGISTER_PARTIAL_FILE("net/rt_cache", ProcNetRT_CACHE)
 
 
 
 # ---
-class ProcNetStatARP_CACHE(PBR.fixed_delim_format_recs):
+class ProcNetStatARP_CACHE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/stat/arp_cache"""
 # source: net/core/neighbour.c
 #        seq_printf(seq, "%08x  %08lx %08lx %08lx  %08lx %08lx  %08lx  "
@@ -1591,13 +1589,13 @@ class ProcNetStatARP_CACHE(PBR.fixed_delim_format_recs):
 
         return( self.entries, self.lookups, self.hits)
 #
-RegisterProcFileHandler("/proc/net/stat/arp_cache", ProcNetStatARP_CACHE)
-RegisterPartialProcFileHandler("arp_cache", ProcNetStatARP_CACHE)
+REGISTER_FILE("/proc/net/stat/arp_cache", ProcNetStatARP_CACHE)
+REGISTER_PARTIAL_FILE("arp_cache", ProcNetStatARP_CACHE)
 
 
 
 # ---
-class ProcNetStatIP_CONNTRACK(PBR.fixed_delim_format_recs):
+class ProcNetStatIP_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/stat/ip_conntrack"""
 # source: net/ipv4/netfilter/nf_conntrack_l3proto_ipv4_compat.c
 #       seq_printf(seq, "%08x  %08x %08x %08x %08x %08x %08x %08x "
@@ -1691,13 +1689,13 @@ class ProcNetStatIP_CONNTRACK(PBR.fixed_delim_format_recs):
 
         return( self.entries, self.searched, self.found, self.new, self.invalid, self.ignore, self.delete, self.insert, self.drop)
 #
-RegisterProcFileHandler("/proc/net/stat/ip_conntrack", ProcNetStatIP_CONNTRACK)
-RegisterPartialProcFileHandler("stat/ip_conntrack", ProcNetStatIP_CONNTRACK)
+REGISTER_FILE("/proc/net/stat/ip_conntrack", ProcNetStatIP_CONNTRACK)
+REGISTER_PARTIAL_FILE("stat/ip_conntrack", ProcNetStatIP_CONNTRACK)
 
 
 
 # ---
-class ProcNetStatNDISC_CACHE(PBR.fixed_delim_format_recs):
+class ProcNetStatNDISC_CACHE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/stat/ndisc_cache"""
 # source: net/core/neighbour.c
 #        seq_printf(seq, "%08x  %08lx %08lx %08lx  %08lx %08lx  %08lx  "
@@ -1766,13 +1764,13 @@ class ProcNetStatNDISC_CACHE(PBR.fixed_delim_format_recs):
 
         return( self.entries, self.lookups, self.hits)
 #
-RegisterProcFileHandler("/proc/net/stat/ndisc_cache", ProcNetStatNDISC_CACHE)
-RegisterPartialProcFileHandler("ndisc_cache", ProcNetStatNDISC_CACHE)
+REGISTER_FILE("/proc/net/stat/ndisc_cache", ProcNetStatNDISC_CACHE)
+REGISTER_PARTIAL_FILE("ndisc_cache", ProcNetStatNDISC_CACHE)
 
 
 
 # ---
-class ProcNetStatNF_CONNTRACK(PBR.fixed_delim_format_recs):
+class ProcNetStatNF_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/stat/nf_conntrack"""
 # source: net/netfilter/nf_conntrack_standalone.c
 #        seq_printf(seq, "%08x  %08x %08x %08x %08x %08x %08x %08x "
@@ -1866,13 +1864,13 @@ class ProcNetStatNF_CONNTRACK(PBR.fixed_delim_format_recs):
 
         return( self.entries, self.searched, self.found, self.new, self.invalid, self.ignore, self.delete, self.insert, self.drop)
 #
-RegisterProcFileHandler("/proc/net/stat/nf_conntrack", ProcNetStatNF_CONNTRACK)
-RegisterPartialProcFileHandler("stat/nf_conntrack", ProcNetStatNF_CONNTRACK)
+REGISTER_FILE("/proc/net/stat/nf_conntrack", ProcNetStatNF_CONNTRACK)
+REGISTER_PARTIAL_FILE("stat/nf_conntrack", ProcNetStatNF_CONNTRACK)
 
 
 
 # ---
-class ProcNetStatRT_CACHE(PBR.fixed_delim_format_recs):
+class ProcNetStatRT_CACHE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/stat/rt_cache"""
 # source: net/ipv4/route.c
 #        seq_printf(seq,"%08x  %08x %08x %08x %08x %08x %08x %08x "
@@ -1960,13 +1958,13 @@ class ProcNetStatRT_CACHE(PBR.fixed_delim_format_recs):
 
         return( self.entries, self.in_hit, self.in_slow, self.out_hit, self.out_slow)
 #
-RegisterProcFileHandler("/proc/net/stat/rt_cache", ProcNetStatRT_CACHE)
-RegisterPartialProcFileHandler("stat/rt_cache", ProcNetStatRT_CACHE)
+REGISTER_FILE("/proc/net/stat/rt_cache", ProcNetStatRT_CACHE)
+REGISTER_PARTIAL_FILE("stat/rt_cache", ProcNetStatRT_CACHE)
 
 
 
 # ---
-class ProcNetTCP6(PBR.fixed_delim_format_recs):
+class ProcNetTCP6(PBR.FixedWhitespaceDelimRecs):
     """Abstraction layer to pull records from /proc/net/tcp6"""
 # source: net/ipv6/tcp_ipv6.c
 # Note: Just as with the "tcp4" code, the source has three separate sections that
@@ -2088,13 +2086,13 @@ class ProcNetTCP6(PBR.fixed_delim_format_recs):
         self.state = self.field[PFC.F_STATE]
 
         return( self.orig_hexip, self.dest_hexip, self.orig_ip, self.orig_port, self.dest_ip, self.dest_port, self.state)
-RegisterProcFileHandler("/proc/net/tcp6", ProcNetTCP6)
-RegisterPartialProcFileHandler("tcp6", ProcNetTCP6)
+REGISTER_FILE("/proc/net/tcp6", ProcNetTCP6)
+REGISTER_PARTIAL_FILE("tcp6", ProcNetTCP6)
 
 
 
 # ---
-class ProcNetTCP(PBR.fixed_delim_format_recs):
+class ProcNetTCP(PBR.FixedWhitespaceDelimRecs):
     """Abstraction layer to pull records from /proc/net/tcp"""
 # source: net/ipv4/tcp_ipv4.c
 # Note: The sample code include is one of three spots where this data is written out.
@@ -2209,13 +2207,13 @@ class ProcNetTCP(PBR.fixed_delim_format_recs):
 
         return( self.orig_hexip, self.dest_hexip, self.orig_ip, self.orig_port, self.dest_ip, self.dest_port, self.state)
 #
-RegisterProcFileHandler("/proc/net/tcp", ProcNetTCP)
-RegisterPartialProcFileHandler("tcp", ProcNetTCP)
+REGISTER_FILE("/proc/net/tcp", ProcNetTCP)
+REGISTER_PARTIAL_FILE("tcp", ProcNetTCP)
 
 
 
 # ---
-class ProcNetUDP6(PBR.fixed_delim_format_recs):
+class ProcNetUDP6(PBR.FixedWhitespaceDelimRecs):
     """Abstraction layer to pull records from /proc/net/udp6"""
 # source: net/ipv6/udp.c
 #        seq_printf(seq,
@@ -2314,13 +2312,13 @@ class ProcNetUDP6(PBR.fixed_delim_format_recs):
 
         return( self.orig_hexip, self.dest_hexip, self.orig_ip, self.orig_port, self.dest_ip, self.dest_port, self.state)
 #
-RegisterProcFileHandler("/proc/net/udp6", ProcNetUDP6)
-RegisterPartialProcFileHandler("udp6", ProcNetUDP6)
+REGISTER_FILE("/proc/net/udp6", ProcNetUDP6)
+REGISTER_PARTIAL_FILE("udp6", ProcNetUDP6)
 
 
 
 # ---
-class ProcNetUDP(PBR.fixed_delim_format_recs):
+class ProcNetUDP(PBR.FixedWhitespaceDelimRecs):
     """Abstraction layer to pull records from /proc/net/udp"""
 # source: net/ipv4/udp.c
 #        seq_printf(f, "%5d: %08X:%04X %08X:%04X"
@@ -2411,13 +2409,13 @@ class ProcNetUDP(PBR.fixed_delim_format_recs):
 
         return( self.orig_hexip, self.dest_hexip, self.orig_ip, self.orig_port, self.dest_ip, self.dest_port, self.state)
 #
-RegisterProcFileHandler("/proc/net/udp", ProcNetUDP)
-RegisterPartialProcFileHandler("udp", ProcNetUDP)
+REGISTER_FILE("/proc/net/udp", ProcNetUDP)
+REGISTER_PARTIAL_FILE("udp", ProcNetUDP)
 
 
 
 # ---
-class ProcNetUNIX(PBR.fixed_delim_format_recs):
+class ProcNetUNIX(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/unix"""
 # source: net/unix/af_unix.c
 #                seq_printf(seq, "%pK: %08X %08X %08X %04X %02X %5lu",
@@ -2496,13 +2494,13 @@ class ProcNetUNIX(PBR.fixed_delim_format_recs):
 
         return( self.refcount, self.protocol, self.flags, self.type, self.state, self.inode, self.path)
 #
-RegisterProcFileHandler("/proc/net/unix", ProcNetUNIX)
-RegisterPartialProcFileHandler("unix", ProcNetUNIX)
+REGISTER_FILE("/proc/net/unix", ProcNetUNIX)
+REGISTER_PARTIAL_FILE("unix", ProcNetUNIX)
 
 
 
 # ---
-class ProcNetSNMP6(PBR.single_name_value_list):
+class ProcNetSNMP6(PBR.SingleNameValueList):
     """Pull records from /proc/net/snmp6"""
 # source: net/ipv6/proc.c
 
@@ -2515,13 +2513,13 @@ class ProcNetSNMP6(PBR.single_name_value_list):
 # Ip6InUnknownProtos              	0
 #
 #
-RegisterProcFileHandler("/proc/net/snmp6", ProcNetSNMP6)
-RegisterPartialProcFileHandler("snmp6", ProcNetSNMP6)
+REGISTER_FILE("/proc/net/snmp6", ProcNetSNMP6)
+REGISTER_PARTIAL_FILE("snmp6", ProcNetSNMP6)
 
 
 
 # ---
-class ProcNetDEV_SNMP6(PBR.single_name_value_list):
+class ProcNetDEV_SNMP6(PBR.SingleNameValueList):
     """Pull records from a device specific file in the /proc/net/dev_snmp6/ directory"""
 # source: net/ipv6/proc.c
 #
@@ -2535,9 +2533,10 @@ class ProcNetDEV_SNMP6(PBR.single_name_value_list):
 
     def extra_init(self, *opts):
         if len(opts) > 0:
-            self.infile = ProcFileToPath(opts[0])
+            self.infile = PBR.PROC_FILE_TO_PATH(opts[0])
         else:
-            self.infile = "{prefix}/{file}".format(prefix=ShowHandlerFilePath(self), file="lo")
+            self.infile = "{prefix}/{file}".format(
+                    prefix=PBR.show_handler_file_path(self), file="lo")
         return
 
 # -- Sample records.  All the files in the /proc/dev_snmp6/ directory use the same format.
@@ -2554,13 +2553,13 @@ class ProcNetDEV_SNMP6(PBR.single_name_value_list):
 # Ip6InDelivers                   	44
 #
 #
-RegisterProcFileHandler("/proc/net/dev_snmp6", ProcNetDEV_SNMP6)
-RegisterPartialProcFileHandler("dev_snmp6", ProcNetDEV_SNMP6)
+REGISTER_FILE("/proc/net/dev_snmp6", ProcNetDEV_SNMP6)
+REGISTER_PARTIAL_FILE("dev_snmp6", ProcNetDEV_SNMP6)
 
 
 
 # ---
-class ProcNetIGMP(PBR.fixed_delim_format_recs):
+class ProcNetIGMP(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/igmp"""
 # source: net/ipv4/igmp.c
 #        if (rcu_dereference(state->in_dev->mc_list) == im) {
@@ -2651,13 +2650,13 @@ class ProcNetIGMP(PBR.fixed_delim_format_recs):
 
         return( self.index, self.device, self.count, self.querier, self.group, self.users, self.timer)
 #
-RegisterProcFileHandler("/proc/net/igmp", ProcNetIGMP)
-RegisterPartialProcFileHandler("igmp", ProcNetIGMP)
+REGISTER_FILE("/proc/net/igmp", ProcNetIGMP)
+REGISTER_PARTIAL_FILE("igmp", ProcNetIGMP)
 
 
 
 # ---
-class ProcNetSNMP(PBR.twoline_logical_records):
+class ProcNetSNMP(PBR.TwoLineLogicalRecs):
     """Abstraction layer to pull records from /proc/net/snmp"""
 # source: net/ipv4/proc.c
 #
@@ -2673,13 +2672,13 @@ class ProcNetSNMP(PBR.twoline_logical_records):
 # Udp: 890715 230 0 667254 0 0
 #
 #
-RegisterProcFileHandler("/proc/net/snmp", ProcNetSNMP)
-RegisterPartialProcFileHandler("snmp", ProcNetSNMP)
+REGISTER_FILE("/proc/net/snmp", ProcNetSNMP)
+REGISTER_PARTIAL_FILE("snmp", ProcNetSNMP)
 
 
 
 # ---
-class ProcNetNETSTAT(PBR.twoline_logical_records):
+class ProcNetNETSTAT(PBR.TwoLineLogicalRecs):
     """Abstraction layer to pull records from /proc/net/netstat"""
 # source: net/ipv4/proc.c
 #
@@ -2712,13 +2711,13 @@ class ProcNetNETSTAT(PBR.twoline_logical_records):
 # IpExt: 0 0 1 0 102161 495 27899358724 1793111008 112 0 20737154 71127
 #
 #
-RegisterProcFileHandler("/proc/net/netstat", ProcNetNETSTAT)
-RegisterPartialProcFileHandler("netstat", ProcNetNETSTAT)
+REGISTER_FILE("/proc/net/netstat", ProcNetNETSTAT)
+REGISTER_PARTIAL_FILE("netstat", ProcNetNETSTAT)
 
 
 
 # ---
-class ProcNetSOCKSTAT(PBR.labelled_pair_list_records):
+class ProcNetSOCKSTAT(PBR.LabelledPairList):
     """Abstraction layer to pull records from /proc/net/sockstat"""
 # Note: Two different ".c" files write data to /net/sockstat.  They are called
 #       in the order listed here.
@@ -2755,13 +2754,13 @@ class ProcNetSOCKSTAT(PBR.labelled_pair_list_records):
 # FRAG: inuse 0 memory 0
 #
 #
-RegisterProcFileHandler("/proc/net/sockstat", ProcNetSOCKSTAT)
-RegisterPartialProcFileHandler("sockstat", ProcNetSOCKSTAT)
+REGISTER_FILE("/proc/net/sockstat", ProcNetSOCKSTAT)
+REGISTER_PARTIAL_FILE("sockstat", ProcNetSOCKSTAT)
 
 
 
 # ---
-class ProcNetSOCKSTAT6(PBR.labelled_pair_list_records):
+class ProcNetSOCKSTAT6(PBR.LabelledPairList):
     """Abstraction layer to pull records from /proc/net/sockstat6"""
 # source: net/ipv6/proc.c
 #
@@ -2789,13 +2788,13 @@ class ProcNetSOCKSTAT6(PBR.labelled_pair_list_records):
 # FRAG6: inuse 0 memory 0
 #
 #
-RegisterProcFileHandler("/proc/net/sockstat6", ProcNetSOCKSTAT6)
-RegisterPartialProcFileHandler("sockstat6", ProcNetSOCKSTAT6)
+REGISTER_FILE("/proc/net/sockstat6", ProcNetSOCKSTAT6)
+REGISTER_PARTIAL_FILE("sockstat6", ProcNetSOCKSTAT6)
 
 
 
 # ---
-class ProcNetIP6_TABLES_MATCHES(PBR.list_of_terms_format):
+class ProcNetIP6_TABLES_MATCHES(PBR.ListOfTerms):
     """Pull records from /proc/net/ip6_tables_matches"""
 # source: net/netfilter/x_tables.c
 
@@ -2807,13 +2806,13 @@ class ProcNetIP6_TABLES_MATCHES(PBR.list_of_terms_format):
 # hl
 #
 #
-RegisterProcFileHandler("/proc/net/ip6_tables_matches", ProcNetIP6_TABLES_MATCHES)
-RegisterPartialProcFileHandler("ip6_tables_matches", ProcNetIP6_TABLES_MATCHES)
+REGISTER_FILE("/proc/net/ip6_tables_matches", ProcNetIP6_TABLES_MATCHES)
+REGISTER_PARTIAL_FILE("ip6_tables_matches", ProcNetIP6_TABLES_MATCHES)
 
 
 
 # ---
-class ProcNetIP6_TABLES_NAMES(PBR.list_of_terms_format):
+class ProcNetIP6_TABLES_NAMES(PBR.ListOfTerms):
     """Pull records from /proc/net/ip6_tables_names"""
 # source: net/netfilter/x_tables.c
 
@@ -2822,13 +2821,13 @@ class ProcNetIP6_TABLES_NAMES(PBR.list_of_terms_format):
 # filter
 #
 #
-RegisterProcFileHandler("/proc/net/ip6_tables_names", ProcNetIP6_TABLES_NAMES)
-RegisterPartialProcFileHandler("ip6_tables_names", ProcNetIP6_TABLES_NAMES)
+REGISTER_FILE("/proc/net/ip6_tables_names", ProcNetIP6_TABLES_NAMES)
+REGISTER_PARTIAL_FILE("ip6_tables_names", ProcNetIP6_TABLES_NAMES)
 
 
 
 # ---
-class ProcNetIP6_TABLES_TARGETS(PBR.list_of_terms_format):
+class ProcNetIP6_TABLES_TARGETS(PBR.ListOfTerms):
     """Pull records from /proc/net/ip6_tables_targets"""
 # source: net/netfilter/x_tables.c
 
@@ -2838,13 +2837,13 @@ class ProcNetIP6_TABLES_TARGETS(PBR.list_of_terms_format):
 # ERROR
 #
 #
-RegisterProcFileHandler("/proc/net/ip6_tables_targets", ProcNetIP6_TABLES_TARGETS)
-RegisterPartialProcFileHandler("ip6_tables_targets", ProcNetIP6_TABLES_TARGETS)
+REGISTER_FILE("/proc/net/ip6_tables_targets", ProcNetIP6_TABLES_TARGETS)
+REGISTER_PARTIAL_FILE("ip6_tables_targets", ProcNetIP6_TABLES_TARGETS)
 
 
 
 # ---
-class ProcNetIP_TABLES_MATCHES(PBR.list_of_terms_format):
+class ProcNetIP_TABLES_MATCHES(PBR.ListOfTerms):
     """Pull records from /proc/net/ip_tables_matches"""
 # source: net/netfilter/x_tables.c
 
@@ -2856,13 +2855,13 @@ class ProcNetIP_TABLES_MATCHES(PBR.list_of_terms_format):
 # ttl
 #
 #
-RegisterProcFileHandler("/proc/net/ip_tables_matches", ProcNetIP_TABLES_MATCHES)
-RegisterPartialProcFileHandler("ip_tables_matches", ProcNetIP_TABLES_MATCHES)
+REGISTER_FILE("/proc/net/ip_tables_matches", ProcNetIP_TABLES_MATCHES)
+REGISTER_PARTIAL_FILE("ip_tables_matches", ProcNetIP_TABLES_MATCHES)
 
 
 
 # ---
-class ProcNetIP_TABLES_NAMES(PBR.list_of_terms_format):
+class ProcNetIP_TABLES_NAMES(PBR.ListOfTerms):
     """Pull records from /proc/net/ip_tables_names"""
 # source: net/netfilter/x_tables.c
 
@@ -2871,13 +2870,13 @@ class ProcNetIP_TABLES_NAMES(PBR.list_of_terms_format):
 # filter
 #
 #
-RegisterProcFileHandler("/proc/net/ip_tables_names", ProcNetIP_TABLES_NAMES)
-RegisterPartialProcFileHandler("ip_tables_names", ProcNetIP_TABLES_NAMES)
+REGISTER_FILE("/proc/net/ip_tables_names", ProcNetIP_TABLES_NAMES)
+REGISTER_PARTIAL_FILE("ip_tables_names", ProcNetIP_TABLES_NAMES)
 
 
 
 # ---
-class ProcNetIP_TABLES_TARGETS(PBR.list_of_terms_format):
+class ProcNetIP_TABLES_TARGETS(PBR.ListOfTerms):
     """Pull records from /proc/net/ip_tables_targets"""
 # source: net/netfilter/x_tables.c
 
@@ -2888,13 +2887,13 @@ class ProcNetIP_TABLES_TARGETS(PBR.list_of_terms_format):
 # ERROR
 #
 #
-RegisterProcFileHandler("/proc/net/ip_tables_targets", ProcNetIP_TABLES_TARGETS)
-RegisterPartialProcFileHandler("ip_tables_targets", ProcNetIP_TABLES_TARGETS)
+REGISTER_FILE("/proc/net/ip_tables_targets", ProcNetIP_TABLES_TARGETS)
+REGISTER_PARTIAL_FILE("ip_tables_targets", ProcNetIP_TABLES_TARGETS)
 
 
 
 # ---
-class ProcNetNetfilterNF_LOG(PBR.fixed_delim_format_recs):
+class ProcNetNetfilterNF_LOG(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/netfilter/nf_log"""
 # source: net/netfilter/nf_log.c
 #  if (!logger)
@@ -2949,13 +2948,13 @@ class ProcNetNetfilterNF_LOG(PBR.fixed_delim_format_recs):
 
         return( self.index, self.name, self.log_list)
 #
-RegisterProcFileHandler("/proc/net/netfilter/nf_log", ProcNetNetfilterNF_LOG)
-RegisterPartialProcFileHandler("nf_log", ProcNetNetfilterNF_LOG)
+REGISTER_FILE("/proc/net/netfilter/nf_log", ProcNetNetfilterNF_LOG)
+REGISTER_PARTIAL_FILE("nf_log", ProcNetNetfilterNF_LOG)
 
 
 
 # ---
-class ProcNetNetfilterNF_QUEUE(PBR.fixed_delim_format_recs):
+class ProcNetNetfilterNF_QUEUE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/netfilter/nf_queue"""
 # source: net/netfilter/nf_queue.c
 #  if (!qh)
@@ -2990,8 +2989,8 @@ class ProcNetNetfilterNF_QUEUE(PBR.fixed_delim_format_recs):
 
         return( self.index, self.name)
 #
-RegisterProcFileHandler("/proc/net/netfilter/nf_queue", ProcNetNetfilterNF_QUEUE)
-RegisterPartialProcFileHandler("nf_queue", ProcNetNetfilterNF_QUEUE)
+REGISTER_FILE("/proc/net/netfilter/nf_queue", ProcNetNetfilterNF_QUEUE)
+REGISTER_PARTIAL_FILE("nf_queue", ProcNetNetfilterNF_QUEUE)
 
 
 

@@ -23,7 +23,7 @@ if len(sys.argv) > 1:
 else:
     TARGET = "tcp"
 
-HANDLER = ProcHandlers.GetProcFileHandler(TARGET)
+HANDLER = ProcHandlers.GET_HANDLER(TARGET)
 
 if QUALIFY != "":
     TARGET = '{path}/{file}'.format(path=TARGET, file=QUALIFY)

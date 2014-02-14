@@ -13,7 +13,7 @@ import ProcFieldConstants
 import CachedDNS
 import ProcessInfo
 
-GET_HANDLER = ProcHandlers.GetProcFileHandler
+GET_HANDLER = ProcHandlers.GET_HANDLER
 
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."

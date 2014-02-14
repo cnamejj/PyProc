@@ -33,14 +33,13 @@ load-plugins=
 # can either give multiple identifier separated by comma (,) or put this option
 # multiple time (only on the command line, not in the configuration file where
 # it should appear only once).
-#disable=C0103,R0903,C0111,W0702,W0613,W0201
-# C0103 is: *Invalid name "%s" (should match %s)* Used when the name doesn't match the regular expression associated to its type
-# C0111 is: *Missing docstring* Used when a module, function, class or method has no docstring.
-# W0201 is: Attribute %r defined outside __init__ Used when an instance attribute is defined outside the __init__ method.
-# W0613 is: *Unused argument %r* Used when a function or method argument is not used.
-# W0702 is: *No exception type(s) specified* Used when an except clause doesn't specify exceptions type to catch.
-# R0903 is: *Too few public methods (%s/%s)*  Used when class has too few public methods, so be sure it's really worth it.
-disable=C0103,R0903,C0111,W0702,W0613
+#
+# R0201: Method could be a function
+# R0903: Too few public methods
+# R0912: Too many branches
+# R0915: Too many statements
+disable=R0201,R0903,R0912,R0915
+
 
 [REPORTS]
 
@@ -49,7 +48,6 @@ disable=C0103,R0903,C0111,W0702,W0613
 output-format=text
 
 # Include message's id in output
-#include-ids=no
 include-ids=yes
 
 # Put messages in a separate file for each module / package specified on the
@@ -58,7 +56,7 @@ include-ids=yes
 files-output=no
 
 # Tells whether to display a full report or only the messages
-reports=yes
+reports=no
 
 # Python expression which should return a note less than 10 (10 is the highest
 # note). You have access to the variables errors warning, statement which
@@ -84,7 +82,7 @@ bad-functions=map,filter,apply,input
 module-rgx=(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$
 
 # Regular expression which should only match correct module level names
-const-rgx=[A-Za-z_][A-Za-z0-9_]{2,30}$
+const-rgx=(([A-Z_][A-Z0-9_]*)|(__.*__))$
 
 # Regular expression which should only match correct class names
 class-rgx=[A-Z_][a-zA-Z0-9]+$
@@ -174,7 +172,6 @@ notes=FIXME,XXX,TODO
 [FORMAT]
 
 # Maximum number of characters on a single line.
-#(ORIG)max-line-length=80
 max-line-length=80
 
 # Maximum number of lines in a module
@@ -204,14 +201,14 @@ max-returns=6
 max-branchs=12
 
 # Maximum number of statements in function / method body
-#(ORIG)max-statements=50
+#max-statements=50
 max-statements=200
 
 # Maximum number of parents for a class (see R0901).
 max-parents=7
 
 # Maximum number of attributes for a class (see R0902).
-#(ORIG)max-attributes=7
+#max-attributes=7
 max-attributes=32
 
 # Minimum number of public methods for a class (see R0903).
@@ -246,9 +243,7 @@ int-import-graph=
 ignore-iface-methods=isImplementedBy,deferred,extends,names,namesAndDescriptions,queryDescriptionFor,getBases,getDescriptionFor,getDoc,getName,getTaggedValue,getTaggedValueTags,isEqualOrExtendedBy,setTaggedValue,isImplementedByInstancesOf,adaptWith,is_implemented_by
 
 # List of method names used to declare (i.e. assign) instance attributes.
-#defining-attr-methods=__init__,__new__,setUp
 defining-attr-methods=__init__,__new__,setUp,extra_init
-
 
 # List of valid names for the first argument in a class method.
 valid-classmethod-first-arg=cls
