@@ -8,7 +8,8 @@ if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
 
-def ShowRecsFromOneFile( ioh, proc_file, subfile):
+def show_recs_from_one_file( ioh, proc_file, subfile):
+    """Display all fields in all lines of the given file."""
 
     seq = 0
 
@@ -20,55 +21,68 @@ def ShowRecsFromOneFile( ioh, proc_file, subfile):
     for srec in active:
         seq = seq + 1
         if len(active.field) > 0:
-            print "- Record {seq} fields {size}".format(seq=seq, size=len(active.field))
+            print "- Record {seq} fields {size} hilit {subset}".format(seq=seq,
+                    size=len(active.field), subset=len(srec))
 
             fseq = 0
             for off in active.field:
                 fseq = fseq + 1
                 currval = active.field[off]
                 if type(currval) == dict:
-                    print "- - {seq}. {key} ...({size})".format(seq=fseq, key=off, size=len(currval))
+                    print "- - {seq}. {key} ...({size})".format(seq=fseq,
+                            key=off, size=len(currval))
                     subseq = 0
                     for subent in currval:
                         subseq = subseq + 1
+                        __templ = "- - - {seq}.{subseq}. {subkey} : {subkeyval}"
                         if type(subent) == str:
-                            print "- - - {seq}.{subseq}. {subkey} : {subkeyval}".format(seq=fseq, subseq=subseq, subkey=subent, subkeyval=str(currval[subent]))
+                            print __templ.format(seq=fseq, subseq=subseq, 
+                                    subkey=subent,
+                                    subkeyval=str(currval[subent]))
                         else:
                             __skey = str(subent)
-                            print "- - - {seq}.{subseq}. {subkey} : {subkeyval}".format(seq=fseq, subseq=subseq, subkey=__skey, subkeyval=str(currval[subent]))
+                            print __templ.format(seq=fseq, subseq=subseq,
+                                    subkey=__skey,
+                                    subkeyval=str(currval[subent]))
                 else:
-                    print "- - {seq}. {key} : {keyval}".format(seq=fseq, key=off, keyval=str(currval))
+                    print "- - {seq}. {key} : {keyval}".format(seq=fseq,
+                            key=off, keyval=str(currval))
 
     return
 
-qualify = ""
+QUALIFY = ""
 
 if len(sys.argv) > 1:
-    target = sys.argv[1]
+    TARGET = sys.argv[1]
     if len(sys.argv) > 2:
-        qualify = sys.argv[2]
-        fulltarget = "{target}/{subfile}".format(target=target, subfile=qualify)
+        QUALIFY = sys.argv[2]
+        FULLTARGET = "{target}/{subfile}".format(target=TARGET, subfile=QUALIFY)
     else:
-        fulltarget = target
+        FULLTARGET = TARGET
 else:
-    target = "tcp"
-    fulltarget = target
+    TARGET = "tcp"
+    FULLTARGET = TARGET
 
-if target == "all":
+if TARGET == "all":
 
-    for target in ProcHandlers.proc_file_handler_registry:
-        print "- Logical records from {file} using {handler}".format(file=target, handler=str(ProcHandlers.proc_file_handler_registry[target]))
+    for TARGET in ProcHandlers.proc_file_handler_registry:
+        print "- Logical records from {file} using {handler}".format(
+                file=TARGET,
+                handler=str(ProcHandlers.proc_file_handler_registry[TARGET]))
 
-        ShowRecsFromOneFile( ProcHandlers.proc_file_handler_registry[target], target, "")
+        show_recs_from_one_file(
+                ProcHandlers.proc_file_handler_registry[TARGET],
+                TARGET, "")
         print ""
 
 else:
-    handler = ProcHandlers.GetProcFileHandler(target)
-    nohandler = ProcHandlers.GetProcFileHandler("null")
+    HANDLER = ProcHandlers.GetProcFileHandler(TARGET)
+    NOHANDLER = ProcHandlers.GetProcFileHandler("null")
 
-    if handler == nohandler:
-        print "- No handler available for file {file}".format(file=fulltarget)
+    if HANDLER == NOHANDLER:
+        print "- No handler available for file {file}".format(file=FULLTARGET)
     else:
-        print "- Logical records from {file} using {handler}".format(file=fulltarget, handler=str(handler))
+        print "- Logical records from {file} using {handler}".format(
+                file=FULLTARGET, handler=str(HANDLER))
 
-        ShowRecsFromOneFile( handler, target, qualify)
+        show_recs_from_one_file( HANDLER, TARGET, QUALIFY)

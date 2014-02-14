@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-"""Show all current TCP connections with local ip/port, remote ip/port, remote hostname, process name and process owner
-
-Data is pulled from /proc filesystem.
+"""
+Show all current TCP connections with local ip/port, remote
+ip/port, remote hostname, process name and process owner.  Data
+is pulled from /proc filesystem.
 """
 
 import sys
@@ -14,28 +15,44 @@ if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
 
-iplookup = CachedDNS.CachedDNS()
-procinfo = ProcessInfo.ProcessInfo()
-socklist = ProcHandlers.GetProcFileHandler("tcp")()
+IPLOOKUP = CachedDNS.CachedDNS()
+PSI = ProcessInfo
+SOCKLIST = ProcHandlers.GetProcFileHandler("tcp")()
 
-for orig_hexip, dest_hexip, orig_ip, orig_port, dest_ip, dest_port, sock_stat in socklist:
+for orig_hexip, \
+    dest_hexip, \
+    orig_ip, \
+    orig_port, \
+    dest_ip, \
+    dest_port, \
+    sock_stat in SOCKLIST:
 
-    ip2host = iplookup.get_cached_hostname(dest_ip)
+    ip2host = IPLOOKUP.get_cached_hostname(dest_ip)
 
-    session_pid = procinfo.map_connection_to_PID(orig_port, dest_ip, dest_port, "tcp")
+    session_pid = PSI.connection_to_pid(orig_port, dest_ip, dest_port, "tcp")
  
-    proc_summary = procinfo.map_PID_to_process_summary(session_pid)
+    proc_summary, proc_rc = PSI.pid_to_proc_summ(session_pid)
 
-    print "{0:s}:{1:d} {2:s}:{3:d} {6:s} cmd: {5:s} host: {4:s}".format( orig_ip, orig_port, dest_ip, dest_port, ip2host, proc_summary, sock_stat)
+    print "{0:s}:{1:d} {2:s}:{3:d} {6:s} cmd: {5:s} host: {4:s}".format(
+            orig_ip, orig_port, dest_ip, dest_port, ip2host, proc_summary,
+            sock_stat)
 
-socklist = ProcHandlers.GetProcFileHandler("tcp6")()
+SOCKLIST = ProcHandlers.GetProcFileHandler("tcp6")()
 
-for orig_hexip, dest_hexip, orig_ip, orig_port, dest_ip, dest_port, sock_stat in socklist:
+for orig_hexip, \
+    dest_hexip, \
+    orig_ip, \
+    orig_port, \
+    dest_ip, \
+    dest_port, \
+    sock_stat in SOCKLIST:
 
-    ip2host = iplookup.get_cached_hostname(dest_ip)
+    ip2host = IPLOOKUP.get_cached_hostname(dest_ip)
 
-    session_pid = procinfo.map_connection_to_PID(orig_port, dest_ip, dest_port, "tcp6")
+    session_pid = PSI.connection_to_pid(orig_port, dest_ip, dest_port, "tcp6")
  
-    proc_summary = procinfo.map_PID_to_process_summary(session_pid)
+    proc_summary, proc_rc = PSI.pid_to_proc_summ(session_pid)
 
-    print "{0:s}:{1:d} {2:s}:{3:d} {6:s} cmd: {5:s} host: {4:s}".format( orig_ip, orig_port, dest_ip, dest_port, ip2host, proc_summary, sock_stat)
+    print "{0:s}:{1:d} {2:s}:{3:d} {6:s} cmd: {5:s} host: {4:s}".format(
+            orig_ip, orig_port, dest_ip, dest_port, ip2host, proc_summary,
+            sock_stat)

@@ -19,9 +19,11 @@
 
 
 #import numpy
+import ProcDataConstants
 import ProcBaseRoutines
 import ProcFieldConstants
 
+PDC = ProcDataConstants
 PBR = ProcBaseRoutines
 PFC = ProcFieldConstants
 
@@ -1757,9 +1759,9 @@ class ProcRootMDSTAT(PBR.fixed_delim_format_recs):
 #
 
     def extra_init(self, *opts):
-        self.__MinWords_first = 1
-        self.__MinWords_second = 0
-        self.minfields = self.__MinWords_first
+        self.__min_words_first = 1
+        self.__min_words_second = 0
+        self.minfields = self.__min_words_first
 
         self.rec_type = ""
         self.personalities = []
@@ -1976,7 +1978,7 @@ class ProcRootMDSTAT(PBR.fixed_delim_format_recs):
         __off = __off + 1
         self.parse_partition_list(sio, " ".join(sio.lineparts[__off:]))
 
-        sio.MinWords = self.__MinWords_second
+        sio.min_words = self.__min_words_second
         sio.read_line()
         for __subrec in range(3):
             if sio.linewords > 0:
@@ -1988,7 +1990,7 @@ class ProcRootMDSTAT(PBR.fixed_delim_format_recs):
                 elif __keyfield == self.__BITMAP_FLAG:
                     self.parse_bitmap_subrec(sio)
                 sio.read_line()
-        sio.MinWords = self.__MinWords_first
+        sio.min_words = self.__min_words_first
         return
 
     def extra_next(self, sio):

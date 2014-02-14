@@ -17,6 +17,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+"""
+Main programmatic interface to collected '/proc' file handlers
+
+This is an umbrella module that imports all the classes that 
+read/parse file in the '/proc' filesystem.  A registry mapping
+specific files (and partial filenames) to handler objects is
+created in the process.  And the are lookup routines included
+which will let a calling program find and use the right handler
+without having to import the other modules.
+"""
+
 import sys
 import CachedDNS
 import ProcessInfo
@@ -39,15 +50,16 @@ GetProcPartialFileRegistry = PBR.GetProcPartialFileRegistry
 ShowHandlerFilePath = PBR.ShowHandlerFilePath
 ProcFileToPath = PBR.ProcFileToPath
 
-state_list = PDC.state_list
-
 proc_file_handler_registry = PBR.proc_file_handler_registry
 
 # ---
-def DispHandlerSep(filepatt):
+def display_handler_name(filepatt):
+    """Display the name of the handler associated with the given file."""
+
 
     __hand = GetProcFileHandler(filepatt)()
-    print "------------ File {inpfile} via {handler}".format(inpfile=filepatt, handler=__hand.__class__.__name__)
+    print "------------ File {inpfile} via {handler}".format(inpfile=filepatt,
+            handler=__hand.__class__.__name__)
 
     return
 
@@ -60,43 +72,46 @@ if __name__ == "__main__":
         print "MacOS doesn't have a '/proc' filesystem, quitting."
         sys.exit(0)
 
-    flist = dict()
+    FLIST = dict()
 
     if len(sys.argv) > 1:
-        which = sys.argv[1]
-        if which == "all":
-            flist = GetProcPartialFileRegistry()
+        WHICH = sys.argv[1]
+        if WHICH == "all":
+            FLIST = GetProcPartialFileRegistry()
         else:
-            flist[which] = GetProcFileHandler(which)
+            FLIST[WHICH] = GetProcFileHandler(WHICH)
     else:
-        which = "show"
+        WHICH = "show"
 
     if len(sys.argv) > 2:
-        qualify = sys.argv[2]
+        QUALIFY = sys.argv[2]
     else:
-        qualify = ""
+        QUALIFY = ""
 
-    iplookup = CachedDNS.CachedDNS()
-    procinfo = ProcessInfo.ProcessInfo()
+    IPLOOKUP = CachedDNS.CachedDNS()
+    PSI = ProcessInfo
 
-    NO_SESSION_PID = procinfo.get_PID_err_value()
-    NO_PROCESS_SUMMARY = procinfo.get_process_summary_err_value()
+    NO_SESSION_PID = PSI.NO_CONN_PID
+    NO_PROCESS_SUMMARY = PSI.NO_PROCESS_SUMMARY
 
-    if which == "show":
+    if WHICH == "show":
         ShowProcFileHandlers()
 
     else:
-        for __file in flist:
+        for __file in FLIST:
 
-            DispHandlerSep(__file)
-            if qualify != "":
-                __qualified = "{base}/{subfile}".format(base=__file, subfile=qualify)
-#                print "::dbg get instance with qualifier'{subfile}' full'{fullname}'".format(subfile=qualify, fullname=__qualified)
-                __act = flist[__file](__qualified)
+            display_handler_name(__file)
+            if QUALIFY != "":
+                __qualified = "{base}/{subfile}".format(base=__file,
+                        subfile=QUALIFY)
+#                print "::dbg get instance with qualifier'{subfile}' \
+#full'{fullname}'".format(subfile=QUALIFY, fullname=__qualified)
+                __act = FLIST[__file](__qualified)
             else:
-                __act = flist[__file]()
+                __act = FLIST[__file]()
 
-            if __file == "udp6" or __file == "udp" or __file == "tcp" or __file == "tcp6":
+            if __file == "udp6" or __file == "udp" or __file == "tcp" \
+                    or __file == "tcp6":
 
                 for parse_slist in __act:
 
@@ -108,11 +123,17 @@ if __name__ == "__main__":
                     dest_port = __act.field[PFC.F_DEST_PORT]
                     sock_stat = __act.field[PFC.F_STATE]
 
-                    dest_host = iplookup.get_cached_hostname(dest_ip)
-                    pid = procinfo.map_connection_to_PID(orig_port, dest_ip, dest_port, __file)
-                    psumm = procinfo.map_PID_to_process_summary(pid)
+                    dest_host = IPLOOKUP.get_cached_hostname(dest_ip)
+                    pid = PSI.connection_to_pid(orig_port, dest_ip, dest_port,
+                            __file)
+                    psumm, psrc = PSI.pid_to_proc_summ(pid)
 
-                    print "{7:s} {0:s} {1:s}:{2:d} -> {3:s}:{4:d} PTR:{5:s} psumm:'{6:s}'".format(sock_stat, orig_ip, orig_port, dest_ip, dest_port, dest_host, psumm, __file)
+                    __template = "{file} {stat} {orip}:{orport} -> \
+{dsip}:{dsport} PTR:{host} psumm'{ps}'"
+                    print __template.format(file=__file, stat=sock_stat,
+                            orip=orig_ip, orport=orig_port, dsip=dest_ip,
+                            dsport=dest_port, host=dest_host, ps=psumm)
+#                    print "{7:s} {0:s} {1:s}:{2:d} -> {3:s}:{4:d} PTR:{5:s} psumm:'{6:s}'".format(sock_stat, orig_ip, orig_port, dest_ip, dest_port, dest_host, psumm, __file)
 
             elif __file == "igmp":
 
@@ -133,12 +154,14 @@ if __name__ == "__main__":
                         print socktype
                         keyvals = __act.field[socktype]
                         for key in keyvals:
-                            print "-- {0:s} {1:s}".format(str(key), str(keyvals[key]))
+                            print "-- {0:s} {1:s}".format(str(key),
+                                str(keyvals[key]))
 
             elif __file == "ptype":
 
                 for dev_type, dev_name, dev_func in __act:
-                    print '{0:s} {1:s} "{2:s}"'.format(str(dev_type), dev_func, dev_name)
+                    print '{0:s} {1:s} "{2:s}"'.format(str(dev_type), dev_func,
+                            dev_name)
 
             elif __file == "snmp" or __file == "netstat":
 
@@ -147,7 +170,8 @@ if __name__ == "__main__":
                     if lrec_prot != "":
                         print '--- protocol {0:s}'.format(lrec_prot)
                     for var_name in __act.field:
-                        print '{0:s} : {1:s}'.format(var_name, __act.field[var_name])
+                        print '{0:s} : {1:s}'.format(var_name,
+                                __act.field[var_name])
 
             else:
 

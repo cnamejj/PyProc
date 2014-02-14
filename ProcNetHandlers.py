@@ -46,7 +46,7 @@ SUFFIX_VAL = PBR.SUFFIX_VAL
 BEFORE_VAL = PBR.BEFORE_VAL
 AFTER_VAL = PBR.AFTER_VAL
 
-state_list = PDC.state_list
+STATE_LIST = PDC.STATE_LIST
 
 
 
@@ -854,7 +854,7 @@ class ProcNetIP_CONNTRACK(PBR.fixed_delim_format_recs):
         self.protocol = ""
         self.src_port = 0
         self.src_ip = PDC.ANY_IP_ADDR
-        self.state = PDC.unknown_state
+        self.state = PDC.UNKNOWN_STATE
         self.timeout = 0
         self.dst_ip = PDC.ANY_IP_ADDR
         self.dst_port = 0
@@ -873,7 +873,7 @@ class ProcNetIP_CONNTRACK(PBR.fixed_delim_format_recs):
 # tcp      6 431988 ESTABLISHED src=192.168.1.14 dst=173.201.192.71 sport=35348 dport=993 src=173.201.192.71 dst=192.168.1.14 sport=993 dport=35348 [ASSURED] mark=0 use=2
 # udp      17 17 src=127.0.0.1 dst=127.0.0.1 sport=59830 dport=53 src=127.0.0.1 dst=127.0.0.1 sport=53 dport=59830 mark=0 use=2
 
-        self.field[PFC.F_STATE] = PDC.unknown_state
+        self.field[PFC.F_STATE] = PDC.UNKNOWN_STATE
         self.field[PFC.F_OR_SRC_IP] = PDC.ANY_IP_ADDR
         self.field[PFC.F_OR_DST_IP] = PDC.ANY_IP_ADDR
         self.field[PFC.F_OR_SRC_PORT] = 0
@@ -1109,7 +1109,7 @@ class ProcNetNF_CONNTRACK(PBR.fixed_delim_format_recs):
         self.protocol = ""
         self.src_port = 0
         self.src_ip = PDC.ANY_IP_ADDR
-        self.state = PDC.unknown_state
+        self.state = PDC.UNKNOWN_STATE
         self.l3_protocol = ""
         self.dst_port = 0
         self.timeout = 0
@@ -1127,7 +1127,7 @@ class ProcNetNF_CONNTRACK(PBR.fixed_delim_format_recs):
 # ipv4     2 tcp      6 431964 ESTABLISHED src=192.168.1.14 dst=173.201.192.71 sport=35348 dport=993 src=173.201.192.71 dst=192.168.1.14 sport=993 dport=35348 [ASSURED] mark=0 zone=0 use=2
 # ipv4     2 tcp      6 431798 ESTABLISHED src=192.168.1.14 dst=72.167.218.187 sport=53880 dport=993 src=72.167.218.187 dst=192.168.1.14 sport=993 dport=53880 [ASSURED] mark=0 zone=0 use=2
 
-        self.field[PFC.F_STATE] = PDC.unknown_state
+        self.field[PFC.F_STATE] = PDC.UNKNOWN_STATE
         self.field[PFC.F_OR_SRC_IP] = PDC.ANY_IP_ADDR
         self.field[PFC.F_OR_DST_IP] = PDC.ANY_IP_ADDR
         self.field[PFC.F_OR_SRC_PORT] = 0
@@ -2053,7 +2053,7 @@ class ProcNetTCP6(PBR.fixed_delim_format_recs):
             self.field[PFC.F_ORIG_PORT] = 0
             self.field[PFC.F_DEST_PORT] = 0
             self.field[PFC.F_HEXSTATE] = "00"
-            self.field[PFC.F_STATE] = PDC.unknown_state
+            self.field[PFC.F_STATE] = PDC.UNKNOWN_STATE
             self.field[PFC.F_TXQUEUE] = 0
             self.field[PFC.F_RXQUEUE] = 0
             self.field[PFC.F_TIMER] = 0
@@ -2074,10 +2074,10 @@ class ProcNetTCP6(PBR.fixed_delim_format_recs):
             self.field[PFC.F_ORIG_IP] = self.ipconv.ipv6_hexstring_to_presentation(self.field[PFC.F_ORIG_HEXIP])
             self.field[PFC.F_DEST_IP] = self.ipconv.ipv6_hexstring_to_presentation(self.field[PFC.F_DEST_HEXIP])
 
-            if self.field[PFC.F_HEXSTATE] in state_list:
-                self.field[PFC.F_STATE] = state_list[self.field[PFC.F_HEXSTATE]]
+            if self.field[PFC.F_HEXSTATE] in STATE_LIST:
+                self.field[PFC.F_STATE] = STATE_LIST[self.field[PFC.F_HEXSTATE]]
             else:
-                self.field[PFC.F_STATE] = PDC.unknown_state
+                self.field[PFC.F_STATE] = PDC.UNKNOWN_STATE
 
         self.orig_hexip = self.field[PFC.F_ORIG_HEXIP]
         self.dest_hexip = self.field[PFC.F_DEST_HEXIP]
@@ -2173,7 +2173,7 @@ class ProcNetTCP(PBR.fixed_delim_format_recs):
             self.field[PFC.F_ORIG_PORT] = 0
             self.field[PFC.F_DEST_PORT] = 0
             self.field[PFC.F_HEXSTATE] = "00"
-            self.field[PFC.F_STATE] = PDC.unknown_state
+            self.field[PFC.F_STATE] = PDC.UNKNOWN_STATE
             self.field[PFC.F_TXQUEUE] = 0
             self.field[PFC.F_RXQUEUE] = 0
             self.field[PFC.F_TIMER] = 0
@@ -2194,10 +2194,10 @@ class ProcNetTCP(PBR.fixed_delim_format_recs):
             self.field[PFC.F_ORIG_IP] = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.field[PFC.F_ORIG_HEXIP], 16)))))
             self.field[PFC.F_DEST_IP] = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.field[PFC.F_DEST_HEXIP], 16)))))
 
-            if self.field[PFC.F_HEXSTATE] in state_list:
-                self.field[PFC.F_STATE] = state_list[self.field[PFC.F_HEXSTATE]]
+            if self.field[PFC.F_HEXSTATE] in STATE_LIST:
+                self.field[PFC.F_STATE] = STATE_LIST[self.field[PFC.F_HEXSTATE]]
             else:
-                self.field[PFC.F_STATE] = PDC.unknown_state
+                self.field[PFC.F_STATE] = PDC.UNKNOWN_STATE
 
         self.orig_hexip = self.field[PFC.F_ORIG_HEXIP]
         self.dest_hexip = self.field[PFC.F_DEST_HEXIP]
@@ -2282,7 +2282,7 @@ class ProcNetUDP6(PBR.fixed_delim_format_recs):
             self.field[PFC.F_ORIG_PORT] = 0
             self.field[PFC.F_DEST_PORT] = 0
             self.field[PFC.F_HEXSTATE] = "00"
-            self.field[PFC.F_STATE] = PDC.unknown_state
+            self.field[PFC.F_STATE] = PDC.UNKNOWN_STATE
             self.field[PFC.F_TXQUEUE] = 0
             self.field[PFC.F_RXQUEUE] = 0
             self.field[PFC.F_TIMER] = 0
@@ -2299,10 +2299,10 @@ class ProcNetUDP6(PBR.fixed_delim_format_recs):
             self.field[PFC.F_ORIG_IP] = self.ipconv.ipv6_hexstring_to_presentation(self.field[PFC.F_ORIG_HEXIP])
             self.field[PFC.F_DEST_IP] = self.ipconv.ipv6_hexstring_to_presentation(self.field[PFC.F_DEST_HEXIP])
 
-            if self.field[PFC.F_HEXSTATE] in state_list:
-                self.field[PFC.F_STATE] = state_list[self.field[PFC.F_HEXSTATE]]
+            if self.field[PFC.F_HEXSTATE] in STATE_LIST:
+                self.field[PFC.F_STATE] = STATE_LIST[self.field[PFC.F_HEXSTATE]]
             else:
-                self.field[PFC.F_STATE] = PDC.unknown_state
+                self.field[PFC.F_STATE] = PDC.UNKNOWN_STATE
 
         self.orig_hexip = self.field[PFC.F_ORIG_HEXIP]
         self.dest_hexip = self.field[PFC.F_DEST_HEXIP]
@@ -2379,7 +2379,7 @@ class ProcNetUDP(PBR.fixed_delim_format_recs):
             self.field[PFC.F_ORIG_PORT] = 0
             self.field[PFC.F_DEST_PORT] = 0
             self.field[PFC.F_HEXSTATE] = "00"
-            self.field[PFC.F_STATE] = PDC.unknown_state
+            self.field[PFC.F_STATE] = PDC.UNKNOWN_STATE
             self.field[PFC.F_TXQUEUE] = 0
             self.field[PFC.F_RXQUEUE] = 0
             self.field[PFC.F_TIMER] = 0
@@ -2396,10 +2396,10 @@ class ProcNetUDP(PBR.fixed_delim_format_recs):
             self.field[PFC.F_ORIG_IP] = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.field[PFC.F_ORIG_HEXIP], 16)))))
             self.field[PFC.F_DEST_IP] = socket.inet_ntop(socket.AF_INET, binascii.unhexlify('{0:08x}'.format(socket.htonl(long(self.field[PFC.F_DEST_HEXIP], 16)))))
 
-            if self.field[PFC.F_HEXSTATE] in state_list:
-                self.field[PFC.F_STATE] = state_list[self.field[PFC.F_HEXSTATE]]
+            if self.field[PFC.F_HEXSTATE] in STATE_LIST:
+                self.field[PFC.F_STATE] = STATE_LIST[self.field[PFC.F_HEXSTATE]]
             else:
-                self.field[PFC.F_STATE] = PDC.unknown_state
+                self.field[PFC.F_STATE] = PDC.UNKNOWN_STATE
 
         self.orig_hexip = self.field[PFC.F_ORIG_HEXIP]
         self.dest_hexip = self.field[PFC.F_DEST_HEXIP]
@@ -2576,9 +2576,9 @@ class ProcNetIGMP(PBR.fixed_delim_format_recs):
 #                   im->reporter);
 
     def extra_init(self, *opts):
-        self.__MinWords_first = 5
-        self.__MinWords_second = 4
-        self.minfields = self.__MinWords_first
+        self.__min_words_first = 5
+        self.__min_words_second = 4
+        self.minfields = self.__min_words_first
         self.skipped = "Idx"
         self.__FieldSplitDelim = ":"
 
@@ -2619,9 +2619,9 @@ class ProcNetIGMP(PBR.fixed_delim_format_recs):
         else:
 
 # ... need to read the next line for the rest.
-            sio.MinWords = self.__MinWords_second
+            sio.min_words = self.__min_words_second
             sio.read_line()
-            sio.MinWords = self.__MinWords_first
+            sio.min_words = self.__min_words_first
 
             if sio.buff == "":
                 self.field[PFC.F_INDEX] = 0

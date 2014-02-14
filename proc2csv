@@ -8,61 +8,65 @@ if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
 
-qualify = ""
-seq = 0
-sep = "|"
-nested = 0
-head = ""
+QUALIFY = ""
+SEQ = 0
+DELIM = "|"
+NESTED = 0
+HEAD = ""
 
 DEV_SNMP6 = "dev_snmp6"
 
 if len(sys.argv) > 1:
-    target = sys.argv[1]
+    TARGET = sys.argv[1]
     if len(sys.argv) > 2:
-        qualify = sys.argv[2]
+        QUALIFY = sys.argv[2]
 else:
-    target = "tcp"
+    TARGET = "tcp"
 
-handler = ProcHandlers.GetProcFileHandler(target)
+HANDLER = ProcHandlers.GetProcFileHandler(TARGET)
 
-if qualify != "":
-    target = '{path}/{file}'.format(path=target, file=qualify)
-    active = handler(target)
+if QUALIFY != "":
+    TARGET = '{path}/{file}'.format(path=TARGET, file=QUALIFY)
+    ACTIVE = HANDLER(TARGET)
 else:
-    if target == DEV_SNMP6:
-        active = handler()
+    if TARGET == DEV_SNMP6:
+        ACTIVE = HANDLER()
     else:
-        active = handler(target)
+        ACTIVE = HANDLER(TARGET)
 
-for srec in active:
-    prev_head = head
-    seq = seq + 1
+for srec in ACTIVE:
+    prev_head = HEAD
+    SEQ += 1
 
-    if len(active.field) > 0:
-        nested = 1
-        for key in active.field:
-#            print "::dbg.1 key({key}) nested:{nested:d}".format(key=key, nested=nested)
-            if type(active.field[key]) != dict:
-                nested = 0
-        head = sep.join(active.field)
-        if head != prev_head:
-            if seq > 1:
+    if len(ACTIVE.field) > 0:
+        NESTED = 1
+        for key in ACTIVE.field:
+            if type(ACTIVE.field[key]) != dict:
+                NESTED = 0
+        HEAD = DELIM.join(ACTIVE.field)
+        if HEAD != prev_head:
+            if SEQ > 1:
                 print ""
-            print "{procfile}{sep}{header}".format(procfile=target, sep=sep, header=head)
+            print "{procfile}{delim}{header}".format(procfile=TARGET,
+                    delim=DELIM, header=HEAD)
 
-        if nested == 1:
-            for key in active.field:
-                currval = active.field[key]
+        if NESTED == 1:
+            for key in ACTIVE.field:
+                currval = ACTIVE.field[key]
                 out = ""
                 for subkey in currval:
-                    out = "{out}{sep}{keyval}".format(out=out, sep=sep, keyval=currval[subkey])
-                head = sep.join(currval)
+                    out = "{out}{delim}{keyval}".format(out=out,
+                            delim=DELIM, keyval=currval[subkey])
+                HEAD = DELIM.join(currval)
                 print ""
-                print "{seq}{sep}Label{sep}{header}".format(seq=seq, sep=sep, header=head)
-                print "{seq}{sep}{label}{datalist}".format(seq=seq, sep=sep, label=key, datalist=out)
+                print "{seq}{delim}Label{delim}{header}".format(seq=SEQ,
+                        delim=DELIM, header=HEAD)
+                print "{seq}{delim}{label}{datalist}".format(seq=SEQ,
+                        delim=DELIM, label=key, datalist=out)
 
         else:
             out = ""
-            for key in active.field:
-                out = "{out}{sep}{keyval}".format(out=out, sep=sep, keyval=str(active.field[key]))
-            print "{seq}{datalist}".format(seq=seq, datalist=out)
+            for key in ACTIVE.field:
+                out = "{out}{delim}{keyval}".format(out=out, delim=DELIM,
+                        keyval=str(ACTIVE.field[key]))
+            print "{seq}{datalist}".format(seq=SEQ, datalist=out)

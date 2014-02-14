@@ -1,5 +1,8 @@
 #!/usr/bin/env python
-"""Constants used as 'no value' or other placeholders in several modules, also network state mapping array, no code here"""
+"""
+Constants used as 'no value' or other placeholders in several modules, also
+network state mapping array.  There's no code here.
+"""
 
 try:
     import numpy
@@ -10,7 +13,7 @@ except ImportError:
     NAN = pickle.loads('Fnan\n.')
     INF = pickle.loads('Finf\n.')
 
-unknown_state = "UNRECOGNIZED"
+UNKNOWN_STATE = "UNRECOGNIZED"
 
 ANY_HW_ADDR = "00:00:00:00:00:00"
 ANY_INTERFACE = "any"
@@ -25,15 +28,15 @@ PRESENT_ANY_IP_ADDR = "0.0.0.0"
 ANY_DEVICE = "any"
 NO_DEVICE = "none"
 
-state_list = dict()
-state_list["01"] = "ESTABLISHED"
-state_list["02"] = "SYN_SENT"
-state_list["03"] = "SYN_RECV"
-state_list["04"] = "FIN_WAIT1"
-state_list["05"] = "FIN_WAIT2"
-state_list["06"] = "TIME_WAIT"
-state_list["07"] = "CLOSE"
-state_list["08"] = "CLOSE_WAIT"
-state_list["09"] = "LACK_ACK"
-state_list["0A"] = "LISTEN"
-state_list["0B"] = "CLOSING"
+STATE_LIST = dict()
+STATE_LIST["01"] = "ESTABLISHED"
+STATE_LIST["02"] = "SYN_SENT"
+STATE_LIST["03"] = "SYN_RECV"
+STATE_LIST["04"] = "FIN_WAIT1"
+STATE_LIST["05"] = "FIN_WAIT2"
+STATE_LIST["06"] = "TIME_WAIT"
+STATE_LIST["07"] = "CLOSE"
+STATE_LIST["08"] = "CLOSE_WAIT"
+STATE_LIST["09"] = "LACK_ACK"
+STATE_LIST["0A"] = "LISTEN"
+STATE_LIST["0B"] = "CLOSING"

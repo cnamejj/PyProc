@@ -9,37 +9,37 @@ if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
 
-qualify = ""
+QUALIFY = ""
 
 DEV_SNMP6 = "dev_snmp6"
 
 if len(sys.argv) > 1:
-    target = sys.argv[1]
+    TARGET = sys.argv[1]
     if len(sys.argv) > 2:
-        qualify = sys.argv[2]
+        QUALIFY = sys.argv[2]
 else:
-    target = "tcp"
+    TARGET = "tcp"
 
-handler = ProcHandlers.GetProcFileHandler(target)
+HANDLER = ProcHandlers.GetProcFileHandler(TARGET)
 
-if qualify != "":
-    target = '{path}/{file}'.format(path=target, file=qualify)
-    active = handler(target)
+if QUALIFY != "":
+    TARGET = '{path}/{file}'.format(path=TARGET, file=QUALIFY)
+    ACTIVE = HANDLER(TARGET)
 else:
-    if target == DEV_SNMP6:
-        active = handler()
+    if TARGET == DEV_SNMP6:
+        ACTIVE = HANDLER()
     else:
-        active = handler(target)
+        ACTIVE = HANDLER(TARGET)
 
-rec = 0
-field_list = dict()
-field_list[0] = { 'source' : target }
+REC = 0
+FIELD_LIST = dict()
+FIELD_LIST[0] = { 'source' : TARGET }
 
-for srec in active:
-    if len(active.field) > 0:
-        rec = rec + 1
-        field_list[rec] = dict()
-        for fname in active.field:
-            field_list[rec][fname] = active.field[fname]
+for srec in ACTIVE:
+    if len(ACTIVE.field) > 0:
+        REC += 1
+        FIELD_LIST[REC] = dict()
+        for fname in ACTIVE.field:
+            FIELD_LIST[REC][fname] = ACTIVE.field[fname]
 
-print json.dumps(field_list, sort_keys=True, indent=4, separators=(',', ': '))
+print json.dumps(FIELD_LIST, sort_keys=True, indent=4, separators=(',', ': '))

@@ -2,6 +2,7 @@
 """I/O routines for reading column oriented text data files"""
 
 def pair_list_to_dictionary(line, start_pos):
+    """Transform a list of word pairs to a dictionary."""
 
     __pairs = dict()
 
@@ -21,12 +22,15 @@ class SeqFileIO:
         self.linewords = 0
         self.buff = ""
         self.is_open = 0
-        self.MinWords = 0
-        self.SkipLine = ""
-
-#       For 'pylint'
+        self.min_words = 0
+        self.skip_line = ""
+	
+        # For pylint only...
+        self.pnt_fd = file("/dev/null", "r")
 
     def open_file(self, procfile, *options):
+        """Open the specified file and stash away basic status info"""
+
         try:
             self.pnt_fd = open(procfile)
             self.is_open = 1
@@ -34,12 +38,14 @@ class SeqFileIO:
             self.is_open = 0
 
         if len(options) > 0:
-            self.MinWords = options[0]
+            self.min_words = options[0]
             if len(options) > 1:
-                self.SkipLine = options[1]
+                self.skip_line = options[1]
 
 
     def get_word(self, which):
+        """Return the specific word from the current parsed logical record"""
+
         if which < self.linewords:
             __word = self.lineparts[which]
         else:
@@ -49,6 +55,7 @@ class SeqFileIO:
 
 
     def read_line(self):
+        """Read/Parse the next line in the open file."""
 
         self.lineparts = dict()
         self.linewords = 0
@@ -61,14 +68,14 @@ class SeqFileIO:
             self.buff = self.pnt_fd.readline()
 
             try:
-                __MinWords = self.MinWords
+                __min_words = self.min_words
             except AttributeError:
-                __MinWords = 0
+                __min_words = 0
 
             try:
-                __SkipLine = self.SkipLine 
+                __skip_line = self.skip_line 
             except AttributeError:
-                __SkipLine = ""
+                __skip_line = ""
 
             if self.buff == "":
                 self.pnt_fd.close()
@@ -78,16 +85,17 @@ class SeqFileIO:
             else:
                 self.lineparts = self.buff.split()
                 self.linewords = len(self.lineparts)
-                if self.linewords < __MinWords:
+                if self.linewords < __min_words:
                     self.read_line()
-                elif __SkipLine != "":
-                    if self.lineparts[0] == __SkipLine:
+                elif __skip_line != "":
+                    if self.lineparts[0] == __skip_line:
                         self.read_line()
 
         return(self.is_open)
 
 
     def read_all_lines(self):
+        """Read all the lines in the file and return them all at once"""
 
         __lines = ()
 
@@ -98,18 +106,19 @@ class SeqFileIO:
             __lines = self.pnt_fd.readlines()
 
             try:
-                __SkipPref = self.SkipLine 
+                __skip_pref = self.skip_line 
             except AttributeError:
-                __SkipPref = ""
+                __skip_pref = ""
 
             if __lines != "":
-                __SkipPrefLen = len(__SkipPref) + 1
+                __skip_pref_len = len(__skip_pref) + 1
 
                 for __off in range(len(__lines)-1, -1, -1):
                     if __lines[__off][-1:] == "\n":
                         __lines[__off] = __lines[__off][:-1]
-                    if __SkipPrefLen > 1:
-                        if __lines[__off][1:__SkipPrefLen] == __SkipPref:
+                    if __skip_pref_len > 1:
+#                        if __lines[__off][1:__skip_pref_len] == __skip_pref:
+                        if __lines[__off].startswith(__skip_pref):
                             __lines[__off:__off+1] = []
                     elif __lines[__off] == "":
                         __lines[__off:__off+1] = []
@@ -120,6 +129,11 @@ class SeqFileIO:
 
 
     def read_labelled_pair_list_file(self, handler, label_set):
+        """
+        Parse files formatted such that each pair of lines in the file
+        is a set of variable names (line 1) and associated values
+        (line 2)
+        """
 
         if not self.is_open:
             raise StopIteration
@@ -143,6 +157,9 @@ class SeqFileIO:
 
 
     def read_twoline_logical_record(self, handler, prot_field):
+        """
+        Read and parse files with two-physical line per logical line format
+        """
 
         handler.field = dict()
         self.lineparts = dict()

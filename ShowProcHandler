@@ -8,30 +8,30 @@ if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
 
-qualify = ""
+QUALIFY = ""
 
 if len(sys.argv) > 1:
-    target = sys.argv[1]
+    TARGET = sys.argv[1]
     if len(sys.argv) > 2:
-        qualify = sys.argv[2]
+        QUALIFY = sys.argv[2]
 else:
-    target = "tcp"
+    TARGET = "tcp"
 
-if target == "all":
+if TARGET == "all":
 
     ProcHandlers.ShowProcFileHandlers()
 
 else:
 
-    handler = ProcHandlers.GetProcFileHandler(target)
+    HANDLER = ProcHandlers.GetProcFileHandler(TARGET)
 
-    if qualify != "":
-        active = handler(qualify)
+    if QUALIFY != "":
+        ACTIVE = HANDLER(QUALIFY)
     else:
-        active = handler(target)
+        ACTIVE = HANDLER(TARGET)
 
-    if qualify != "":
-        target = "{dir}/{file}".format(dir=target, file=qualify)
+    if QUALIFY != "":
+        TARGET = "{dir}/{file}".format(dir=TARGET, file=QUALIFY)
 
-    print "File {0:s} handled by {1:s}".format(target, handler)
+    print "File {0:s} handled by {1:s}".format(TARGET, HANDLER)
 

@@ -750,7 +750,7 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         elif __opt.has_key(self.__FLAG_SOFT):
             self.field[PFC.F_MOUNT_TYPE] = self.__FLAG_SOFT
         else:
-            self.field[PFC.F_MOUNT_TYPE] = PDC.unknown_state
+            self.field[PFC.F_MOUNT_TYPE] = PDC.UNKNOWN_STATE
 
         for __mount_opt in self.__NFS_MOUNT_OPTS_FLAG:
             self.field[__mount_opt] = __opt.has_key(__mount_opt)
@@ -999,8 +999,8 @@ class ProcSelfMOUNTSTATS(PBR.fixed_delim_format_recs):
         self.field[PFC.F_MOUNTPOINT] = ""
         self.field[PFC.F_FSTYPE] = ""
         self.field[PFC.F_STATSVERS] = ""
-        self.field[PFC.F_MOUNT_TYPE] = PDC.unknown_state
-        self.field[PFC.F_WRITE_STATUS] = PDC.unknown_state
+        self.field[PFC.F_MOUNT_TYPE] = PDC.UNKNOWN_STATE
+        self.field[PFC.F_WRITE_STATUS] = PDC.UNKNOWN_STATE
         self.field[PFC.F_AGE] = 0
         self.field[PFC.F_BYTES_LIST] = dict()
         self.field[PFC.F_EVENT_LIST] = dict()
