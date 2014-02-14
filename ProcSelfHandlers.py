@@ -52,7 +52,10 @@ if __name__ == "__main__":
 
 # ---
 class ProcSelfLIMITS(PBR.FixedColumnRecs):
-    """Pull records from /proc/self/limits"""
+    """
+    Pull records from /proc/self/limits
+
+
 # source: fs/proc/base.c
 #
 #    count += sprintf(&bufptr[count], "%-25s %-20s %-20s %-10s\n",
@@ -78,6 +81,7 @@ class ProcSelfLIMITS(PBR.FixedColumnRecs):
 #            else
 #                    count += sprintf(&bufptr[count], "\n");
 #    }
+    """
 
     def extra_init(self, *opts):
         self.minfields = 4
@@ -190,6 +194,7 @@ class ProcSelfMAPS(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
+        """
 # -- Sample records
 #
 # 00400000-0041e000 r-xp 00000000 09:01 149422083                          /bin/cp
@@ -199,6 +204,7 @@ class ProcSelfMAPS(PBR.FixedWhitespaceDelimRecs):
 # 7facdda3a000-7facddd03000 r--p 00000000 09:01 29890584                   /usr/lib/locale/locale-archive
 # 7facddd03000-7facddd1b000 r-xp 00000000 09:01 75238943                   /lib/x86_64-linux-gnu/libpthread-2.15.so
 # 7facddd1b000-7facddf1a000 ---p 00018000 09:01 75238943                   /lib/x86_64-linux-gnu/libpthread-2.15.so
+        """
 
         if sio.buff == "":
             self.field[PFC.F_START] = 0
@@ -425,6 +431,7 @@ class ProcSelfNUMAMAPS(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
+        """
 # -- Sample records
 #
 # 00400000 default file=/bin/cat mapped=7 mapmax=2 N0=7
@@ -433,6 +440,7 @@ class ProcSelfNUMAMAPS(PBR.FixedWhitespaceDelimRecs):
 # 01b69000 default heap anon=3 dirty=3 active=0 N0=3
 # 7f5935a28000 default file=/usr/lib/locale/locale-archive mapped=11 mapmax=88 N0=11
 # 7f5935cf1000 default file=/lib/x86_64-linux-gnu/libc-2.15.so mapped=82 mapmax=167 N0=82
+        """
 
         self.field[PFC.F_HEAP] = 0
         self.field[PFC.F_STACK] = 0
@@ -560,6 +568,7 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
+        """
 # -- Sample records
 #
 # 15 20 0:14 / /sys rw,nosuid,nodev,noexec,relatime - sysfs sysfs rw
@@ -567,6 +576,7 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
 # 20 1 9:1 / / rw,relatime - ext4 /dev/disk/by-uuid/a959862a-84b7-4373-b7d6-954ac9005249 rw,errors=remount-ro,user_xattr,barrier=1,stripe=256,data=ordered
 # 21 15 0:16 / /sys/fs/fuse/connections rw,relatime - fusectl none rw
 # 27 20 9:0 / /boot rw,relatime - ext4 /dev/md0 rw,user_xattr,barrier=1,stripe=128,data=ordered
+        """
 
         self.field[PFC.F_EXTRA_OPTS] = ""
         self.field[PFC.F_FS_TYPE] = ""
@@ -620,7 +630,10 @@ REGISTER_PARTIAL_FILE("mountinfo", ProcSelfMOUNTINFO)
 
 # ---
 class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
-    """Pull records from /proc/self/mountstats"""
+    """
+    Pull records from /proc/self/mountstats
+
+
 #
 # source: fs/namespace.c
 # --and--
@@ -660,6 +673,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 # (M) \txprt: (15) !INT! !INT! !INT! !INT! !INT! !INT! !INT!
 #     (15) local|udp
 # (N) \txprt: tcp !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT!
+    """
 
     def extra_init(self, *opts):
         """Custom processing for the record just read"""
@@ -767,6 +781,10 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
             self.__partial[PFC.F_STATSVERS] = ""
         return
 
+    def parse_options_line(self, sio):
+        """
+        Driver for parsing options subrecords
+
 # (B) \topts: (2){,sync}{,noatime}{,nodiratime}(3)(4)(5)(6)(7)(8)(9)
 #     (2) ro|rw
 #     (3) ,vers=!INT!,rsize=!INT!,wsize=!INT!{,bsize=!INT!},namelen=!INT!
@@ -778,8 +796,8 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 #         (10) !IP4!|!IP6!|unspecified
 #         (11) !PROTOCOL!|auto
 #     (9) {,fsc}{,lookupcache={none|pos}}{,local_lock={none|all|flock|posix}}
-    def parse_options_line(self, sio):
-        """Driver for parsing options subrecords"""
+        """
+
 
         __opt = PBR.breakout_option_list(sio.lineparts[1])
 
@@ -856,10 +874,12 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
                 { CONVERSION: long } )
         return
 
-# (E) \tnfsv4: bm0=0x!HEX!,bm1=0x!HEX!,acl=0x!HEX!{,sessions}{,pnfs={!NAME!|not configured}}
     def parse_nfsv4_line(self, sio):
-        """Parse a subrecord with NFS v4 info"""
+        """
+        Parse a subrecord with NFS v4 info
 
+# (E) \tnfsv4: bm0=0x!HEX!,bm1=0x!HEX!,acl=0x!HEX!{,sessions}{,pnfs={!NAME!|not configured}}
+        """
         __opts = PBR.breakout_option_list(sio.lineparts[1])
 
         self.field[PFC.F_NFSV4_BM0] = PBR.convert_by_rule(
@@ -1115,6 +1135,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
+        """
 # -- Sample records (NFS mounts add all the complex sub-records, no sample available yet)
 #
 # device udev mounted on /dev with fstype devtmpfs
@@ -1122,6 +1143,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 # device tmpfs mounted on /run with fstype tmpfs
 # device /dev/disk/by-uuid/a959862a-84b7-4373-b7d6-954ac9005249 mounted on / with fstype ext4
 # device none mounted on /sys/fs/fuse/connections with fstype fusectl
+        """
 
 #        print "dbg:: readline: '{line}'".format(line=sio.buff[:-1])
         self.__is_per_op = 0

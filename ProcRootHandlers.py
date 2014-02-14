@@ -79,9 +79,11 @@ class ProcRootEXECDOMAINS(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
+        """
 # -- Sample records (the real file has no column headers, they are added to clarify how the file is parsed)
 # PL-PH Name                    Module
 # 0-0	Linux           	[kernel]
+        """
 
         if sio.buff == "":
 
@@ -256,7 +258,9 @@ REGISTER_PARTIAL_FILE("mtrr", ProcRootMTRR)
 
 # ---
 class ProcRootMODULES(PBR.FixedWhitespaceDelimRecs):
-    """Pull records from /proc/modules"""
+    """
+    Pull records from /proc/modules
+
 # source: kernel/module.c
 #
 # ... in routine m_show():
@@ -298,6 +302,7 @@ class ProcRootMODULES(PBR.FixedWhitespaceDelimRecs):
 #        if (!printed_something)
 #                seq_printf(m, "-");
 #
+    """
 
     def extra_init(self, *opts):
         self.minfields = 6
@@ -402,12 +407,13 @@ class ProcRootBUDDYINFO(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
+        """
 # -- Sample records
 #
 # Node 0, zone      DMA      1      0      1      0      1      1      1      0      1      1      3 
 # Node 0, zone    DMA32  18435  13755   5520    786      7      1      0      1      0      0      0 
 # Node 0, zone   Normal  36118   8165   6999    374      0      0      0      0      0      0      1 
-
+        """
 
         if sio.buff == "":
             self.field[PFC.F_NODE] = 0
@@ -436,7 +442,10 @@ REGISTER_PARTIAL_FILE("buddyinfo", ProcRootBUDDYINFO)
 
 # ---
 class ProcRootSWAPS(PBR.FixedWhitespaceDelimRecs):
-    """Pull records from /proc/swaps"""
+    """
+    Pull records from /proc/swaps
+
+
 # source: mm/swapfile.c
 #
 #        if (si == SEQ_START_TOKEN) {
@@ -454,6 +463,7 @@ class ProcRootSWAPS(PBR.FixedWhitespaceDelimRecs):
 #                        si->inuse_pages << (PAGE_SHIFT - 10),
 #                        si->prio);
 #
+    """
 
     def extra_init(self, *opts):
         self.minfields = 5
@@ -666,6 +676,7 @@ class ProcRootDISKSTATS(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
+        """
 # -- Sample records
 #
 # 7       6 loop6 0 0 0 0 0 0 0 0 0 0 0
@@ -673,6 +684,7 @@ class ProcRootDISKSTATS(PBR.FixedWhitespaceDelimRecs):
 # 8       0 sda 15235018 10980568 3312891398 74957548 8362788 4577595 144647677 114936764 0 90848652 189870564
 # 8       1 sda1 398 1129 4568 1424 1 0 1 0 0 800 1424
 # 8       2 sda2 15185612 10961911 3312352646 74838696 7650568 4513340 143561212 103557888 0 79839900 178373748
+        """
 
         if sio.buff == "":
             self.field[PFC.F_MAJOR_DEV] = 0
@@ -1352,9 +1364,11 @@ class ProcRootVERSION(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
+        """
 # -- Sample records
 #
 # Linux version 3.2.0-24-generic (buildd@crested) (gcc version 4.6.3 (Ubuntu/Linaro 4.6.3-1ubuntu5) ) #39-Ubuntu SMP Mon May 21 16:52:17 UTC 2012
+        """
 
         if sio.buff == "":
             self.field[PFC.F_VERSION_STRING] = ""
@@ -1515,9 +1529,11 @@ class ProcRootCMDLINE(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
+        """
 # -- Sample records
 #
 # BOOT_IMAGE=/vmlinuz-3.2.0-24-generic root=UUID=a959862a-84b7-4373-b7d6-954ac9005249 ro quiet splash vt.handoff=7
+        """
 
         if sio.buff == "":
             self.field[PFC.F_CMDLINE] = ""
@@ -1615,6 +1631,7 @@ class ProcRootSLABINFO(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
+        """
 # -- Sample records
 #
 # slabinfo - version: 2.1
@@ -1622,6 +1639,7 @@ class ProcRootSLABINFO(PBR.FixedWhitespaceDelimRecs):
 # fat_inode_cache      216    216    672   24    4 : tunables    0    0    0 : slabdata      9      9      0
 # fat_cache            714    714     40  102    1 : tunables    0    0    0 : slabdata      7      7      0
 # nf_conntrack_expect      0      0    240   34    2 : tunables    0    0    0 : slabdata      0      0      0
+        """
 
         if sio.buff == "":
             self.field[PFC.F_SLAB_NAME] = ""
@@ -1748,6 +1766,7 @@ class ProcRootVMALLOCINFO(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
+        """
 # -- Sample records
 #
 # 0xffffc900100c0000-0xffffc900100e1000  135168 e1000_probe+0x21b/0xa0b [e1000e] phys=fbf00000 ioremap
@@ -1756,6 +1775,7 @@ class ProcRootVMALLOCINFO(PBR.FixedWhitespaceDelimRecs):
 # 0xffffc900100fb000-0xffffc90010100000   20480 swap_cgroup_swapon+0x60/0x170 pages=4 vmalloc N0=4
 # 0xffffc90010100000-0xffffc90011101000 16781312 efi_ioremap+0x1a/0x57 phys=ff000000 ioremap
 # 0xffffc90011101000-0xffffc90013102000 33558528 alloc_large_system_hash+0x14b/0x215 pages=8192 vmalloc vpages N0=8192
+        """
 
         __flags = ""
         __numa = ""
@@ -2145,6 +2165,7 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
+        """
 # -- Sample records #1
 # Personalities : [linear] [multipath] [raid0] [raid1] [raid10] [raid6] [raid5] [raid4] 
 # md1 : active raid10 sda2[0] sdd1[3] sdb2[1] sdc2[2]
@@ -2163,6 +2184,7 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
 #       bitmap: 12/12 pages [48KB], 65536KB chunk
 # 
 # unused devices: <none>
+        """
 
         self.field[PFC.F_REC_TYPE] = ""
         self.field[PFC.F_PERSONALITIES] = []
