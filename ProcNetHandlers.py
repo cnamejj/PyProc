@@ -17,6 +17,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+"""
+Handlers for file in the /proc/net directory (and subdirectories)
+"""
 
 import socket
 import binascii
@@ -503,7 +506,7 @@ REGISTER_PARTIAL_FILE("packet", ProcNetPACKET)
 
 
 # ---
-class ProcNetSOFTNET_STAT(PBR.FixedWhitespaceDelimRecs):
+class ProcNetSOFTNETSTAT(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/softnet_stat"""
 # source: net/core/dev.c
 #         seq_printf(seq, "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x\n",
@@ -574,8 +577,8 @@ class ProcNetSOFTNET_STAT(PBR.FixedWhitespaceDelimRecs):
         return(self.processed, self.dropped, self.time_squeeze, self.cpu_coll,
                 self.received_rps)
 #
-REGISTER_FILE("/proc/net/softnet_stat", ProcNetSOFTNET_STAT)
-REGISTER_PARTIAL_FILE("softnet_stat", ProcNetSOFTNET_STAT)
+REGISTER_FILE("/proc/net/softnet_stat", ProcNetSOFTNETSTAT)
+REGISTER_PARTIAL_FILE("softnet_stat", ProcNetSOFTNETSTAT)
 
 
 
@@ -633,7 +636,7 @@ REGISTER_PARTIAL_FILE("arp", ProcNetARP)
 
 
 # ---
-class ProcNetDEV_MCAST(PBR.FixedWhitespaceDelimRecs):
+class ProcNetDEVMCAST(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/dev_mcast"""
 # source: net/core/dev_addr_lists.ca
 #                seq_printf(seq, "%-4d %-15s %-5d %-5d ", dev->ifindex,
@@ -681,8 +684,8 @@ class ProcNetDEV_MCAST(PBR.FixedWhitespaceDelimRecs):
 
         return(self.device, self.ref_count, self.global_use)
 #
-REGISTER_FILE("/proc/net/dev_mcast", ProcNetDEV_MCAST)
-REGISTER_PARTIAL_FILE("dev_mcast", ProcNetDEV_MCAST)
+REGISTER_FILE("/proc/net/dev_mcast", ProcNetDEVMCAST)
+REGISTER_PARTIAL_FILE("dev_mcast", ProcNetDEVMCAST)
 
 
 
@@ -800,7 +803,7 @@ REGISTER_PARTIAL_FILE("dev", ProcNetDEV)
 
 
 # ---
-class ProcNetIF_INET6(PBR.FixedWhitespaceDelimRecs):
+class ProcNetIPINET6(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/if_inet6"""
 # source: net/ipv6/addrconf.c
 #        seq_printf(seq, "%pi6 %02x %02x %02x %02x %8s\n",
@@ -874,8 +877,8 @@ class ProcNetIF_INET6(PBR.FixedWhitespaceDelimRecs):
 
         return(self.ipv6, self.ipv6_hex, self.scope, self.device)
 #
-REGISTER_FILE("/proc/net/if_inet6", ProcNetIF_INET6)
-REGISTER_PARTIAL_FILE("if_inet6", ProcNetIF_INET6)
+REGISTER_FILE("/proc/net/if_inet6", ProcNetIPINET6)
+REGISTER_PARTIAL_FILE("if_inet6", ProcNetIPINET6)
 
 
 
@@ -950,7 +953,7 @@ REGISTER_PARTIAL_FILE("igmp6", ProcNetIGMP6)
 
 
 # ---
-class ProcNetIP_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
+class ProcNetIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/ip_conntrack"""
 #
 # source: net/ipv4/netfilter/nf_conntrack_l3proto_ipv4_compat.c
@@ -968,15 +971,15 @@ class ProcNetIP_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
         self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_TIMEOUT,
                 CONVERSION: long } )
 
-        self.__TUPLE_PREF = "src="
-        self.__UNREPLIED_PREF = "["
-        self.__PACKETS_PREF = "packets="
-        self.__BYTES_PREF = "bytes="
-        self.__ASSURED_PREF = "["
-        self.__MARK_PREF = "mark="
-        self.__SECCTX_PREF = "secctx="
-        self.__USE_PREF = "use="
-        self.__Val_Delim = "="
+        self.__tuple_pref = "src="
+        self.__unreplied_pref = "["
+        self.__packets_pref = "packets="
+        self.__bytes_pref = "bytes="
+        self.__assured_pref = "["
+        self.__mark_pref = "mark="
+        self.__secctx_pref = "secctx="
+        self.__use_pref = "use="
+        self.__val_delim = "="
 
         self.protocol = ""
         self.src_port = 0
@@ -1029,7 +1032,7 @@ class ProcNetIP_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
         else:
             __off = 3
             __word = sio.get_word(__off)
-            if not __word.startswith(self.__TUPLE_PREF):
+            if not __word.startswith(self.__tuple_pref):
                 self.field[PFC.F_STATE] = __word
                 __off += 1
 
@@ -1049,22 +1052,22 @@ class ProcNetIP_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
             __off += 1
 
             __word = sio.get_word(__off)
-            if __word.startswith(self.__UNREPLIED_PREF):
+            if __word.startswith(self.__unreplied_pref):
                 self.field[PFC.F_UNREPLIED] = __word
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__PACKETS_PREF):
+            if __word.startswith(self.__packets_pref):
                 self.field[PFC.F_OR_PACKETS] = PBR.convert_by_rule(__word,
-                        { CONVERSION: long, PREFIX_VAL: self.__PACKETS_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                        { CONVERSION: long, PREFIX_VAL: self.__packets_pref,
+                          AFTER_VAL: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__BYTES_PREF):
+            if __word.startswith(self.__bytes_pref):
                 self.field[PFC.F_OR_BYTES] = PBR.convert_by_rule(__word,
-                        { CONVERSION: long, PREFIX_VAL: self.__BYTES_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                        { CONVERSION: long, PREFIX_VAL: self.__bytes_pref,
+                          AFTER_VAL: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
@@ -1084,44 +1087,44 @@ class ProcNetIP_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
             __off += 1
 
             __word = sio.get_word(__off)
-            if __word.startswith(self.__PACKETS_PREF):
+            if __word.startswith(self.__packets_pref):
                 self.field[PFC.F_RE_PACKETS] = PBR.convert_by_rule(__word,
-                        { CONVERSION: long, PREFIX_VAL: self.__PACKETS_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                        { CONVERSION: long, PREFIX_VAL: self.__packets_pref,
+                          AFTER_VAL: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__BYTES_PREF):
+            if __word.startswith(self.__bytes_pref):
                 self.field[PFC.F_RE_BYTES] = PBR.convert_by_rule(__word,
-                        { CONVERSION: long, PREFIX_VAL: self.__BYTES_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                        { CONVERSION: long, PREFIX_VAL: self.__bytes_pref,
+                          AFTER_VAL: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__ASSURED_PREF):
+            if __word.startswith(self.__assured_pref):
                 self.field[PFC.F_ASSURED] = __word
                         
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__MARK_PREF):
+            if __word.startswith(self.__mark_pref):
                 self.field[PFC.F_MARK] = PBR.convert_by_rule(__word,
-                        { CONVERSION: long, PREFIX_VAL: self.__MARK_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                        { CONVERSION: long, PREFIX_VAL: self.__mark_pref,
+                          AFTER_VAL: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__SECCTX_PREF):
+            if __word.startswith(self.__secctx_pref):
                 self.field[PFC.F_SECCTX] = PBR.convert_by_rule(__word,
-                        { CONVERSION: long, PREFIX_VAL: self.__SECCTX_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                        { CONVERSION: long, PREFIX_VAL: self.__secctx_pref,
+                          AFTER_VAL: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__USE_PREF):
+            if __word.startswith(self.__use_pref):
                 self.field[PFC.F_USE] = PBR.convert_by_rule(__word,
-                        { CONVERSION: long, PREFIX_VAL: self.__USE_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                        { CONVERSION: long, PREFIX_VAL: self.__use_pref,
+                          AFTER_VAL: self.__val_delim } )
            
         self.protocol = self.field[PFC.F_PROTOCOL]
         self.timeout = self.field[PFC.F_TIMEOUT]
@@ -1134,13 +1137,13 @@ class ProcNetIP_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
         return(self.protocol, self.timeout, self.state, self.src_ip,
                 self.src_port, self.dst_ip, self.dst_port)
 #
-REGISTER_FILE("/proc/net/ip_conntrack", ProcNetIP_CONNTRACK)
-REGISTER_PARTIAL_FILE("net/ip_conntrack", ProcNetIP_CONNTRACK)
+REGISTER_FILE("/proc/net/ip_conntrack", ProcNetIPCONNTRACK)
+REGISTER_PARTIAL_FILE("net/ip_conntrack", ProcNetIPCONNTRACK)
 
 
 
 # ---
-class ProcNetIPV6_ROUTE(PBR.FixedWhitespaceDelimRecs):
+class ProcNetIPV6ROUTE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/ipv6_route"""
 # source: net/ipv6/route.c
 #         seq_printf(m, "%pi6 %02x ", &rt->rt6i_dst.addr, rt->rt6i_dst.plen);
@@ -1247,13 +1250,13 @@ class ProcNetIPV6_ROUTE(PBR.FixedWhitespaceDelimRecs):
         return(self.dest_ip, self.dest_pref_len, self.src_ip,
                 self.src_pref_len, self.dest_refcount, self.device)
 #
-REGISTER_FILE("/proc/net/ipv6_route", ProcNetIPV6_ROUTE)
-REGISTER_PARTIAL_FILE("ipv6_route", ProcNetIPV6_ROUTE)
+REGISTER_FILE("/proc/net/ipv6_route", ProcNetIPV6ROUTE)
+REGISTER_PARTIAL_FILE("ipv6_route", ProcNetIPV6ROUTE)
 
 
 
 # ---
-class ProcNetNF_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
+class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/nf_conntrack"""
 #
 # source: net/netfilter/nf_conntrack_standalone.c
@@ -1275,18 +1278,18 @@ class ProcNetNF_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
         self.add_parse_rule( { FIELD_NUMBER: 4,
                 FIELD_NAME: PFC.F_TIMEOUT, CONVERSION: long } )
 
-        self.__TUPLE_PREF = "src="
-        self.__UNREPLIED_PREF = "["
-        self.__PACKETS_PREF = "packets="
-        self.__BYTES_PREF = "bytes="
-        self.__ASSURED_PREF = "["
-        self.__MARK_PREF = "mark="
-        self.__SECCTX_PREF = "secctx="
-        self.__ZONE_PREF = "zone="
-        self.__DELTA_TIME_PREF = "delta-time="
-        self.__USE_PREF = "use="
+        self.__tuple_pref = "src="
+        self.__unreplied_pref = "["
+        self.__packets_pref = "packets="
+        self.__bytes_pref = "bytes="
+        self.__assured_pref = "["
+        self.__mark_pref = "mark="
+        self.__secctx_pref = "secctx="
+        self.__zone_pref = "zone="
+        self.__delta_time_pref = "delta-time="
+        self.__use_pref = "use="
 
-        self.__Val_Delim = "="
+        self.__val_delim = "="
 
         self.protocol = ""
         self.src_port = 0
@@ -1342,7 +1345,7 @@ class ProcNetNF_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
         else:
             __off = 5
             __word = sio.get_word(__off)
-            if not __word.startswith(self.__TUPLE_PREF):
+            if not __word.startswith(self.__tuple_pref):
                 self.field[PFC.F_STATE] = __word
                 __off += 1
 
@@ -1362,22 +1365,22 @@ class ProcNetNF_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
             __off += 1
 
             __word = sio.get_word(__off)
-            if __word.startswith(self.__UNREPLIED_PREF):
+            if __word.startswith(self.__unreplied_pref):
                 self.field[PFC.F_UNREPLIED] = __word
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__PACKETS_PREF):
+            if __word.startswith(self.__packets_pref):
                 self.field[PFC.F_OR_PACKETS] = PBR.convert_by_rule(__word,
-                        { CONVERSION: long, PREFIX_VAL: self.__PACKETS_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                        { CONVERSION: long, PREFIX_VAL: self.__packets_pref,
+                          AFTER_VAL: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__BYTES_PREF):
+            if __word.startswith(self.__bytes_pref):
                 self.field[PFC.F_OR_BYTES] = PBR.convert_by_rule(__word,
-                        { CONVERSION: long, PREFIX_VAL: self.__BYTES_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                        { CONVERSION: long, PREFIX_VAL: self.__bytes_pref,
+                          AFTER_VAL: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
@@ -1397,58 +1400,58 @@ class ProcNetNF_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
             __off += 1
 
             __word = sio.get_word(__off)
-            if __word.startswith(self.__PACKETS_PREF):
+            if __word.startswith(self.__packets_pref):
                 self.field[PFC.F_RE_PACKETS] = PBR.convert_by_rule(__word,
-                        { CONVERSION: long, PREFIX_VAL: self.__PACKETS_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                        { CONVERSION: long, PREFIX_VAL: self.__packets_pref,
+                          AFTER_VAL: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__BYTES_PREF):
+            if __word.startswith(self.__bytes_pref):
                 self.field[PFC.F_RE_BYTES] = PBR.convert_by_rule(__word,
-                        { CONVERSION: long, PREFIX_VAL: self.__BYTES_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                        { CONVERSION: long, PREFIX_VAL: self.__bytes_pref,
+                          AFTER_VAL: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__ASSURED_PREF):
+            if __word.startswith(self.__assured_pref):
                 self.field[PFC.F_ASSURED] = __word
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__MARK_PREF):
+            if __word.startswith(self.__mark_pref):
                 self.field[PFC.F_MARK] = PBR.convert_by_rule(__word,
-                        { CONVERSION: long, PREFIX_VAL: self.__MARK_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                        { CONVERSION: long, PREFIX_VAL: self.__mark_pref,
+                          AFTER_VAL: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__SECCTX_PREF):
+            if __word.startswith(self.__secctx_pref):
                 self.field[PFC.F_SECCTX] = PBR.convert_by_rule(__word,
-                        { CONVERSION: long, PREFIX_VAL: self.__SECCTX_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                        { CONVERSION: long, PREFIX_VAL: self.__secctx_pref,
+                          AFTER_VAL: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__ZONE_PREF):
+            if __word.startswith(self.__zone_pref):
                 self.field[PFC.F_ZONE] = PBR.convert_by_rule(__word,
-                        { CONVERSION: long, PREFIX_VAL: self.__ZONE_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                        { CONVERSION: long, PREFIX_VAL: self.__zone_pref,
+                          AFTER_VAL: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__DELTA_TIME_PREF):
+            if __word.startswith(self.__delta_time_pref):
                 self.field[PFC.F_DELTA_TIME] = PBR.convert_by_rule(__word,
                         { CONVERSION: long,
-                          PREFIX_VAL: self.__DELTA_TIME_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                          PREFIX_VAL: self.__delta_time_pref,
+                          AFTER_VAL: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
-            if __word.startswith(self.__USE_PREF):
+            if __word.startswith(self.__use_pref):
                 self.field[PFC.F_USE] = PBR.convert_by_rule(__word,
-                        { CONVERSION: long, PREFIX_VAL: self.__USE_PREF,
-                          AFTER_VAL: self.__Val_Delim } )
+                        { CONVERSION: long, PREFIX_VAL: self.__use_pref,
+                          AFTER_VAL: self.__val_delim } )
            
         self.l3_protocol = self.field[PFC.F_L3_PROTOCOL]
         self.protocol = self.field[PFC.F_PROTOCOL]
@@ -1462,8 +1465,8 @@ class ProcNetNF_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
         return(self.l3_protocol, self.protocol, self.timeout, self.state,
                 self.src_ip, self.src_port, self.dst_ip, self.dst_port)
 #
-REGISTER_FILE("/proc/net/nf_conntrack", ProcNetNF_CONNTRACK)
-REGISTER_PARTIAL_FILE("net/nf_conntrack", ProcNetNF_CONNTRACK)
+REGISTER_FILE("/proc/net/nf_conntrack", ProcNetNFCONNTRACK)
+REGISTER_PARTIAL_FILE("net/nf_conntrack", ProcNetNFCONNTRACK)
 
 
 
@@ -1590,7 +1593,7 @@ REGISTER_PARTIAL_FILE("ptype", ProcNetPTYPE)
 
 
 # ---
-class ProcNetRT6_STATS(PBR.FixedWhitespaceDelimRecs):
+class ProcNetRT6STATS(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/rt6_stats"""
 # source: net/ipv6/route.c
 #    seq_printf(seq, "%04x %04x %04x %04x %04x %04x %04x\n",
@@ -1656,13 +1659,13 @@ class ProcNetRT6_STATS(PBR.FixedWhitespaceDelimRecs):
         return(self.nodes, self.route_nodes, self.route_entries,
                 self.route_cache, self.discarded)
 #
-REGISTER_FILE("/proc/net/rt6_stats", ProcNetRT6_STATS)
-REGISTER_PARTIAL_FILE("rt6_stats", ProcNetRT6_STATS)
+REGISTER_FILE("/proc/net/rt6_stats", ProcNetRT6STATS)
+REGISTER_PARTIAL_FILE("rt6_stats", ProcNetRT6STATS)
 
 
 
 # ---
-class ProcNetRT_CACHE(PBR.FixedWhitespaceDelimRecs):
+class ProcNetRTCACHE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/rt_cache"""
 # source: net/ipv4/route.c
 #                seq_printf(seq, "%s\t%08X\t%08X\t%8X\t%d\t%u\t%d\t"
@@ -1782,13 +1785,13 @@ class ProcNetRT_CACHE(PBR.FixedWhitespaceDelimRecs):
         return(self.interface, self.destination, self.gateway, self.usecount,
                 self.source, self.spec_dst)
 #
-REGISTER_FILE("/proc/net/rt_cache", ProcNetRT_CACHE)
-REGISTER_PARTIAL_FILE("net/rt_cache", ProcNetRT_CACHE)
+REGISTER_FILE("/proc/net/rt_cache", ProcNetRTCACHE)
+REGISTER_PARTIAL_FILE("net/rt_cache", ProcNetRTCACHE)
 
 
 
 # ---
-class ProcNetStatARP_CACHE(PBR.FixedWhitespaceDelimRecs):
+class ProcNetStatARPCACHE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/stat/arp_cache"""
 # source: net/core/neighbour.c
 #        seq_printf(seq, "%08x  %08lx %08lx %08lx  %08lx %08lx  %08lx  "
@@ -1873,13 +1876,13 @@ class ProcNetStatARP_CACHE(PBR.FixedWhitespaceDelimRecs):
 
         return(self.entries, self.lookups, self.hits)
 #
-REGISTER_FILE("/proc/net/stat/arp_cache", ProcNetStatARP_CACHE)
-REGISTER_PARTIAL_FILE("arp_cache", ProcNetStatARP_CACHE)
+REGISTER_FILE("/proc/net/stat/arp_cache", ProcNetStatARPCACHE)
+REGISTER_PARTIAL_FILE("arp_cache", ProcNetStatARPCACHE)
 
 
 
 # ---
-class ProcNetStatIP_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
+class ProcNetStatIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/stat/ip_conntrack"""
 # source: net/ipv4/netfilter/nf_conntrack_l3proto_ipv4_compat.c
 #       seq_printf(seq, "%08x  %08x %08x %08x %08x %08x %08x %08x "
@@ -1995,13 +1998,13 @@ class ProcNetStatIP_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
         return(self.entries, self.searched, self.found, self.new,
                 self.invalid, self.ignore, self.delete, self.insert, self.drop)
 #
-REGISTER_FILE("/proc/net/stat/ip_conntrack", ProcNetStatIP_CONNTRACK)
-REGISTER_PARTIAL_FILE("stat/ip_conntrack", ProcNetStatIP_CONNTRACK)
+REGISTER_FILE("/proc/net/stat/ip_conntrack", ProcNetStatIPCONNTRACK)
+REGISTER_PARTIAL_FILE("stat/ip_conntrack", ProcNetStatIPCONNTRACK)
 
 
 
 # ---
-class ProcNetStatNDISC_CACHE(PBR.FixedWhitespaceDelimRecs):
+class ProcNetStatNDISCCACHE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/stat/ndisc_cache"""
 # source: net/core/neighbour.c
 #        seq_printf(seq, "%08x  %08lx %08lx %08lx  %08lx %08lx  %08lx  "
@@ -2086,13 +2089,13 @@ class ProcNetStatNDISC_CACHE(PBR.FixedWhitespaceDelimRecs):
 
         return(self.entries, self.lookups, self.hits)
 #
-REGISTER_FILE("/proc/net/stat/ndisc_cache", ProcNetStatNDISC_CACHE)
-REGISTER_PARTIAL_FILE("ndisc_cache", ProcNetStatNDISC_CACHE)
+REGISTER_FILE("/proc/net/stat/ndisc_cache", ProcNetStatNDISCCACHE)
+REGISTER_PARTIAL_FILE("ndisc_cache", ProcNetStatNDISCCACHE)
 
 
 
 # ---
-class ProcNetStatNF_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
+class ProcNetStatNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/stat/nf_conntrack"""
 # source: net/netfilter/nf_conntrack_standalone.c
 #        seq_printf(seq, "%08x  %08x %08x %08x %08x %08x %08x %08x "
@@ -2208,13 +2211,13 @@ class ProcNetStatNF_CONNTRACK(PBR.FixedWhitespaceDelimRecs):
         return(self.entries, self.searched, self.found, self.new,
                 self.invalid, self.ignore, self.delete, self.insert, self.drop)
 #
-REGISTER_FILE("/proc/net/stat/nf_conntrack", ProcNetStatNF_CONNTRACK)
-REGISTER_PARTIAL_FILE("stat/nf_conntrack", ProcNetStatNF_CONNTRACK)
+REGISTER_FILE("/proc/net/stat/nf_conntrack", ProcNetStatNFCONNTRACK)
+REGISTER_PARTIAL_FILE("stat/nf_conntrack", ProcNetStatNFCONNTRACK)
 
 
 
 # ---
-class ProcNetStatRT_CACHE(PBR.FixedWhitespaceDelimRecs):
+class ProcNetStatRTCACHE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/stat/rt_cache"""
 # source: net/ipv4/route.c
 #        seq_printf(seq,"%08x  %08x %08x %08x %08x %08x %08x %08x "
@@ -2330,8 +2333,8 @@ class ProcNetStatRT_CACHE(PBR.FixedWhitespaceDelimRecs):
         return(self.entries, self.in_hit, self.in_slow, self.out_hit,
                 self.out_slow)
 #
-REGISTER_FILE("/proc/net/stat/rt_cache", ProcNetStatRT_CACHE)
-REGISTER_PARTIAL_FILE("stat/rt_cache", ProcNetStatRT_CACHE)
+REGISTER_FILE("/proc/net/stat/rt_cache", ProcNetStatRTCACHE)
+REGISTER_PARTIAL_FILE("stat/rt_cache", ProcNetStatRTCACHE)
 
 
 
@@ -3023,7 +3026,7 @@ REGISTER_PARTIAL_FILE("snmp6", ProcNetSNMP6)
 
 
 # ---
-class ProcNetDEV_SNMP6(PBR.SingleNameValueList):
+class ProcNetDEVSNMP6(PBR.SingleNameValueList):
     """
     Pull records from a device specific file in the /proc/net/dev_snmp6/ directory
 
@@ -3059,8 +3062,8 @@ class ProcNetDEV_SNMP6(PBR.SingleNameValueList):
 # Ip6InDelivers                   	44
 #
 #
-REGISTER_FILE("/proc/net/dev_snmp6", ProcNetDEV_SNMP6)
-REGISTER_PARTIAL_FILE("dev_snmp6", ProcNetDEV_SNMP6)
+REGISTER_FILE("/proc/net/dev_snmp6", ProcNetDEVSNMP6)
+REGISTER_PARTIAL_FILE("dev_snmp6", ProcNetDEVSNMP6)
 
 
 
@@ -3088,7 +3091,7 @@ class ProcNetIGMP(PBR.FixedWhitespaceDelimRecs):
         self.__min_words_second = 4
         self.minfields = self.__min_words_first
         self.skipped = "Idx"
-        self.__FieldSplitDelim = ":"
+#        self.__split_delim = ":"
 
         self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INDEX,
                 CONVERSION: long } )
@@ -3320,7 +3323,7 @@ REGISTER_PARTIAL_FILE("sockstat6", ProcNetSOCKSTAT6)
 
 
 # ---
-class ProcNetIP6_TABLES_MATCHES(PBR.ListOfTerms):
+class ProcNetIP6TABLESMATCHES(PBR.ListOfTerms):
     """Pull records from /proc/net/ip6_tables_matches"""
 # source: net/netfilter/x_tables.c
 
@@ -3332,13 +3335,13 @@ class ProcNetIP6_TABLES_MATCHES(PBR.ListOfTerms):
 # hl
 #
 #
-REGISTER_FILE("/proc/net/ip6_tables_matches", ProcNetIP6_TABLES_MATCHES)
-REGISTER_PARTIAL_FILE("ip6_tables_matches", ProcNetIP6_TABLES_MATCHES)
+REGISTER_FILE("/proc/net/ip6_tables_matches", ProcNetIP6TABLESMATCHES)
+REGISTER_PARTIAL_FILE("ip6_tables_matches", ProcNetIP6TABLESMATCHES)
 
 
 
 # ---
-class ProcNetIP6_TABLES_NAMES(PBR.ListOfTerms):
+class ProcNetIP6TABLESNAMES(PBR.ListOfTerms):
     """Pull records from /proc/net/ip6_tables_names"""
 # source: net/netfilter/x_tables.c
 
@@ -3347,13 +3350,13 @@ class ProcNetIP6_TABLES_NAMES(PBR.ListOfTerms):
 # filter
 #
 #
-REGISTER_FILE("/proc/net/ip6_tables_names", ProcNetIP6_TABLES_NAMES)
-REGISTER_PARTIAL_FILE("ip6_tables_names", ProcNetIP6_TABLES_NAMES)
+REGISTER_FILE("/proc/net/ip6_tables_names", ProcNetIP6TABLESNAMES)
+REGISTER_PARTIAL_FILE("ip6_tables_names", ProcNetIP6TABLESNAMES)
 
 
 
 # ---
-class ProcNetIP6_TABLES_TARGETS(PBR.ListOfTerms):
+class ProcNetIP6TABLESTARGETS(PBR.ListOfTerms):
     """Pull records from /proc/net/ip6_tables_targets"""
 # source: net/netfilter/x_tables.c
 
@@ -3363,13 +3366,13 @@ class ProcNetIP6_TABLES_TARGETS(PBR.ListOfTerms):
 # ERROR
 #
 #
-REGISTER_FILE("/proc/net/ip6_tables_targets", ProcNetIP6_TABLES_TARGETS)
-REGISTER_PARTIAL_FILE("ip6_tables_targets", ProcNetIP6_TABLES_TARGETS)
+REGISTER_FILE("/proc/net/ip6_tables_targets", ProcNetIP6TABLESTARGETS)
+REGISTER_PARTIAL_FILE("ip6_tables_targets", ProcNetIP6TABLESTARGETS)
 
 
 
 # ---
-class ProcNetIP_TABLES_MATCHES(PBR.ListOfTerms):
+class ProcNetIPTABLESMATCHES(PBR.ListOfTerms):
     """Pull records from /proc/net/ip_tables_matches"""
 # source: net/netfilter/x_tables.c
 
@@ -3381,13 +3384,13 @@ class ProcNetIP_TABLES_MATCHES(PBR.ListOfTerms):
 # ttl
 #
 #
-REGISTER_FILE("/proc/net/ip_tables_matches", ProcNetIP_TABLES_MATCHES)
-REGISTER_PARTIAL_FILE("ip_tables_matches", ProcNetIP_TABLES_MATCHES)
+REGISTER_FILE("/proc/net/ip_tables_matches", ProcNetIPTABLESMATCHES)
+REGISTER_PARTIAL_FILE("ip_tables_matches", ProcNetIPTABLESMATCHES)
 
 
 
 # ---
-class ProcNetIP_TABLES_NAMES(PBR.ListOfTerms):
+class ProcNetIPTABLESNAMES(PBR.ListOfTerms):
     """Pull records from /proc/net/ip_tables_names"""
 # source: net/netfilter/x_tables.c
 
@@ -3396,13 +3399,13 @@ class ProcNetIP_TABLES_NAMES(PBR.ListOfTerms):
 # filter
 #
 #
-REGISTER_FILE("/proc/net/ip_tables_names", ProcNetIP_TABLES_NAMES)
-REGISTER_PARTIAL_FILE("ip_tables_names", ProcNetIP_TABLES_NAMES)
+REGISTER_FILE("/proc/net/ip_tables_names", ProcNetIPTABLESNAMES)
+REGISTER_PARTIAL_FILE("ip_tables_names", ProcNetIPTABLESNAMES)
 
 
 
 # ---
-class ProcNetIP_TABLES_TARGETS(PBR.ListOfTerms):
+class ProcNetIPTABLESTARGETS(PBR.ListOfTerms):
     """Pull records from /proc/net/ip_tables_targets"""
 # source: net/netfilter/x_tables.c
 
@@ -3413,13 +3416,13 @@ class ProcNetIP_TABLES_TARGETS(PBR.ListOfTerms):
 # ERROR
 #
 #
-REGISTER_FILE("/proc/net/ip_tables_targets", ProcNetIP_TABLES_TARGETS)
-REGISTER_PARTIAL_FILE("ip_tables_targets", ProcNetIP_TABLES_TARGETS)
+REGISTER_FILE("/proc/net/ip_tables_targets", ProcNetIPTABLESTARGETS)
+REGISTER_PARTIAL_FILE("ip_tables_targets", ProcNetIPTABLESTARGETS)
 
 
 
 # ---
-class ProcNetNetfilterNF_LOG(PBR.FixedWhitespaceDelimRecs):
+class ProcNetNetfilterNFLOG(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/netfilter/nf_log"""
 # source: net/netfilter/nf_log.c
 #  if (!logger)
@@ -3476,13 +3479,13 @@ class ProcNetNetfilterNF_LOG(PBR.FixedWhitespaceDelimRecs):
 
         return(self.index, self.name, self.log_list)
 #
-REGISTER_FILE("/proc/net/netfilter/nf_log", ProcNetNetfilterNF_LOG)
-REGISTER_PARTIAL_FILE("nf_log", ProcNetNetfilterNF_LOG)
+REGISTER_FILE("/proc/net/netfilter/nf_log", ProcNetNetfilterNFLOG)
+REGISTER_PARTIAL_FILE("nf_log", ProcNetNetfilterNFLOG)
 
 
 
 # ---
-class ProcNetNetfilterNF_QUEUE(PBR.FixedWhitespaceDelimRecs):
+class ProcNetNetfilterNFQUEUE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/netfilter/nf_queue"""
 # source: net/netfilter/nf_queue.c
 #  if (!qh)
@@ -3518,8 +3521,8 @@ class ProcNetNetfilterNF_QUEUE(PBR.FixedWhitespaceDelimRecs):
 
         return(self.index, self.name)
 #
-REGISTER_FILE("/proc/net/netfilter/nf_queue", ProcNetNetfilterNF_QUEUE)
-REGISTER_PARTIAL_FILE("nf_queue", ProcNetNetfilterNF_QUEUE)
+REGISTER_FILE("/proc/net/netfilter/nf_queue", ProcNetNetfilterNFQUEUE)
+REGISTER_PARTIAL_FILE("nf_queue", ProcNetNetfilterNFQUEUE)
 
 
 
