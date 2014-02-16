@@ -3,41 +3,41 @@ arp DONE ProcNetARP
 bnep NEED aqui-only
 connector DONE ProcNetCONNECTOR
 dev DONE ProcNetDEV
-dev_mcast DONE ProcNetDEV_MCAST
+dev_mcast DONE ProcNetDEVMCAST
 dev_snmp6 DONE DIR
-dev_snmp6/eth0 DONE ProcNetDEV_SNMP6
-dev_snmp6/lo DONE ProcNetDEV_SNMP6
+dev_snmp6/eth0 DONE ProcNetDEVSNMP6
+dev_snmp6/lo DONE ProcNetDEVSNMP6
 fib_trie NONRECORD
 fib_triestat NONRECORD
 hci NEED aqui-only
 icmp EMPTY
 icmp6 EMPTY aqui-only
-if_inet6 DONE ProcNetIF_INET6
+if_inet6 DONE ProcNetIFINET6
 igmp DONE ProcNetIGMP
 igmp6 DONE ProcNetIGMP6
 ip6_flowlabel EMPTY
 ip6_mr_cache EMPTY
 ip6_mr_vif EMPTY
-ip6_tables_matches DONE ProcNetIP6_TABLES_MATCHES ROOTONLY
-ip6_tables_names DONE ProcNetIP6_TABLES_NAMES ROOTONLY
-ip6_tables_targets DONE ProcNetIP6_TARGETS ROOTONLY
-ip_conntrack DONE ProcNetIP_CONNTRACK ROOTONLY
+ip6_tables_matches DONE ProcNetIP6TABLESMATCHES ROOTONLY
+ip6_tables_names DONE ProcNetIP6TABLESNAMES ROOTONLY
+ip6_tables_targets DONE ProcNetIP6TARGETS ROOTONLY
+ip_conntrack DONE ProcNetIPCONNTRACK ROOTONLY
 ip_conntrack_expect EMPTY NOHEADER ROOTONLY
 ip_mr_cache EMPTY
 ip_mr_vif EMPTY
-ip_tables_matches DONE ProcNetIP_TABLES_MATCHES ROOTONLY
-ip_tables_names DONE ProcNetIP_TABLES_NAMES ROOTONLY
-ip_tables_targets DONE ProcNetIP_TABLES_TARGETS ROOTONLY
-ipv6_route DONE ProcNetIPV6_ROUTE
+ip_tables_matches DONE ProcNetIPTABLESMATCHES ROOTONLY
+ip_tables_names DONE ProcNetIPTABLESNAMES ROOTONLY
+ip_tables_targets DONE ProcNetIPTABLESTARGETS ROOTONLY
+ipv6_route DONE ProcNetIPV6ROUTE
 l2cap NEED aqui-only
 mcfilter EMPTY
 mcfilter6 EMPTY
 netfilter DONE DIR
-netfilter/nf_log DONE ProcNetNetfilterNF_LOG
-netfilter/nf_queue DONE ProcNetNetfilterNF_QUEUE
+netfilter/nf_log DONE ProcNetNetfilterNFLOG
+netfilter/nf_queue DONE ProcNetNetfilterNFQUEUE
 netlink DONE ProcNetNETLINK
 netstat DONE ProcNetNETSTAT
-nf_conntrack DONE ProcNetNF_CONNTRACK ROOTONLY
+nf_conntrack DONE ProcNetNFCONNTRACK ROOTONLY
 nf_conntrack_expect EMPTY NOHEADER ROOTONLY
 packet DONE ProcNetPACKET
 protocols DONE ProcNetPROTOCOLS
@@ -46,21 +46,21 @@ ptype DONE ProcNetPTYPE
 raw EMPTY
 raw6 EMPTY
 route DONE ProcNetROUTE
-rt6_stats DONE ProcNetRT6_STATS
+rt6_stats DONE ProcNetRT6STATS
 rt_acct EMPTY NOHEADER
-rt_cache DONE ProcNetRT_CACHE
+rt_cache DONE ProcNetRTCACHE
 sco NEED aqui-only
 snmp DONE ProcNetSNMP
 snmp6 DONE ProcNetSNMP6
 sockstat DONE ProcNetSOCKSTAT
 sockstat6 DONE ProcNetSOCKSTAT6
-softnet_stat DONE ProcNetSOFTNET_STAT
+softnet_stat DONE ProcNetSOFTNETSTAT
 stat DONE DIR
-stat/arp_cache DONE ProcNetStatARP_CACHE
-stat/ip_conntrack DONE ProcNetStatIP_CONNTRACK
-stat/ndisc_cache DONE ProcNetStatNDISC_CACHE
-stat/nf_conntrack DONE ProcNetStatNF_CONNTRACK
-stat/rt_cache DONE ProcNetStatRT_CACHE
+stat/arp_cache DONE ProcNetStatARPCACHE
+stat/ip_conntrack DONE ProcNetStatIPCONNTRACK
+stat/ndisc_cache DONE ProcNetStatNDISCCACHE
+stat/nf_conntrack DONE ProcNetStatNFCONNTRACK
+stat/rt_cache DONE ProcNetStatRTCACHE
 tcp DONE ProcNetTCP
 tcp6 DONE ProcNetTCP6
 tr_rif EMPTY

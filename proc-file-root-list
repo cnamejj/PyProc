@@ -22,8 +22,8 @@ sysrq-trigger SKIP NOTDATA ROOTONLY
 partitions DONE WSD ProcRootPARTITIONS
 diskstats DONE WSD ProcRootDISKSTATS NOHEADER
 crypto NEED NESTED
-key-users DONE WSD ProcRootKEY_USERS one-line NOHEADER
-version_signature DONE WSD ProcRootVERSION_SIGNATURE one-line NOHEADER
+key-users DONE WSD ProcRootKEYUSERS one-line NOHEADER
+version_signature DONE WSD ProcRootVERSIONSIGNATURE one-line NOHEADER
 kpageflags SKIP BINARY ROOTONLY
 kpagecount SKIP BINARY ROOTONLY
 kmsg SKIP NOTDATA ROOTONLY
