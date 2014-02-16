@@ -539,3 +539,97 @@ Excerpts from that code:
 #                         xprt->stat.req_u,
 #                         xprt->stat.bklog_u);
 # }
+
+
+
+--- File: /proc/self/smaps
+
+source: fs/proc/task_mmu.c
+
+Excerpts from that code:
+
+# static int show_smap(struct seq_file *m, void *v)
+# {
+# ...text deleted...
+# 
+#         show_map_vma(m, vma);
+# 
+#         seq_printf(m,
+#                    "Size:           %8lu kB\n"
+#                    "Rss:            %8lu kB\n"
+#                    "Pss:            %8lu kB\n"
+#                    "Shared_Clean:   %8lu kB\n"
+#                    "Shared_Dirty:   %8lu kB\n"
+#                    "Private_Clean:  %8lu kB\n"
+#                    "Private_Dirty:  %8lu kB\n"
+#                    "Referenced:     %8lu kB\n"
+#                    "Anonymous:      %8lu kB\n"
+#                    "AnonHugePages:  %8lu kB\n"
+#                    "Swap:           %8lu kB\n"
+#                    "KernelPageSize: %8lu kB\n"
+#                    "MMUPageSize:    %8lu kB\n"
+#                    "Locked:         %8lu kB\n",
+#                    (vma->vm_end - vma->vm_start) >> 10,
+#                    mss.resident >> 10,
+#                    (unsigned long)(mss.pss >> (10 + PSS_SHIFT)),
+#                    mss.shared_clean  >> 10,
+#                    mss.shared_dirty  >> 10,
+#                    mss.private_clean >> 10,
+#                    mss.private_dirty >> 10,
+#                    mss.referenced >> 10,
+#                    mss.anonymous >> 10,
+#                    mss.anonymous_thp >> 10,
+#                    mss.swap >> 10,
+#                    vma_kernel_pagesize(vma) >> 10,
+#                    vma_mmu_pagesize(vma) >> 10,
+#                    (vma->vm_flags & VM_LOCKED) ?
+#                         (unsigned long)(mss.pss >> (10 + PSS_SHIFT)) : 0);
+# 
+# ...text deleted...
+# }
+# 
+# 
+# static void show_map_vma(struct seq_file *m, struct vm_area_struct *vma)
+# {
+# 
+# ...text deleted...
+# 
+#         seq_printf(m, "%08lx-%08lx %c%c%c%c %08llx %02x:%02x %lu %n",
+#                         start,
+#                         end,
+#                         flags & VM_READ ? 'r' : '-',
+#                         flags & VM_WRITE ? 'w' : '-',
+#                         flags & VM_EXEC ? 'x' : '-',
+#                         flags & VM_MAYSHARE ? 's' : 'p',
+#                         pgoff,
+#                         MAJOR(dev), MINOR(dev), ino, &len);
+# 
+#         /*
+#          * Print the dentry name for named mappings, and a
+#          * special [heap] marker for the heap:
+#          */
+#         if (file) {
+#                 pad_len_spaces(m, len);
+#                 seq_path(m, &file->f_path, "\n");
+#         } else {
+#                 const char *name = arch_vma_name(vma);
+#                 if (!name) {
+#                         if (mm) {
+#                                 if (vma->vm_start <= mm->brk &&
+#                                                 vma->vm_end >= mm->start_brk) {
+#                                         name = "[heap]";
+#                                 } else if (vma->vm_start <= mm->start_stack &&
+#                                            vma->vm_end >= mm->start_stack) {
+#                                         name = "[stack]";
+#                                 }
+#                         } else {
+#                                 name = "[vdso]";
+#                         }
+#                 }
+#                 if (name) {
+#                         pad_len_spaces(m, len);
+#                         seq_puts(m, name);
+#                 }
+#         }
+#         seq_putc(m, '\n');
+# }

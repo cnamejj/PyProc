@@ -499,7 +499,7 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
 # source: fs/namespace.c
 #
 # The kernel source snippets that generate this file are stored in
-# "README.ProcNetHandlers" to reduce the size of this module.
+# "README.ProcSelfHandlers" to reduce the size of this module.
 #
 # docs: 
 #
@@ -644,7 +644,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 # source: net/sunrpc/xprtsock.c
 #
 # The kernel source snippets that generate this file are stored in
-# "README.ProcNetHandlers" to reduce the size of this module.
+# "README.ProcSelfHandlers" to reduce the size of this module.
 #
 # (A) (1) mounted on !MOUNT! with fstype !FSTYPE! {statvers=!VERSION!}
 #     (1) device !DEVICE!|no device
@@ -1183,3 +1183,149 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 #
 REGISTER_FILE("/proc/self/mountstats", ProcSelfMOUNTSTATS)
 REGISTER_PARTIAL_FILE("mountstats", ProcSelfMOUNTSTATS)
+
+
+# ---
+class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
+    """Pull records from /proc/self/smaps"""
+# 
+# source: fs/proc/task_mmu.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcSelfHandlers" to reduce the size of this module.
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 3
+
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_START,
+                BEFORE_VAL: "-", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_END,
+                AFTER_VAL: "-", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_FLAGS } )
+        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_PAGE_OFFSET,
+                CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MAJOR_DEV,
+                BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MINOR_DEV,
+                AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
+        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_INODE,
+                CONVERSION: long } )
+        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_PATH } )
+
+        p2n = dict()
+        p2n["Size:"] = PFC.F_SIZE
+        p2n["Rss:"] = PFC.F_RSS
+        p2n["Pss:"] = PFC.F_PSS
+        p2n["Shared_Clean:"] = PFC.F_SH_CLEAN
+        p2n["Shared_Dirty:"] = PFC.F_SH_DIRTY
+        p2n["Private_Clean:"] = PFC.F_PR_CLEAN
+        p2n["Private_Dirty:"] = PFC.F_PR_DIRTY
+        p2n["Referenced:"] = PFC.F_REFERENCED
+        p2n["Anonymous:"] = PFC.F_ANONYMOUS
+        p2n["AnonHugePages:"] = PFC.F_ANON_HUGE_PAGES
+        p2n["Swap:"] = PFC.F_SWAP
+        p2n["KernelPageSize:"] = PFC.F_KERNEL_PGSZ
+        p2n["MMUPageSize:"] = PFC.F_MMU_PGSZ
+        p2n["Locked:"] = PFC.F_LOCKED
+        self.__pref2field = p2n
+
+        self.__eor_pref = "Locked:"
+
+        self.st_addr = 0
+        self.en_addr = 0
+        self.flags = ""
+        self.path = ""
+        self.size = 0
+        self.rss = 0
+        self.pss = 0
+        self.referenced = 0
+        self.swap = 0
+        return
+
+    def extra_next(self, sio):
+
+        """
+# -- Sample records
+#
+# 00400000-00420000 r-xp 00000000 09:01 149422156                          /bin/less
+# Size:                128 kB
+# Rss:                 104 kB
+# Pss:                  34 kB
+# Shared_Clean:        104 kB
+# Shared_Dirty:          0 kB
+# Private_Clean:         0 kB
+# Private_Dirty:         0 kB
+# Referenced:          104 kB
+# Anonymous:             0 kB
+# AnonHugePages:         0 kB
+# Swap:                  0 kB
+# KernelPageSize:        4 kB
+# MMUPageSize:           4 kB
+# Locked:                0 kB
+        """
+
+        if sio.buff == "":
+            self.field[PFC.F_START] = 0
+            self.field[PFC.F_END] = 0
+            self.field[PFC.F_FLAGS] = ""
+            self.field[PFC.F_FL_READ] = ""
+            self.field[PFC.F_FL_WRITE] = ""
+            self.field[PFC.F_FL_EXEC] = ""
+            self.field[PFC.F_FL_MAYSHARE] = ""
+            self.field[PFC.F_PAGE_OFFSET] = 0
+            self.field[PFC.F_MAJOR_DEV] = 0
+            self.field[PFC.F_MINOR_DEV] = 0
+            self.field[PFC.F_INODE] = 0
+            self.field[PFC.F_PATH] = ""
+            self.field[PFC.F_SIZE] = 0
+            self.field[PFC.F_RSS] = 0
+            self.field[PFC.F_PSS] = 0
+            self.field[PFC.F_SH_CLEAN] = 0
+            self.field[PFC.F_SH_DIRTY] = 0
+            self.field[PFC.F_PR_CLEAN] = 0
+            self.field[PFC.F_PR_DIRTY] = 0
+            self.field[PFC.F_REFERENCED] = 0
+            self.field[PFC.F_ANONYMOUS] = 0
+            self.field[PFC.F_ANON_HUGE_PAGES] = 0
+            self.field[PFC.F_SWAP] = 0
+            self.field[PFC.F_KERNEL_PGSZ] = 0
+            self.field[PFC.F_MMU_PGSZ] = 0
+            self.field[PFC.F_LOCKED] = 0
+
+        for __pref in self.__pref2field:
+            self.field[self.__pref2field[__pref]] = 0
+
+        __pref = ""
+
+        while __pref != self.__eor_pref and sio.buff != "":
+            sio.read_line()
+            __pref = sio.get_word(0)
+
+            try:
+                __field = self.__pref2field[__pref]
+                self.field[__field] = PBR.convert_by_rule(sio.get_word(1),
+                        { CONVERSION: long } )
+            except KeyError:
+                pass
+
+        self.field[PFC.F_FL_READ] = self.field[PFC.F_FLAGS][:1]
+        self.field[PFC.F_FL_WRITE] = self.field[PFC.F_FLAGS][1:2]
+        self.field[PFC.F_FL_EXEC] = self.field[PFC.F_FLAGS][2:3]
+        self.field[PFC.F_FL_MAYSHARE] = self.field[PFC.F_FLAGS][3:4]
+
+        self.st_addr = self.field[PFC.F_START]
+        self.en_addr = self.field[PFC.F_END]
+        self.flags = self.field[PFC.F_FLAGS]
+        self.path = self.field[PFC.F_PATH]
+        self.size = self.field[PFC.F_SIZE]
+        self.rss = self.field[PFC.F_RSS]
+        self.pss = self.field[PFC.F_PSS]
+        self.referenced = self.field[PFC.F_REFERENCED]
+        self.swap = self.field[PFC.F_SWAP]
+
+        return(self.st_addr, self.en_addr, self.flags, self.path, self.size,
+                self.rss, self.pss, self.referenced, self.swap)
+#
+REGISTER_FILE("/proc/self/smaps", ProcSelfSMAPS)
+REGISTER_PARTIAL_FILE("smaps", ProcSelfSMAPS)
