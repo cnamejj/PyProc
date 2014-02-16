@@ -13,6 +13,7 @@ import time
 import sys
 import CachedDNS
 import ProcessInfo
+import operator
 
 import ProcHandlers
 import ProcFieldConstants
@@ -38,8 +39,8 @@ DONE = 0
 
 HANDLE_TCP = GET_HANDLER("/proc/net/tcp")
 
-try:
-    while DONE != 1:
+while DONE != 1:
+    try:
 
         NEW_SESSIONS = set()
         SOCKLIST = HANDLE_TCP()
@@ -85,14 +86,18 @@ try:
             print "%s" % time.ctime(), len(NEW_SESSIONS)
 
 
-except KeyboardInterrupt:
-    print "Stopping..."
+    except KeyboardInterrupt:
+        print "Stopping..."
+        DONE = 1
 
-for ip in SEEN_FREQ:
 
-    ip2host = IPLOOKUP.get_cache_entry(ip) 
+ORDERED_FREQ = sorted(SEEN_FREQ.items(), key=operator.itemgetter(1))
 
-    print "{0:d} {1:s} host: {2:s}".format(SEEN_FREQ[ip], ip, ip2host)
+for ip, freq in ORDERED_FREQ:
+
+    ip2host = IPLOOKUP.get_cache_entry(ip)
+
+    print "{0:d} {1:s} host: {2:s}".format( freq, ip, ip2host)
 
 sys.stderr.flush()
 sys.stdout.flush()

@@ -11,6 +11,7 @@ times each was seen.
 
 import time
 import sys
+import operator
 
 import ProcHandlers
 import ProcessInfo
@@ -31,9 +32,9 @@ SEEN_FREQ = dict()
 
 DONE = 0
 
-try:
-    while DONE != 1:
+while DONE != 1:
 
+    try:
         NEW_SESSIONS = set()
         SOCKLIST = ProcHandlers.GET_HANDLER("tcp")()
 
@@ -75,15 +76,17 @@ try:
         if len(NEW_SESSIONS) > 0:
             print "%s" % time.ctime(), len(NEW_SESSIONS)
 
+    except KeyboardInterrupt:
+        print "Stopping..."
+        DONE = 1
 
-except KeyboardInterrupt:
-    print "Stopping..."
+ORDERED_FREQ = sorted(SEEN_FREQ.items(), key=operator.itemgetter(1))
 
-for ip in SEEN_FREQ:
+for ip, freq in ORDERED_FREQ:
 
-    ip2host = IPLOOKUP.get_cache_entry(ip) 
+    ip2host = IPLOOKUP.get_cache_entry(ip)
 
-    print "{0:d} {1:s} host: {2:s}".format(SEEN_FREQ[ip], ip, ip2host)
+    print "{0:d} {1:s} host: {2:s}".format( freq, ip, ip2host)
 
 sys.stderr.flush()
 sys.stdout.flush()
