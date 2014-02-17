@@ -595,15 +595,15 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
                 else:
                     __extras = "{accum} {next}".format(accum=__extras,
                             next=__curr)
-                __off = __off + 1
+                __off += 1
             self.field[PFC.F_EXTRA_OPTS] = __extras
 
             if sio.linewords > __off:
                 self.field[PFC.F_FS_TYPE] = sio.get_word(__off)
-                __off = __off + 1
+                __off += 1
             if sio.linewords > __off:
                 self.field[PFC.F_MOUNT_SRC] = sio.get_word(__off)
-                __off = __off + 1
+                __off += 1
             if sio.linewords > __off:
                 self.field[PFC.F_SUPER_OPTS] = sio.get_word(__off)
 

@@ -406,15 +406,18 @@ class ProcNetROUTE(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_NETMASK] = PDC.ANY_IP_ADDR
     
         else:
+            __lip = PBR.convert_by_rule(self.field[PFC.F_DEST_HEXIP],
+                    { CONVERSION: long, NUM_BASE: 16 } )
             self.field[PFC.F_DEST_IP] = socket.inet_ntop(socket.AF_INET,
-                    binascii.unhexlify('{0:08x}'.format(socket.htonl(
-                    long(self.field[PFC.F_DEST_HEXIP], 16)))))
+                    binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
+            __lip = PBR.convert_by_rule(self.field[PFC.F_GATE_HEXIP],
+                    { CONVERSION: long, NUM_BASE: 16 } )
             self.field[PFC.F_GATEWAY] = socket.inet_ntop(socket.AF_INET,
-                    binascii.unhexlify('{0:08x}'.format(socket.htonl(
-                    long(self.field[PFC.F_GATE_HEXIP], 16)))))
+                    binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
+            __lip = PBR.convert_by_rule(self.field[PFC.F_MASK_HEXIP],
+                    { CONVERSION: long, NUM_BASE: 16 } )
             self.field[PFC.F_NETMASK] = socket.inet_ntop(socket.AF_INET,
-                    binascii.unhexlify('{0:08x}'.format(socket.htonl(
-                    long(self.field[PFC.F_MASK_HEXIP], 16)))))
+                    binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
 
         self.interface = self.field[PFC.F_INTERFACE]
         self.destination = self.field[PFC.F_DEST_IP]
@@ -1761,18 +1764,22 @@ class ProcNetRTCACHE(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_SPEC_DST] = PDC.ANY_IP_ADDR
 
         else:
+            __lip = PBR.convert_by_rule(self.field[PFC.F_DEST_HEXIP],
+                    { CONVERSION: long, NUM_BASE: 16 } )
             self.field[PFC.F_DEST_IP] = socket.inet_ntop(socket.AF_INET,
-                    binascii.unhexlify('{0:08x}'.format(socket.htonl(
-                    long(self.field[PFC.F_DEST_HEXIP], 16)))))
+                    binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
+            __lip = PBR.convert_by_rule(self.field[PFC.F_GATE_HEXIP],
+                    { CONVERSION: long, NUM_BASE: 16 } )
             self.field[PFC.F_GATEWAY] = socket.inet_ntop(socket.AF_INET,
-                    binascii.unhexlify('{0:08x}'.format(socket.htonl(
-                    long(self.field[PFC.F_GATE_HEXIP], 16)))))
+                    binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
+            __lip = PBR.convert_by_rule(self.field[PFC.F_SRCE_HEXIP],
+                    { CONVERSION: long, NUM_BASE: 16 } )
             self.field[PFC.F_SOURCE] = socket.inet_ntop(socket.AF_INET,
-                    binascii.unhexlify('{0:08x}'.format(socket.htonl(
-                    long(self.field[PFC.F_SRCE_HEXIP], 16)))))
+                    binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
+            __lip = PBR.convert_by_rule(self.field[PFC.F_SPEC_HEXIP],
+                    { CONVERSION: long, NUM_BASE: 16 } )
             self.field[PFC.F_SPEC_DST] = socket.inet_ntop(socket.AF_INET,
-                    binascii.unhexlify('{0:08x}'.format(socket.htonl(
-                    long(self.field[PFC.F_SPEC_HEXIP], 16)))))
+                    binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
 
         self.interface = self.field[PFC.F_INTERFACE]
         self.destination = self.field[PFC.F_DEST_IP]
@@ -2625,12 +2632,14 @@ class ProcNetTCP(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_SSTART_THRESH] = 0
 
         else:
+            __lip = PBR.convert_by_rule(self.field[PFC.F_ORIG_HEXIP],
+                    { CONVERSION: long, NUM_BASE: 16 } )
             self.field[PFC.F_ORIG_IP] = socket.inet_ntop(socket.AF_INET,
-                    binascii.unhexlify('{0:08x}'.format(socket.htonl(
-                    long(self.field[PFC.F_ORIG_HEXIP], 16)))))
+                    binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
+            __lip = PBR.convert_by_rule(self.field[PFC.F_DEST_HEXIP],
+                    { CONVERSION: long, NUM_BASE: 16 } )
             self.field[PFC.F_DEST_IP] = socket.inet_ntop(socket.AF_INET,
-                    binascii.unhexlify('{0:08x}'.format(socket.htonl(
-                    long(self.field[PFC.F_DEST_HEXIP], 16)))))
+                    binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
 
             if self.field[PFC.F_HEXSTATE] in STATE_LIST:
                 self.field[PFC.F_STATE] = STATE_LIST[
@@ -2880,12 +2889,14 @@ class ProcNetUDP(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_DROPS] = 0
 
         else:
+            __lip = PBR.convert_by_rule(self.field[PFC.F_ORIG_HEXIP],
+                    { CONVERSION: long, NUM_BASE: 16 } )
             self.field[PFC.F_ORIG_IP] = socket.inet_ntop(socket.AF_INET,
-                    binascii.unhexlify('{0:08x}'.format(socket.htonl(
-                    long(self.field[PFC.F_ORIG_HEXIP], 16)))))
+                    binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
+            __lip = PBR.convert_by_rule(self.field[PFC.F_DEST_HEXIP],
+                    { CONVERSION: long, NUM_BASE: 16 } )
             self.field[PFC.F_DEST_IP] = socket.inet_ntop(socket.AF_INET,
-                    binascii.unhexlify('{0:08x}'.format(socket.htonl(
-                    long(self.field[PFC.F_DEST_HEXIP], 16)))))
+                    binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
 
             if self.field[PFC.F_HEXSTATE] in STATE_LIST:
                 self.field[PFC.F_STATE] = STATE_LIST[self.field[PFC.F_HEXSTATE]]
