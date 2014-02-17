@@ -230,18 +230,18 @@ class ProcRootMTRR(PBR.FixedWhitespaceDelimRecs):
 
         else:
             __offset = 3
-            if sio.lineparts[__offset] == self.__size_pref:
+            if sio.get_word(__offset) == self.__size_pref:
                 __offset = __offset + 1
-            elif not sio.lineparts[__offset].startswith(self.__size_pref):
+            elif not sio.get_word(__offset).startswith(self.__size_pref):
                 __offset = __offset + 1
-                if sio.lineparts[__offset] == self.__size_pref:
+                if sio.get_word(__offset) == self.__size_pref:
                     __offset = __offset + 1
             self.field[PFC.F_SIZE] = PBR.convert_by_rule(
-                    sio.lineparts[__offset][-8:], { CONVERSION: long,
+                    sio.get_word(__offset)[-8:], { CONVERSION: long,
                     SUFFIX_VAL: "MB," } )
 
             __offset = __offset + 2
-            self.field[PFC.F_TYPE] = sio.lineparts[__offset]
+            self.field[PFC.F_TYPE] = sio.get_word(__offset)
                 
         self.index = self.field[PFC.F_INDEX]
         self.base = self.field[PFC.F_BASE_MEMORY]
@@ -557,27 +557,27 @@ class ProcRootLOCKS(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_END] = 0
 
         else:
-            self.field[PFC.F_INDEX] = PBR.convert_by_rule(sio.lineparts[0],
+            self.field[PFC.F_INDEX] = PBR.convert_by_rule(sio.get_word(0),
                     { CONVERSION: long, SUFFIX_VAL: ":" } )
-            if sio.lineparts[1] != self.__skip_prefix:
+            if sio.get_word(1) != self.__skip_prefix:
                 __offset = 1
             else:
                 __offset = 2
-            self.field[PFC.F_LOCK_TYPE] = sio.lineparts[__offset]
+            self.field[PFC.F_LOCK_TYPE] = sio.get_word(__offset)
             __offset = __offset + 1
-            self.field[PFC.F_LOCK_SUBTYPE] = sio.lineparts[__offset]
+            self.field[PFC.F_LOCK_SUBTYPE] = sio.get_word(__offset)
             __offset = __offset + 1
-            self.field[PFC.F_LOCK_IO] = sio.lineparts[__offset]
+            self.field[PFC.F_LOCK_IO] = sio.get_word(__offset)
             __offset = __offset + 1
             self.field[PFC.F_PID] = PBR.convert_by_rule(
-                    sio.lineparts[__offset], { CONVERSION: long} )
+                    sio.get_word(__offset), { CONVERSION: long} )
             __offset = __offset + 1
-            self.field[PFC.F_LOCK_INODE] = sio.lineparts[__offset]
+            self.field[PFC.F_LOCK_INODE] = sio.get_word(__offset)
             __offset = __offset + 1
             self.field[PFC.F_START] = PBR.convert_by_rule(
-                    sio.lineparts[__offset], { CONVERSION: long } )
+                    sio.get_word(__offset), { CONVERSION: long } )
             __offset = __offset + 1
-            self.field[PFC.F_END_STRING] = sio.lineparts[__offset]
+            self.field[PFC.F_END_STRING] = sio.get_word(__offset)
             if self.field[PFC.F_END_STRING] == "EOF":
                 self.field[PFC.F_END] = PDC.INF
             else:
@@ -1040,11 +1040,11 @@ class ProcRootFILESYSTEMS(PBR.FixedWhitespaceDelimRecs):
 
         else:
             if sio.linewords >= 2:
-                self.field[PFC.F_DEV_FLAG] = sio.lineparts[0]
-                self.field[PFC.F_FILESYSTEM] = sio.lineparts[1]
+                self.field[PFC.F_DEV_FLAG] = sio.get_word(0)
+                self.field[PFC.F_FILESYSTEM] = sio.get_word(1)
             else:
                 self.field[PFC.F_DEV_FLAG] = ""
-                self.field[PFC.F_FILESYSTEM] = sio.lineparts[0]
+                self.field[PFC.F_FILESYSTEM] = sio.get_word(0)
 
         self.dev_flag = self.field[PFC.F_DEV_FLAG]
         self.filesystem = self.field[PFC.F_FILESYSTEM]
@@ -1379,13 +1379,13 @@ class ProcRootVERSION(PBR.FixedWhitespaceDelimRecs):
         else:
             self.field[PFC.F_VERSION_STRING] = " ".join(sio.lineparts)
             if sio.linewords < 6 or \
-                    sio.lineparts[0] != self.__fixed_banner_prefix:
+                    sio.get_word(0) != self.__fixed_banner_prefix:
                 self.field[PFC.F_SYSNAME] = ""
                 self.field[PFC.F_RELEASE] = ""
                 self.field[PFC.F_VERSION] = ""
             else:
-                self.field[PFC.F_SYSNAME] = sio.lineparts[0]
-                self.field[PFC.F_RELEASE] = sio.lineparts[2]
+                self.field[PFC.F_SYSNAME] = sio.get_word(0)
+                self.field[PFC.F_RELEASE] = sio.get_word(2)
                 __split = " ".join(sio.lineparts).split(self.__field_delim)
                 self.field[PFC.F_VERSION] = __split[-1:][0]
 
@@ -1799,7 +1799,7 @@ class ProcRootVMALLOCINFO(PBR.FixedWhitespaceDelimRecs):
         else:
             __off = 2
             if sio.linewords > __off:
-                __check = sio.lineparts[__off]
+                __check = sio.get_word(__off)
                 if __check.startswith(self.__prefix_pages):
                     __flags = "{flags} {next}".format(flags=__flags,
                             next=__check)
@@ -1808,63 +1808,63 @@ class ProcRootVMALLOCINFO(PBR.FixedWhitespaceDelimRecs):
                 __off = __off + 1
 
             if sio.linewords > __off:
-                __check = sio.lineparts[__off]
+                __check = sio.get_word(__off)
                 if __check[0:1] == self.__name_bracket:
                     self.field[PFC.F_CALLER] = "{base} {qual}".format(
                             base=self.field[PFC.F_CALLER], qual=__check)
                     __off = __off + 1
 
             if sio.linewords > __off:
-                __check = sio.lineparts[__off]
+                __check = sio.get_word(__off)
                 if __check.startswith(self.__prefix_pages):
                     __flags = "{flags} {next}".format(flags=__flags,
                             next=__check)
                     __off = __off + 1
 
             if sio.linewords > __off:
-                __check = sio.lineparts[__off]
+                __check = sio.get_word(__off)
                 if __check.startswith(self.__prefix_phys):
                     __flags = "{flags} {next}".format(flags=__flags,
                             next=__check)
                     __off = __off + 1
 
             if sio.linewords > __off:
-                if sio.lineparts[__off] == self.__flag_ioremap:
+                if sio.get_word(__off) == self.__flag_ioremap:
                     self.field[PFC.F_IOREMAP] = 1
                     __flags = "{flags} {next}".format(flags=__flags,
-                            next=sio.lineparts[__off])
+                            next=sio.get_word(__off))
                     __off = __off + 1
 
             if sio.linewords > __off:
-                if sio.lineparts[__off] == self.__flag_vmalloc:
+                if sio.get_word(__off) == self.__flag_vmalloc:
                     self.field[PFC.F_VM_ALLOC] = 1
                     __flags = "{flags} {next}".format(flags=__flags,
-                            next=sio.lineparts[__off])
+                            next=sio.get_word(__off))
                     __off = __off + 1
 
             if sio.linewords > __off:
-                if sio.lineparts[__off] == self.__flag_vmap:
+                if sio.get_word(__off) == self.__flag_vmap:
                     self.field[PFC.F_VM_MAP] = 1
                     __flags = "{flags} {next}".format(flags=__flags,
-                            next=sio.lineparts[__off])
+                            next=sio.get_word(__off))
                     __off = __off + 1
 
             if sio.linewords > __off:
-                if sio.lineparts[__off] == self.__flag_usermap:
+                if sio.get_word(__off) == self.__flag_usermap:
                     self.field[PFC.F_USER_MAP] = 1
                     __flags = "{flags} {next}".format(flags=__flags,
-                            next=sio.lineparts[__off])
+                            next=sio.get_word(__off))
                     __off = __off + 1
 
             if sio.linewords > __off:
-                if sio.lineparts[__off] == self.__flag_vpages:
+                if sio.get_word(__off) == self.__flag_vpages:
                     self.field[PFC.F_VM_PAGES] = 1
                     __flags = "{flags} {next}".format(flags=__flags,
-                            next=sio.lineparts[__off])
+                            next=sio.get_word(__off))
                     __off = __off + 1
 
             for __rest in range(__off, sio.linewords):
-                __check = sio.lineparts[__rest]
+                __check = sio.get_word(__rest)
                 if __check[0:1] == self.__prefix_numa:
                     __numa = "{curr} {app}".format(curr=__numa, app=__check)
                 else:
@@ -1999,15 +1999,15 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
     def parse_bitmap_subrec(self, sio):
         """Parse bitmap subrecord"""
 
-        __split = sio.lineparts[1].partition(self.__num_split)
+        __split = sio.get_word(1).partition(self.__num_split)
         self.field[PFC.F_PAGES_NOMISS] = long(__split[0])
         self.field[PFC.F_PAGES_TOTAL] = long(__split[2])
 
-        __curr = sio.lineparts[3]
+        __curr = sio.get_word(3)
         self.field[PFC.F_PAGES_NOMISS_KB] = \
                 long(__curr[1:-len(self.__pages_suff)])
 
-        __curr = sio.lineparts[4]
+        __curr = sio.get_word(4)
 #        if __curr[-len(self.__kb_suff):] == self.__kb_suff:
         if __curr.endswith(self.__kb_suff):
             self.field[PFC.F_BITMAP_CHUNK] = \
@@ -2030,35 +2030,35 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
     def parse_rebuild_subrec(self, sio):
         """Parse rebuild status indicator info"""
 
-        __curr = sio.lineparts[0]
+        __curr = sio.get_word(0)
 #        if __curr[:len(self.__resync_flag)] == self.__resync_flag:
         if __curr.startswith(self.__resync_flag):
             self.field[PFC.F_RESYNC_STAT] = \
                     __curr.partition(self.__resync_delim)[2]
         else:
-            self.field[PFC.F_REBUILD_PROG] = sio.lineparts[0]
-            self.field[PFC.F_REBUILD_ACTION] = sio.lineparts[1]
+            self.field[PFC.F_REBUILD_PROG] = sio.get_word(0)
+            self.field[PFC.F_REBUILD_ACTION] = sio.get_word(1)
 
             __off = 2
-            if sio.lineparts[__off] == self.__value_pref:
+            if sio.get_word(__off) == self.__value_pref:
                 __off = __off + 1
-                __curr = sio.lineparts[__off]
+                __curr = sio.get_word(__off)
             else:
-                __curr = sio.lineparts[__off][1:]
+                __curr = sio.get_word(__off)[1:]
             self.field[PFC.F_PERCENT] = float(__curr[:-1])
 
             __off = __off + 1
-            __split = sio.lineparts[__off].partition(self.__num_split)
+            __split = sio.get_word(__off).partition(self.__num_split)
             self.field[PFC.F_REBUILD_DONE] = long(__split[0][1:])
             self.field[PFC.F_REBUILD_TOTAL] = long(__split[2][:-1])
 
             __off = __off + 1
-            __split = sio.lineparts[__off].partition(self.__value_pref)
+            __split = sio.get_word(__off).partition(self.__value_pref)
             self.field[PFC.F_FIN_TIME] = \
                     float(__split[2][:-len(self.__finish_suff)])
 
             __off = __off + 1
-            __split = sio.lineparts[__off].partition(self.__value_pref)
+            __split = sio.get_word(__off).partition(self.__value_pref)
             self.field[PFC.F_SPEED] = long(__split[2][:-len(self.__speed_suff)])
         return
 
@@ -2066,29 +2066,29 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
         """Parse device specific subrecord with block level info"""
 
         __words = sio.linewords
-        self.field[PFC.F_BLOCKS] = long(sio.lineparts[0])
+        self.field[PFC.F_BLOCKS] = long(sio.get_word(0))
         __off = 2
-        if __off < __words and sio.lineparts[__off] == self.__super_flag:
-            self.field[PFC.F_SUPER] = sio.lineparts[__off + 1]
+        if __off < __words and sio.get_word(__off) == self.__super_flag:
+            self.field[PFC.F_SUPER] = sio.get_word(__off + 1)
             __off = __off + 2
-        if __off < __words and sio.lineparts[__off + 1] == self.__chunk_flag:
-            self.field[PFC.F_CHUNK] = long(sio.lineparts[__off][:-1])
-            __off = __off + 2
-        if __off < __words and \
-                sio.lineparts[__off + 1] == self.__near_copy_flag:
-            self.field[PFC.F_NEAR_COPY] = long(sio.lineparts[__off])
+        if __off < __words and sio.get_word(__off + 1) == self.__chunk_flag:
+            self.field[PFC.F_CHUNK] = long(sio.get_word(__off)[:-1])
             __off = __off + 2
         if __off < __words and \
-                sio.lineparts[__off + 1] == self.__offset_copy_flag:
-            self.field[PFC.F_OFFSET_COPY] = long(sio.lineparts[__off])
+                sio.get_word(__off + 1) == self.__near_copy_flag:
+            self.field[PFC.F_NEAR_COPY] = long(sio.get_word(__off))
             __off = __off + 2
-        if __off < __words and sio.lineparts[__off + 1] == self.__far_copy_flag:
-            self.field[PFC.F_FAR_COPY] = long(sio.lineparts[__off])
+        if __off < __words and \
+                sio.get_word(__off + 1) == self.__offset_copy_flag:
+            self.field[PFC.F_OFFSET_COPY] = long(sio.get_word(__off))
+            __off = __off + 2
+        if __off < __words and sio.get_word(__off + 1) == self.__far_copy_flag:
+            self.field[PFC.F_FAR_COPY] = long(sio.get_word(__off))
             __off = __off + 2
 
         for __try in range(2):
-            if __off < __words and sio.lineparts[__off][:1] == self.__open_list:
-                __curr = sio.lineparts[__off]
+            if __off < __words and sio.get_word(__off)[:1] == self.__open_list:
+                __curr = sio.get_word(__off)
                 __split = __curr.partition(self.__num_split)
                 if __split[0] != __curr:
                     self.field[PFC.F_TOTAL_PARTS] = long(__split[0][1:])
@@ -2136,15 +2136,15 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
     def parse_mddev_record(self, sio):
         """Parse device specific record"""
 
-        self.field[PFC.F_ACTIVE_STAT] = sio.lineparts[2]
+        self.field[PFC.F_ACTIVE_STAT] = sio.get_word(2)
         __off = 3
-        if sio.lineparts[__off] == self.__readonly_flag:
+        if sio.get_word(__off) == self.__readonly_flag:
             self.field[PFC.F_READONLY] = 1
             __off = __off + 1
-        if sio.lineparts[__off] == self.__autoreadonly_flag:
+        if sio.get_word(__off) == self.__autoreadonly_flag:
             self.field[PFC.F_READONLY] = 2
             __off = __off + 1
-        self.field[PFC.F_PERS_NAME] = sio.lineparts[__off]
+        self.field[PFC.F_PERS_NAME] = sio.get_word(__off)
         __off = __off + 1
         self.parse_partition_list(" ".join(sio.lineparts[__off:]))
 
@@ -2152,8 +2152,8 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
         sio.read_line()
         for __subrec in range(3):
             if sio.linewords > 0:
-                __keyfield = sio.lineparts[0]
-                if sio.linewords > 1 and sio.lineparts[1] == self.__block_flag:
+                __keyfield = sio.get_word(0)
+                if sio.linewords > 1 and sio.get_word(1) == self.__block_flag:
                     self.parse_blocks_subrec(sio)
                 elif __keyfield[:1] == self.__open_list:
                     self.parse_rebuild_subrec(sio)
@@ -2220,7 +2220,7 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
         self.field[PFC.F_FILEPATH] = ""
 
         if sio.buff != "":
-            __rec = sio.lineparts[0]
+            __rec = sio.get_word(0)
             self.field[PFC.F_REC_TYPE] = __rec
 
             if __rec == self.__rec_personality:

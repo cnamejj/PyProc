@@ -1558,8 +1558,7 @@ class ProcNetPTYPE(PBR.FixedWhitespaceDelimRecs):
 # Note: This file can't be parsed as blank delimited words, since the second field is sometimes
 #       blank.  So we have to parse by columns, since the layout is fixed rather than delimited.
 #       The normal "read_line" call can still be used to pull in the data.  But we just have to
-#       pull column ranges from the buffer and the split words in the "lineparts" array is
-#       ignored.
+#       pull column ranges from the buffer.
 #
 # Type Device      Function
 # 0800          ip_rcv+0x0/0x300

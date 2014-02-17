@@ -276,7 +276,7 @@ class ProcSelfSTACK(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_ADDRESS] = 0
             self.field[PFC.F_STACK_ENTRY] = ""
 
-        self.address_string = sio.lineparts[0]
+        self.address_string = sio.get_word(0)
         self.address = self.field[PFC.F_ADDRESS]
         self.stack_entry = self.field[PFC.F_STACK_ENTRY]
 
@@ -450,7 +450,7 @@ class ProcSelfNUMAMAPS(PBR.FixedWhitespaceDelimRecs):
         if sio.buff != "":
 
             for __off in range(2, sio.linewords):
-                __word = sio.lineparts[__off]
+                __word = sio.get_word(__off)
 
                 if __word == self.__flag_heap:
                     self.field[PFC.F_HEAP] = 1
@@ -589,7 +589,7 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
             __endopts = 0
             __extras = ""
             while sio.linewords > __off and not __endopts:
-                __curr = sio.lineparts[__off]
+                __curr = sio.get_word(__off)
                 if __curr == self.__option_sep:
                     __endopts = 1
                 else:
@@ -599,13 +599,13 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_EXTRA_OPTS] = __extras
 
             if sio.linewords > __off:
-                self.field[PFC.F_FS_TYPE] = sio.lineparts[__off]
+                self.field[PFC.F_FS_TYPE] = sio.get_word(__off)
                 __off = __off + 1
             if sio.linewords > __off:
-                self.field[PFC.F_MOUNT_SRC] = sio.lineparts[__off]
+                self.field[PFC.F_MOUNT_SRC] = sio.get_word(__off)
                 __off = __off + 1
             if sio.linewords > __off:
-                self.field[PFC.F_SUPER_OPTS] = sio.lineparts[__off]
+                self.field[PFC.F_SUPER_OPTS] = sio.get_word(__off)
 
         self.mntid = self.field[PFC.F_MOUNT_ID]
         self.mntid_parent = self.field[PFC.F_PARENT_MOUNT_ID]
@@ -767,15 +767,15 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 
         self.__have_partial = 1
 
-        if sio.lineparts[0] == self.__prefix_dev:
-            self.__partial[PFC.F_DEVICE] = sio.lineparts[1]
+        if sio.get_word(0) == self.__prefix_dev:
+            self.__partial[PFC.F_DEVICE] = sio.get_word(1)
         else:
             self.__partial[PFC.F_DEVICE] = PDC.NO_DEVICE
-        self.__partial[PFC.F_MOUNTPOINT] = sio.lineparts[4]
-        self.__partial[PFC.F_FSTYPE] = sio.lineparts[7]
+        self.__partial[PFC.F_MOUNTPOINT] = sio.get_word(4)
+        self.__partial[PFC.F_FSTYPE] = sio.get_word(7)
 
         if sio.linewords >= 9:
-            __split = sio.lineparts[8].partition(self.__assign_delim)
+            __split = sio.get_word(8).partition(self.__assign_delim)
             self.__partial[PFC.F_STATSVERS] = __split[2]
         else:
             self.__partial[PFC.F_STATSVERS] = ""
@@ -799,13 +799,13 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         """
 
 
-        __opt = PBR.breakout_option_list(sio.lineparts[1])
+        __opt = PBR.breakout_option_list(sio.get_word(1))
 
 #        for __key in __opt:
 #            print "dbg:: Opts post-BOL key'{key}' val'{val}'".format(
 #                    key=__key, val=__opt[__key])
 
-        self.field[PFC.F_WRITE_STATUS] = sio.lineparts[1][0:2]
+        self.field[PFC.F_WRITE_STATUS] = sio.get_word(1)[0:2]
 
         if __opt.has_key(self.__flag_hard):
             self.field[PFC.F_MOUNT_TYPE] = self.__flag_hard
@@ -847,7 +847,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
     def parse_age_line(self, sio):
         """Parse an 'age' subrecord"""
 
-        self.field[PFC.F_AGE] = PBR.convert_by_rule( sio.lineparts[1],
+        self.field[PFC.F_AGE] = PBR.convert_by_rule( sio.get_word(1),
                 { CONVERSION: long } )
         return
 
@@ -855,7 +855,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
     def parse_caps_line(self, sio):
         """Parse a 'caps' subrecord"""
 
-        __caps = PBR.breakout_option_list(sio.lineparts[1])
+        __caps = PBR.breakout_option_list(sio.get_word(1))
 
 #        print "dbg:: Caps line'{line}'".format(line=sio.buff[:-1])
 #        for __key in __caps:
@@ -880,7 +880,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 
 # (E) \tnfsv4: bm0=0x!HEX!,bm1=0x!HEX!,acl=0x!HEX!{,sessions}{,pnfs={!NAME!|not configured}}
         """
-        __opts = PBR.breakout_option_list(sio.lineparts[1])
+        __opts = PBR.breakout_option_list(sio.get_word(1))
 
         self.field[PFC.F_NFSV4_BM0] = PBR.convert_by_rule(
                 __opts[PFC.F_NFSV4_BM0], { CONVERSION: long, NUM_BASE: 16 } )
@@ -905,7 +905,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
     def parse_security_line(self, sio):
         """Parse security subrecord"""
 
-        __optlist = PBR.breakout_option_list(sio.lineparts[1])
+        __optlist = PBR.breakout_option_list(sio.get_word(1))
         self.field[PFC.F_FLAVOR] = PBR.convert_by_rule(
                 __optlist[self.__prefix_flavor],
                 { CONVERSION: long } )
@@ -942,13 +942,13 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
     def parse_iostats_line(self, sio):
         """Parse a subrecord with I/O stats info"""
 
-        self.field[PFC.F_VERSION] = sio.lineparts[3]
+        self.field[PFC.F_VERSION] = sio.get_word(3)
 
-        __part = sio.lineparts[5].partition(self.__rpc_delim)
+        __part = sio.get_word(5).partition(self.__rpc_delim)
         self.field[PFC.F_RPC_PROG] = __part[0]
         self.field[PFC.F_RPC_VERS] = __part[2]
 
-        self.field[PFC.F_PROTOCOL] = sio.lineparts[6][1:-1]
+        self.field[PFC.F_PROTOCOL] = sio.get_word(6)[1:-1]
 
         return
 
@@ -958,7 +958,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
     def parse_per_op_line(self, sio):
         """Parse line containing and option name followed by a list of vals"""
 
-        __stat = sio.lineparts[0]
+        __stat = sio.get_word(0)
         if __stat[-1:] == ":":
             __stat = __stat[:-1]
 
@@ -1036,7 +1036,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
     def parse_xprt_line(self, sio):
         """Parse an 'xprt' subrecord"""
 
-        __rectype = sio.lineparts[1]
+        __rectype = sio.get_word(1)
 
         if __rectype == self.__flag_xprt_local:
             __val = self.parse_xprt_local(sio)
@@ -1056,8 +1056,8 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
     def accumulate_info(self, sio):
         """Add a physical record to the accumulated logical record"""
 
-        __first = sio.lineparts[0]
-        __second = sio.lineparts[1]
+        __first = sio.get_word(0)
+        __second = sio.get_word(1)
 
         if __first == self.__prefix_dev:
             self.parse_device_line(sio)
@@ -1160,8 +1160,8 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         while sio.buff != "" and not __complete:
             self.accumulate_info(sio)
 
-            __first = sio.lineparts[0]
-            __second = sio.lineparts[1]
+            __first = sio.get_word(0)
+            __second = sio.get_word(1)
             if __first == self.__prefix_dev or \
                     (__first == self.__prefix_no
                     and __second == self.__prefix_dev):
