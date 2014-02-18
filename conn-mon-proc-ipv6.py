@@ -21,7 +21,7 @@ if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
 
-IPLOOKUP = CachedDNS.CachedDNS()
+IPLOOKUP = CachedDNS.LookupIP()
 PSI = ProcessInfo
 
 NO_SESSION_PID = PSI.NO_CONN_PID

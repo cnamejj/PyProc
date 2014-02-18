@@ -82,7 +82,7 @@ if __name__ == "__main__":
     else:
         QUALIFY = ""
 
-    IPLOOKUP = CachedDNS.CachedDNS()
+    IPLOOKUP = CachedDNS.LookupIP()
     PSI = ProcessInfo
 
     NO_SESSION_PID = PSI.NO_CONN_PID

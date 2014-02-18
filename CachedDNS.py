@@ -3,7 +3,7 @@
 
 import socket
 
-class CachedDNS:
+class LookupIP:
     """
     Map IP's to hostnames using local cache where possible, using DNS lookups
     otherwise

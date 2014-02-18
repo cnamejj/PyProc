@@ -26,7 +26,7 @@ if sys.platform == "darwin":
     
 PFC = ProcFieldConstants
 
-IPLOOKUP = CachedDNS.CachedDNS()
+IPLOOKUP = CachedDNS.LookupIP()
 PSI = ProcessInfo
 
 NO_SESSION_PID = PSI.NO_CONN_PID
