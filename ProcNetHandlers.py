@@ -102,13 +102,12 @@ class ProcNetNETLINK(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample records
 # sk       Eth Pid    Groups   Rmem     Wmem     Dump     Locks     Drops     Inode
 # 0000000000000000 0   4196011 00000000 0        0        0000000000000000 2        0        11034   
 # 0000000000000000 0   0      00000000 0        0        0000000000000000 2        0        8       
 # 0000000000000000 0   1707   000a0501 0        0        0000000000000000 2        0        11033   
-        """
 
         if sio.buff == "":
             self.field[PFC.F_SOCKET_POINTER] = 0
@@ -186,6 +185,7 @@ REGISTER_PARTIAL_FILE("connector", ProcNetCONNECTOR)
 class ProcNetPROTOCOLS(PBR.FixedWhitespaceDelimRecs):
     """
     Specific use of simple col reading class, for /proc/net/protocols file
+    """
 
 # source: net/core/sock.c
 #    seq_printf(seq, "%-9s %4u %6d  %6ld   %-3s %6u   %-3s  %-10s "
@@ -217,7 +217,6 @@ class ProcNetPROTOCOLS(PBR.FixedWhitespaceDelimRecs):
 #               proto_method_implemented(proto->unhash),
 #               proto_method_implemented(proto->get_port),
 #               proto_method_implemented(proto->enter_memory_pressure));
-    """
 
     def extra_init(self, *opts):
         self.minfields = 27
@@ -272,14 +271,13 @@ class ProcNetPROTOCOLS(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample entries
 # protocol  size sockets  memory press maxhdr  slab module     cl co di ac io in de sh ss gs se re sp bi br ha uh gp em
 # BNEP       664      0      -1   NI       0   no   bnep        n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n
 # RFCOMM     680      0      -1   NI       0   no   rfcomm      n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n
 # SCO        680      0      -1   NI       0   no   bluetooth   n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n
 # PACKET    1344      1      -1   NI       0   no   kernel      n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n
-        """
 
         if sio.buff == "":
             self.field[PFC.F_PROTOCOL] = ""
@@ -381,13 +379,12 @@ class ProcNetROUTE(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Samples lines.
 # Iface	Destination	Gateway 	Flags	RefCnt	Use	Metric	Mask		MTU	Window	IRTT                                                       
 # eth0	00000000	0101A8C0	0003	0	0	0	00000000	0	0	0                                                                               
 # eth0	0000FEA9	00000000	0001	0	0	1000	0000FFFF	0	0	0                                                                            
 # eth0	0001A8C0	00000000	0001	0	0	1	00FFFFFF	0	0	0                                                                               
-        """
 
         if sio.buff == "":
             self.field[PFC.F_INTERFACE] = PDC.ANY_INTERFACE
@@ -550,14 +547,13 @@ class ProcNetSOFTNETSTAT(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample entries, note the header is for informational purposes and
 # -- there's no header line in the file itself
 # Processed Dropped Time_Squeeze Null1 Null2   Null3    Null4    Null5    CPU_Coll Received_RPS
 # 001fc1c7 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 # 00002970 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 # 000041b2 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-        """
 
         if sio.buff == "":
             self.field[PFC.F_PROCESSED] = 0
@@ -764,13 +760,12 @@ class ProcNetDEV(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Samples lines.
 # Inter-|   Receive                                                |  Transmit
 #  face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
 #     lo: 102519022  306837    0    0    0     0          0         0 102519022  306837    0    0    0     0       0          0
 #   eth0: 1618664727 5080413    0    0    0     0          0    312848 915217483 4396111    0    0    0     0       0          0
-        """
 
         if sio.buff == "":
             self.field[PFC.F_DEVICE] = PDC.ANY_INTERFACE
@@ -920,14 +915,13 @@ class ProcNetIGMP6(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample entries, note the header is for informational purposes and
 # -- there's no header line in the file itself
 # IntFaceIndex DeviceName MCastAddress             MCastUsers MCastFlags TimerExp 
 # 1    lo              ff020000000000000000000000000001     1 0000000C 0
 # 2    eth0            ff0200000000000000000001ff01e486     1 00000004 0
 # 2    eth0            ff020000000000000000000000000001     1 0000000C 0
-        """
 
         if sio.buff == "":
             self.field[PFC.F_INT_INDEX] = 0
@@ -994,7 +988,7 @@ class ProcNetIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample records, there is no header line and the fields presented can very from record to record, only the
 # -- first 3 are guaranteed to always the protocol name, protocol number, and timeout. The rest will always
 # -- be in the same order, but a number of fields may or may not be there.
@@ -1006,7 +1000,6 @@ class ProcNetIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
 # udp      17 17 src=127.0.0.1 dst=127.0.0.1 sport=60942 dport=53 src=127.0.0.1 dst=127.0.0.1 sport=53 dport=60942 mark=0 use=2
 # tcp      6 431988 ESTABLISHED src=192.168.1.14 dst=173.201.192.71 sport=35348 dport=993 src=173.201.192.71 dst=192.168.1.14 sport=993 dport=35348 [ASSURED] mark=0 use=2
 # udp      17 17 src=127.0.0.1 dst=127.0.0.1 sport=59830 dport=53 src=127.0.0.1 dst=127.0.0.1 sport=53 dport=59830 mark=0 use=2
-        """
 
         self.field[PFC.F_STATE] = PDC.UNKNOWN_STATE
         self.field[PFC.F_OR_SRC_IP] = PDC.ANY_IP_ADDR
@@ -1209,7 +1202,7 @@ class ProcNetIPV6ROUTE(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample entries, note the header is for informational purposes and
 # -- there's no header line in the file itself
 # DestAddr                DestPrefLen SrcAddr                 AddrPrefLen PrimaryKey                    RT6I_METRIC DestRefCount DestUse RT6I_FLAGS Device
@@ -1217,7 +1210,6 @@ class ProcNetIPV6ROUTE(PBR.FixedWhitespaceDelimRecs):
 # 00000000000000000000000000000000 00 00000000000000000000000000000000 00 00000000000000000000000000000000 ffffffff 00000001 000010cf 00200200       lo
 # fe80000000000000ca6000fffe01e486 80 00000000000000000000000000000000 00 00000000000000000000000000000000 00000000 00000001 00000000 80200001       lo
 # ff000000000000000000000000000000 08 00000000000000000000000000000000 00 00000000000000000000000000000000 00000100 00000000 00000000 00000001     eth0
-        """
 
         if sio.buff == "":
             self.field[PFC.F_DEST_HEXIP] = PDC.ANY_IPV6_ADDR_HEX
@@ -1305,7 +1297,7 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample records, there is no header line and the fields presented can very from record to record, only the
 # -- first 3 are guaranteed to always the protocol name, protocol number, and timeout. The rest will always
 # -- be in the same order, but a number of fields may or may not be there.
@@ -1315,7 +1307,6 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
 # ipv4     2 tcp      6 431934 ESTABLISHED src=192.168.1.14 dst=173.201.192.71 sport=33934 dport=993 src=173.201.192.71 dst=192.168.1.14 sport=993 dport=33934 [ASSURED] mark=0 zone=0 use=2
 # ipv4     2 tcp      6 431964 ESTABLISHED src=192.168.1.14 dst=173.201.192.71 sport=35348 dport=993 src=173.201.192.71 dst=192.168.1.14 sport=993 dport=35348 [ASSURED] mark=0 zone=0 use=2
 # ipv4     2 tcp      6 431798 ESTABLISHED src=192.168.1.14 dst=72.167.218.187 sport=53880 dport=993 src=72.167.218.187 dst=192.168.1.14 sport=993 dport=53880 [ASSURED] mark=0 zone=0 use=2
-        """
 
         self.field[PFC.F_STATE] = PDC.UNKNOWN_STATE
         self.field[PFC.F_OR_SRC_IP] = PDC.ANY_IP_ADDR
@@ -1555,7 +1546,7 @@ class ProcNetPTYPE(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample lines for reference...
 #
 # Note: This file can't be parsed as blank delimited words, since the second field is sometimes
@@ -1568,7 +1559,6 @@ class ProcNetPTYPE(PBR.FixedWhitespaceDelimRecs):
 # 0011          llc_rcv+0x0/0x370
 # 0004          llc_rcv+0x0/0x370
 # 0806          arp_rcv+0x0/0x140
-        """
 
         if sio.buff == "":
             self.field[PFC.F_DEVICE_TYPE] = ""
@@ -1732,7 +1722,7 @@ class ProcNetRTCACHE(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Samples lines.
 # Iface	Destination	Gateway 	Flags		RefCnt	Use	Metric	Source		MTU	Window	IRTT	TOS	HHRef	HHUptod	SpecDst
 # %s    %08X            %08X            %8X             %d      %u      %d      %08X            %d      %u      %u      %02X    %d      %1d     %08X
@@ -1740,7 +1730,6 @@ class ProcNetRTCACHE(PBR.FixedWhitespaceDelimRecs):
 # eth0	0101A8C0	0101A8C0	       0	0	375723	0	0E01A8C0	1500	0	113	00	-1	1	0E01A8C0
 # lo	0E01A8C0	0E01A8C0	80000000	0	23	0	2BE07D4A	16436	0	0	00	-1	0	0E01A8C0
 # lo	0E01A8C0	0E01A8C0	80000000	0	1	0	28846DD0	16436	0	0	00	-1	0	0E01A8C0
-        """
 
         if sio.buff == "":
             self.field[PFC.F_INTERFACE] = PDC.ANY_INTERFACE
@@ -1854,13 +1843,12 @@ class ProcNetStatARPCACHE(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample entries, note that each line is for a different CPU
 # entries  allocs destroys hash_grows  lookups hits  res_failed  rcv_probes_mcast rcv_probes_ucast  periodic_gc_runs forced_gc_runs unresolved_discards
 # 00000003  0000000f 0000002e 00000000  000186e5 00001172  00000000  00000000 00000000  0000a08c 00000000 00000000
 # 00000003  00000005 00000000 00000000  00000002 00000000  00000000  00000000 00000000  00000000 00000000 00000000
 # 00000003  00000008 00000000 00000000  00000003 00000001  00000000  00000000 00000000  00000000 00000000 00000000
-        """
 
         if sio.buff == "":
             self.field[PFC.F_ARP_ENTRIES] = 0
@@ -2067,13 +2055,12 @@ class ProcNetStatNDISCCACHE(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample entries, note that each line is for a different CPU
 # entries  allocs destroys hash_grows  lookups hits  res_failed  rcv_probes_mcast rcv_probes_ucast  periodic_gc_runs forced_gc_runs unresolved_discards
 # 00000003  0000000f 0000002e 00000000  000186e5 00001172  00000000  00000000 00000000  0000a08c 00000000 00000000
 # 00000003  00000005 00000000 00000000  00000002 00000000  00000000  00000000 00000000  00000000 00000000 00000000
 # 00000003  00000008 00000000 00000000  00000003 00000001  00000000  00000000 00000000  00000000 00000000 00000000
-        """
 
         if sio.buff == "":
             self.field[PFC.F_ARP_ENTRIES] = 0
@@ -2304,12 +2291,11 @@ class ProcNetStatRTCACHE(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample entries, note that each line is for a different CPU
 # entries  in_hit in_slow_tot in_slow_mc in_no_route in_brd in_martian_dst in_martian_src  out_hit out_slow_tot out_slow_mc  gc_total gc_ignored gc_goal_miss gc_dst_overflow in_hlist_search out_hlist_search
 # 000000a4  00579509 0002044f 00000000 00000000 00001e53 00000000 00000018  0006f8ff 00002620 00000001 00000000 00000000 00000000 00000000 0000ba0b 00000092 
 # 000000a4  00000000 00000002 00000000 00000000 00000001 00000000 00000000  0006f479 000027b4 00000000 00000000 00000000 00000000 00000000 00000000 00000008 
-        """
 
         if sio.buff == "":
             self.field[PFC.F_ENTRIES] = 0
@@ -2443,12 +2429,11 @@ class ProcNetTCP6(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample lines for reference...
 #  sl  local_address                         remote_address                        st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode
 #   0: 00000000000000000000000000000000:0035 00000000000000000000000000000000:0000 0A 00000000:00000000 00:00000000 00000000   118        0 1995 1 0000000000000000 100 0 0 2 -1
 #   1: 00000000000000000000000000000000:0016 00000000000000000000000000000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 1892 1 0000000000000000 100 0 0 2 -1
-        """
 
         if sio.buff == "":
             self.field[PFC.F_ORIG_HEXIP] = "00000000000000000000000000000000"
@@ -2595,14 +2580,13 @@ class ProcNetTCP(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample lines for reference...
 #  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode                                                     
 #   0: 0100007F:0CEA 00000000:0000 0A 00000000:00000000 00:00000000 00000000   120        0 8633 1 0000000000000000 100 0 0 10 -1                     
 #   1: 0100007F:0050 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 24865 1 0000000000000000 100 0 0 10 -1                    
 #   2: 00000000:4E70 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 69682 1 0000000000000000 100 0 0 10 -1                    
 #   3: 0E01A8C0:0035 00000000:0000 0A 00000000:00000000 00:00000000 00000000   118        0 15488 1 0000000000000000 100 0 0 10 -1                    
-        """
 
         if sio.buff == "":
             self.field[PFC.F_ORIG_HEXIP] = "00000000"
@@ -2734,13 +2718,12 @@ class ProcNetUDP6(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample lines for reference...
 #  sl  local_address                         remote_address                        st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode ref pointer drops
 # 1224: 000080FE00000000FF0060CA86E401FE:BBF1 00000000000000000000000000000000:0000 07 00000000:00000000 00:00000000 00000000   500        0 4893942 2 0000000000000000 0
 # 2316: 00000000000000000000000000000000:0035 00000000000000000000000000000000:0000 07 00000000:00000000 00:00000000 00000000   118        0 1994 2 0000000000000000 0
 # 2777: 00000000000000000000000000000000:0202 00000000000000000000000000000000:0000 07 00000000:00000000 00:00000000 00000000     0        0 1899 2 0000000000000000 0
-        """
 
         if sio.buff == "":
             self.field[PFC.F_ORIG_HEXIP] = "00000000000000000000000000000000"
@@ -2856,14 +2839,13 @@ class ProcNetUDP(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample lines for reference...
 #  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode ref pointer drops        
 # %5d : %08X:%04X     %08X:%04X    %02X %08X:%08X        %02X:%08lX  %08X       %5d      %8d %lu  %d %pK              %d
 # 2316: 0E01A8C0:0035 00000000:0000 07 00000000:00000000 00:00000000 00000000   118        0 15487 2 0000000000000000 0
 # 2316: 0100007F:0035 00000000:0000 07 00000000:00000000 00:00000000 00000000   118        0 1999 2 0000000000000000 0
 # 2777: 00000000:0202 00000000:0000 07 00000000:00000000 00:00000000 00000000     0        0 1898 2 0000000000000000 0
-        """
 
         if sio.buff == "":
             self.field[PFC.F_ORIG_HEXIP] = "00000000"
@@ -2982,13 +2964,12 @@ class ProcNetUNIX(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- Sample entries, note that each line is for a different CPU
 # Num       RefCount Protocol Flags    Type St Inode Path
 # 0000000000000000: 00000002 00000000 00010000 0001 01 15807 @/tmp/dbus-HTivHd8Iyv
 # 0000000000000000: 00000002 00000000 00010000 0001 01 14531 /tmp/.X11-unix/X0
 # 0000000000000000: 00000002 00000000 00010000 0001 01 16649 /tmp/keyring-OUNO20/control
-        """
 
         if sio.buff == "":
             self.field[PFC.F_NUM] = 0
@@ -3214,6 +3195,7 @@ REGISTER_PARTIAL_FILE("snmp", ProcNetSNMP)
 class ProcNetNETSTAT(PBR.TwoLineLogicalRecs):
     """
     Abstraction layer to pull records from /proc/net/netstat
+    """
 
 # source: net/ipv4/proc.c
 #
@@ -3246,7 +3228,6 @@ class ProcNetNETSTAT(PBR.TwoLineLogicalRecs):
 # IpExt: 0 0 1 0 102161 495 27899358724 1793111008 112 0 20737154 71127
 #
 #
-    """
 REGISTER_FILE("/proc/net/netstat", ProcNetNETSTAT)
 REGISTER_PARTIAL_FILE("netstat", ProcNetNETSTAT)
 

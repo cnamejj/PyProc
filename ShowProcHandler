@@ -3,6 +3,8 @@
 
 import sys
 import ProcHandlers
+
+PBR = ProcHandlers.PBR
     
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
@@ -19,7 +21,7 @@ else:
 
 if TARGET == "all":
 
-    ProcHandlers.show_proc_file_handlers()
+    PBR.show_proc_file_handlers()
 
 else:
 

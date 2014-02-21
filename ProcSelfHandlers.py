@@ -194,7 +194,6 @@ class ProcSelfMAPS(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
-        """
 # -- Sample records
 #
 # 00400000-0041e000 r-xp 00000000 09:01 149422083                          /bin/cp
@@ -204,7 +203,6 @@ class ProcSelfMAPS(PBR.FixedWhitespaceDelimRecs):
 # 7facdda3a000-7facddd03000 r--p 00000000 09:01 29890584                   /usr/lib/locale/locale-archive
 # 7facddd03000-7facddd1b000 r-xp 00000000 09:01 75238943                   /lib/x86_64-linux-gnu/libpthread-2.15.so
 # 7facddd1b000-7facddf1a000 ---p 00018000 09:01 75238943                   /lib/x86_64-linux-gnu/libpthread-2.15.so
-        """
 
         if sio.buff == "":
             self.field[PFC.F_START] = 0
@@ -431,7 +429,6 @@ class ProcSelfNUMAMAPS(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
-        """
 # -- Sample records
 #
 # 00400000 default file=/bin/cat mapped=7 mapmax=2 N0=7
@@ -440,7 +437,6 @@ class ProcSelfNUMAMAPS(PBR.FixedWhitespaceDelimRecs):
 # 01b69000 default heap anon=3 dirty=3 active=0 N0=3
 # 7f5935a28000 default file=/usr/lib/locale/locale-archive mapped=11 mapmax=88 N0=11
 # 7f5935cf1000 default file=/lib/x86_64-linux-gnu/libc-2.15.so mapped=82 mapmax=167 N0=82
-        """
 
         self.field[PFC.F_HEAP] = 0
         self.field[PFC.F_STACK] = 0
@@ -568,7 +564,6 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
-        """
 # -- Sample records
 #
 # 15 20 0:14 / /sys rw,nosuid,nodev,noexec,relatime - sysfs sysfs rw
@@ -576,7 +571,6 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
 # 20 1 9:1 / / rw,relatime - ext4 /dev/disk/by-uuid/a959862a-84b7-4373-b7d6-954ac9005249 rw,errors=remount-ro,user_xattr,barrier=1,stripe=256,data=ordered
 # 21 15 0:16 / /sys/fs/fuse/connections rw,relatime - fusectl none rw
 # 27 20 9:0 / /boot rw,relatime - ext4 /dev/md0 rw,user_xattr,barrier=1,stripe=128,data=ordered
-        """
 
         self.field[PFC.F_EXTRA_OPTS] = ""
         self.field[PFC.F_FS_TYPE] = ""
@@ -1135,7 +1129,6 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
-        """
 # -- Sample records (NFS mounts add all the complex sub-records, no sample available yet)
 #
 # device udev mounted on /dev with fstype devtmpfs
@@ -1143,7 +1136,6 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 # device tmpfs mounted on /run with fstype tmpfs
 # device /dev/disk/by-uuid/a959862a-84b7-4373-b7d6-954ac9005249 mounted on / with fstype ext4
 # device none mounted on /sys/fs/fuse/connections with fstype fusectl
-        """
 
 #        print "dbg:: readline: '{line}'".format(line=sio.buff[:-1])
         self.__is_per_op = 0
@@ -1245,7 +1237,6 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
-        """
 # -- Sample records
 #
 # 00400000-00420000 r-xp 00000000 09:01 149422156                          /bin/less
@@ -1263,7 +1254,6 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
 # KernelPageSize:        4 kB
 # MMUPageSize:           4 kB
 # Locked:                0 kB
-        """
 
         if sio.buff == "":
             self.field[PFC.F_START] = 0
