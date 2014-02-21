@@ -628,3 +628,6 @@ F_FL_READ = "flag-read"
 F_FL_WRITE = "flag-write"
 F_FL_EXEC = "flag-exec"
 F_FL_MAYSHARE = "flag-may-share"
+
+# -- added to support "SymLinkFile" base class
+F_SYMLINK = "symlink-target"

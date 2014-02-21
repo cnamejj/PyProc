@@ -27,7 +27,7 @@ def pid_to_proc_summ(targetpid):
         try:
             __ps_comm = ["ps", "--no-headers", "-o", "user,pid,cmd", \
                     "-p", __ps_arg]
-            __ps_fd = Popen( __ps_comm, stdout=PIPE, stderr=PIPE)
+            __ps_fd = Popen(__ps_comm, stdout=PIPE, stderr=PIPE)
 
             __sout_buff, __serr_buff = __ps_fd.communicate()
             if __sout_buff != "":
@@ -72,13 +72,13 @@ def connection_to_pid(loc_port, rem_ip, rem_port, net_protocol):
 
 
     try:
-        __fufd = Popen( ["fuser", __fuser_arg, __ipv], stdout=PIPE, stderr=PIPE)
+        __fufd = Popen(["fuser", __fuser_arg, __ipv], stdout=PIPE, stderr=PIPE)
 
         __sout_buff, __serr_buff = __fufd.communicate()
 #        print '::dbg ({0:s})'.format(__sout_buff)
         if __sout_buff != "":
 #            Trying to make "pylint" happy here...
-            __pid = long( str(__sout_buff).split()[0], 10)
+            __pid = long(str(__sout_buff).split()[0])
         else:
             __pid = NO_CONN_PID
 

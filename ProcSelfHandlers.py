@@ -847,7 +847,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
     def parse_age_line(self, sio):
         """Parse an 'age' subrecord"""
 
-        self.field[PFC.F_AGE] = PBR.convert_by_rule( sio.get_word(1),
+        self.field[PFC.F_AGE] = PBR.convert_by_rule(sio.get_word(1),
                 { CONVERSION: long } )
         return
 
@@ -1329,3 +1329,45 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
 #
 REGISTER_FILE("/proc/self/smaps", ProcSelfSMAPS)
 REGISTER_PARTIAL_FILE("smaps", ProcSelfSMAPS)
+
+
+
+# ---
+class ProcSelfEXE(PBR.SymLinkFile):
+    """Pull records from /proc/self/exe"""
+#
+REGISTER_FILE("/proc/self/exe", ProcSelfEXE)
+REGISTER_PARTIAL_FILE("exe", ProcSelfEXE)
+
+
+
+# ---
+class ProcSelfCWD(PBR.SymLinkFile):
+    """Pull records from /proc/self/cwd"""
+#
+REGISTER_FILE("/proc/self/cwd", ProcSelfCWD)
+REGISTER_PARTIAL_FILE("cwd", ProcSelfCWD)
+
+
+
+# ---
+class ProcSelfROOT(PBR.SymLinkFile):
+    """Pull records from /proc/self/root"""
+#
+REGISTER_FILE("/proc/self/root", ProcSelfROOT)
+REGISTER_PARTIAL_FILE("root", ProcSelfROOT)
+
+
+
+# ---
+class ProcSelfFD(PBR.SymLinkFile):
+    """Pull records from /proc/self/fd/* files"""
+
+    def extra_init(self, *opts):
+        if len(opts) == 0:
+            self.infile = "{base}/0".format(base=self.infile)
+        return
+
+#
+REGISTER_FILE("/proc/self/fd", ProcSelfFD)
+REGISTER_PARTIAL_FILE("fd", ProcSelfFD)

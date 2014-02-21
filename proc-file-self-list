@@ -17,10 +17,10 @@ Terms:
 
  VARIES - the fields included vary from system to system
 ---
-fd/### NEED LINK
-cwd NEED LINK
-root NEED LINK
-exe NEED LINK
+fd/### DONE LINK ProcSelfFD
+cwd DONE LINK ProcSelfCWD
+root DONE LINK ProcSelfROOT
+exe DONE LINK ProcSelfEXE
 fdinfo/###
 ns/net
 ns/uts

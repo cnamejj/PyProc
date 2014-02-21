@@ -201,6 +201,23 @@ def proc_file_to_path(proc_file):
 
     return __path
 
+def proc_file_to_symlink(proc_file):
+    """
+    If the arg passed in doesn't exist, try prepending well known directories to find the file.
+    """
+
+    __path = ""
+
+    if os.path.islink(proc_file):
+        __path = proc_file
+    else:
+        for __pref in PROC_PATH_PREFIX_LIST:
+            __trial = "{prefix}{file}".format(prefix=__pref, file=proc_file)
+            if __path == "" and os.path.islink(__trial):
+                __path = __trial
+
+    return __path
+
 def get_handler(proc_file):
     """
     Lookup routine to find the code that knows how to parse the requested /proc/net/ datafile
@@ -441,7 +458,7 @@ class SingleNameValueList(object):
         self.trim_tail = ""
         self.debug_level = 0
 
-        self.extra_init( *opts)
+        self.extra_init(*opts)
 
         self.field = dict()
         self.curr_sio = SeqFileIO.SeqFileIO()
@@ -504,7 +521,7 @@ class TwoLineLogicalRecs(object):
         self.skipped = ""
         self.protocol_type = ""
 
-        self.extra_init( *opts)
+        self.extra_init(*opts)
 
         self.field = dict()
         self.curr_sio = SeqFileIO.SeqFileIO()
@@ -539,7 +556,7 @@ class TwoLineLogicalRecs(object):
         except KeyError:
             self.protocol_type = ""
 
-        return( self.protocol_type, self.field)
+        return(self.protocol_type, self.field)
 
 
 
@@ -567,7 +584,7 @@ class LabelledPairList(object):
 
         self.sock_type_list = ()
 
-        self.extra_init( *opts)
+        self.extra_init(*opts)
 
         self.field = dict()
         self.curr_sio = SeqFileIO.SeqFileIO()
@@ -600,7 +617,7 @@ class LabelledPairList(object):
         __result, __unk_label = self.curr_sio.read_labelled_pair_list_file(
                                     self, self.sock_type_list)
 
-        return( __result)
+        return(__result)
 
 
 
@@ -626,7 +643,7 @@ class ListOfTerms(object):
         self.minfields = 1
         self.skipped = ""
 
-        self.extra_init( *opts)
+        self.extra_init(*opts)
 
         self.field = dict()
         self.curr_sio = SeqFileIO.SeqFileIO()
@@ -657,7 +674,7 @@ class ListOfTerms(object):
 
         self.field[F_TERM_LIST] = __lines
 
-        return( __lines)
+        return(__lines)
 #
 
 
@@ -691,7 +708,7 @@ class FixedColumnRecs(object):
         self.skipped = ""
         self.fixedcols = dict()
 
-        self.extra_init( *opts)
+        self.extra_init(*opts)
 
         self.field = dict()
         self.curr_sio = SeqFileIO.SeqFileIO()
@@ -722,6 +739,58 @@ class FixedColumnRecs(object):
         return(self.extra_next(sio))
 
 
+
+#
+class SymLinkFile(object):
+    """
+    Class to simulate an iterator that reads a file while
+    just returning the target of a symlink as the first line.
+    """
+
+    def extra_init(self, *opts):
+        """No-op version of optional call-out from '__init__' method"""
+        return
+
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            __path = opts[0]
+            self.infile = proc_file_to_symlink(__path)
+        else:
+            self.infile = show_handler_file_path(self)
+
+        self.extra_init(*opts)
+
+        try:
+            self.symlink_target = os.readlink(self.infile)
+            self.complete = False
+        except OSError:
+            self.symlink_target = ""
+            self.complete = True
+
+        self.field = dict()
+        return
+
+    def __iter__(self):
+        """Standard iterator method"""
+        return(self)
+
+    def next(self):
+        """
+        Called to fetch a record, but for this class there's no
+        data to read from the file.  The first call returns the
+        target of the symlink.  All calls after that raise a
+        'StopIteration' condition.
+        """
+        if self.complete:
+            raise StopIteration
+
+        self.complete = True
+        self.field[PFC.F_SYMLINK] = self.symlink_target
+        self.field[PFC.F_FILEPATH] = self.infile
+
+        return(self.infile, self.symlink_target)
+        
+            
 
 if __name__ == "__main__":
 

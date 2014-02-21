@@ -97,8 +97,8 @@ class ProcRootEXECDOMAINS(PBR.FixedWhitespaceDelimRecs):
         self.exdom_name = self.field[PFC.F_EXDOM_NAME]
         self.exdom_module = self.field[PFC.F_EXDOM_MODULE]
 
-        return( self.pers_low, self.pers_high, self.exdom_name,
-                self.exdom_module)
+        return(self.pers_low, self.pers_high, self.exdom_name,
+               self.exdom_module)
 #
 REGISTER_FILE("/proc/execdomains", ProcRootEXECDOMAINS)
 REGISTER_PARTIAL_FILE("execdomains", ProcRootEXECDOMAINS)
@@ -158,7 +158,7 @@ class ProcRootCGROUPS(PBR.FixedWhitespaceDelimRecs):
         self.cgroups = self.field[PFC.F_NUM_CGROUPS]
         self.enabled = self.field[PFC.F_ENABLED] = 0
 
-        return( self.subsys, self.hierachy, self.cgroups, self.enabled)
+        return(self.subsys, self.hierachy, self.cgroups, self.enabled)
 #
 REGISTER_FILE("/proc/cgroups", ProcRootCGROUPS)
 REGISTER_PARTIAL_FILE("cgroups", ProcRootCGROUPS)
@@ -249,7 +249,7 @@ class ProcRootMTRR(PBR.FixedWhitespaceDelimRecs):
         self.count = self.field[PFC.F_COUNT]
         self.type = self.field[PFC.F_TYPE]
 
-        return( self.index, self.base, self.size, self.count, self.type)
+        return(self.index, self.base, self.size, self.count, self.type)
 #
 REGISTER_FILE("/proc/mtrr", ProcRootMTRR)
 REGISTER_PARTIAL_FILE("mtrr", ProcRootMTRR)
@@ -2071,7 +2071,7 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
     def parse_blocks_subrec(self, sio):
         """Parse device specific subrecord with block level info"""
 
-        self.field[PFC.F_BLOCKS] = PBR.convert_by_rule( sio.get_word(0),
+        self.field[PFC.F_BLOCKS] = PBR.convert_by_rule(sio.get_word(0),
                 { CONVERSION: long } )
         __off = 2
 

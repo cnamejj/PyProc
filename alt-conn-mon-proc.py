@@ -97,7 +97,7 @@ for ip, freq in ORDERED_FREQ:
 
     ip2host = IPLOOKUP.get_cache_entry(ip)
 
-    print "{0:d} {1:s} host: {2:s}".format( freq, ip, ip2host)
+    print "{0:d} {1:s} host: {2:s}".format(freq, ip, ip2host)
 
 sys.stderr.flush()
 sys.stdout.flush()
