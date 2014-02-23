@@ -61,14 +61,14 @@ class ProcRootEXECDOMAINS(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 3
 
-        self.add_parse_rule( { FIELD_NUMBER: 0,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0,
                 FIELD_NAME: PFC.F_PERSONALITY_LOW, BEFORE_VAL: "-",
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 0,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0,
                 FIELD_NAME: PFC.F_PERSONALITY_HIGH, AFTER_VAL: "-",
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_EXDOM_NAME } )
-        self.add_parse_rule( { FIELD_NUMBER: 2,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_EXDOM_NAME } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2,
                 FIELD_NAME: PFC.F_EXDOM_MODULE } )
 
         self.pers_low = 0
@@ -124,12 +124,12 @@ class ProcRootCGROUPS(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 4
         self.skipped = "#subsys_name"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_SUBSYSTEM } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_HIERARCHY,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_SUBSYSTEM } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_HIERARCHY,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_NUM_CGROUPS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_NUM_CGROUPS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_ENABLED,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_ENABLED,
                 CONVERSION: long } )
 
         self.subsys = ""
@@ -195,12 +195,12 @@ class ProcRootMTRR(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 6
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INDEX,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INDEX,
                 PREFIX_VAL: "reg", SUFFIX_VAL: ":", CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_BASE_MEMORY,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_BASE_MEMORY,
                 PREFIX_VAL: "base=0x", SUFFIX_VAL: "00000", CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NAME: PFC.F_COUNT, PREFIX_VAL: "count=",
+        PBR.add_parse_rule(self, { FIELD_NAME: PFC.F_COUNT, PREFIX_VAL: "count=",
                 SUFFIX_VAL: ":", CONVERSION: long } )
 
         self.index = 0
@@ -260,6 +260,7 @@ REGISTER_PARTIAL_FILE("mtrr", ProcRootMTRR)
 class ProcRootMODULES(PBR.FixedWhitespaceDelimRecs):
     """
     Pull records from /proc/modules
+    """
 
 # source: kernel/module.c
 #
@@ -302,22 +303,21 @@ class ProcRootMODULES(PBR.FixedWhitespaceDelimRecs):
 #        if (!printed_something)
 #                seq_printf(m, "-");
 #
-    """
 
     def extra_init(self, *opts):
         self.minfields = 6
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_MODULE } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_SIZE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_MODULE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_SIZE,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_REFCOUNT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_REFCOUNT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 3,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3,
                 FIELD_NAME: PFC.F_SOURCE_LIST } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_STATUS } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_MODULE_CORE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_STATUS } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_MODULE_CORE,
                 PREFIX_VAL: "0x", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_TAINTS } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_TAINTS } )
 
         self.module = ""
         self.size = 0
@@ -375,30 +375,30 @@ class ProcRootBUDDYINFO(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 15
 
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_NODE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_NODE,
                     SUFFIX_VAL: ",", CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_ZONE } )
-        self.add_parse_rule( { FIELD_NUMBER: 4,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_ZONE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4,
                     FIELD_NAME: PFC.F_FRBL_AREA_1 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5,
                     FIELD_NAME: PFC.F_FRBL_AREA_2 } )
-        self.add_parse_rule( { FIELD_NUMBER: 6,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6,
                     FIELD_NAME: PFC.F_FRBL_AREA_3 } )
-        self.add_parse_rule( { FIELD_NUMBER: 7,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7,
                     FIELD_NAME: PFC.F_FRBL_AREA_4 } )
-        self.add_parse_rule( { FIELD_NUMBER: 8,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8,
                     FIELD_NAME: PFC.F_FRBL_AREA_5 } )
-        self.add_parse_rule( { FIELD_NUMBER: 9,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9,
                     FIELD_NAME: PFC.F_FRBL_AREA_6 } )
-        self.add_parse_rule( { FIELD_NUMBER: 10,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10,
                     FIELD_NAME: PFC.F_FRBL_AREA_7 } )
-        self.add_parse_rule( { FIELD_NUMBER: 11,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 11,
                     FIELD_NAME: PFC.F_FRBL_AREA_8 } )
-        self.add_parse_rule( { FIELD_NUMBER: 12,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 12,
                     FIELD_NAME: PFC.F_FRBL_AREA_9 } )
-        self.add_parse_rule( { FIELD_NUMBER: 13,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 13,
                     FIELD_NAME: PFC.F_FRBL_AREA_10 } )
-        self.add_parse_rule( { FIELD_NUMBER: 14,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 14,
                     FIELD_NAME: PFC.F_FRBL_AREA_11 } )
 
         self.node = 0
@@ -442,7 +442,7 @@ REGISTER_PARTIAL_FILE("buddyinfo", ProcRootBUDDYINFO)
 class ProcRootSWAPS(PBR.FixedWhitespaceDelimRecs):
     """
     Pull records from /proc/swaps
-
+    """
 
 # source: mm/swapfile.c
 #
@@ -461,19 +461,18 @@ class ProcRootSWAPS(PBR.FixedWhitespaceDelimRecs):
 #                        si->inuse_pages << (PAGE_SHIFT - 10),
 #                        si->prio);
 #
-    """
 
     def extra_init(self, *opts):
         self.minfields = 5
         self.skipped = "Filename"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_FILENAME } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_TYPE } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_SIZE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_FILENAME } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_TYPE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_SIZE,
                     CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_USED,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_USED,
                     CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_PRIORITY,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_PRIORITY,
                     CONVERSION: long } )
 
         self.filename = ""
@@ -628,32 +627,32 @@ class ProcRootDISKSTATS(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 14
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_MAJOR_DEV,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_MAJOR_DEV,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_MINOR_DEV,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_MINOR_DEV,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DISK_NAME } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_READ_IOS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DISK_NAME } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_READ_IOS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_READ_MERGES,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_READ_MERGES,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_READ_SECTORS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_READ_SECTORS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_READ_MSECS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_READ_MSECS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_WRITE_IOS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_WRITE_IOS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_WRITE_MERGES,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_WRITE_MERGES,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_WRITE_SECTORS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_WRITE_SECTORS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_WRITE_MSECS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_WRITE_MSECS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 11,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 11,
                 FIELD_NAME: PFC.F_PART_IN_FLIGHT, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_IO_MSECS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_IO_MSECS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 13,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 13,
                 FIELD_NAME: PFC.F_QUEUE_TIME_MSECS, CONVERSION: long } )
 
         self.major_dev = 0
@@ -737,8 +736,8 @@ class ProcRootVMSTAT(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 2
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_CATEGORY } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_COUNT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_CATEGORY } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_COUNT,
                 CONVERSION: long } )
 
         self.category = ""
@@ -786,10 +785,10 @@ class ProcRootMEMINFO(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 2
         self.skipped = "Filename"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_CATEGORY } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_SIZE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_CATEGORY } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_SIZE,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_UNITS } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_UNITS } )
 
         self.category = ""
         self.size = 0
@@ -841,13 +840,13 @@ class ProcRootPARTITIONS(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 4
         self.skipped = "major"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_MAJOR_DEV,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_MAJOR_DEV,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_MINOR_DEV,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_MINOR_DEV,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_BLOCKS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_BLOCKS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 3,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3,
                 FIELD_NAME: PFC.F_PARTITION_NAME } )
 
         self.major_dev = 0
@@ -898,9 +897,9 @@ class ProcRootMISC(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 2
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_MINOR_DEV,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_MINOR_DEV,
                 CONVERSION: long  } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_DEVICE  } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_DEVICE  } )
 
         self.minor_dev = 0
         self.device = ""
@@ -955,11 +954,11 @@ class ProcRootKALLSYMS(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 3
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ADDRESS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ADDRESS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_TYPE } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_SYMBOL } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MODULE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_TYPE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_SYMBOL } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MODULE,
                 PREFIX_VAL: "[", SUFFIX_VAL: "]" } )
 
         self.address = 0
@@ -1083,9 +1082,9 @@ class ProcRootDMA(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 2
         self.skipped = "No"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_CHANNEL,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_CHANNEL,
                 CONVERSION: long, SUFFIX_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 1,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1,
                 FIELD_NAME: PFC.F_DEVICE_NAME } )
 
         self.channel = 0
@@ -1126,7 +1125,7 @@ class ProcRootFB(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 2
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_NODE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_NODE,
                 CONVERSION: long } )
 
         self.node = 0
@@ -1177,9 +1176,9 @@ class ProcRootCONSOLES(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 4
 
-        self.add_parse_rule( { FIELD_NUMBER: 0,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0,
                 FIELD_NAME: PFC.F_DEVICE_NAME } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_IO_TYPE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_IO_TYPE } )
 
         self.device_name = ""
         self.io_type = ""
@@ -1241,21 +1240,21 @@ class ProcRootKEYUSERS(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 5
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_UID,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_UID,
                 SUFFIX_VAL: ":", CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_USAGE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_USAGE,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_NKEYS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_NKEYS,
                 BEFORE_VAL: "/", CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_NIKEYS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_NIKEYS,
                 AFTER_VAL: "/", CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_QNKEYS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_QNKEYS,
                 BEFORE_VAL: "/", CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MAXKEYS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MAXKEYS,
                 AFTER_VAL: "/", CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_QNBYTES,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_QNBYTES,
                 BEFORE_VAL: "/", CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_MAXBYTES,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_MAXBYTES,
                 AFTER_VAL: "/", CONVERSION: long } )
 
         self.uid = 0
@@ -1414,9 +1413,9 @@ class ProcRootUPTIME(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 2
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_UPTIME,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_UPTIME,
                 CONVERSION: float } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_IDLE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_IDLE,
                 CONVERSION: float } )
 
         self.uptime = 0.0
@@ -1458,17 +1457,17 @@ class ProcRootLOADAVG(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 5
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_LOAD_AV0,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_LOAD_AV0,
                 CONVERSION: float } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_LOAD_AV1,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_LOAD_AV1,
                 CONVERSION: float } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_LOAD_AV2,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_LOAD_AV2,
                 CONVERSION: float } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_NUM_TASKS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_NUM_TASKS,
                 CONVERSION: long, BEFORE_VAL: "/" } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_NUM_THREADS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_NUM_THREADS,
                 CONVERSION: long, AFTER_VAL: "/" } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_LAST_PID,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_LAST_PID,
                 CONVERSION: long } )
 
         self.load0 = 0.0
@@ -1557,54 +1556,54 @@ class ProcRootSLABINFO(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 16
         self.skipped = "#"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_SLAB_NAME } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ACTIVE_OBJS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_SLAB_NAME } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ACTIVE_OBJS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_NUM_OBJS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_NUM_OBJS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_OBJ_SIZE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_OBJ_SIZE,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_OBJ_PER_SLAB,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_OBJ_PER_SLAB,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 5,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5,
                 FIELD_NAME: PFC.F_PAGES_PER_SLAB, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_LIMIT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_LIMIT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_BATCHCOUNT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_BATCHCOUNT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_SHARED,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_SHARED,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_ACTIVE_SLABS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_ACTIVE_SLABS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 14, FIELD_NAME: PFC.F_NUM_SLABS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 14, FIELD_NAME: PFC.F_NUM_SLABS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 15, FIELD_NAME: PFC.F_SHARED_AVAIL,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 15, FIELD_NAME: PFC.F_SHARED_AVAIL,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 18, FIELD_NAME: PFC.F_LIST_ALLOCS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 18, FIELD_NAME: PFC.F_LIST_ALLOCS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 19, FIELD_NAME: PFC.F_MAX_OBJS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 19, FIELD_NAME: PFC.F_MAX_OBJS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 20, FIELD_NAME: PFC.F_GROWN,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 20, FIELD_NAME: PFC.F_GROWN,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 21, FIELD_NAME: PFC.F_REAPED,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 21, FIELD_NAME: PFC.F_REAPED,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 22, FIELD_NAME: PFC.F_ERROR,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 22, FIELD_NAME: PFC.F_ERROR,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 23, FIELD_NAME: PFC.F_MAX_FREEABLE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 23, FIELD_NAME: PFC.F_MAX_FREEABLE,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 24, FIELD_NAME: PFC.F_NODE_ALLOCS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 24, FIELD_NAME: PFC.F_NODE_ALLOCS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 25, FIELD_NAME: PFC.F_REMOTE_FREES,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 25, FIELD_NAME: PFC.F_REMOTE_FREES,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 26,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 26,
                 FIELD_NAME: PFC.F_ALIEN_OVERFLOW, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 29, FIELD_NAME: PFC.F_ALLOC_HIT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 29, FIELD_NAME: PFC.F_ALLOC_HIT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 30, FIELD_NAME: PFC.F_ALLOC_MISS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 30, FIELD_NAME: PFC.F_ALLOC_MISS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 31, FIELD_NAME: PFC.F_FREE_HIT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 31, FIELD_NAME: PFC.F_FREE_HIT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 32, FIELD_NAME: PFC.F_FREE_MISS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 32, FIELD_NAME: PFC.F_FREE_MISS,
                 CONVERSION: long } )
 
         self.slab = ""
@@ -1733,17 +1732,17 @@ class ProcRootVMALLOCINFO(PBR.FixedWhitespaceDelimRecs):
         self.__flag_vpages = "vpages"
         self.__prefix_numa = "N"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_START,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_START,
                 BEFORE_VAL: "-", PREFIX_VAL: "0x", CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_END,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_END,
                 AFTER_VAL: "-", PREFIX_VAL: "0x", CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_SIZE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_SIZE,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NAME: PFC.F_PAGES, PREFIX_VAL: "pages=",
+        PBR.add_parse_rule(self, { FIELD_NAME: PFC.F_PAGES, PREFIX_VAL: "pages=",
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NAME: PFC.F_PHYS_ADDR, PREFIX_VAL: "phys=",
+        PBR.add_parse_rule(self, { FIELD_NAME: PFC.F_PHYS_ADDR, PREFIX_VAL: "phys=",
                 CONVERSION: long, NUM_BASE: 16 } )
 
         self.start_addr = 0

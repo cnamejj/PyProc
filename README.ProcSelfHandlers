@@ -633,3 +633,276 @@ Excerpts from that code:
 #         }
 #         seq_putc(m, '\n');
 # }
+
+
+--- File: /proc/self/status
+
+source: fs/proc/array.c
+--and--
+source: fs/proc/task_mmu.c
+--and---
+source: kernel/cpuset.c
+
+Excerpts from that code:
+
+# from: fs/proc/array.c
+# ---------
+#
+# int proc_pid_status(struct seq_file *m, struct pid_namespace *ns,
+# 			struct pid *pid, struct task_struct *task)
+# {
+# 	struct mm_struct *mm = get_task_mm(task);
+# 
+# 	task_name(m, task);
+# 	task_state(m, ns, pid, task);
+# 
+# 	if (mm) {
+# 		task_mem(m, mm);
+# 		mmput(mm);
+# 	}
+# 	task_sig(m, task);
+# 	task_cap(m, task);
+# 	task_cpus_allowed(m, task);
+# 	cpuset_task_status_allowed(m, task);
+# 	task_context_switch_counts(m, task);
+# 	return 0;
+# }
+# 
+# 
+# static inline void task_name(struct seq_file *m, struct task_struct *p)
+# {
+# 	int i;
+# 	char *buf, *end;
+# 	char *name;
+# 	char tcomm[sizeof(p->comm)];
+# 
+# 	get_task_comm(tcomm, p);
+# 
+# 	seq_puts(m, "Name:\t");
+# 	end = m->buf + m->size;
+# 	buf = m->buf + m->count;
+# 	name = tcomm;
+# 	i = sizeof(tcomm);
+# 	while (i && (buf < end)) {
+# 		unsigned char c = *name;
+# 		name++;
+# 		i--;
+# 		*buf = c;
+# 		if (!c)
+# 			break;
+# 		if (c == '\\') {
+# 			buf++;
+# 			if (buf < end)
+# 				*buf++ = c;
+# 			continue;
+# 		}
+# 		if (c == '\n') {
+# 			*buf++ = '\\';
+# 			if (buf < end)
+# 				*buf++ = 'n';
+# 			continue;
+# 		}
+# 		buf++;
+# 	}
+# 	m->count = buf - m->buf;
+# 	seq_putc(m, '\n');
+# }
+# 
+# 
+# 
+# static inline void task_state(struct seq_file *m, struct pid_namespace *ns,
+# 				struct pid *pid, struct task_struct *p)
+# {
+# 	struct group_info *group_info;
+# 	int g;
+# 	struct fdtable *fdt = NULL;
+# 	const struct cred *cred;
+# 	pid_t ppid, tpid;
+# 
+# 	rcu_read_lock();
+# 	ppid = pid_alive(p) ?
+# 		task_tgid_nr_ns(rcu_dereference(p->real_parent), ns) : 0;
+# 	tpid = 0;
+# 	if (pid_alive(p)) {
+# 		struct task_struct *tracer = ptrace_parent(p);
+# 		if (tracer)
+# 			tpid = task_pid_nr_ns(tracer, ns);
+# 	}
+# 	cred = get_task_cred(p);
+# 	seq_printf(m,
+# 		"State:\t%s\n"
+# 		"Tgid:\t%d\n"
+# 		"Pid:\t%d\n"
+# 		"PPid:\t%d\n"
+# 		"TracerPid:\t%d\n"
+# 		"Uid:\t%d\t%d\t%d\t%d\n"
+# 		"Gid:\t%d\t%d\t%d\t%d\n",
+# 		get_task_state(p),
+# 		task_tgid_nr_ns(p, ns),
+# 		pid_nr_ns(pid, ns),
+# 		ppid, tpid,
+# 		cred->uid, cred->euid, cred->suid, cred->fsuid,
+# 		cred->gid, cred->egid, cred->sgid, cred->fsgid);
+# 
+# 	task_lock(p);
+# 	if (p->files)
+# 		fdt = files_fdtable(p->files);
+# 	seq_printf(m,
+# 		"FDSize:\t%d\n"
+# 		"Groups:\t",
+# 		fdt ? fdt->max_fds : 0);
+# 	rcu_read_unlock();
+# 
+# 	group_info = cred->group_info;
+# 	task_unlock(p);
+# 
+# 	for (g = 0; g < min(group_info->ngroups, NGROUPS_SMALL); g++)
+# 		seq_printf(m, "%d ", GROUP_AT(group_info, g));
+# 	put_cred(cred);
+# 
+# 	seq_putc(m, '\n');
+# }
+# 
+# static inline void task_sig(struct seq_file *m, struct task_struct *p)
+# {
+# 	unsigned long flags;
+# 	sigset_t pending, shpending, blocked, ignored, caught;
+# 	int num_threads = 0;
+# 	unsigned long qsize = 0;
+# 	unsigned long qlim = 0;
+# 
+# 	sigemptyset(&pending);
+# 	sigemptyset(&shpending);
+# 	sigemptyset(&blocked);
+# 	sigemptyset(&ignored);
+# 	sigemptyset(&caught);
+# 
+# 	if (lock_task_sighand(p, &flags)) {
+# 		pending = p->pending.signal;
+# 		shpending = p->signal->shared_pending.signal;
+# 		blocked = p->blocked;
+# 		collect_sigign_sigcatch(p, &ignored, &caught);
+# 		num_threads = get_nr_threads(p);
+# 		rcu_read_lock();  /* FIXME: is this correct? */
+# 		qsize = atomic_read(&__task_cred(p)->user->sigpending);
+# 		rcu_read_unlock();
+# 		qlim = task_rlimit(p, RLIMIT_SIGPENDING);
+# 		unlock_task_sighand(p, &flags);
+# 	}
+# 
+# 	seq_printf(m, "Threads:\t%d\n", num_threads);
+# 	seq_printf(m, "SigQ:\t%lu/%lu\n", qsize, qlim);
+# 
+# 	/* render them all */
+# 	render_sigset_t(m, "SigPnd:\t", &pending);
+# 	render_sigset_t(m, "ShdPnd:\t", &shpending);
+# 	render_sigset_t(m, "SigBlk:\t", &blocked);
+# 	render_sigset_t(m, "SigIgn:\t", &ignored);
+# 	render_sigset_t(m, "SigCgt:\t", &caught);
+# }
+# 
+# 
+# static inline void task_cap(struct seq_file *m, struct task_struct *p)
+# {
+# 	const struct cred *cred;
+# 	kernel_cap_t cap_inheritable, cap_permitted, cap_effective, cap_bset;
+# 
+# 	rcu_read_lock();
+# 	cred = __task_cred(p);
+# 	cap_inheritable	= cred->cap_inheritable;
+# 	cap_permitted	= cred->cap_permitted;
+# 	cap_effective	= cred->cap_effective;
+# 	cap_bset	= cred->cap_bset;
+# 	rcu_read_unlock();
+# 
+# 	render_cap_t(m, "CapInh:\t", &cap_inheritable);
+# 	render_cap_t(m, "CapPrm:\t", &cap_permitted);
+# 	render_cap_t(m, "CapEff:\t", &cap_effective);
+# 	render_cap_t(m, "CapBnd:\t", &cap_bset);
+# }
+# 
+# 
+# static void task_cpus_allowed(struct seq_file *m, struct task_struct *task)
+# {
+# 	seq_puts(m, "Cpus_allowed:\t");
+# 	seq_cpumask(m, &task->cpus_allowed);
+# 	seq_putc(m, '\n');
+# 	seq_puts(m, "Cpus_allowed_list:\t");
+# 	seq_cpumask_list(m, &task->cpus_allowed);
+# 	seq_putc(m, '\n');
+# }
+# 
+# 
+# static inline void task_context_switch_counts(struct seq_file *m,
+# 						struct task_struct *p)
+# {
+# 	seq_printf(m,	"voluntary_ctxt_switches:\t%lu\n"
+# 			"nonvoluntary_ctxt_switches:\t%lu\n",
+# 			p->nvcsw,
+# 			p->nivcsw);
+# }
+
+
+# from: fs/proc/task_mmu.c
+# ---------
+#
+# void task_mem(struct seq_file *m, struct mm_struct *mm)
+# {
+# 	unsigned long data, text, lib, swap;
+# 	unsigned long hiwater_vm, total_vm, hiwater_rss, total_rss;
+# 
+# 	/*
+# 	 * Note: to minimize their overhead, mm maintains hiwater_vm and
+# 	 * hiwater_rss only when about to *lower* total_vm or rss.  Any
+# 	 * collector of these hiwater stats must therefore get total_vm
+# 	 * and rss too, which will usually be the higher.  Barriers? not
+# 	 * worth the effort, such snapshots can always be inconsistent.
+# 	 */
+# 	hiwater_vm = total_vm = mm->total_vm;
+# 	if (hiwater_vm < mm->hiwater_vm)
+# 		hiwater_vm = mm->hiwater_vm;
+# 	hiwater_rss = total_rss = get_mm_rss(mm);
+# 	if (hiwater_rss < mm->hiwater_rss)
+# 		hiwater_rss = mm->hiwater_rss;
+# 
+# 	data = mm->total_vm - mm->shared_vm - mm->stack_vm;
+# 	text = (PAGE_ALIGN(mm->end_code) - (mm->start_code & PAGE_MASK)) >> 10;
+# 	lib = (mm->exec_vm << (PAGE_SHIFT-10)) - text;
+# 	swap = get_mm_counter(mm, MM_SWAPENTS);
+# 	seq_printf(m,
+# 		"VmPeak:\t%8lu kB\n"
+# 		"VmSize:\t%8lu kB\n"
+# 		"VmLck:\t%8lu kB\n"
+# 		"VmPin:\t%8lu kB\n"
+# 		"VmHWM:\t%8lu kB\n"
+# 		"VmRSS:\t%8lu kB\n"
+# 		"VmData:\t%8lu kB\n"
+# 		"VmStk:\t%8lu kB\n"
+# 		"VmExe:\t%8lu kB\n"
+# 		"VmLib:\t%8lu kB\n"
+# 		"VmPTE:\t%8lu kB\n"
+# 		"VmSwap:\t%8lu kB\n",
+# 		hiwater_vm << (PAGE_SHIFT-10),
+# 		(total_vm - mm->reserved_vm) << (PAGE_SHIFT-10),
+# 		mm->locked_vm << (PAGE_SHIFT-10),
+# 		mm->pinned_vm << (PAGE_SHIFT-10),
+# 		hiwater_rss << (PAGE_SHIFT-10),
+# 		total_rss << (PAGE_SHIFT-10),
+# 		data << (PAGE_SHIFT-10),
+# 		mm->stack_vm << (PAGE_SHIFT-10), text, lib,
+# 		(PTRS_PER_PTE*sizeof(pte_t)*mm->nr_ptes) >> 10,
+# 		swap << (PAGE_SHIFT-10));
+# }
+
+# from: kernel/cpuset.c
+# ---------
+#
+# void cpuset_task_status_allowed(struct seq_file *m, struct task_struct *task)
+# {
+# 	seq_printf(m, "Mems_allowed:\t");
+# 	seq_nodemask(m, &task->mems_allowed);
+# 	seq_printf(m, "\n");
+# 	seq_printf(m, "Mems_allowed_list:\t");
+# 	seq_nodemask_list(m, &task->mems_allowed);
+# 	seq_printf(m, "\n");
+# }

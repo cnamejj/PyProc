@@ -71,26 +71,26 @@ class ProcNetNETLINK(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 10
         self.skipped = "sk"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0,
                 FIELD_NAME: PFC.F_SOCKET_POINTER, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_PROTOCOL,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_PROTOCOL,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_PID,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_PID,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_GROUPS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_GROUPS,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_RMEM_ALLOC,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_RMEM_ALLOC,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_WMEM_ALLOC,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_WMEM_ALLOC,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_DUMP,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_DUMP,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_LOCKS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_LOCKS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_DROPS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_DROPS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_INODE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_INODE,
                 CONVERSION: long } )
 
         self.protocol = 0
@@ -149,10 +149,10 @@ class ProcNetCONNECTOR(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 2
         self.skipped = "Name"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_NAME } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ID_IDX,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_NAME } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ID_IDX,
                 BEFORE_VAL: ":", CONVERSION: long }) 
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ID_VAL,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ID_VAL,
                 AFTER_VAL: ":", CONVERSION: long } )
 
         self.name = ""
@@ -222,45 +222,45 @@ class ProcNetPROTOCOLS(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 27
         self.skipped = "protocol"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_PROTOCOL } )
-        self.add_parse_rule( { FIELD_NUMBER: 1,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_PROTOCOL } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1,
                 FIELD_NAME: PFC.F_SIZE, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2,
                 FIELD_NAME: PFC.F_SOCKETS, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 3,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3,
                 FIELD_NAME: PFC.F_MEMORY, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 4,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4,
                 FIELD_NAME: PFC.F_PRESSURE, } )
-        self.add_parse_rule( { FIELD_NUMBER: 5,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5,
                 FIELD_NAME: PFC.F_MAX_HEADER, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_SLAB } )
-        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_MODULE } )
-        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_CLOSE } )
-        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_CONNECT } )
-        self.add_parse_rule( { FIELD_NUMBER: 10,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_SLAB } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_MODULE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_CLOSE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_CONNECT } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10,
                 FIELD_NAME: PFC.F_DISCONNECT } )
-        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_ACCEPT } )
-        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_IOCTL } )
-        self.add_parse_rule( { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_INIT } )
-        self.add_parse_rule( { FIELD_NUMBER: 14, FIELD_NAME: PFC.F_DESTROY } )
-        self.add_parse_rule( { FIELD_NUMBER: 15,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_ACCEPT } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_IOCTL } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_INIT } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 14, FIELD_NAME: PFC.F_DESTROY } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 15,
                 FIELD_NAME: PFC.F_SHUTDOWN } )
-        self.add_parse_rule( { FIELD_NUMBER: 16,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 16,
                 FIELD_NAME: PFC.F_SETSOCKOPT } )
-        self.add_parse_rule( { FIELD_NUMBER: 17,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 17,
                 FIELD_NAME: PFC.F_GETSOCKOPT } )
-        self.add_parse_rule( { FIELD_NUMBER: 18, FIELD_NAME: PFC.F_SENDMSG } )
-        self.add_parse_rule( { FIELD_NUMBER: 19, FIELD_NAME: PFC.F_RECVMSG } )
-        self.add_parse_rule( { FIELD_NUMBER: 20,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 18, FIELD_NAME: PFC.F_SENDMSG } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 19, FIELD_NAME: PFC.F_RECVMSG } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 20,
                 FIELD_NAME: PFC.F_SENDPAGE } )
-        self.add_parse_rule( { FIELD_NUMBER: 21, FIELD_NAME: PFC.F_BIND } )
-        self.add_parse_rule( { FIELD_NUMBER: 22,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 21, FIELD_NAME: PFC.F_BIND } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 22,
                 FIELD_NAME: PFC.F_BACKLOG_RCV } )
-        self.add_parse_rule( { FIELD_NUMBER: 23, FIELD_NAME: PFC.F_HASH } )
-        self.add_parse_rule( { FIELD_NUMBER: 24, FIELD_NAME: PFC.F_UNHASH } )
-        self.add_parse_rule( { FIELD_NUMBER: 25,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 23, FIELD_NAME: PFC.F_HASH } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 24, FIELD_NAME: PFC.F_UNHASH } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 25,
                 FIELD_NAME: PFC.F_GET_PORT } )
-        self.add_parse_rule( { FIELD_NUMBER: 26,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 26,
                 FIELD_NAME: PFC.F_ENTER_PRESSURE } )
 
         self.protocol = ""
@@ -349,27 +349,27 @@ class ProcNetROUTE(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 11
         self.skipped = "Iface"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0,
                 FIELD_NAME: PFC.F_INTERFACE } )
-        self.add_parse_rule( { FIELD_NUMBER: 1,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1,
                 FIELD_NAME: PFC.F_DEST_HEXIP } )
-        self.add_parse_rule( { FIELD_NUMBER: 2,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2,
                 FIELD_NAME: PFC.F_GATE_HEXIP } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_FLAGS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_FLAGS,
                 CONVERSION: long, NUM_BASE:16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_REFCOUNT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_REFCOUNT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_USECOUNT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_USECOUNT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_METRIC,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_METRIC,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 7,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7,
                 FIELD_NAME: PFC.F_MASK_HEXIP } )
-        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_MTU,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_MTU,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_WINDOW,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_WINDOW,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_IRTT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_IRTT,
                CONVERSION: long } )
 
         self.interface = ""
@@ -447,24 +447,24 @@ class ProcNetPACKET(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 9
         self.skipped = "sk"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0,
                 FIELD_NAME: PFC.F_SOCKET_POINTER, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_REFCOUNT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_REFCOUNT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_TYPE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_TYPE,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_PROTOCOL,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_PROTOCOL,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_INT_INDEX,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_INT_INDEX,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_RUNNING,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_RUNNING,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RMEM_ALLOC,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RMEM_ALLOC,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_UID,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_UID,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_INODE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_INODE,
                 CONVERSION: long } )
 
         self.type = 0
@@ -517,26 +517,26 @@ class ProcNetSOFTNETSTAT(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 10
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_PROCESSED,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_PROCESSED,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_DROPPED,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_DROPPED,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 2,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2,
                 FIELD_NAME: PFC.F_TIME_SQUEEZE, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_ZERO1,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_ZERO1,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_ZERO2,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_ZERO2,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_ZERO3,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_ZERO3,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_ZERO4,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_ZERO4,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_ZERO5,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_ZERO5,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_CPU_COLL,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_CPU_COLL,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_RECEIVED_RPS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_RECEIVED_RPS,
                 CONVERSION: long, NUM_BASE: 16 } )
 
         self.processed = 0
@@ -592,16 +592,16 @@ class ProcNetARP(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 6
         self.skipped = "IP"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0,
                 FIELD_NAME: PFC.F_IP_ADDRESS} )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_HW_TYPE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_HW_TYPE,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_FLAGS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_FLAGS,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3,
                 FIELD_NAME: PFC.F_HW_ADDRESS } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_MASK } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_DEVICE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_MASK } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_DEVICE } )
 
         self.ip_addr = ""
         self.hw_addr = ""
@@ -647,14 +647,14 @@ class ProcNetDEVMCAST(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 5
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INT_INDEX,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INT_INDEX,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_DEVICE } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_REFCOUNT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_DEVICE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_REFCOUNT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_GLOBAL_USE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_GLOBAL_USE,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 4,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4,
                 FIELD_NAME: PFC.F_DEV_ADDR } )
 
         self.device = ""
@@ -692,6 +692,7 @@ REGISTER_PARTIAL_FILE("dev_mcast", ProcNetDEVMCAST)
 class ProcNetDEV(PBR.FixedWhitespaceDelimRecs):
     """
     Pull records from /proc/net/dev
+    """
 
 # source: net/core/dev.c
 #        seq_printf(seq, "%6s: %7llu %7llu %4llu %4llu %4llu %5llu %10llu %9llu "
@@ -711,45 +712,44 @@ class ProcNetDEV(PBR.FixedWhitespaceDelimRecs):
 #                   stats->tx_window_errors +
 #                   stats->tx_heartbeat_errors,
 #                   stats->tx_compressed);
-    """
 
     def extra_init(self, *opts):
         self.minfields = 17
         self.skipped = "face"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_DEVICE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_DEVICE,
                 SUFFIX_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_RX_BYTES,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_RX_BYTES,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_RX_PACKETS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_RX_PACKETS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_RX_ERRORS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_RX_ERRORS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_RX_DROP,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_RX_DROP,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_RX_FIFO,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_RX_FIFO,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RX_FRAME,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RX_FRAME,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 7,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7,
                 FIELD_NAME: PFC.F_RX_COMPRESSED, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 8,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8,
                 FIELD_NAME: PFC.F_RX_MULTICAST, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_TX_BYTES,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_TX_BYTES,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_TX_PACKETS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_TX_PACKETS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_TX_ERRORS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_TX_ERRORS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_TX_DROP,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_TX_DROP,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_TX_FIFO,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_TX_FIFO,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 14,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 14,
                 FIELD_NAME: PFC.F_TX_COLLISION, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 15, FIELD_NAME: PFC.F_TX_CARRIER,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 15, FIELD_NAME: PFC.F_TX_CARRIER,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 16,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 16,
                 FIELD_NAME: PFC.F_TX_COMPRESSED, CONVERSION: long } )
 
         self.device = ""
@@ -816,26 +816,26 @@ class ProcNetIPINET6(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 6
         self.ipconv = IPAddressConv
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_IPV6_HEX } )
-        self.add_parse_rule( { FIELD_NUMBER: 1,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_IPV6_HEX } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1,
                 FIELD_NAME: PFC.F_INT_INDEX_HEX } )
-        self.add_parse_rule( { FIELD_NUMBER: 1,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1,
                 FIELD_NAME: PFC.F_INT_INDEX, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 2,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2,
                 FIELD_NAME: PFC.F_PREFIX_LEN_HEX } )
-        self.add_parse_rule( { FIELD_NUMBER: 2,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2,
                 FIELD_NAME: PFC.F_PREFIX_LEN, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3,
                 FIELD_NAME: PFC.F_SCOPE_HEX } )
-        self.add_parse_rule( { FIELD_NUMBER: 3,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3,
                 FIELD_NAME: PFC.F_SCOPE, CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4,
                 FIELD_NAME: PFC.F_FLAGS_HEX } )
-        self.add_parse_rule( { FIELD_NUMBER: 4,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4,
                 FIELD_NAME: PFC.F_FLAGS, CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_DEVICE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_DEVICE } )
 
         self.ipv6 = PDC.ANY_IPV6_ADDR
         self.ipv6_hex = PDC.ANY_IPV6_ADDR_HEX
@@ -896,16 +896,16 @@ class ProcNetIGMP6(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 6
         self.ipconv = IPAddressConv
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INT_INDEX,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INT_INDEX,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_DEVICE } )
-        self.add_parse_rule( { FIELD_NUMBER: 2,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_DEVICE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2,
                 FIELD_NAME: PFC.F_MCAST_ADDR_HEX } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MCAST_USERS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MCAST_USERS,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 4,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4,
                 FIELD_NAME: PFC.F_MCAST_FLAGS } )
-        self.add_parse_rule( { FIELD_NUMBER: 5,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5,
                 FIELD_NAME: PFC.F_TIMER_EXPIRE, CONVERSION: long } )
 
         self.device = PDC.ANY_DEVICE
@@ -962,10 +962,10 @@ class ProcNetIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 12
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_PROTOCOL } )
-        self.add_parse_rule( { FIELD_NUMBER: 1,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_PROTOCOL } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1,
                 FIELD_NAME: PFC.F_PROTOCOL_NUM, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_TIMEOUT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_TIMEOUT,
                 CONVERSION: long } )
 
         self.__tuple_pref = "src="
@@ -1166,32 +1166,32 @@ class ProcNetIPV6ROUTE(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 10
         self.ipconv = IPAddressConv
 
-        self.add_parse_rule( { FIELD_NUMBER: 0,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0,
                 FIELD_NAME: PFC.F_DEST_HEXIP } )
-        self.add_parse_rule( { FIELD_NUMBER: 1,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1,
                 FIELD_NAME: PFC.F_DEST_PREFIX_LEN_HEX } )
-        self.add_parse_rule( { FIELD_NUMBER: 1,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1,
                 FIELD_NAME: PFC.F_DEST_PREFIX_LEN, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 2,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2,
                 FIELD_NAME: PFC.F_SRCE_HEXIP } )
-        self.add_parse_rule( { FIELD_NUMBER: 3,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3,
                 FIELD_NAME: PFC.F_SRCE_PREFIX_LEN_HEX } )
-        self.add_parse_rule( { FIELD_NUMBER: 3,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3,
                 FIELD_NAME: PFC.F_SRCE_PREFIX_LEN, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4,
                 FIELD_NAME: PFC.F_PRIMARY_KEY } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_RT6I_METRIC,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_RT6I_METRIC,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 6,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6,
                 FIELD_NAME: PFC.F_DEST_REFCOUNT, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_DEST_USE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_DEST_USE,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 8,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8,
                 FIELD_NAME: PFC.F_RT6I_FLAGS } )
-        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_DEVICE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_DEVICE } )
 
         self.dest_ip = PDC.PRESENT_ANY_IPV6_ADDR
         self.dest_pref_len = 0
@@ -1263,14 +1263,14 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 14
 
-        self.add_parse_rule( { FIELD_NUMBER: 0,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0,
                 FIELD_NAME: PFC.F_L3_PROTOCOL } )
-        self.add_parse_rule( { FIELD_NUMBER: 1,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1,
                 FIELD_NAME: PFC.F_L3_PROTOCOL_NUM, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_PROTOCOL } )
-        self.add_parse_rule( { FIELD_NUMBER: 3,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_PROTOCOL } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3,
                 FIELD_NAME: PFC.F_PROTOCOL_NUM, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 4,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4,
                 FIELD_NAME: PFC.F_TIMEOUT, CONVERSION: long } )
 
         self.__tuple_pref = "src="
@@ -1476,15 +1476,15 @@ class ProcNetPSCHED(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 4
 
-        self.add_parse_rule( { FIELD_NUMBER: 0,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0,
                 FIELD_NAME: PFC.F_NSEC_PER_USEC, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_PSCHED_TICKS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_PSCHED_TICKS,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 2,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2,
                 FIELD_NAME: PFC.F_UNKNOWN_FIELD, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3,
                 FIELD_NAME: PFC.F_NSEC_PER_HRTIME, CONVERSION: long,
                 NUM_BASE: 16 } )
 
@@ -1537,7 +1537,7 @@ class ProcNetPTYPE(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 2
         self.skipped = "Type"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0,
                 FIELD_NAME: PFC.F_DEVICE_TYPE } )
 
         self.device_name = ""
@@ -1600,23 +1600,23 @@ class ProcNetRT6STATS(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 7
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_FIB_NODES,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_FIB_NODES,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 1,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1,
                 FIELD_NAME: PFC.F_FIB_ROUTE_NODES, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 2,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2,
                 FIELD_NAME: PFC.F_FIB_ROUTE_ALLOC, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3,
                 FIELD_NAME: PFC.F_FIB_ROUTE_ENTRIES, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4,
                 FIELD_NAME: PFC.F_FIB_ROUTE_CACHE, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_FIB_DEST_OPS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_FIB_DEST_OPS,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 6,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6,
                 FIELD_NAME: PFC.F_FIB_DISC_ROUTES, CONVERSION: long,
                 NUM_BASE: 16 } )
 
@@ -1682,35 +1682,35 @@ class ProcNetRTCACHE(PBR.FixedWhitespaceDelimRecs):
         self.skipped = "Iface"
         self.ipconv = IPAddressConv
 
-        self.add_parse_rule( { FIELD_NUMBER: 0,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0,
                 FIELD_NAME: PFC.F_INTERFACE } )
-        self.add_parse_rule( { FIELD_NUMBER: 1,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1,
                 FIELD_NAME: PFC.F_DEST_HEXIP } )
-        self.add_parse_rule( { FIELD_NUMBER: 2,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2,
                 FIELD_NAME: PFC.F_GATE_HEXIP } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_FLAGS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_FLAGS,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_REFCOUNT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_REFCOUNT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_USECOUNT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_USECOUNT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_METRIC,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_METRIC,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 7,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7,
                 FIELD_NAME: PFC.F_SRCE_HEXIP } )
-        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_MTU,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_MTU,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_WINDOW,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_WINDOW,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_IRTT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_IRTT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_TOS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_TOS,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_HHREF,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_HHREF,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_HHUPTOD,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_HHUPTOD,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 14,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 14,
                 FIELD_NAME: PFC.F_SPEC_HEXIP } )
 
         self.interface = PDC.ANY_INTERFACE
@@ -1809,31 +1809,31 @@ class ProcNetStatARPCACHE(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 12
         self.skipped = "entries"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ARP_ENTRIES,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ARP_ENTRIES,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ALLOC,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ALLOC,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DESTROY,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DESTROY,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_HASH_GROW,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_HASH_GROW,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_LOOKUP,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_LOOKUP,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_HIT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_HIT,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RES_FAIL,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RES_FAIL,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 7,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7,
                 FIELD_NAME: PFC.F_RCV_MCAST_PROBE, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 8,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8,
                 FIELD_NAME: PFC.F_RCV_UCAST_PROBE, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_GC_PERIODIC,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_GC_PERIODIC,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_GC_FORCED,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_GC_FORCED,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 11,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 11,
                 FIELD_NAME: PFC.F_UNRES_DISCARD, CONVERSION: long,
                 NUM_BASE: 16 } )
 
@@ -1904,40 +1904,40 @@ class ProcNetStatIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 17
         self.skipped = "entries"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ENTRIES,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ENTRIES,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_SEARCHED,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_SEARCHED,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_FOUND,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_FOUND,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_NEW,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_NEW,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_INVALID,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_INVALID,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_IGNORE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_IGNORE,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_DELETE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_DELETE,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_DELETE_LIST,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_DELETE_LIST,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_INSERT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_INSERT,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 9,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9,
                 FIELD_NAME: PFC.F_INSERT_FAILED, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_DROP,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_DROP,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_DROP_EARLY,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_DROP_EARLY,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_ICMP_ERROR,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_ICMP_ERROR,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_EXP_NEW,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_EXP_NEW,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 14, FIELD_NAME: PFC.F_EXP_CREATE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 14, FIELD_NAME: PFC.F_EXP_CREATE,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 15, FIELD_NAME: PFC.F_EXP_DELETE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 15, FIELD_NAME: PFC.F_EXP_DELETE,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 16,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 16,
                 FIELD_NAME: PFC.F_SEARCH_RESTART, CONVERSION: long,
                 NUM_BASE: 16 } )
 
@@ -1953,12 +1953,11 @@ class ProcNetStatIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- sample records, note that there's one line for each CPU on the system
 # entries  searched found new invalid ignore delete delete_list insert insert_failed drop early_drop icmp_error  expect_new expect_create expect_delete search_restart
 # 00000084  00003e17 00770ce7 00024cc0 0000060a 00012bf0 0006e07e 0006778b 0001e3f0 00000000 00000000 00000000 00000000  00000023 00000001 00000023 00000000
 # 00000084  00000c51 00053265 0001cc23 00000041 0000d313 00006987 00006986 0001cc22 00000000 00000000 00000000 00000000  00000000 0000000f 00000000 00000000
-        """
 
         if sio.buff == "":
             self.field[PFC.F_ENTRIES] = 0
@@ -2021,31 +2020,31 @@ class ProcNetStatNDISCCACHE(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 12
         self.skipped = "entries"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ARP_ENTRIES,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ARP_ENTRIES,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ALLOC,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ALLOC,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DESTROY,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DESTROY,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_HASH_GROW,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_HASH_GROW,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_LOOKUP,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_LOOKUP,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_HIT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_HIT,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RES_FAIL,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RES_FAIL,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 7,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7,
                 FIELD_NAME: PFC.F_RCV_MCAST_PROBE,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 8,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8,
                 FIELD_NAME: PFC.F_RCV_UCAST_PROBE,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_GC_PERIODIC,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_GC_PERIODIC,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_GC_FORCED,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_GC_FORCED,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 11,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 11,
                 FIELD_NAME: PFC.F_UNRES_DISCARD,
                 CONVERSION: long, NUM_BASE: 16 } )
 
@@ -2116,40 +2115,40 @@ class ProcNetStatNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 17
         self.skipped = "entries"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ENTRIES,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ENTRIES,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_SEARCHED,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_SEARCHED,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_FOUND,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_FOUND,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_NEW,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_NEW,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_INVALID,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_INVALID,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_IGNORE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_IGNORE,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_DELETE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_DELETE,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_DELETE_LIST,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_DELETE_LIST,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_INSERT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_INSERT,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 9,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9,
                 FIELD_NAME: PFC.F_INSERT_FAILED, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_DROP,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_DROP,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_DROP_EARLY,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_DROP_EARLY,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_ICMP_ERROR,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_ICMP_ERROR,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_EXP_NEW,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_EXP_NEW,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 14, FIELD_NAME: PFC.F_EXP_CREATE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 14, FIELD_NAME: PFC.F_EXP_CREATE,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 15, FIELD_NAME: PFC.F_EXP_DELETE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 15, FIELD_NAME: PFC.F_EXP_DELETE,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 16,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 16,
                 FIELD_NAME: PFC.F_SEARCH_RESTART, CONVERSION: long,
                 NUM_BASE: 16 } )
 
@@ -2165,12 +2164,11 @@ class ProcNetStatNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
-        """
+
 # -- sample records, note that there's one line for each CPU on the system
 # entries  searched found new invalid ignore delete delete_list insert insert_failed drop early_drop icmp_error  expect_new expect_create expect_delete search_restart
 # 00000085  00003e40 007782a9 00024eab 0000060a 00012c63 0006e7c2 00067e99 0001e5a5 00000000 00000000 00000000 00000000  00000023 00000001 00000023 00000000
 # 00000085  00000c5f 00053a15 0001ce59 00000041 0000d3b2 000069ca 000069c9 0001ce58 00000000 00000000 00000000 00000000  00000000 0000000f 00000000 00000000
-        """
 
         if sio.buff == "":
             self.field[PFC.F_ENTRIES] = 0
@@ -2240,46 +2238,46 @@ class ProcNetStatRTCACHE(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 17
         self.skipped = "entries"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ENTRIES,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ENTRIES,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_IN_HIT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_IN_HIT,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_IN_SLOW_TOT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_IN_SLOW_TOT,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_IN_SLOW_MC,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_IN_SLOW_MC,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_IN_NO_ROUTE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_IN_NO_ROUTE,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_IN_BRD,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_IN_BRD,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 6,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6,
                 FIELD_NAME: PFC.F_IN_MARTIAN_DST, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 7,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7,
                 FIELD_NAME: PFC.F_IN_MARTIAN_SRC, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_OUT_HIT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_OUT_HIT,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 9,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9,
                 FIELD_NAME: PFC.F_OUT_SLOW_TOT, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 10,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10,
                 FIELD_NAME: PFC.F_OUT_SLOW_MC, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_GC_TOTAL,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_GC_TOTAL,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_GC_IGNORED,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_GC_IGNORED,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 13,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 13,
                 FIELD_NAME: PFC.F_GC_GOAL_MISS, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 14,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 14,
                 FIELD_NAME: PFC.F_GC_DST_OVERFLOW, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 15,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 15,
                 FIELD_NAME: PFC.F_IN_HL_SEARCH, CONVERSION: long,
                 NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 16,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 16,
                 FIELD_NAME: PFC.F_OUT_HL_SEARCH, CONVERSION: long,
                 NUM_BASE: 16 } )
 
@@ -2334,6 +2332,7 @@ REGISTER_PARTIAL_FILE("stat/rt_cache", ProcNetStatRTCACHE)
 class ProcNetTCP6(PBR.FixedWhitespaceDelimRecs):
     """
     Abstraction layer to pull records from /proc/net/tcp6
+    """
 
 # source: net/ipv6/tcp_ipv6.c
 # Note: Just as with the "tcp4" code, the source has three separate sections that
@@ -2369,55 +2368,54 @@ class ProcNetTCP6(PBR.FixedWhitespaceDelimRecs):
 #             tp->snd_cwnd,
 #             tcp_in_initial_slowstart(tp) ? -1 : tp->snd_ssthresh
 #             );
-    """
 
     def extra_init(self, *opts):
         self.minfields = 12
         self.skipped = "sl"
         self.ipconv = IPAddressConv
 
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXIP,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXIP,
                 BEFORE_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXPORT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXPORT,
                 AFTER_VAL: ":"  } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_PORT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_PORT,
                 AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16  } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXIP,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXIP,
                 BEFORE_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXPORT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXPORT,
                 AFTER_VAL: ":"  } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_PORT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_PORT,
                 AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16  } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_HEXSTATE } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_TXQUEUE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_HEXSTATE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_TXQUEUE,
                 CONVERSION: long, NUM_BASE: 16, BEFORE_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_RXQUEUE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_RXQUEUE,
                 CONVERSION: long, NUM_BASE: 16, AFTER_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER,
                 CONVERSION: long, NUM_BASE: 16, BEFORE_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER_WHEN,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER_WHEN,
                 CONVERSION: long, NUM_BASE: 16, AFTER_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RETRANS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RETRANS,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_UID,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_UID,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_TIMEOUT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_TIMEOUT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_INODE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_INODE,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_REFCOUNT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_REFCOUNT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_POINTER,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_POINTER,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 12,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 12,
                 FIELD_NAME: PFC.F_RETRY_TIMEOUT, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_ACK_TIMEOUT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 13, FIELD_NAME: PFC.F_ACK_TIMEOUT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 14,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 14,
                 FIELD_NAME: PFC.F_QUICK_OR_PPONG, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 15,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 15,
                 FIELD_NAME: PFC.F_CONGEST_WINDOW, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 16,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 16,
                 FIELD_NAME: PFC.F_SSTART_THRESH, CONVERSION: long } )
 
         self.orig_hexip = self.dest_hexip = ""
@@ -2495,6 +2493,7 @@ REGISTER_PARTIAL_FILE("tcp6", ProcNetTCP6)
 class ProcNetTCP(PBR.FixedWhitespaceDelimRecs):
     """
     Abstraction layer to pull records from /proc/net/tcp
+    """
 
 # source: net/ipv4/tcp_ipv4.c
 # Note: The sample code include is one of three spots where this data is written out.
@@ -2521,54 +2520,53 @@ class ProcNetTCP(PBR.FixedWhitespaceDelimRecs):
 #                tp->snd_cwnd,
 #                tcp_in_initial_slowstart(tp) ? -1 : tp->snd_ssthresh,
 #                len);
-    """
 
     def extra_init(self, *opts):
         self.minfields = 12
         self.skipped = "sl"
 
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXIP,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXIP,
                 BEFORE_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXPORT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXPORT,
                 AFTER_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_PORT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_PORT,
                 AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXIP,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXIP,
                 BEFORE_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXPORT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXPORT,
                 AFTER_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_PORT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_PORT,
                 AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_HEXSTATE } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_TXQUEUE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_HEXSTATE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_TXQUEUE,
                 BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_RXQUEUE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_RXQUEUE,
                 AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER,
                 BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER_WHEN,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER_WHEN,
                 AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RETRANS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RETRANS,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_UID,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_UID,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_TIMEOUT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_TIMEOUT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_INODE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_INODE,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_REFCOUNT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_REFCOUNT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_POINTER,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_POINTER,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 12,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 12,
                 FIELD_NAME: PFC.F_RETRY_TIMEOUT, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 13,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 13,
                 FIELD_NAME: PFC.F_ACK_TIMEOUT, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 14,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 14,
                 FIELD_NAME: PFC.F_QUICK_OR_PPONG, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 15,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 15,
                 FIELD_NAME: PFC.F_CONGEST_WINDOW, CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 16,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 16,
                 FIELD_NAME: PFC.F_SSTART_THRESH, CONVERSION: long } )
 
         self.orig_hexip = self.dest_hexip = ""
@@ -2673,40 +2671,40 @@ class ProcNetUDP6(PBR.FixedWhitespaceDelimRecs):
         self.skipped = "sl"
         self.ipconv = IPAddressConv
 
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXIP,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXIP,
                 BEFORE_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXPORT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXPORT,
                 AFTER_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_PORT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_PORT,
                 AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXIP,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXIP,
                 BEFORE_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 2,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2,
                 FIELD_NAME: PFC.F_DEST_HEXPORT, AFTER_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_PORT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_PORT,
                 AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_HEXSTATE } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_TXQUEUE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_HEXSTATE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_TXQUEUE,
                 BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_RXQUEUE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_RXQUEUE,
                 AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER,
                 BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER_WHEN,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER_WHEN,
                 AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RETRANS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RETRANS,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_UID,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_UID,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_TIMEOUT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_TIMEOUT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_INODE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_INODE,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_REFCOUNT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_REFCOUNT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_POINTER,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_POINTER,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_DROPS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_DROPS,
                 CONVERSION: long } )
 
         self.orig_hexip = self.dest_hexip = ""
@@ -2794,40 +2792,40 @@ class ProcNetUDP(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 12
         self.skipped = "sl"
 
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXIP,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXIP,
                 BEFORE_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXPORT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_HEXPORT,
                 AFTER_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_PORT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_ORIG_PORT,
                 AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXIP,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXIP,
                 BEFORE_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXPORT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_HEXPORT,
                 AFTER_VAL: ":" } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_PORT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_DEST_PORT,
                 AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_HEXSTATE } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_TXQUEUE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_HEXSTATE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_TXQUEUE,
                 BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_RXQUEUE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_RXQUEUE,
                 AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER,
                 BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER_WHEN,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_TIMER_WHEN,
                 AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RETRANS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_RETRANS,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_UID,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_UID,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_TIMEOUT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 8, FIELD_NAME: PFC.F_TIMEOUT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_INODE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 9, FIELD_NAME: PFC.F_INODE,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_REFCOUNT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 10, FIELD_NAME: PFC.F_REFCOUNT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_POINTER,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 11, FIELD_NAME: PFC.F_POINTER,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_DROPS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 12, FIELD_NAME: PFC.F_DROPS,
                 CONVERSION: long } )
 
         self.orig_hexip = self.dest_hexip = ""
@@ -2905,6 +2903,7 @@ REGISTER_PARTIAL_FILE("udp", ProcNetUDP)
 class ProcNetUNIX(PBR.FixedWhitespaceDelimRecs):
     """
     Pull records from /proc/net/unix
+    """
 
 # source: net/unix/af_unix.c
 #                seq_printf(seq, "%pK: %08X %08X %08X %04X %02X %5lu",
@@ -2932,27 +2931,26 @@ class ProcNetUNIX(PBR.FixedWhitespaceDelimRecs):
 #                        }
 #                        for ( ; i < len; i++)
 #                                seq_putc(seq, u->addr->name->sun_path[i]);
-    """
 
     def extra_init(self, *opts):
         self.minfields = 7
         self.skipped = "Num"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_NUM,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_NUM,
                 BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_REFCOUNT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_REFCOUNT,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_PROTOCOL,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_PROTOCOL,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_FLAGS,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_FLAGS,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_TYPE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_TYPE,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_STATE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_STATE,
                 CONVERSION: long, NUM_BASE: 16 } )
-        self.add_parse_rule( { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_INODE,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 6, FIELD_NAME: PFC.F_INODE,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_PATH } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 7, FIELD_NAME: PFC.F_PATH } )
 
         self.protocol = 0
         self.refcount = 0
@@ -3020,6 +3018,7 @@ REGISTER_PARTIAL_FILE("snmp6", ProcNetSNMP6)
 class ProcNetDEVSNMP6(PBR.SingleNameValueList):
     """
     Pull records from a device specific file in the /proc/net/dev_snmp6/ directory
+    """
 
 # source: net/ipv6/proc.c
 #
@@ -3029,7 +3028,6 @@ class ProcNetDEVSNMP6(PBR.SingleNameValueList):
 #  snmp6_seq_show_item(seq, NULL, idev->stats.icmpv6dev->mibs,
 #                      snmp6_icmp6_list);
 #  snmp6_seq_show_icmpv6msg(seq, NULL, idev->stats.icmpv6msgdev->mibs);
-    """
 
     def extra_init(self, *opts):
         if len(opts) > 0:
@@ -3062,6 +3060,7 @@ REGISTER_PARTIAL_FILE("dev_snmp6", ProcNetDEVSNMP6)
 class ProcNetIGMP(PBR.FixedWhitespaceDelimRecs):
     """
     Pull records from /proc/net/igmp
+    """
 
 # source: net/ipv4/igmp.c
 #        if (rcu_dereference(state->in_dev->mc_list) == im) {
@@ -3075,7 +3074,6 @@ class ProcNetIGMP(PBR.FixedWhitespaceDelimRecs):
 #                   im->tm_running, im->tm_running ?
 #                   jiffies_to_clock_t(im->timer.expires-jiffies) : 0,
 #                   im->reporter);
-    """
 
     def extra_init(self, *opts):
         self.__min_words_first = 5
@@ -3084,12 +3082,12 @@ class ProcNetIGMP(PBR.FixedWhitespaceDelimRecs):
         self.skipped = "Idx"
 #        self.__split_delim = ":"
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INDEX,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INDEX,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_DEVICE } )
-        self.add_parse_rule( { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_COUNT,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_DEVICE } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_COUNT,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_QUERIER } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_QUERIER } )
 
         self.count = 0
         self.index = 0
@@ -3170,6 +3168,7 @@ REGISTER_PARTIAL_FILE("igmp", ProcNetIGMP)
 class ProcNetSNMP(PBR.TwoLineLogicalRecs):
     """
     Abstraction layer to pull records from /proc/net/snmp
+    """
 
 # source: net/ipv4/proc.c
 #
@@ -3185,7 +3184,6 @@ class ProcNetSNMP(PBR.TwoLineLogicalRecs):
 # Udp: 890715 230 0 667254 0 0
 #
 #
-    """
 REGISTER_FILE("/proc/net/snmp", ProcNetSNMP)
 REGISTER_PARTIAL_FILE("snmp", ProcNetSNMP)
 
@@ -3440,10 +3438,10 @@ class ProcNetNetfilterNFLOG(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 3
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INDEX,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INDEX,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_NAME } )
-        self.add_parse_rule( { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_LOGGER_LIST,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_NAME } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_LOGGER_LIST,
                 PREFIX_VAL: "(", SUFFIX_VAL: ")" } )
 
         self.index = 0
@@ -3487,9 +3485,9 @@ class ProcNetNetfilterNFQUEUE(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 2
 
-        self.add_parse_rule( { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INDEX,
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_INDEX,
                 CONVERSION: long } )
-        self.add_parse_rule( { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_NAME } )
+        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_NAME } )
 
         self.index = 0
         self.name = ""

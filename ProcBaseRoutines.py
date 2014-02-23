@@ -61,6 +61,41 @@ def error_by_rule(rule):
 
     return __err
 
+def matches_all_crit(rawdata, rule):
+    """
+    Test to see if 'rawdata' passes all selection tests in the given 
+    parse rule.
+    """
+
+    __result = True
+
+    if __result and rule.has_key(PREFIX_VAL):
+        __result = rawdata.startswith(rule[PREFIX_VAL])
+        rawdata = rawdata[len(rule[PREFIX_VAL]):]
+
+    if __result and rule.has_key(SUFFIX_VAL):
+        __result = rawdata.endswith(rule[SUFFIX_VAL])
+        rawdata = rawdata[:-len(rule[SUFFIX_VAL])]
+
+    if __result and rule.has_key(BEFORE_VAL):
+        __split = rawdata.partition(rule[BEFORE_VAL])
+        if len(__split) == 3:
+            if len(__split[1]) > 0:
+                rawdata = __split[0]
+            else:
+                __result = False
+        else:
+            __result = False
+
+    if __result and rule.has_key(AFTER_VAL):
+        __split = rawdata.partition(rule[AFTER_VAL])
+        if len(__split) != 3:
+            __result = False
+        elif len(__split[1]) == 0:
+            __result = False
+
+    return __result    
+
 def convert_by_rule(rawdata, rule):
     """Apply the given ruleset to the specified string and return the result"""
 
@@ -287,6 +322,26 @@ def show_handler_file_path(cl_instance):
                 tcl=cl_instance.__class__.__name__)
     return HANDLER_TO_PATH[__key]
 
+def add_parse_rule(handler, rule):
+    """
+    Append the supplied ruleset to the list of parsing rules defined
+    for the instance of the file parser.
+    """
+
+    __rn = len(handler.parse_rule)
+#    print "dbg:: apr: n:{rn:d} r({rule})".format(rn=__rn, rule=str(rule))
+
+    if rule.has_key(FIELD_NUMBER) or not rule.has_key(FIELD_NAME):
+        handler.floating_rule[__rn] = False
+    elif rule.has_key(PREFIX_VAL) or rule.has_key(SUFFIX_VAL):
+        # -- rules without a field number, but that have a prefix
+        # -- and/or suffix check are parsed separately
+        handler.floating_rule[__rn] = True
+    else:
+        handler.floating_rule[__rn] = False
+
+    handler.parse_rule[__rn] = rule
+
 # ---
 class ProcNetNULL(object):
     """
@@ -315,26 +370,6 @@ class FixedWhitespaceDelimRecs(object):
     """
     Base class to read simple files with whitespace delimited columns, consistent record format
     """
-
-    def add_parse_rule(self, rule):
-        """
-        Append the supplied ruleset to the list of parsing rules defined
-        for the instance of the file parser.
-        """
-
-        __rn = len(self.parse_rule)
-#        print "dbg:: apr: n:{rn:d} r({rule})".format(rn=__rn, rule=str(rule))
-
-        if rule.has_key(FIELD_NUMBER) or not rule.has_key(FIELD_NAME):
-            self.floating_rule[__rn] = False
-        elif rule.has_key(PREFIX_VAL) or rule.has_key(SUFFIX_VAL):
-            # -- rules without a field number, but that have a prefix
-            # -- and/or suffix check are parsed separately
-            self.floating_rule[__rn] = True
-        else:
-            self.floating_rule[__rn] = False
-
-        self.parse_rule[__rn] = rule
 
     def extra_init(self, *opts):
         """No-op version of optional call-out from '__init__' method"""
@@ -789,6 +824,106 @@ class SymLinkFile(object):
         self.field[PFC.F_FILEPATH] = self.infile
 
         return(self.infile, self.symlink_target)
+
+
+
+#
+class TaggedMultiLineFile(object):
+    """
+    Read files where one logical records is made up of multiple physical recs
+    each of which has can be parsed with a 'parse_rule'.  The call-out to the
+    'extra_next' method, which is where the extended class can perform more
+    complex parsing/transformations, is done only once the complete logical
+    record has been built.
+    """
+
+    def extra_init(self, *opts):
+        """No-op version of optional call-out from '__init__' method"""
+        return
+
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            __path = opts[0]
+            self.infile = proc_file_to_path(__path)
+        else:
+            self.infile = show_handler_file_path(self)
+
+        self.at_eof = False
+        self.minfields = 0
+        self.skipped = ""
+        self.eor_value = ""
+        self.eor_rule = dict()
+        self.parse_rule = dict()
+        self.floating_rule = dict()
+
+        self.extra_init(*opts)
+
+        self.field = dict()
+        self.curr_sio = SeqFileIO.SeqFileIO()
+#        print "base:__init__: inp({infile})".format(infile=self.infile)
+        self.curr_sio.open_file(self.infile, self.minfields, self.skipped)
+        return
+
+    def __iter__(self):
+        """Standard iterator method"""
+        return(self)
+
+    def extra_next(self, sio):
+        """No-op version of logical record post-processing method"""
+        return(self.field)
+
+    def add_eor_rule(self, eor, rule):
+        """
+        Define a parse rule for detecting an 'end of logical record'
+        line in the target file.
+        """
+        self.eor_value = eor
+        self.eor_rule = rule
+
+    def next(self):
+        """
+        Call to fetch a logical record, which means reading and
+        parsing multiple physical records until a specific tag
+        is found indicating we're done, or EOF is reached.
+        """
+
+        if self.at_eof:
+            raise StopIteration
+
+        __done = False
+
+        self.field = dict()
+        sio = self.curr_sio
+
+        while not __done:
+            try:
+                sio.read_line()
+                __line = sio.buff[:-1]
+
+                for __rulenum in self.parse_rule:
+                    __cr = self.parse_rule[__rulenum]
+                    if __cr.has_key(FIELD_NAME):
+                        if matches_all_crit(__line, __cr):
+                            __parsed = convert_by_rule(__line, __cr)
+#                            print "dbg:: ApRu? par({val}) rule({rule}) b({buff})".format(val=str(__parsed),
+#                                    buff=__line.strip(), rule=str(__cr))
+                            self.field[__cr[FIELD_NAME]] = __parsed
+
+#                if matches_all_crit(__line, self.eor_rule):
+#                    __done = True
+                __is_eor = convert_by_rule(__line, self.eor_rule)
+                #print "dbg:: EOR? par({val}) comp({eor}) b({buff})".format(val=__is_eor, eor=self.eor_value, buff=__line)
+                if __is_eor == self.eor_value:
+                    __done = True
+                    
+            except StopIteration:
+                self.at_eof = True
+                __done = True
+
+        if len(self.field) == 0:
+            raise StopIteration
+
+        return(self.extra_next(sio))
         
             
 
