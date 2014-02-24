@@ -1497,7 +1497,7 @@ class ProcSelfSTATUS(PBR.TaggedMultiLineFile):
         try:
             __conv = self.field[PFC.F_GROUPS].strip().split(" ")
         except KeyError:
-            __conv = [ self.field.PFC.F_GROUPS ]
+            __conv = []
 
         for __off in range(0, len(__conv)):
             __val = __conv[__off]
