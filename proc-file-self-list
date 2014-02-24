@@ -27,7 +27,7 @@ ns/uts
 ns/ipc
 environ
 auxv
-status NEED REPORT
+status DONE REPORT ProcSelfSTATUS
 personality NEED TBD NOHEADER
 limits DONE FIXEDCOLS ProcSelfLIMITS
 sched NEED TBD NOHEADER

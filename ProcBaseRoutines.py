@@ -909,8 +909,6 @@ class TaggedMultiLineFile(object):
 #                                    buff=__line.strip(), rule=str(__cr))
                             self.field[__cr[FIELD_NAME]] = __parsed
 
-#                if matches_all_crit(__line, self.eor_rule):
-#                    __done = True
                 __is_eor = convert_by_rule(__line, self.eor_rule)
                 #print "dbg:: EOR? par({val}) comp({eor}) b({buff})".format(val=__is_eor, eor=self.eor_value, buff=__line)
                 if __is_eor == self.eor_value:

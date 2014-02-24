@@ -44,7 +44,7 @@ SUFFIX = PBR.SUFFIX_VAL
 CONV = PBR.CONVERSION
 NAME = PBR.FIELD_NAME
 BEFORE = PBR.BEFORE_VAL
-
+ERRVAL = PBR.ERROR_VAL
 
 REGISTER_FILE = PBR.register_file
 REGISTER_PARTIAL_FILE = PBR.register_partial_file
@@ -1464,17 +1464,46 @@ class ProcSelfSTATUS(PBR.TaggedMultiLineFile):
 
     def extra_next(self, sio):
 
-#        try:
-#            __split = self.field[PFC.F_UID_SET].split("\t")
-#            print "dbg:: Found {nn} uid values".format(nn=len(__split))
-#        except KeyError:
-#            print "dbg:: Err: No uid list"
-#
-#        try:
-#            __split = self.field[PFC.F_GID_SET].split("\t")
-#            print "dbg:: Found {nn} gid values".format(nn=len(__split))
-#        except KeyError:
-#            print "dbg:: Err: No gid list"
+        try:
+            __split = self.field[PFC.F_UID_SET].split("\t")
+        except KeyError:
+            __split = []
+
+        __conv = [ PDC.NO_UID, PDC.NO_UID, PDC.NO_UID, PDC.NO_UID ]
+
+        for __off in range(0, min(len(__split), len(__conv))):
+            __conv[__off] = PBR.convert_by_rule(__split[__off], { CONV: long, ERRVAL: PDC.NO_GID } )
+
+        self.field[PFC.F_UID] = __conv[0]
+        self.field[PFC.F_EUID] = __conv[1]
+        self.field[PFC.F_SUID] = __conv[2]
+        self.field[PFC.F_FSUID] = __conv[3]
+
+        try:
+            __split = self.field[PFC.F_GID_SET].split("\t")
+        except KeyError:
+            __split = []
+
+        __conv = [ PDC.NO_GID, PDC.NO_GID, PDC.NO_GID, PDC.NO_GID ]
+
+        for __off in range(0, min(len(__split), len(__conv))):
+            __conv[__off] = PBR.convert_by_rule(__split[__off], { CONV: long, ERRVAL: PDC.NO_UID } )
+
+        self.field[PFC.F_GID] = __conv[0]
+        self.field[PFC.F_EGID] = __conv[1]
+        self.field[PFC.F_SGID] = __conv[2]
+        self.field[PFC.F_FSGID] = __conv[3]
+
+        try:
+            __conv = self.field[PFC.F_GROUPS].strip().split(" ")
+        except KeyError:
+            __conv = [ self.field.PFC.F_GROUPS ]
+
+        for __off in range(0, len(__conv)):
+            __val = __conv[__off]
+            __conv[__off] = PBR.convert_by_rule(__val, { CONV: long, ERRVAL: PDC.NO_GID } )
+
+        self.field[PFC.F_GROUPS] = __conv
 
         return self.field
 
