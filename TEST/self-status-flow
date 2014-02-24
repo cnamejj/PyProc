@@ -1,0 +1,41 @@
+A: Name: %program-file-name%
+B: State: %process-state%
+   Tgid: %thread-gid%
+   Pid: %pid%
+   PPid: %parent-pid%
+   TracerPid: %tracer-pid%
+   Uid: %cred-uid% %cred-euid% %cred-setuid% %cred-fsuid% --> "fs" means "filesystem"
+   Gid: %cred-gid% %cred-egid% %cred-setgid% %cred-fsgid% --> "fs" means "filesystem"
+   FDSize: %max-fds%
+   Groups: {%group% }*
+C: VmPeak: %% kB
+   VmSize: %% kB
+   VmLck: %% kB
+   VmPin: %% kB
+   VmHWM: %% kB
+   VmRSS: %% kB
+   VmData: %% kB
+   VmStk: %% kB
+   VmExe: %% kB
+   VmLib: %% kB
+   VmPTE: %% kB
+   VmSwap: %% kB
+D: Threads: %num-threads%
+   SigQ: %queue-size% %queue-limit%
+   SigPnd: %pending-bitmap%
+   ShdPnd: %shared-pending-bitmap%
+   SigBlk: %blocked-bitmap%
+   SigIgn: %ignored-bitmap%
+   SigCgt: %caught-bitmap%
+E: CapInh: %inheritable-bitmap%
+   CapPrm: %permitted-bitmap%
+   CapEff: %effective-bitmap%
+   CapBnd: %bounding-set-bitmap%
+F: Cpus_allowed: %allowed-cpu-mask%
+   Cpus_allowed_list: %allowed-cpu-list%
+G: Mems_allowed: %allowed-mem-node-mask%
+   Mems_allowed_list: %allowed-mem-node-list%
+H: voluntary_ctxt_switches: %voluntary-cswitch%
+   nonvoluntary_ctxt_switches: %involuntary-cswitch%
+
+See "Documentation/filesystems/proc.txt"
