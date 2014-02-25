@@ -29,22 +29,17 @@ PBR = ProcBaseRoutines
 PFC = ProcFieldConstants
 PDC = ProcDataConstants
 
-FIELD_NAME = PBR.FIELD_NAME
-FIELD_NUMBER = PBR.FIELD_NUMBER
-CONVERSION = PBR.CONVERSION
-ERROR_VAL = PBR.ERROR_VAL
-NUM_BASE = PBR.NUM_BASE
-PREFIX_VAL = PBR.PREFIX_VAL
-SUFFIX_VAL = PBR.SUFFIX_VAL
-BEFORE_VAL = PBR.BEFORE_VAL
-AFTER_VAL = PBR.AFTER_VAL
-
 PREFIX = PBR.PREFIX_VAL
 SUFFIX = PBR.SUFFIX_VAL
 CONV = PBR.CONVERSION
 NAME = PBR.FIELD_NAME
+POS = PBR.FIELD_NUMBER
 BEFORE = PBR.BEFORE_VAL
+AFTER = PBR.AFTER_VAL
 ERRVAL = PBR.ERROR_VAL
+HAS = PBR.HAS_VAL
+CONV = PBR.CONVERSION
+BASE = PBR.NUM_BASE
 
 REGISTER_FILE = PBR.register_file
 REGISTER_PARTIAL_FILE = PBR.register_partial_file
@@ -173,20 +168,20 @@ class ProcSelfMAPS(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 5
 
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_START,
-                BEFORE_VAL: "-", CONVERSION: long, NUM_BASE: 16 } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_END,
-                AFTER_VAL: "-", CONVERSION: long, NUM_BASE: 16 } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_FLAGS } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_PAGE_OFFSET,
-                CONVERSION: long, NUM_BASE: 16 } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MAJOR_DEV,
-                BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MINOR_DEV,
-                AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_INODE,
-                CONVERSION: long } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_PATH } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_START,
+                BEFORE: "-", CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_END,
+                AFTER: "-", CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_FLAGS } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_PAGE_OFFSET,
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_MAJOR_DEV,
+                BEFORE: ":", CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_MINOR_DEV,
+                AFTER: ":", CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_INODE,
+                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_PATH } )
 
         self.vm_start = 0
         self.vm_end = 0
@@ -256,11 +251,11 @@ class ProcSelfSTACK(PBR.FixedWhitespaceDelimRecs):
         self.stack_entry = ""
 
         self.rules = dict()
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_ADDRESS,
-                PREFIX_VAL: "[<", SUFFIX_VAL: ">]", CONVERSION: long,
-                NUM_BASE: 16 } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 1,
-                FIELD_NAME: PFC.F_STACK_ENTRY } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_ADDRESS,
+                PREFIX: "[<", SUFFIX: ">]", CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 1,
+                NAME: PFC.F_STACK_ENTRY } )
 
         return
 
@@ -391,25 +386,25 @@ class ProcSelfNUMAMAPS(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 2
 
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_START,
-                CONVERSION: long, NUM_BASE: 16 } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_BUFFNAME } )
-        PBR.add_parse_rule(self, { FIELD_NAME: PFC.F_FILEPATH,
-                PREFIX_VAL: "file=" } )
-        PBR.add_parse_rule(self, { FIELD_NAME: PFC.F_ANON, PREFIX_VAL: "anon=",
-                CONVERSION: long } )
-        PBR.add_parse_rule(self, { FIELD_NAME: PFC.F_DIRTY, PREFIX_VAL: "dirty=",
-                CONVERSION: long } )
-        PBR.add_parse_rule(self, { FIELD_NAME: PFC.F_MAPPED, PREFIX_VAL: "mapped=",
-                CONVERSION: long } )
-        PBR.add_parse_rule(self, { FIELD_NAME: PFC.F_MAPMAX, PREFIX_VAL: "mapmax=",
-                CONVERSION: long } )
-        PBR.add_parse_rule(self, { FIELD_NAME: PFC.F_SWAPCACHE,
-                PREFIX_VAL: "swapcache=", CONVERSION: long } )
-        PBR.add_parse_rule(self, { FIELD_NAME: PFC.F_ACTIVE_PAGES,
-                PREFIX_VAL: "active=", CONVERSION: long } )
-        PBR.add_parse_rule(self, { FIELD_NAME: PFC.F_WRITEBACK,
-                PREFIX_VAL: "writeback=", CONVERSION: long } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_START,
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_BUFFNAME } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_FILEPATH,
+                PREFIX: "file=" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ANON, PREFIX: "anon=",
+                CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_DIRTY, PREFIX: "dirty=",
+                CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_MAPPED, PREFIX: "mapped=",
+                CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_MAPMAX, PREFIX: "mapmax=",
+                CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_SWAPCACHE,
+                PREFIX: "swapcache=", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ACTIVE_PAGES,
+                PREFIX: "active=", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_WRITEBACK,
+                PREFIX: "writeback=", CONV: long } )
 
         self.start = 0
         self.buffname = ""
@@ -542,16 +537,16 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 10
 
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_MOUNT_ID } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 1,
-                FIELD_NAME: PFC.F_PARENT_MOUNT_ID, CONVERSION: long } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_MAJOR_DEV,
-                BEFORE_VAL: ":", CONVERSION: long } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_MINOR_DEV,
-                AFTER_VAL: ":", CONVERSION: long } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MOUNT_FS } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_MOUNT_REL } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_MOUNT_OPTS } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_MOUNT_ID } )
+        PBR.add_parse_rule(self, { POS: 1,
+                NAME: PFC.F_PARENT_MOUNT_ID, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_MAJOR_DEV,
+                BEFORE: ":", CONV: long } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_MINOR_DEV,
+                AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_MOUNT_FS } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_MOUNT_REL } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_MOUNT_OPTS } )
 
         self.__option_sep = "-"
 
@@ -819,7 +814,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
             try:
                 self.field[__mount_opt] = PBR.convert_by_rule(
                         __opt[__mount_opt],
-                        { CONVERSION: long } )
+                        { CONV: long } )
             except KeyError:
                 self.field[__mount_opt] = 0
 
@@ -827,7 +822,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
             try:
                 self.field[__mount_opt] = PBR.convert_by_rule(
                         __opt[__mount_opt],
-                        { CONVERSION: long, NUM_BASE: 16 } )
+                        { CONV: long, BASE: 16 } )
             except KeyError:
                 self.field[__mount_opt] = 0
         self.__nfs_mount_opts_hex = ( PFC.F_NFSV4_BM0, PFC.F_NFSV4_BM1,
@@ -846,7 +841,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         """Parse an 'age' subrecord"""
 
         self.field[PFC.F_AGE] = PBR.convert_by_rule(sio.get_word(1),
-                { CONVERSION: long } )
+                { CONV: long } )
         return
 
 # (D) \tcaps: caps=0x!HEX!,wtmult=!INT!,dtsize=!INT!,bsize=!INT!,namlen=!INT!
@@ -861,15 +856,15 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 #                    val=__caps[__key])
 
         self.field[PFC.F_CAPS] = PBR.convert_by_rule(__caps[PFC.F_CAPS],
-                { CONVERSION: long, NUM_BASE: 16, PREFIX_VAL: "0x" } )
+                { CONV: long, BASE: 16, PREFIX: "0x" } )
         self.field[PFC.F_WTMULT] = PBR.convert_by_rule(__caps[PFC.F_WTMULT],
-                { CONVERSION: long } )
+                { CONV: long } )
         self.field[PFC.F_DTSIZE] = PBR.convert_by_rule(__caps[PFC.F_DTSIZE],
-                { CONVERSION: long } )
+                { CONV: long } )
         self.field[PFC.F_BSIZE] = PBR.convert_by_rule(__caps[PFC.F_BSIZE],
-                { CONVERSION: long } )
+                { CONV: long } )
         self.field[PFC.F_NAMELEN] = PBR.convert_by_rule(__caps[PFC.F_NAMELEN],
-                { CONVERSION: long } )
+                { CONV: long } )
         return
 
     def parse_nfsv4_line(self, sio):
@@ -881,11 +876,11 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         __opts = PBR.breakout_option_list(sio.get_word(1))
 
         self.field[PFC.F_NFSV4_BM0] = PBR.convert_by_rule(
-                __opts[PFC.F_NFSV4_BM0], { CONVERSION: long, NUM_BASE: 16 } )
+                __opts[PFC.F_NFSV4_BM0], { CONV: long, BASE: 16 } )
         self.field[PFC.F_NFSV4_BM1] = PBR.convert_by_rule(
-                __opts[PFC.F_NFSV4_BM1], { CONVERSION: long, NUM_BASE: 16 } )
+                __opts[PFC.F_NFSV4_BM1], { CONV: long, BASE: 16 } )
         self.field[PFC.F_NFSV4_ACL] = PBR.convert_by_rule(
-                __opts[PFC.F_NFSV4_ACL], { CONVERSION: long, NUM_BASE: 16 } )
+                __opts[PFC.F_NFSV4_ACL], { CONV: long, BASE: 16 } )
 
         if __opts.has_key(PFC.F_SESSIONS):
             self.field[PFC.F_SESSIONS] = 1
@@ -906,11 +901,11 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         __optlist = PBR.breakout_option_list(sio.get_word(1))
         self.field[PFC.F_FLAVOR] = PBR.convert_by_rule(
                 __optlist[self.__prefix_flavor],
-                { CONVERSION: long } )
+                { CONV: long } )
         try:
             self.field[PFC.F_PSEUDOFLAVOR] = PBR.convert_by_rule(
                     __optlist[self.__prefix_pseudoflavor],
-                    { CONVERSION: long } )
+                    { CONV: long } )
         except KeyError:
             self.field[PFC.F_PSEUDOFLAVOR] = 0
         return
@@ -1133,7 +1128,8 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
-# -- Sample records (NFS mounts add all the complex sub-records, no sample available yet)
+# -- Sample records (NFS mounts add all the complex sub-records, no sample
+#    available yet)
 #
 # device udev mounted on /dev with fstype devtmpfs
 # device devpts mounted on /dev/pts with fstype devpts
@@ -1194,20 +1190,20 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 3
 
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_START,
-                BEFORE_VAL: "-", CONVERSION: long, NUM_BASE: 16 } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 0, FIELD_NAME: PFC.F_END,
-                AFTER_VAL: "-", CONVERSION: long, NUM_BASE: 16 } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 1, FIELD_NAME: PFC.F_FLAGS } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 2, FIELD_NAME: PFC.F_PAGE_OFFSET,
-                CONVERSION: long, NUM_BASE: 16 } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MAJOR_DEV,
-                BEFORE_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 3, FIELD_NAME: PFC.F_MINOR_DEV,
-                AFTER_VAL: ":", CONVERSION: long, NUM_BASE: 16 } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 4, FIELD_NAME: PFC.F_INODE,
-                CONVERSION: long } )
-        PBR.add_parse_rule(self, { FIELD_NUMBER: 5, FIELD_NAME: PFC.F_PATH } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_START,
+                BEFORE: "-", CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_END,
+                AFTER: "-", CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_FLAGS } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_PAGE_OFFSET,
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_MAJOR_DEV,
+                BEFORE: ":", CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_MINOR_DEV,
+                AFTER: ":", CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_INODE,
+                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_PATH } )
 
         p2n = dict()
         p2n["Size:"] = PFC.F_SIZE
@@ -1299,7 +1295,7 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
             try:
                 __field = self.__pref2field[__pref]
                 self.field[__field] = PBR.convert_by_rule(sio.get_word(1),
-                        { CONVERSION: long } )
+                        { CONV: long } )
             except KeyError:
                 pass
 
@@ -1370,7 +1366,9 @@ REGISTER_PARTIAL_FILE("fd", ProcSelfFD)
 
 #
 class ProcSelfSTATUS(PBR.TaggedMultiLineFile):
-    """Parse contents of process specific 'status' file, ex: /proc/self/status"""
+    """
+    Parse contents of process specific 'status' file, ex: /proc/self/status
+    """
 
 # source: fs/proc/array.c
 # --and--
@@ -1380,7 +1378,6 @@ class ProcSelfSTATUS(PBR.TaggedMultiLineFile):
 #
 # The kernel source snippets that generate this file are stored in
 # "README.ProcSelfHandlers" to reduce the size of this module.
-
 
     def extra_init(self, *opts):
         self.minfields = 2
@@ -1472,7 +1469,8 @@ class ProcSelfSTATUS(PBR.TaggedMultiLineFile):
         __conv = [ PDC.NO_UID, PDC.NO_UID, PDC.NO_UID, PDC.NO_UID ]
 
         for __off in range(0, min(len(__split), len(__conv))):
-            __conv[__off] = PBR.convert_by_rule(__split[__off], { CONV: long, ERRVAL: PDC.NO_GID } )
+            __conv[__off] = PBR.convert_by_rule(__split[__off], { CONV: long,
+                    ERRVAL: PDC.NO_GID } )
 
         self.field[PFC.F_UID] = __conv[0]
         self.field[PFC.F_EUID] = __conv[1]
@@ -1487,7 +1485,8 @@ class ProcSelfSTATUS(PBR.TaggedMultiLineFile):
         __conv = [ PDC.NO_GID, PDC.NO_GID, PDC.NO_GID, PDC.NO_GID ]
 
         for __off in range(0, min(len(__split), len(__conv))):
-            __conv[__off] = PBR.convert_by_rule(__split[__off], { CONV: long, ERRVAL: PDC.NO_UID } )
+            __conv[__off] = PBR.convert_by_rule(__split[__off],
+                    { CONV: long, ERRVAL: PDC.NO_UID } )
 
         self.field[PFC.F_GID] = __conv[0]
         self.field[PFC.F_EGID] = __conv[1]
@@ -1501,7 +1500,8 @@ class ProcSelfSTATUS(PBR.TaggedMultiLineFile):
 
         for __off in range(0, len(__conv)):
             __val = __conv[__off]
-            __conv[__off] = PBR.convert_by_rule(__val, { CONV: long, ERRVAL: PDC.NO_GID } )
+            __conv[__off] = PBR.convert_by_rule(__val, { CONV: long,
+                    ERRVAL: PDC.NO_GID } )
 
         self.field[PFC.F_GROUPS] = __conv
 
@@ -1509,3 +1509,134 @@ class ProcSelfSTATUS(PBR.TaggedMultiLineFile):
 
 REGISTER_FILE("/proc/self/status", ProcSelfSTATUS)
 REGISTER_PARTIAL_FILE("status", ProcSelfSTATUS)
+
+
+
+#
+class ProcSelfSCHED(PBR.TaggedMultiLineFile):
+    """Parse contents of process specific 'sched' file, ex: /proc/self/sched"""
+
+# source: fs/proc/base.c
+# --and--
+# source: kernel/sched_debug.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcSelfHandlers" to reduce the size of this module.
+
+    def extra_init(self, *opts):
+        self.minfields = 2
+        
+        self.__two_longs = ( PFC.F_EXEC_START, PFC.F_RUNTIME,
+                PFC.F_EXEC_RUNTIME, PFC.F_ST_WAIT_START, PFC.F_ST_SLEEP_START,
+                PFC.F_ST_BLOCK_START, PFC.F_ST_SLEEP_MAX, PFC.F_ST_BLOCK_MAX,
+                PFC.F_ST_EXEC_MAX, PFC.F_ST_SLICE_MAX, PFC.F_ST_WAIT_MAX,
+                PFC.F_ST_WAIT_SUM, PFC.F_ST_IOWAIT_SUM, PFC.F_AVG_ATOM,
+                PFC.F_AVG_PER_CPU )
+
+        PBR.add_parse_rule(self, { NAME: PFC.F_PROGRAM, HAS: "#threads:", } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_EXEC_START,
+                PREFIX: "se.exec_start", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_RUNTIME, PREFIX: "se.vruntime",
+                AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_EXEC_RUNTIME,
+                PREFIX: "se.sum_exec_runtime", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_WAIT_START,
+                PREFIX: "se.statistics.wait_start", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_SLEEP_START,
+                PREFIX: "se.statistics.sleep_start", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_BLOCK_START,
+                PREFIX: "se.statistics.block_start", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_SLEEP_MAX,
+                PREFIX: "se.statistics.sleep_max", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_BLOCK_MAX,
+                PREFIX: "se.statistics.block_max", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_EXEC_MAX,
+                PREFIX: "se.statistics.exec_max", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_SLICE_MAX,
+                PREFIX: "se.statistics.slice_max", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_WAIT_MAX,
+                PREFIX: "se.statistics.wait_max", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_WAIT_SUM,
+                PREFIX: "se.statistics.wait_sum", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_WAIT_COUNT,
+                PREFIX: "se.statistics.wait_count", AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_IOWAIT_SUM,
+                PREFIX: "se.statistics.iowait_sum", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_IOWAIT_COUNT,  CONV: long,
+                PREFIX: "se.statistics.iowait_count", AFTER: ":"  } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_NR_MIGR,
+                PREFIX: "se.nr_migrations", AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_MIGR_COLD, CONV: long,
+                PREFIX: "se.statistics.nr_migrations_cold", AFTER: ":",  } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_FAIL_MIGR_AFF,
+                PREFIX: "se.statistics.nr_failed_migrations_affine",
+                AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_FAIL_MIGR_RUN,
+                PREFIX: "se.statistics.nr_failed_migrations_running",
+                AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_FAIL_MIGR_HOT,
+                PREFIX: "se.statistics.nr_failed_migrations_hot", AFTER: ":",
+                CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_FORCED_MIGR,
+                PREFIX: "se.statistics.nr_forced_migrations", AFTER: ":",
+                CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_WAKE, CONV: long,
+                PREFIX: "se.statistics.nr_wakeups", AFTER: ":"  } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_WAKE_SYNC, CONV: long,
+                PREFIX: "se.statistics.nr_wakeups_sync", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_WAKE_MIGR, CONV: long,
+                PREFIX: "se.statistics.nr_wakeups_migrate", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_WAKE_LOC, CONV: long,
+                PREFIX: "se.statistics.nr_wakeups_local", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_WAKE_REM, CONV: long,
+                PREFIX: "se.statistics.nr_wakeups_remote", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_WAKE_AFF, CONV: long,
+                PREFIX: "se.statistics.nr_wakeups_affine", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_WAKE_AFF_ATT,
+                PREFIX: "se.statistics.nr_wakeups_affine_attempts",
+                AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_WAKE_PASS, CONV: long,
+                PREFIX: "se.statistics.nr_wakeups_passive", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_WAKE_IDLE, CONV: long,
+                PREFIX: "se.statistics.nr_wakeups_idle", AFTER: ":" } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_AVG_ATOM,
+                PREFIX: "avg_atom", AFTER: ":",  } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_AVG_PER_CPU,
+                PREFIX: "avg_per_cpu", AFTER: ":",  } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_NR_SWITCH,
+                PREFIX: "nr_switches", AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_NR_VOL_SWITCH,
+                PREFIX: "nr_voluntary_switches", AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_NR_INVOL_SWITCH,
+                PREFIX: "nr_involuntary_switches", AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_LOAD_WEIGHT,
+                PREFIX: "se.load.weight", AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_POLICY,
+                PREFIX: "policy", AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_PRIORITY,
+                PREFIX: "prio", AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_CLOCK_DELTA,
+                PREFIX: "clock-delta", AFTER: ":", CONV: long } )
+
+        self.add_eor_rule( "clock-delta", { BEFORE: ":" } )
+
+        return
+
+
+    def extra_next(self, sio):
+        __mix = self.field[PFC.F_PROGRAM]
+        self.field[PFC.F_PID] = PBR.convert_by_rule(__mix, { NAME: PFC.F_PID,
+                AFTER: "(", BEFORE: ",", CONV: long } )
+        self.field[PFC.F_THREADS] = PBR.convert_by_rule(__mix, {
+                NAME: PFC.F_PID, AFTER: "#threads: ", BEFORE: ")",
+                CONV: long } )
+        self.field[PFC.F_PROGRAM] = PBR.convert_by_rule(__mix, { 
+                NAME: PFC.F_PID, BEFORE: " (" } )
+
+        for __key in self.__two_longs:
+            self.field[__key] = PBR.hilo_pair_from_str(self.field[__key])
+
+        return self.field
+
+REGISTER_FILE("/proc/self/sched", ProcSelfSCHED)
+REGISTER_PARTIAL_FILE("/sched", ProcSelfSCHED)

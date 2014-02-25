@@ -906,3 +906,133 @@ Excerpts from that code:
 # 	seq_nodemask_list(m, &task->mems_allowed);
 # 	seq_printf(m, "\n");
 # }
+
+
+
+--- File: /proc/self/sched
+
+source: fs/proc/base.c
+--and--
+source: kernel/sched_debug.c
+
+Excerpts from that code:
+
+# from: fs/proc/base.c
+# ---------
+#
+#static int sched_show(struct seq_file *m, void *v)
+#{
+#        struct inode *inode = m->private;
+#        struct task_struct *p;
+#
+#        p = get_proc_task(inode);
+#        if (!p)
+#                return -ESRCH;
+#        proc_sched_show_task(p, m);
+#
+#        put_task_struct(p);
+#
+#        return 0;
+#}
+
+
+# from: kernel/sched_debug.c
+# ---------
+#
+#void proc_sched_show_task(struct task_struct *p, struct seq_file *m)
+#{
+#        unsigned long nr_switches;
+#
+#        SEQ_printf(m, "%s (%d, #threads: %d)\n", p->comm, p->pid,
+#                                                get_nr_threads(p));
+#        SEQ_printf(m,
+#                "---------------------------------------------------------\n");
+##define __P(F) \
+#        SEQ_printf(m, "%-35s:%21Ld\n", #F, (long long)F)
+##define P(F) \
+#        SEQ_printf(m, "%-35s:%21Ld\n", #F, (long long)p->F)
+##define __PN(F) \
+#        SEQ_printf(m, "%-35s:%14Ld.%06ld\n", #F, SPLIT_NS((long long)F))
+##define PN(F) \
+#        SEQ_printf(m, "%-35s:%14Ld.%06ld\n", #F, SPLIT_NS((long long)p->F))
+#
+#        PN(se.exec_start);
+#        PN(se.vruntime);
+#        PN(se.sum_exec_runtime);
+#
+#        nr_switches = p->nvcsw + p->nivcsw;
+#
+##ifdef CONFIG_SCHEDSTATS
+#        PN(se.statistics.wait_start);
+#        PN(se.statistics.sleep_start);
+#        PN(se.statistics.block_start);
+#        PN(se.statistics.sleep_max);
+#        PN(se.statistics.block_max);
+#        PN(se.statistics.exec_max);
+#        PN(se.statistics.slice_max);
+#        PN(se.statistics.wait_max);
+#        PN(se.statistics.wait_sum);
+#        P(se.statistics.wait_count);
+#        PN(se.statistics.iowait_sum);
+#        P(se.statistics.iowait_count);
+#        P(se.nr_migrations);
+#        P(se.statistics.nr_migrations_cold);
+#        P(se.statistics.nr_failed_migrations_affine);
+#        P(se.statistics.nr_failed_migrations_running);
+#        P(se.statistics.nr_failed_migrations_hot);
+#        P(se.statistics.nr_forced_migrations);
+#        P(se.statistics.nr_wakeups);
+#        P(se.statistics.nr_wakeups_sync);
+#        P(se.statistics.nr_wakeups_migrate);
+#        P(se.statistics.nr_wakeups_local);
+#        P(se.statistics.nr_wakeups_remote);
+#        P(se.statistics.nr_wakeups_affine);
+#        P(se.statistics.nr_wakeups_affine_attempts);
+#        P(se.statistics.nr_wakeups_passive);
+#        P(se.statistics.nr_wakeups_idle);
+#
+#        {
+#                u64 avg_atom, avg_per_cpu;
+#
+#                avg_atom = p->se.sum_exec_runtime;
+#                if (nr_switches)
+#                        do_div(avg_atom, nr_switches);
+#                else
+#                        avg_atom = -1LL;
+#
+#                avg_per_cpu = p->se.sum_exec_runtime;
+#                if (p->se.nr_migrations) {
+#                        avg_per_cpu = div64_u64(avg_per_cpu,
+#                                                p->se.nr_migrations);
+#                } else {
+#                        avg_per_cpu = -1LL;
+#                }
+#
+#                __PN(avg_atom);
+#                __PN(avg_per_cpu);
+#        }
+##endif
+#        __P(nr_switches);
+#        SEQ_printf(m, "%-35s:%21Ld\n",
+#                   "nr_voluntary_switches", (long long)p->nvcsw);
+#        SEQ_printf(m, "%-35s:%21Ld\n",
+#                   "nr_involuntary_switches", (long long)p->nivcsw);
+#
+#        P(se.load.weight);
+#        P(policy);
+#        P(prio);
+##undef PN
+##undef __PN
+##undef P
+##undef __P
+#
+#        {
+#                unsigned int this_cpu = raw_smp_processor_id();
+#                u64 t0, t1;
+#
+#                t0 = cpu_clock(this_cpu);
+#                t1 = cpu_clock(this_cpu);
+#                SEQ_printf(m, "%-35s:%21Ld\n",
+#                           "clock-delta", (long long)(t1-t0));
+#        }
+#}

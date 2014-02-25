@@ -28,6 +28,7 @@ PREFIX_VAL = "prefix"
 SUFFIX_VAL = "suffix"
 BEFORE_VAL = "before"
 AFTER_VAL = "after"
+HAS_VAL = "has"
 
 # --
 PROC_PATH_PREFIX_LIST = ( "/proc", "/proc/", "/proc/net/", "/proc/self/net/",
@@ -36,6 +37,22 @@ PROC_PATH_PREFIX_LIST = ( "/proc", "/proc/", "/proc/net/", "/proc/self/net/",
 FILE_HANDLER_REGISTRY = dict()
 PARTIAL_HANDLER_REGISTRY = dict()
 HANDLER_TO_PATH = dict()
+
+
+# ---
+def hilo_pair_from_str(raw):
+    """
+    Convert '%d.%6d' float to long by shifting decimal places
+    """
+
+    __parts = raw.partition(".")
+    if len(__parts) == 3:
+        __res = long(__parts[0]) * 1000000 + long(__parts[2])
+    else:
+        __res = 0
+
+    return __res
+
 
 # ---
 
@@ -68,6 +85,9 @@ def matches_all_crit(rawdata, rule):
     """
 
     __result = True
+
+    if __result and rule.has_key(HAS_VAL):
+        __result = rawdata.find(rule[HAS_VAL]) != -1
 
     if __result and rule.has_key(PREFIX_VAL):
         __result = rawdata.startswith(rule[PREFIX_VAL])
@@ -130,6 +150,7 @@ def convert_by_rule(rawdata, rule):
         __after = ""
 
     __val = rawdata
+
 
     if __before != "":
         __split = __val.partition(__before)
@@ -905,12 +926,9 @@ class TaggedMultiLineFile(object):
                     if __cr.has_key(FIELD_NAME):
                         if matches_all_crit(__line, __cr):
                             __parsed = convert_by_rule(__line, __cr)
-#                            print "dbg:: ApRu? par({val}) rule({rule}) b({buff})".format(val=str(__parsed),
-#                                    buff=__line.strip(), rule=str(__cr))
                             self.field[__cr[FIELD_NAME]] = __parsed
 
                 __is_eor = convert_by_rule(__line, self.eor_rule)
-                #print "dbg:: EOR? par({val}) comp({eor}) b({buff})".format(val=__is_eor, eor=self.eor_value, buff=__line)
                 if __is_eor == self.eor_value:
                     __done = True
                     
