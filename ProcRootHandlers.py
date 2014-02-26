@@ -2282,3 +2282,48 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
 #
 REGISTER_FILE("/proc/mdstat", ProcRootMDSTAT)
 REGISTER_PARTIAL_FILE("mdstat", ProcRootMDSTAT)
+
+
+
+
+# ---
+class ProcRootMOUNTS(PBR.FixedWhitespaceDelimRecs):
+    """Pull records from /proc/mounts"""
+# source: fs/namespace.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcRootHandlers" to reduce the size of this module.
+
+    def extra_init(self, *opts):
+        self.minfields = 6
+
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_MOUNT_SRC } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_MOUNT_FS } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_FS_TYPE } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_MOUNT_OPTS } )
+
+        self.mnt_source = ""
+        self.mount_fs = ""
+        self.fstype = ""
+        self.mnt_options = ""
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records 
+#
+# rootfs / rootfs rw 0 0
+# sysfs /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0
+# proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0
+# none /sys/fs/fuse/connections fusectl rw,relatime 0 0
+# rpc_pipefs /run/rpc_pipefs rpc_pipefs rw,relatime 0 0
+
+        self.mnt_source = self.field[PFC.F_MOUNT_SRC]
+        self.mount_fs = self.field[PFC.F_MOUNT_FS]
+        self.fstype = self.field[PFC.F_FS_TYPE]
+        self.mnt_options = self.field[PFC.F_MOUNT_OPTS]
+
+        return(self.mnt_source, self.mount_fs, self.fstype, self.mnt_options)
+#
+REGISTER_FILE("/proc/mounts", ProcRootMOUNTS)
+REGISTER_PARTIAL_FILE("mounts", ProcRootMOUNTS)

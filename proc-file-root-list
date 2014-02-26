@@ -64,3 +64,4 @@ misc DONE WSD ProcRootMISC NOHEADER
 fb DONE WSD ProcRootFB one-line NOHEADER
 mtrr DONE FIXEDCOLS ProcRootMTRR NOHEADER
 cgroups DONE WSD ProcRootCGROUPS
+mounts DONE WSD ProcRootMOUNTS NOHEADER --Note-- The "mounts" file appears in the root and the PID directories

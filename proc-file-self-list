@@ -40,7 +40,7 @@ statm NEED WSD NOHEADER ONE-LINE
 maps DONE WSD ProcSelfMAPS NOHEADER
 numa_maps DONE WSD ProcSelfNUMAMAPS NOHEADER
 mem SKIP
-mounts NEED WSD NOHEADER
+mounts DONE WSD ProcRootMOUNTS NOHEADER --Note-- The "mounts" file appears in the root and the PID directories
 mountinfo DONE WSD ProcSelfMOUNTINFO NOHEADER
 mountstats DONE WSD ProcSelfMOUNTSTATS NOHEADER
 clear_refs SKIP

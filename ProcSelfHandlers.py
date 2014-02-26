@@ -1640,3 +1640,5 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
 
 REGISTER_FILE("/proc/self/sched", ProcSelfSCHED)
 REGISTER_PARTIAL_FILE("/sched", ProcSelfSCHED)
+
+

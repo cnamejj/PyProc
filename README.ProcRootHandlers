@@ -538,3 +538,40 @@ Excerpts from that code:
 # 	
 # 	return 0;
 # }
+
+
+
+--- File: /proc/mounts
+
+source: fs/namespace.c
+
+Excerpts from that code:
+
+#static int show_vfsmnt(struct seq_file *m, void *v)
+#{
+#        struct vfsmount *mnt = list_entry(v, struct vfsmount, mnt_list);
+#        int err = 0;
+#        struct path mnt_path = { .dentry = mnt->mnt_root, .mnt = mnt };
+#
+#        if (mnt->mnt_sb->s_op->show_devname) {
+#                err = mnt->mnt_sb->s_op->show_devname(m, mnt);
+#                if (err)
+#                        goto out;
+#        } else {
+#                mangle(m, mnt->mnt_devname ? mnt->mnt_devname : "none");
+#        }
+#        seq_putc(m, ' ');
+#        seq_path(m, &mnt_path, " \t\n\\");
+#        seq_putc(m, ' ');
+#        show_type(m, mnt->mnt_sb);
+#        seq_puts(m, __mnt_is_readonly(mnt) ? " ro" : " rw");
+#        err = show_sb_opts(m, mnt->mnt_sb);
+#        if (err)
+#                goto out;
+#        show_mnt_opts(m, mnt);
+#        if (mnt->mnt_sb->s_op->show_options)
+#                err = mnt->mnt_sb->s_op->show_options(m, mnt);
+#        seq_puts(m, " 0 0\n");
+#out:
+#        return err;
+#}
