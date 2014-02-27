@@ -718,3 +718,6 @@ F_NR_INVOL_SWITCH = "nr-involutary-switches"
 F_LOAD_WEIGHT = "load-weight"
 F_POLICY = "policy"
 F_CLOCK_DELTA = "clock-delta"
+
+# -- added to support /proc/self/personality
+F_PERSONALITY = "personality"

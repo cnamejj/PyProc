@@ -28,7 +28,7 @@ ns/ipc
 environ
 auxv
 status DONE REPORT ProcSelfSTATUS
-personality NEED TBD NOHEADER
+personality DONE TBD ProcSelfPERSONALITY NOHEADER
 limits DONE FIXEDCOLS ProcSelfLIMITS
 sched DONE TBD NOHEADER ProcSelfSCHED
 autogroup NEED WSD NOHEADER ONE-LINE

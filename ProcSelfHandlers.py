@@ -1634,6 +1634,44 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
         return self.field
 
 REGISTER_FILE("/proc/self/sched", ProcSelfSCHED)
-REGISTER_PARTIAL_FILE("/sched", ProcSelfSCHED)
+REGISTER_PARTIAL_FILE("sched", ProcSelfSCHED)
+
+
+#
+class ProcSelfPERSONALITY(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse process specific file 'personality', ex: /proc/self/personality
+    """
+
+# source: fs/proc/base.c
+#
+# Extract from that code
+# 
+# static int proc_pid_personality(struct seq_file *m, struct pid_namespace *ns,
+#                                 struct pid *pid, struct task_struct *task)
+# {
+#         int err = lock_trace(task);
+#         if (!err) {
+#                 seq_printf(m, "%08x\n", task->personality);
+#                 unlock_trace(task);
+#         }
+#         return err;
+# }
+
+    def extra_init(self, *opts):
+        self.minfields = 1
+
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_PERSONALITY, CONV: long, BASE: 16 } )
+        return
+
+
+    def extra_next(self, sio):
+
+        self.personality = self.field[PFC.F_PERSONALITY]
+
+        return self.personality
+
+REGISTER_FILE("/proc/self/personality", ProcSelfPERSONALITY)
+REGISTER_PARTIAL_FILE("personality", ProcSelfPERSONALITY)
 
 
