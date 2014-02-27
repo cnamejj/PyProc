@@ -24,7 +24,7 @@ class SeqFileIO:
         self.is_open = 0
         self.min_words = 0
         self.skip_line = ""
-	
+
         # For pylint only...
         self.pnt_fd = file("/dev/null", "r")
 

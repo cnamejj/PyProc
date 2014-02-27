@@ -227,31 +227,23 @@ class ProcNetPROTOCOLS(PBR.FixedWhitespaceDelimRecs):
         PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_MODULE } )
         PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_CLOSE } )
         PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_CONNECT } )
-        PBR.add_parse_rule(self, { POS: 10,
-                NAME: PFC.F_DISCONNECT } )
+        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_DISCONNECT } )
         PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_ACCEPT } )
         PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_IOCTL } )
         PBR.add_parse_rule(self, { POS: 13, NAME: PFC.F_INIT } )
         PBR.add_parse_rule(self, { POS: 14, NAME: PFC.F_DESTROY } )
-        PBR.add_parse_rule(self, { POS: 15,
-                NAME: PFC.F_SHUTDOWN } )
-        PBR.add_parse_rule(self, { POS: 16,
-                NAME: PFC.F_SETSOCKOPT } )
-        PBR.add_parse_rule(self, { POS: 17,
-                NAME: PFC.F_GETSOCKOPT } )
+        PBR.add_parse_rule(self, { POS: 15, NAME: PFC.F_SHUTDOWN } )
+        PBR.add_parse_rule(self, { POS: 16, NAME: PFC.F_SETSOCKOPT } )
+        PBR.add_parse_rule(self, { POS: 17, NAME: PFC.F_GETSOCKOPT } )
         PBR.add_parse_rule(self, { POS: 18, NAME: PFC.F_SENDMSG } )
         PBR.add_parse_rule(self, { POS: 19, NAME: PFC.F_RECVMSG } )
-        PBR.add_parse_rule(self, { POS: 20,
-                NAME: PFC.F_SENDPAGE } )
+        PBR.add_parse_rule(self, { POS: 20, NAME: PFC.F_SENDPAGE } )
         PBR.add_parse_rule(self, { POS: 21, NAME: PFC.F_BIND } )
-        PBR.add_parse_rule(self, { POS: 22,
-                NAME: PFC.F_BACKLOG_RCV } )
+        PBR.add_parse_rule(self, { POS: 22, NAME: PFC.F_BACKLOG_RCV } )
         PBR.add_parse_rule(self, { POS: 23, NAME: PFC.F_HASH } )
         PBR.add_parse_rule(self, { POS: 24, NAME: PFC.F_UNHASH } )
-        PBR.add_parse_rule(self, { POS: 25,
-                NAME: PFC.F_GET_PORT } )
-        PBR.add_parse_rule(self, { POS: 26,
-                NAME: PFC.F_ENTER_PRESSURE } )
+        PBR.add_parse_rule(self, { POS: 25, NAME: PFC.F_GET_PORT } )
+        PBR.add_parse_rule(self, { POS: 26, NAME: PFC.F_ENTER_PRESSURE } )
 
         self.protocol = ""
         self.size = 0
@@ -339,28 +331,18 @@ class ProcNetROUTE(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 11
         self.skipped = "Iface"
 
-        PBR.add_parse_rule(self, { POS: 0,
-                NAME: PFC.F_INTERFACE } )
-        PBR.add_parse_rule(self, { POS: 1,
-                NAME: PFC.F_DEST_HEXIP } )
-        PBR.add_parse_rule(self, { POS: 2,
-                NAME: PFC.F_GATE_HEXIP } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_INTERFACE } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_DEST_HEXIP } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_GATE_HEXIP } )
         PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_FLAGS, CONV: long,
                 BASE:16 } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_REFCOUNT,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_USECOUNT,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_METRIC,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 7,
-                NAME: PFC.F_MASK_HEXIP } )
-        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_MTU,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_WINDOW,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_IRTT,
-               CONV: long } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_REFCOUNT, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_USECOUNT, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_METRIC, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_MASK_HEXIP } )
+        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_MTU, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_WINDOW, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_IRTT, CONV: long } )
 
         self.interface = ""
         self.destination = ""
@@ -439,22 +421,17 @@ class ProcNetPACKET(PBR.FixedWhitespaceDelimRecs):
 
         PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_SOCKET_POINTER,
                 CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_REFCOUNT,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_TYPE,
-                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_REFCOUNT, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_TYPE, CONV: long } )
         PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_PROTOCOL, CONV: long,
                 BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_INT_INDEX,
                 CONV: long } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_RUNNING,
-                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_RUNNING, CONV: long } )
         PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_RMEM_ALLOC,
                 CONV: long } )
-        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_UID,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_INODE,
-                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_UID, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_INODE, CONV: long } )
 
         self.type = 0
         self.protocol = 0
@@ -580,8 +557,7 @@ class ProcNetARP(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 6
         self.skipped = "IP"
 
-        PBR.add_parse_rule(self, { POS: 0,
-                NAME: PFC.F_IP_ADDRESS} )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_IP_ADDRESS} )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_HW_TYPE, CONV: long,
                 BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_FLAGS, CONV: long,
@@ -1134,31 +1110,23 @@ class ProcNetIPV6ROUTE(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 10
         self.ipconv = IPAddressConv
 
-        PBR.add_parse_rule(self, { POS: 0,
-                NAME: PFC.F_DEST_HEXIP } )
-        PBR.add_parse_rule(self, { POS: 1,
-                NAME: PFC.F_DEST_PREFIX_LEN_HEX } )
-        PBR.add_parse_rule(self, { POS: 1,
-                NAME: PFC.F_DEST_PREFIX_LEN, CONV: long,
-                BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 2,
-                NAME: PFC.F_SRCE_HEXIP } )
-        PBR.add_parse_rule(self, { POS: 3,
-                NAME: PFC.F_SRCE_PREFIX_LEN_HEX } )
-        PBR.add_parse_rule(self, { POS: 3,
-                NAME: PFC.F_SRCE_PREFIX_LEN, CONV: long,
-                BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 4,
-                NAME: PFC.F_PRIMARY_KEY } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_RT6I_METRIC,
+#...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_DEST_HEXIP } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_DEST_PREFIX_LEN_HEX } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_DEST_PREFIX_LEN,
                 CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 6,
-                NAME: PFC.F_DEST_REFCOUNT, CONV: long,
-                BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_DEST_USE,
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_SRCE_HEXIP } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_SRCE_PREFIX_LEN_HEX } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_SRCE_PREFIX_LEN,
                 CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 8,
-                NAME: PFC.F_RT6I_FLAGS } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_PRIMARY_KEY } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_RT6I_METRIC, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_DEST_REFCOUNT,
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_DEST_USE, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_RT6I_FLAGS } )
         PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_DEVICE } )
 
         self.dest_ip = PDC.PRESENT_ANY_IPV6_ADDR
@@ -1231,15 +1199,13 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 14
 
-        PBR.add_parse_rule(self, { POS: 0,
-                NAME: PFC.F_L3_PROTOCOL } )
-        PBR.add_parse_rule(self, { POS: 1,
-                NAME: PFC.F_L3_PROTOCOL_NUM, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_L3_PROTOCOL } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_L3_PROTOCOL_NUM,
+                CONV: long } )
         PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_PROTOCOL } )
-        PBR.add_parse_rule(self, { POS: 3,
-                NAME: PFC.F_PROTOCOL_NUM, CONV: long } )
-        PBR.add_parse_rule(self, { POS: 4,
-                NAME: PFC.F_TIMEOUT, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_PROTOCOL_NUM,
+                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_TIMEOUT, CONV: long } )
 
         self.__tuple_pref = "src="
         self.__unreplied_pref = "["
@@ -1444,17 +1410,15 @@ class ProcNetPSCHED(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 4
 
-        PBR.add_parse_rule(self, { POS: 0,
-                NAME: PFC.F_NSEC_PER_USEC, CONV: long,
-                BASE: 16 } )
+#...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_NSEC_PER_USEC,
+                CONV: long, BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_PSCHED_TICKS,
                 CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 2,
-                NAME: PFC.F_UNKNOWN_FIELD, CONV: long,
-                BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 3,
-                NAME: PFC.F_NSEC_PER_HRTIME, CONV: long,
-                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_UNKNOWN_FIELD,
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_NSEC_PER_HRTIME,
+                CONV: long, BASE: 16 } )
 
         self.nsec_per_usec = 0
         self.psched_ticks = 0
@@ -1505,8 +1469,7 @@ class ProcNetPTYPE(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 2
         self.skipped = "Type"
 
-        PBR.add_parse_rule(self, { POS: 0,
-                NAME: PFC.F_DEVICE_TYPE } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_DEVICE_TYPE } )
 
         self.device_name = ""
         self.device_type = ""
@@ -1569,25 +1532,20 @@ class ProcNetRT6STATS(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 7
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_FIB_NODES,
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_FIB_NODES, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_FIB_ROUTE_NODES,
                 CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 1,
-                NAME: PFC.F_FIB_ROUTE_NODES, CONV: long,
-                BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 2,
-                NAME: PFC.F_FIB_ROUTE_ALLOC, CONV: long,
-                BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 3,
-                NAME: PFC.F_FIB_ROUTE_ENTRIES, CONV: long,
-                BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 4,
-                NAME: PFC.F_FIB_ROUTE_CACHE, CONV: long,
-                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_FIB_ROUTE_ALLOC,
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_FIB_ROUTE_ENTRIES,
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_FIB_ROUTE_CACHE,
+                CONV: long, BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_FIB_DEST_OPS,
                 CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 6,
-                NAME: PFC.F_FIB_DISC_ROUTES, CONV: long,
-                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_FIB_DISC_ROUTES,
+                CONV: long, BASE: 16 } )
 
         self.nodes = 0
         self.route_nodes = 0
@@ -1651,36 +1609,23 @@ class ProcNetRTCACHE(PBR.FixedWhitespaceDelimRecs):
         self.skipped = "Iface"
         self.ipconv = IPAddressConv
 
-        PBR.add_parse_rule(self, { POS: 0,
-                NAME: PFC.F_INTERFACE } )
-        PBR.add_parse_rule(self, { POS: 1,
-                NAME: PFC.F_DEST_HEXIP } )
-        PBR.add_parse_rule(self, { POS: 2,
-                NAME: PFC.F_GATE_HEXIP } )
-        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_FLAGS,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_REFCOUNT,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_USECOUNT,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_METRIC,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 7,
-                NAME: PFC.F_SRCE_HEXIP } )
-        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_MTU,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_WINDOW,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_IRTT,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_TOS,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_HHREF,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 13, NAME: PFC.F_HHUPTOD,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 14,
-                NAME: PFC.F_SPEC_HEXIP } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_INTERFACE } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_DEST_HEXIP } )
+        PBR.add_parse_rule(self, { POS: 2,  NAME: PFC.F_GATE_HEXIP } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_FLAGS, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_REFCOUNT, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_USECOUNT, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_METRIC, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_SRCE_HEXIP } )
+        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_MTU, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_WINDOW, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_IRTT, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_TOS, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_HHREF, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 13, NAME: PFC.F_HHUPTOD, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 14, NAME: PFC.F_SPEC_HEXIP } )
 
         self.interface = PDC.ANY_INTERFACE
         self.destination = PDC.ANY_IP_ADDR
@@ -1778,33 +1723,30 @@ class ProcNetStatARPCACHE(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 12
         self.skipped = "entries"
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_ARP_ENTRIES,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ALLOC,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DESTROY,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_HASH_GROW,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_LOOKUP,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_HIT,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_RES_FAIL,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 7,
-                NAME: PFC.F_RCV_MCAST_PROBE, CONV: long,
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_ARP_ENTRIES, CONV: long,
                 BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 8,
-                NAME: PFC.F_RCV_UCAST_PROBE, CONV: long,
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ALLOC, CONV: long,
                 BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_GC_PERIODIC,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_GC_FORCED,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 11,
-                NAME: PFC.F_UNRES_DISCARD, CONV: long,
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DESTROY, CONV: long,
                 BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_HASH_GROW, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_LOOKUP, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_HIT, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_RES_FAIL, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_RCV_MCAST_PROBE,
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_RCV_UCAST_PROBE,
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_GC_PERIODIC, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_GC_FORCED, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_UNRES_DISCARD,
+                CONV: long, BASE: 16 } )
 
         self.lookups = 0
         self.hits = 0
@@ -1873,41 +1815,39 @@ class ProcNetStatIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 17
         self.skipped = "entries"
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_ENTRIES,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_SEARCHED,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_FOUND,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_NEW,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_INVALID,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_IGNORE,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_DELETE,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_DELETE_LIST,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_INSERT,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 9,
-                NAME: PFC.F_INSERT_FAILED, CONV: long,
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_ENTRIES, CONV: long,
                 BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_DROP,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_DROP_EARLY,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_ICMP_ERROR,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 13, NAME: PFC.F_EXP_NEW,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 14, NAME: PFC.F_EXP_CREATE,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 15, NAME: PFC.F_EXP_DELETE,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 16,
-                NAME: PFC.F_SEARCH_RESTART, CONV: long,
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_SEARCHED, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_FOUND, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_NEW, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_INVALID, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_IGNORE, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_DELETE, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_DELETE_LIST, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_INSERT, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_INSERT_FAILED,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_DROP, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_DROP_EARLY, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_ICMP_ERROR, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 13, NAME: PFC.F_EXP_NEW, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 14, NAME: PFC.F_EXP_CREATE, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 15, NAME: PFC.F_EXP_DELETE, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 16, NAME: PFC.F_SEARCH_RESTART,
                 BASE: 16 } )
 
         self.insert = 0
@@ -1989,32 +1929,29 @@ class ProcNetStatNDISCCACHE(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 12
         self.skipped = "entries"
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_ARP_ENTRIES,
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_ARP_ENTRIES, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ALLOC, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DESTROY, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_HASH_GROW, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_LOOKUP, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_HIT, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_RES_FAIL, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_RCV_MCAST_PROBE,
                 CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ALLOC,
+        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_RCV_UCAST_PROBE,
                 CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DESTROY,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_HASH_GROW,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_LOOKUP,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_HIT,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_RES_FAIL,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 7,
-                NAME: PFC.F_RCV_MCAST_PROBE,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 8,
-                NAME: PFC.F_RCV_UCAST_PROBE,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_GC_PERIODIC,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_GC_FORCED,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 11,
-                NAME: PFC.F_UNRES_DISCARD,
+        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_GC_PERIODIC, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_GC_FORCED, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_UNRES_DISCARD,
                 CONV: long, BASE: 16 } )
 
         self.entries = 0
@@ -2084,42 +2021,40 @@ class ProcNetStatNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 17
         self.skipped = "entries"
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_ENTRIES,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_SEARCHED,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_FOUND,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_NEW,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_INVALID,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_IGNORE,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_DELETE,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_DELETE_LIST,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_INSERT,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 9,
-                NAME: PFC.F_INSERT_FAILED, CONV: long,
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_ENTRIES, CONV: long,
                 BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_DROP,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_DROP_EARLY,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_ICMP_ERROR,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 13, NAME: PFC.F_EXP_NEW,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 14, NAME: PFC.F_EXP_CREATE,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 15, NAME: PFC.F_EXP_DELETE,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 16,
-                NAME: PFC.F_SEARCH_RESTART, CONV: long,
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_SEARCHED, CONV: long,
                 BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_FOUND, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_NEW, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_INVALID, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_IGNORE, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_DELETE, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_DELETE_LIST, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_INSERT, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_INSERT_FAILED,
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_DROP, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_DROP_EARLY, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_ICMP_ERROR, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 13, NAME: PFC.F_EXP_NEW, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 14, NAME: PFC.F_EXP_CREATE, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 15, NAME: PFC.F_EXP_DELETE, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 16, NAME: PFC.F_SEARCH_RESTART,                
+                CONV: long, BASE: 16 } )
 
         self.insert = 0
         self.drop = 0
@@ -2207,48 +2142,40 @@ class ProcNetStatRTCACHE(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 17
         self.skipped = "entries"
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_ENTRIES,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_IN_HIT,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_IN_SLOW_TOT,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_IN_SLOW_MC,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_IN_NO_ROUTE,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_IN_BRD,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 6,
-                NAME: PFC.F_IN_MARTIAN_DST, CONV: long,
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_ENTRIES, CONV: long,
                 BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 7,
-                NAME: PFC.F_IN_MARTIAN_SRC, CONV: long,
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_IN_HIT, CONV: long,
                 BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_OUT_HIT,
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_IN_SLOW_TOT, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_IN_SLOW_MC, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_IN_NO_ROUTE, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_IN_BRD, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_IN_MARTIAN_DST,
                 CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 9,
-                NAME: PFC.F_OUT_SLOW_TOT, CONV: long,
-                BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 10,
-                NAME: PFC.F_OUT_SLOW_MC, CONV: long,
-                BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_GC_TOTAL,
+        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_IN_MARTIAN_SRC,
                 CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_GC_IGNORED,
+        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_OUT_HIT, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_OUT_SLOW_TOT,
                 CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 13,
-                NAME: PFC.F_GC_GOAL_MISS, CONV: long,
+        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_OUT_SLOW_MC,
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_GC_TOTAL, CONV: long,
                 BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 14,
-                NAME: PFC.F_GC_DST_OVERFLOW, CONV: long,
+        PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_GC_IGNORED, CONV: long,
                 BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 15,
-                NAME: PFC.F_IN_HL_SEARCH, CONV: long,
-                BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 16,
-                NAME: PFC.F_OUT_HL_SEARCH, CONV: long,
-                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 13, NAME: PFC.F_GC_GOAL_MISS,
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 14, NAME: PFC.F_GC_DST_OVERFLOW,
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 15, NAME: PFC.F_IN_HL_SEARCH,
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 16, NAME: PFC.F_OUT_HL_SEARCH,
+                CONV: long, BASE: 16 } )
 
         self.entries = 0
         self.in_hit = 0
@@ -2348,45 +2275,42 @@ class ProcNetTCP6(PBR.FixedWhitespaceDelimRecs):
                 BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXPORT,
                 AFTER: ":"  } )
-        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_PORT,
-                AFTER: ":", CONV: long, BASE: 16  } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_PORT, AFTER: ":",
+                CONV: long, BASE: 16  } )
         PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_HEXIP,
                 BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_HEXPORT,
                 AFTER: ":"  } )
-        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_PORT,
-                AFTER: ":", CONV: long, BASE: 16  } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_PORT, AFTER: ":",
+                CONV: long, BASE: 16  } )
         PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_HEXSTATE } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_TXQUEUE,
-                CONV: long, BASE: 16, BEFORE: ":" } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_RXQUEUE,
-                CONV: long, BASE: 16, AFTER: ":" } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER,
-                CONV: long, BASE: 16, BEFORE: ":" } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER_WHEN,
-                CONV: long, BASE: 16, AFTER: ":" } )
-        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_RETRANS,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_UID,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_TIMEOUT,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_INODE,
-                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_TXQUEUE, CONV: long,
+                BASE: 16, BEFORE: ":" } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_RXQUEUE, CONV: long,
+                BASE: 16, AFTER: ":" } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER, CONV: long,
+                BASE: 16, BEFORE: ":" } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER_WHEN, CONV: long,
+                BASE: 16, AFTER: ":" } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_RETRANS, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_UID, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_TIMEOUT, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_INODE, CONV: long } )
         PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_REFCOUNT,
                 CONV: long } )
-        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_POINTER,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 12,
-                NAME: PFC.F_RETRY_TIMEOUT, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_POINTER, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_RETRY_TIMEOUT,
+                CONV: long } )
         PBR.add_parse_rule(self, { POS: 13, NAME: PFC.F_ACK_TIMEOUT,
                 CONV: long } )
-        PBR.add_parse_rule(self, { POS: 14,
-                NAME: PFC.F_QUICK_OR_PPONG, CONV: long } )
-        PBR.add_parse_rule(self, { POS: 15,
-                NAME: PFC.F_CONGEST_WINDOW, CONV: long } )
-        PBR.add_parse_rule(self, { POS: 16,
-                NAME: PFC.F_SSTART_THRESH, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 14, NAME: PFC.F_QUICK_OR_PPONG,
+                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 15, NAME: PFC.F_CONGEST_WINDOW,
+                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 16, NAME: PFC.F_SSTART_THRESH,
+                CONV: long } )
 
         self.orig_hexip = self.dest_hexip = ""
         self.orig_ip = self.dest_ip = ""
@@ -2500,45 +2424,42 @@ class ProcNetTCP(PBR.FixedWhitespaceDelimRecs):
                 BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXPORT,
                 AFTER: ":" } )
-        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_PORT,
-                AFTER: ":", CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_PORT, AFTER: ":",
+                CONV: long, BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_HEXIP,
                 BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_HEXPORT,
                 AFTER: ":" } )
-        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_PORT,
-                AFTER: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_HEXSTATE } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_TXQUEUE,
-                BEFORE: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_RXQUEUE,
-                AFTER: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER,
-                BEFORE: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER_WHEN,
-                AFTER: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_RETRANS,
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_PORT, AFTER: ":",
                 CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_UID,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_TIMEOUT,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_INODE,
-                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_HEXSTATE } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_TXQUEUE, BEFORE: ":",
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_RXQUEUE, AFTER: ":",
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER, BEFORE: ":",
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER_WHEN, AFTER: ":",
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_RETRANS, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_UID, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_TIMEOUT, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_INODE, CONV: long } )
         PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_REFCOUNT,
                 CONV: long } )
-        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_POINTER,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 12,
-                NAME: PFC.F_RETRY_TIMEOUT, CONV: long } )
-        PBR.add_parse_rule(self, { POS: 13,
-                NAME: PFC.F_ACK_TIMEOUT, CONV: long } )
-        PBR.add_parse_rule(self, { POS: 14,
-                NAME: PFC.F_QUICK_OR_PPONG, CONV: long } )
-        PBR.add_parse_rule(self, { POS: 15,
-                NAME: PFC.F_CONGEST_WINDOW, CONV: long } )
-        PBR.add_parse_rule(self, { POS: 16,
-                NAME: PFC.F_SSTART_THRESH, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_POINTER, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_RETRY_TIMEOUT,
+                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 13, NAME: PFC.F_ACK_TIMEOUT,
+                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 14, NAME: PFC.F_QUICK_OR_PPONG,
+                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 15, NAME: PFC.F_CONGEST_WINDOW,
+                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 16, NAME: PFC.F_SSTART_THRESH,
+                CONV: long } )
 
         self.orig_hexip = self.dest_hexip = ""
         self.orig_ip = self.dest_ip = ""
@@ -2646,37 +2567,32 @@ class ProcNetUDP6(PBR.FixedWhitespaceDelimRecs):
                 BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXPORT,
                 AFTER: ":" } )
-        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_PORT,
-                AFTER: ":", CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_PORT, AFTER: ":",
+                CONV: long, BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_HEXIP,
                 BEFORE: ":" } )
-        PBR.add_parse_rule(self, { POS: 2,
-                NAME: PFC.F_DEST_HEXPORT, AFTER: ":" } )
-        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_PORT,
-                AFTER: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_HEXSTATE } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_TXQUEUE,
-                BEFORE: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_RXQUEUE,
-                AFTER: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER,
-                BEFORE: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER_WHEN,
-                AFTER: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_RETRANS,
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_HEXPORT,
+                AFTER: ":" } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_PORT, AFTER: ":",
                 CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_UID,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_TIMEOUT,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_INODE,
-                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_HEXSTATE } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_TXQUEUE, BEFORE: ":",
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_RXQUEUE, AFTER: ":",
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER, BEFORE: ":",
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER_WHEN, AFTER: ":",
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_RETRANS, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_UID, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_TIMEOUT, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_INODE, CONV: long } )
         PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_REFCOUNT,
                 CONV: long } )
-        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_POINTER,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_DROPS,
-                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_POINTER, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_DROPS, CONV: long } )
 
         self.orig_hexip = self.dest_hexip = ""
         self.orig_ip = self.dest_ip = ""
@@ -2767,37 +2683,32 @@ class ProcNetUDP(PBR.FixedWhitespaceDelimRecs):
                 BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXPORT,
                 AFTER: ":" } )
-        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_PORT,
-                AFTER: ":", CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_PORT, AFTER: ":",
+                CONV: long, BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_HEXIP,
                 BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_HEXPORT,
                 AFTER: ":" } )
-        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_PORT,
-                AFTER: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_HEXSTATE } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_TXQUEUE,
-                BEFORE: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_RXQUEUE,
-                AFTER: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER,
-                BEFORE: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER_WHEN,
-                AFTER: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_RETRANS,
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_DEST_PORT, AFTER: ":",
                 CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_UID,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_TIMEOUT,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_INODE,
-                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_HEXSTATE } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_TXQUEUE, BEFORE: ":",
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_RXQUEUE, AFTER: ":",
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER, BEFORE: ":",
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER_WHEN, AFTER: ":",
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_RETRANS, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_UID, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_TIMEOUT, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_INODE, CONV: long } )
         PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_REFCOUNT,
                 CONV: long } )
-        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_POINTER,
-                CONV: long } )
-        PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_DROPS,
-                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_POINTER, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_DROPS, CONV: long } )
 
         self.orig_hexip = self.dest_hexip = ""
         self.orig_ip = self.dest_ip = ""
@@ -2907,20 +2818,19 @@ class ProcNetUNIX(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 7
         self.skipped = "Num"
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_NUM,
-                BEFORE: ":", CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_REFCOUNT,
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_NUM, BEFORE: ":",
                 CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_PROTOCOL,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_FLAGS,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_TYPE,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_STATE,
-                CONV: long, BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_INODE,
-                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_REFCOUNT, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_PROTOCOL, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_FLAGS, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_TYPE, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_STATE, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_INODE, CONV: long } )
         PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_PATH } )
 
         self.protocol = 0
@@ -3053,11 +2963,9 @@ class ProcNetIGMP(PBR.FixedWhitespaceDelimRecs):
         self.skipped = "Idx"
 #        self.__split_delim = ":"
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_INDEX,
-                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_INDEX, CONV: long } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_DEVICE } )
-        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_COUNT,
-                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_COUNT, CONV: long } )
         PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_QUERIER } )
 
         self.count = 0
@@ -3409,8 +3317,7 @@ class ProcNetNetfilterNFLOG(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 3
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_INDEX,
-                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_INDEX, CONV: long } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_NAME } )
         PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_LOGGER_LIST,
                 PREFIX: "(", SUFFIX: ")" } )
@@ -3456,8 +3363,7 @@ class ProcNetNetfilterNFQUEUE(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 2
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_INDEX,
-                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_INDEX, CONV: long } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_NAME } )
 
         self.index = 0

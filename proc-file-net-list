@@ -1,4 +1,4 @@
-anycast6 EMPTY NOHEADER
+anycast6 NEED TBD EMPTY
 arp DONE ProcNetARP
 bnep NEED aqui-only
 connector DONE ProcNetCONNECTOR
@@ -10,44 +10,44 @@ dev_snmp6/lo DONE ProcNetDEVSNMP6
 fib_trie NONRECORD
 fib_triestat NONRECORD
 hci NEED aqui-only
-icmp EMPTY
-icmp6 EMPTY aqui-only
+icmp NEED TBD EMPTY
+icmp6 NEED TBD EMPTY aqui-only
 if_inet6 DONE ProcNetIFINET6
 igmp DONE ProcNetIGMP
 igmp6 DONE ProcNetIGMP6
-ip6_flowlabel EMPTY
-ip6_mr_cache EMPTY
-ip6_mr_vif EMPTY
+ip6_flowlabel NEED TBD EMPTY
+ip6_mr_cache NEED TBD EMPTY
+ip6_mr_vif NEED TBD EMPTY
 ip6_tables_matches DONE ProcNetIP6TABLESMATCHES ROOTONLY
 ip6_tables_names DONE ProcNetIP6TABLESNAMES ROOTONLY
 ip6_tables_targets DONE ProcNetIP6TARGETS ROOTONLY
 ip_conntrack DONE ProcNetIPCONNTRACK ROOTONLY
-ip_conntrack_expect EMPTY NOHEADER ROOTONLY
-ip_mr_cache EMPTY
-ip_mr_vif EMPTY
+ip_conntrack_expect NEED TBD EMPTY ROOTONLY
+ip_mr_cache NEED TBD EMPTY
+ip_mr_vif NEED TBD EMPTY
 ip_tables_matches DONE ProcNetIPTABLESMATCHES ROOTONLY
 ip_tables_names DONE ProcNetIPTABLESNAMES ROOTONLY
 ip_tables_targets DONE ProcNetIPTABLESTARGETS ROOTONLY
 ipv6_route DONE ProcNetIPV6ROUTE
 l2cap NEED aqui-only
-mcfilter EMPTY
-mcfilter6 EMPTY
+mcfilter NEED TBD EMPTY
+mcfilter6 NEED TBD EMPTY
 netfilter DONE DIR
 netfilter/nf_log DONE ProcNetNetfilterNFLOG
 netfilter/nf_queue DONE ProcNetNetfilterNFQUEUE
 netlink DONE ProcNetNETLINK
 netstat DONE ProcNetNETSTAT
 nf_conntrack DONE ProcNetNFCONNTRACK ROOTONLY
-nf_conntrack_expect EMPTY NOHEADER ROOTONLY
+nf_conntrack_expect NEED TBD EMPTY ROOTONLY
 packet DONE ProcNetPACKET
 protocols DONE ProcNetPROTOCOLS
 psched DONE ProcNetPSCHED
 ptype DONE ProcNetPTYPE
-raw EMPTY
-raw6 EMPTY
+raw NEED TBD EMPTY
+raw6 NEED TBD EMPTY
 route DONE ProcNetROUTE
 rt6_stats DONE ProcNetRT6STATS
-rt_acct EMPTY NOHEADER
+rt_acct NEED TBD EMPTY
 rt_cache DONE ProcNetRTCACHE
 sco NEED aqui-only
 snmp DONE ProcNetSNMP
@@ -63,11 +63,11 @@ stat/nf_conntrack DONE ProcNetStatNFCONNTRACK
 stat/rt_cache DONE ProcNetStatRTCACHE
 tcp DONE ProcNetTCP
 tcp6 DONE ProcNetTCP6
-tr_rif EMPTY
+tr_rif NEED TBD EMPTY
 udp DONE ProcNetUDP
 udp6 DONE ProcNetUDP6
-udplite EMPTY
-udplite6 EMPTY
+udplite NEED TBD EMPTY
+udplite6 NEED TBD EMPTY
 unix DONE ProcNetUNIX
-wireless EMPTY
+wireless NEED TBD EMPTY
 xfrm_stat NOHEADER aqui-only
