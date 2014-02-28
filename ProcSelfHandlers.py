@@ -1661,7 +1661,10 @@ class ProcSelfPERSONALITY(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 1
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_PERSONALITY, CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_PERSONALITY,
+                CONV: long, BASE: 16 } )
+
+        self.personality = ""
         return
 
 

@@ -2053,7 +2053,7 @@ class ProcNetStatNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
                 BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 15, NAME: PFC.F_EXP_DELETE, CONV: long,
                 BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 16, NAME: PFC.F_SEARCH_RESTART,                
+        PBR.add_parse_rule(self, { POS: 16, NAME: PFC.F_SEARCH_RESTART,
                 CONV: long, BASE: 16 } )
 
         self.insert = 0
