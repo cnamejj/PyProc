@@ -2282,3 +2282,68 @@ class ProcRootMOUNTS(PBR.FixedWhitespaceDelimRecs):
 #
 REGISTER_FILE("/proc/mounts", ProcRootMOUNTS)
 REGISTER_PARTIAL_FILE("mounts", ProcRootMOUNTS)
+
+
+
+
+#
+class ProcRootSOFTIRQS(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/softirq matrix of softirq counts per CPU
+    """
+
+# source: fs/proc/softirqs.c
+#
+# Excerpt from that code:
+#
+#static int show_softirqs(struct seq_file *p, void *v)
+#{
+#        int i, j;
+#
+#        seq_puts(p, "                    ");
+#        for_each_possible_cpu(i)
+#                seq_printf(p, "CPU%-8d", i);
+#        seq_putc(p, '\n');
+#
+#        for (i = 0; i < NR_SOFTIRQS; i++) {
+#                seq_printf(p, "%12s:", softirq_to_name[i]);
+#                for_each_possible_cpu(j)
+#                        seq_printf(p, " %10u", kstat_softirqs_cpu(i, j));
+#                seq_putc(p, '\n');
+#        }
+#        return 0;
+#}
+
+    def extra_init(self, *opts):
+        self.minfields = 1
+        return
+
+    def extra_next(self, sio):
+#
+# -- Sample records
+#              CPU0       CPU1       CPU2       CPU3       
+#    HI:          0          0          0          0
+# TIMER:  284022609  287940296  327374992  337143936
+#NET_TX:       4142        158     520084         98
+
+        if sio.buff != "":
+            __cpus = dict()
+            for __col in range(0, sio.linewords):
+                __cpus[__col+1] = sio.lineparts[__col]
+
+            try:
+                while sio.read_line():
+                    __irq = sio.lineparts[0][:-1]
+                    __clist = dict()
+                    for __col in range(1, sio.linewords):
+                        __clist[__cpus[__col]] = PBR.convert_by_rule(
+                                sio.lineparts[__col], { CONV: long } )
+                    self.field[__irq] = __clist
+
+            except StopIteration:
+                pass
+
+        return(self.field)
+
+REGISTER_FILE("/proc/softirqs", ProcRootSOFTIRQS)
+REGISTER_PARTIAL_FILE("softirqs", ProcRootSOFTIRQS)
