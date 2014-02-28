@@ -721,3 +721,14 @@ F_CLOCK_DELTA = "clock-delta"
 
 # -- added to support /proc/self/personality
 F_PERSONALITY = "personality"
+
+# -- added for /proc/stat
+F_SS_CPU = "cpu-summ-stats"
+F_SS_INTR = "interrupt-stats"
+F_SS_CTXT = "cswitch-stats"
+F_SS_BTIME = "btime-stats"
+F_SS_PROCS_TOT = "fork-stats"
+F_SS_PROCS_RUN = "running-stats"
+F_SS_PROCS_BLOCK = "blocked-stats"
+F_SS_SOFTIRQ = "softirq-stats"
+

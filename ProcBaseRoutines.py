@@ -880,6 +880,7 @@ class TaggedMultiLineFile(object):
         self.extra_init(*opts)
 
         self.field = dict()
+        self.unused_recs = dict()
         self.curr_sio = SeqFileIO.SeqFileIO()
 #        print "base:__init__: inp({infile})".format(infile=self.infile)
         self.curr_sio.open_file(self.infile, self.minfields, self.skipped)
@@ -914,12 +915,16 @@ class TaggedMultiLineFile(object):
         __done = False
 
         self.field = dict()
+        self.unused_recs = dict()
+        __subrec = 0
         sio = self.curr_sio
 
         while not __done:
             try:
                 sio.read_line()
+                __subrec += 1
                 __line = sio.buff[:-1]
+                __matches = 0
 
                 for __rulenum in self.parse_rule:
                     __cr = self.parse_rule[__rulenum]
@@ -927,6 +932,10 @@ class TaggedMultiLineFile(object):
                         if matches_all_crit(__line, __cr):
                             __parsed = convert_by_rule(__line, __cr)
                             self.field[__cr[FIELD_NAME]] = __parsed
+                            __matches += 1
+
+                if __matches == 0:
+                    self.unused_recs[__subrec] = __line
 
                 __is_eor = convert_by_rule(__line, self.eor_rule)
                 if __is_eor == self.eor_value:

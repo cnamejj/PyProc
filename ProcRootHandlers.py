@@ -2347,3 +2347,116 @@ class ProcRootSOFTIRQS(PBR.FixedWhitespaceDelimRecs):
 
 REGISTER_FILE("/proc/softirqs", ProcRootSOFTIRQS)
 REGISTER_PARTIAL_FILE("softirqs", ProcRootSOFTIRQS)
+
+
+
+
+#
+class ProcRootSTAT(PBR.TaggedMultiLineFile):
+    """
+    Parse /proc/stats dump of summary system stats
+    """
+
+# source: fs/proc/stat.c
+#
+# Excerpt from that code:
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcRootHandlers" to reduce the size of this module.
+
+    def extra_init(self, *opts):
+        self.minfields = 2
+
+        self.__list_of_longs = set( [PFC.F_SS_CPU, PFC.F_SS_INTR,
+                PFC.F_SS_SOFTIRQ] )
+
+        self.__pref_cpu = "cpu"
+
+        self.__intr_summ = "total"
+       
+        self.__cpu_plist = dict()
+        self.__cpu_plist[0] = "user"
+        self.__cpu_plist[1] = "nice"
+        self.__cpu_plist[2] = "sys"
+        self.__cpu_plist[3] = "idle"
+        self.__cpu_plist[4] = "iowait"
+        self.__cpu_plist[5] = "irq"
+        self.__cpu_plist[6] = "softirq"
+        self.__cpu_plist[7] = "steal"
+        self.__cpu_plist[8] = "guest"
+        self.__cpu_plist[9] = "guest-nice"
+
+        PBR.add_parse_rule(self, { PREFIX: "cpu ", NAME: PFC.F_SS_CPU } )
+        PBR.add_parse_rule(self, { PREFIX: "intr ", NAME: PFC.F_SS_INTR } )
+        PBR.add_parse_rule(self, { PREFIX: "ctxt ", NAME: PFC.F_SS_CTXT } )
+        PBR.add_parse_rule(self, { PREFIX: "btime ", NAME: PFC.F_SS_BTIME } )
+        PBR.add_parse_rule(self, { PREFIX: "processes ",
+                NAME: PFC.F_SS_PROCS_TOT } )
+        PBR.add_parse_rule(self, { PREFIX: "procs_running ",
+                NAME: PFC.F_SS_PROCS_RUN } )
+        PBR.add_parse_rule(self, { PREFIX: "procs_blocked ",
+                NAME: PFC.F_SS_PROCS_BLOCK } )
+        PBR.add_parse_rule(self, { PREFIX: "softirq ",
+                NAME: PFC.F_SS_SOFTIRQ } )
+
+        self.add_eor_rule( "softirq", { BEFORE: " " } )
+
+        return
+
+    def longs_to_cpu_ss(self, long_list):
+        """Map a list of longs to a cpu summary stats dict"""
+
+        __res = dict()
+
+        for __off in range(0, len(self.__cpu_plist)):
+            try:
+                __res[self.__cpu_plist[__off]] = long_list[__off]
+            except KeyError:
+                __res[self.__cpu_plist[__off]] = 0
+
+        return __res
+
+
+    def longs_to_intr_ss(self, long_list):
+        """Map a list of longs to an interrrupt summary stats dict"""
+
+        __res = { self.__intr_summ: long_list[0] }
+
+        for __off in range(1, len(long_list)):
+            __res[__off-1] = long_list[__off]
+
+        return __res
+
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+#cpu  16227660 208781 5386332 2170952533 2218674 305 55746 7 8 9
+#cpu0 3306208 42619 664552 269205678 875412 293 49809 0 0 0
+#cpu1 3331254 31567 818902 269027267 1086491 9 802 0 0 0
+#ctxt 2418647143
+#btime 1390806357
+#processes 4128591
+
+        for __subrec in self.unused_recs:
+            __key = self.unused_recs[__subrec].partition(" ")
+            if __key[0].startswith(self.__pref_cpu):
+                self.__list_of_longs.add(__key[0])
+                self.field[__key[0]] = __key[2]
+
+        for __key in self.__list_of_longs:
+            __raw = self.field[__key].strip().split(" ")
+            __conv = PBR.array_of_longs(__raw)
+
+            if __key == PFC.F_SS_CPU or __key.startswith(self.__pref_cpu):
+                self.field[__key] = self.longs_to_cpu_ss(__conv)
+            elif __key == PFC.F_SS_INTR:
+                self.field[__key] = self.longs_to_intr_ss(__conv)
+            else:
+                self.field[__key] = __conv
+
+        return(self.field)
+
+REGISTER_FILE("/proc/stat", ProcRootSTAT)
+REGISTER_PARTIAL_FILE("/stat", ProcRootSTAT)
