@@ -732,3 +732,8 @@ F_SS_PROCS_RUN = "running-stats"
 F_SS_PROCS_BLOCK = "blocked-stats"
 F_SS_SOFTIRQ = "softirq-stats"
 
+
+# -- added for /proc/interrupts
+F_INTERRUPT = "interrupt"
+F_INTERRUPT_DESC = "interrupt-decription"
+F_TOT_COUNT = "total-count"

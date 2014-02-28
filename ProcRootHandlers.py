@@ -2329,15 +2329,15 @@ class ProcRootSOFTIRQS(PBR.FixedWhitespaceDelimRecs):
         if sio.buff != "":
             __cpus = dict()
             for __col in range(0, sio.linewords):
-                __cpus[__col+1] = sio.lineparts[__col]
+                __cpus[__col+1] = sio.get_word(__col)
 
             try:
                 while sio.read_line():
-                    __irq = sio.lineparts[0][:-1]
+                    __irq = sio.get_word(0)[:-1]
                     __clist = dict()
                     for __col in range(1, sio.linewords):
                         __clist[__cpus[__col]] = PBR.convert_by_rule(
-                                sio.lineparts[__col], { CONV: long } )
+                                sio.get_word(__col), { CONV: long } )
                     self.field[__irq] = __clist
 
             except StopIteration:
@@ -2460,3 +2460,92 @@ class ProcRootSTAT(PBR.TaggedMultiLineFile):
 
 REGISTER_FILE("/proc/stat", ProcRootSTAT)
 REGISTER_PARTIAL_FILE("/stat", ProcRootSTAT)
+
+
+
+
+#
+class ProcRootINTERRUPTS(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/interrupts matrix of per-CPU interrup counts
+    """
+
+# source: kernel/irq/proc.c (primary)
+#
+# There quite a few other routines in the kernel that provide some
+# of the contents of the file.  See the README file for the complete
+# list.
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcRootHandlers" to reduce the size of this module.
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 1
+
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_INTERRUPT,
+                SUFFIX: ":" } )
+
+        self.__summ_only = set( ["ERR", "MIS"] )
+        self.__pref_cpu = "CPU"
+        self.__no_desc = "N/A"
+        self.__cpu_list = dict()
+        self.__num_cpus = 0
+        return
+
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+#          CPU0       CPU1       CPU2       CPU3       
+# 0:        132          0          0          0   IO-APIC-edge      timer
+# 1:          1          1          0          1   IO-APIC-edge      i8042
+# 8:          1          0          0          0   IO-APIC-edge      rtc0
+# 9:          0          0          0          0   IO-APIC-fasteoi   acpi
+#16:          5          5    5591774    4662973   IO-APIC-fasteoi   ahci, uhci_hcd:usb3, nouveau
+
+        if sio.buff != "" and self.__num_cpus == 0:
+            self.__num_cpus = sio.linewords
+            for __off in range(0, self.__num_cpus):
+                self.__cpu_list[__off] = sio.get_word(__off)
+            sio.read_line()
+
+        if sio.buff != "":
+
+            if self.field[PFC.F_INTERRUPT] in self.__summ_only:
+                try:
+                    __total = long(sio.get_word(1))
+                except ValueError:
+                    __total = 0
+
+                __pci = dict()
+                for __off in range(0, self.__num_cpus):
+                    __pci[self.__cpu_list[__off]] = 0
+
+                self.field[PFC.F_TOT_COUNT] = __total
+                self.field[PFC.F_COUNT] = __pci
+                self.field[PFC.F_INTERRUPT_DESC] = self.__no_desc
+
+            else:
+                __cl = self.__cpu_list
+                __pci = dict()
+                __total = 0
+
+                for __off in range(0, self.__num_cpus):
+                    try:
+                        __conv = long(sio.get_word(__off))
+                        __total += __conv
+                    except ValueError:
+                        __conv = 0
+                    __pci[__cl[__off]] = __conv
+
+                self.field[PFC.F_COUNT] = __pci
+                self.field[PFC.F_TOT_COUNT] = __total
+                __rest = sio.lineparts[self.__num_cpus+1:]
+                self.field[PFC.F_INTERRUPT_DESC] = " ".join(__rest)
+
+        return(self.field)
+
+REGISTER_FILE("/proc/interrupts", ProcRootINTERRUPTS)
+REGISTER_PARTIAL_FILE("interrupts", ProcRootINTERRUPTS)
