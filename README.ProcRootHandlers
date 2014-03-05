@@ -1083,3 +1083,72 @@ source: arch/arm/kernel/smp.c
 #                seq_printf(p, " %s\n", ipi_types[i]);
 #        }
 #}
+
+
+
+--- File: /proc/zoneinfo
+
+source: mm/vmstat.c
+
+Excerpts from that code:
+
+#static void zoneinfo_show_print(struct seq_file *m, pg_data_t *pgdat,
+#                                                        struct zone *zone)
+#{
+#        int i;
+#        seq_printf(m, "Node %d, zone %8s", pgdat->node_id, zone->name);
+#        seq_printf(m,
+#                   "\n  pages free     %lu"
+#                   "\n        min      %lu"
+#                   "\n        low      %lu"
+#                   "\n        high     %lu"
+#                   "\n        scanned  %lu"
+#                   "\n        spanned  %lu"
+#                   "\n        present  %lu",
+#                   zone_page_state(zone, NR_FREE_PAGES),
+#                   min_wmark_pages(zone),
+#                   low_wmark_pages(zone),
+#                   high_wmark_pages(zone),
+#                   zone->pages_scanned,
+#                   zone->spanned_pages,
+#                   zone->present_pages);
+#
+#        for (i = 0; i < NR_VM_ZONE_STAT_ITEMS; i++)
+#                seq_printf(m, "\n    %-12s %lu", vmstat_text[i],
+#                                zone_page_state(zone, i));
+#
+#        seq_printf(m,
+#                   "\n        protection: (%lu",
+#                   zone->lowmem_reserve[0]);
+#        for (i = 1; i < ARRAY_SIZE(zone->lowmem_reserve); i++)
+#                seq_printf(m, ", %lu", zone->lowmem_reserve[i]);
+#        seq_printf(m,
+#                   ")"
+#                   "\n  pagesets");
+#        for_each_online_cpu(i) {
+#                struct per_cpu_pageset *pageset;
+#
+#                pageset = per_cpu_ptr(zone->pageset, i);
+#                seq_printf(m,
+#                           "\n    cpu: %i"
+#                           "\n              count: %i"
+#                           "\n              high:  %i"
+#                           "\n              batch: %i",
+#                           i,
+#                           pageset->pcp.count,
+#                           pageset->pcp.high,
+#                           pageset->pcp.batch);
+##ifdef CONFIG_SMP
+#                seq_printf(m, "\n  vm stats threshold: %d",
+#                                pageset->stat_threshold);
+##endif
+#        }
+#        seq_printf(m,
+#                   "\n  all_unreclaimable: %u"
+#                   "\n  start_pfn:         %lu"
+#                   "\n  inactive_ratio:    %u",
+#                   zone->all_unreclaimable,
+#                   zone->zone_start_pfn,
+#                   zone->inactive_ratio);
+#        seq_putc(m, '\n');
+#}

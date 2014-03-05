@@ -2549,3 +2549,168 @@ class ProcRootINTERRUPTS(PBR.FixedWhitespaceDelimRecs):
 
 REGISTER_FILE("/proc/interrupts", ProcRootINTERRUPTS)
 REGISTER_PARTIAL_FILE("interrupts", ProcRootINTERRUPTS)
+
+
+
+
+#
+class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
+    """
+    Parse /proc/zoneinfo file
+    """
+
+# source: mm/vmstat.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcRootHandlers" to reduce the size of this module.
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 1
+
+        self.__cpu_pref = "cpu:"
+        self.__count_pref = "count:"
+        self.__high_pref = "high:"
+        self.__batch_pref = "batch:"
+        self.__vm_stats_pref = "vm stats"
+        self.__count_key = "count"
+        self.__high_key = "high"
+        self.__batch_key = "batch"
+        self.__vm_stats_key = "vm-stats-thresh"
+
+        PBR.add_parse_rule(self, { PREFIX: "Node", BEFORE: ",", 
+                CONV: long, NAME: PFC.F_NODE } )
+        PBR.add_parse_rule(self, { PREFIX: "Node", AFTER: " zone ",
+                NAME: PFC.F_ZONE } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " pages free ",
+                CONV: long, NAME: PFC.F_PAGES_FREE } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " min ",
+                CONV: long, NAME: PFC.F_PAGES_MIN } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " low ",
+                CONV: long, NAME: PFC.F_PAGES_LOW } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " high ",
+                CONV: long, NAME: PFC.F_PAGES_HIGH } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " scanned ",
+                CONV: long, NAME: PFC.F_PAGES_SCANNED } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " spanned ",
+                CONV: long, NAME: PFC.F_PAGES_SPANNED } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " present ",
+                CONV: long, NAME: PFC.F_PAGES_PRESENT } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_free_pages ",
+                CONV: long, NAME: PFC.F_NR_FREE_PAGES } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_inactive_anon ",
+                CONV: long, NAME: PFC.F_NR_INACTIVE_ANON } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_active_anon ",
+		CONV: long, NAME: PFC.F_NR_ACTIVE_ANON } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_inactive_file ",
+		CONV: long, NAME: PFC.F_NR_INACTIVE_FILE } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_active_file ",
+		CONV: long, NAME: PFC.F_NR_ACTIVE_FILE } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_unevictable ",
+		CONV: long, NAME: PFC.F_NR_UNEVICTABLE } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_mlock ",
+		CONV: long, NAME: PFC.F_NR_MLOCK } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_anon_pages ",
+		CONV: long, NAME: PFC.F_NR_ANON_PAGES } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_mapped ",
+		CONV: long, NAME: PFC.F_NR_MAPPED } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_file_pages ",
+		CONV: long, NAME: PFC.F_NR_FILE_PAGES } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_dirty ",
+		CONV: long, NAME: PFC.F_NR_DIRTY } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_writeback ",
+		CONV: long, NAME: PFC.F_NR_WRITEBACK } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_slab_reclaimable ",
+		CONV: long, NAME: PFC.F_NR_SLAB_RECLAIM } )
+        PBR.add_parse_rule(self, { PREFIX: " ",
+                AFTER: " nr_slab_unreclaimable ",
+		CONV: long, NAME: PFC.F_NR_SLAB_UNRECLAIM } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_page_table_pages ",
+		CONV: long, NAME: PFC.F_NR_PAGE_TABLE_PAGES } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_kernel_stack ",
+		CONV: long, NAME: PFC.F_NR_KERNEL_STACK } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_unstable ",
+		CONV: long, NAME: PFC.F_NR_UNSTABLE } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_bounce ",
+		CONV: long, NAME: PFC.F_NR_BOUNCE } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_vmscan_write ",
+		CONV: long, NAME: PFC.F_NR_VMSCAN_WRITE } )
+        PBR.add_parse_rule(self, { PREFIX: " ",
+                AFTER: " nr_vmscan_immediate_reclaim ",
+		CONV: long, NAME: PFC.F_NR_VMSCAN_IMM_RECLAIM } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_writeback_temp ",
+		CONV: long, NAME: PFC.F_NR_WRITEBACK_TEMP } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_isolated_anon ",
+		CONV: long, NAME: PFC.F_NR_ISOLATED_ANON } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_isolated_file ",
+		CONV: long, NAME: PFC.F_NR_ISOLATED_FILE } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_shmem ",
+		CONV: long, NAME: PFC.F_NR_SHMEM } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_dirtied ",
+		CONV: long, NAME: PFC.F_NR_DIRTIED } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_written ",
+		CONV: long, NAME: PFC.F_NR_WRITTEN } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " numa_hit ",
+		CONV: long, NAME: PFC.F_NUMA_HIT } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " numa_miss ",
+		CONV: long, NAME: PFC.F_NUMA_MISS } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " numa_foreign ",
+		CONV: long, NAME: PFC.F_NUMA_FOREIGN } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " numa_interleave ",
+		CONV: long, NAME: PFC.F_NUMA_INTERLEAVE } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " numa_local ",
+		CONV: long, NAME: PFC.F_NUMA_LOCAL } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " numa_other ",
+		CONV: long, NAME: PFC.F_NUMA_OTHER } )
+        PBR.add_parse_rule(self, { PREFIX: " ",
+                AFTER: " nr_anon_transparent_hugepages ",
+		CONV: long, NAME: PFC.F_NR_ANON_TRANS_HUGE } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " protection: (",
+                SUFFIX: ")", NAME: PFC.F_PROTECTION } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " all_unreclaimable: ",
+                CONV: long, NAME: PFC.F_ALL_UNRECLAIM } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " start_pfn: ",
+                CONV: long, NAME: PFC.F_START_PFN } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " inactive_ratio: ",
+                CONV: long, NAME: PFC.F_INACTIVE_RATIO } )
+
+        self.add_eor_rule( "  inactive_ratio", { BEFORE: ":" } )
+        return
+
+
+    def extra_next(self, sio):
+
+        self.field[PFC.F_ZONE] = self.field[PFC.F_ZONE].strip()
+
+        __per_cpu = dict()
+        for __subrec in self.unused_recs:
+            __line = self.unused_recs[__subrec].strip()
+            if __line.startswith(self.__cpu_pref):
+                __cpu = PBR.convert_by_rule( __line, { AFTER: self.__cpu_pref,
+                        CONV: long } )
+                __per_cpu[__cpu] = dict()
+            else:
+                __val = PBR.convert_by_rule( __line, { AFTER: ":",
+                        CONV: long } )
+                if __line.startswith(self.__count_pref):
+                    __per_cpu[__cpu][self.__count_key] = __val
+                elif __line.startswith(self.__high_pref):
+                    __per_cpu[__cpu][self.__high_key] = __val
+                elif __line.startswith(self.__batch_pref):
+                    __per_cpu[__cpu][self.__batch_key] = __val
+                elif __line.startswith(self.__vm_stats_pref):
+                    __per_cpu[__cpu][self.__vm_stats_key] = __val
+
+        self.field[PFC.F_CPU_PAGESETS] = __per_cpu
+
+        __pl = self.field[PFC.F_PROTECTION].split(",")
+        __nums = [0] * len(__pl)
+        for __off in range(0, len(__pl)):
+            __nums[__off] = PBR.convert_by_rule(__pl[__off], { CONV: long } )
+
+        self.field[PFC.F_PROTECTION] = __nums
+                
+        return(self.field)
+
+REGISTER_FILE("/proc/zoneinfo", ProcRootZONEINFO)
+REGISTER_PARTIAL_FILE("zoneinfo", ProcRootZONEINFO)

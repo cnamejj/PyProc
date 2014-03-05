@@ -21,7 +21,7 @@ file-name STATUS FORMAT <Handler> FLAGS
 sysrq-trigger SKIP NOTDATA ROOTONLY
 partitions DONE WSD ProcRootPARTITIONS
 diskstats DONE WSD ProcRootDISKSTATS NOHEADER
-crypto NEED NESTED
+crypto NEED NESTED new-handler
 key-users DONE WSD ProcRootKEYUSERS one-line NOHEADER
 version_signature DONE WSD ProcRootVERSIONSIGNATURE one-line NOHEADER
 kpageflags SKIP BINARY ROOTONLY
@@ -36,7 +36,7 @@ meminfo DONE WSD ProcRootMEMINFO NOHEADER
 loadavg DONE WSD ProcRootLOADAVG one-line NOHEADER
 interrupts DONE FIXEDCOLS ProcRootINTERRUPTS VARIES
 devices NEED NESTED
-cpuinfo NEED MULTILINE VARIES
+cpuinfo NEED MULTILINE VARIES new-handler
 consoles DONE WSD ProcRootCONSOLES one-line NOHEADER
 cmdline DONE WSD ProcRootCMDLINE one-line NOHEADER
 locks DONE WSD ProcRootLOCKS NOHEADER
@@ -44,7 +44,7 @@ filesystems DONE TBD ProcRootFILESYSTEMS
 slabinfo DONE WSD ProcRootSLABINFO ROOTONLY
 swaps DONE WSD ProcRootSWAPS
 vmallocinfo DONE WSD ProcRootVMALLOCINFO NOHEADER ROOTONLY
-zoneinfo NEED REPORT
+zoneinfo DONE REPORT ProcRootZONEINFO
 vmstat DONE WSD ProcRootVMSTAT NOHEADER
 pagetypeinfo NEED NESTED
 buddyinfo DONE WSD ProcRootBUDDYINFO NOHEADER
