@@ -2566,7 +2566,7 @@ class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
 #
 
     def extra_init(self, *opts):
-        self.minfields = 1
+        self.minfields = 2
 
         self.__cpu_pref = "cpu:"
         self.__count_pref = "count:"
@@ -2714,3 +2714,139 @@ class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
 
 REGISTER_FILE("/proc/zoneinfo", ProcRootZONEINFO)
 REGISTER_PARTIAL_FILE("zoneinfo", ProcRootZONEINFO)
+
+
+
+
+#
+class ProcRootSCHEDSTAT(PBR.TaggedMultiLineFile):
+    """
+    Parse /proc/schedstat file
+    """
+
+# source: kernel/sched_stats.h
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcRootHandlers" to reduce the size of this module.
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 2
+        self.__cpu_count = 9
+        self.__domain_count = 36
+        self.__no_cpu = -1
+        self.__cpu_pref = "cpu"
+        self.__dom_pref = "domain"
+        self.all_parsed = dict()
+
+        PBR.add_parse_rule(self, { PREFIX: "version", CONV: long,
+                NAME: PFC.F_VERSION } )
+        PBR.add_parse_rule(self, { PREFIX: "timestamp", CONV: long,
+                NAME: PFC.F_TIMESTAMP } )
+        return
+
+
+    def parse_cpu_line(self, words):
+        """Dissect a 'cpuX # # ...' subrecord"""
+
+        __res = dict()
+        __nums = PBR.array_of_longs(words[1:])
+
+        if len(__nums) == self.__cpu_count:
+            __res[PFC.F_SCH_YIELD] = __nums[0]
+            __res[PFC.F_SCH_SW_EXP_Q] = __nums[1]
+            __res[PFC.F_SCH_CALLS] = __nums[2]
+            __res[PFC.F_SCH_IDLE] = __nums[3]
+            __res[PFC.F_WUP_CALLS] = __nums[4]
+            __res[PFC.F_WUP_LOC_CPU] = __nums[5]
+            __res[PFC.F_RUNNING] = __nums[6]
+            __res[PFC.F_WAITING] = __nums[7]
+            __res[PFC.F_SLICES] = __nums[8]
+        return __res            
+
+
+    def parse_domain_line(self, words):
+        """Dissect a 'domainX # # ...' subrecord"""
+
+        __res = dict()
+        __res[PFC.F_CPU_MASK] = words[1]
+        __nums = PBR.array_of_longs(words[2:])
+        if len(__nums) == self.__domain_count:
+            __res[PFC.F_IDLE_LB] = __nums[0]
+            __res[PFC.F_IDLE_LB_PASS] = __nums[1]
+            __res[PFC.F_IDLE_LB_FAIL] = __nums[2]
+            __res[PFC.F_IDLE_LB_IMBAL] = __nums[3]
+            __res[PFC.F_IDLE_PT] = __nums[4]
+            __res[PFC.F_IDLE_PT_CACHE_HOT] = __nums[5]
+            __res[PFC.F_IDLE_LB_NO_QUEUE] = __nums[6]
+            __res[PFC.F_IDLE_LB_NO_GROUP] = __nums[7]
+            __res[PFC.F_BUSY_LB] = __nums[8]
+            __res[PFC.F_BUSY_LB_PASS] = __nums[9]
+            __res[PFC.F_BUSY_LB_FAIL] = __nums[10]
+            __res[PFC.F_BUSY_LB_IMBAL] = __nums[11]
+            __res[PFC.F_BUSY_PT] = __nums[12]
+            __res[PFC.F_BUSY_PT_CACHE_HOT] = __nums[13]
+            __res[PFC.F_BUSY_LB_NO_QUEUE] = __nums[14]
+            __res[PFC.F_BUSY_LB_NO_GROUP] = __nums[15]
+            __res[PFC.F_JBEI_LB] = __nums[16]
+            __res[PFC.F_JBEI_LB_PASS] = __nums[17]
+            __res[PFC.F_JBEI_LB_FAIL] = __nums[18]
+            __res[PFC.F_JBEI_LB_IMBAL] = __nums[19]
+            __res[PFC.F_JBEI_PT] = __nums[20]
+            __res[PFC.F_JBEI_PT_CACHE_HOT] = __nums[21]
+            __res[PFC.F_JBEI_LB_NO_QUEUE] = __nums[22]
+            __res[PFC.F_JBEI_LB_NO_GROUP] = __nums[23]
+            __res[PFC.F_ACT_LB] = __nums[24]
+            __res[PFC.F_ACT_LB_FAIL] = __nums[25]
+            __res[PFC.F_ACT_LB_MOVED] = __nums[26]
+            __res[PFC.F_SBE_COUNT] = __nums[27]
+            __res[PFC.F_SBE_BALANCED] = __nums[28]
+            __res[PFC.F_SBE_PUSHED] = __nums[29]
+            __res[PFC.F_SBF_COUNT] = __nums[30]
+            __res[PFC.F_SBF_BALANCED] = __nums[31]
+            __res[PFC.F_SBF_PUSHED] = __nums[32]
+            __res[PFC.F_TRWUP_AWOKE_DIFF_CPU] = __nums[33]
+            __res[PFC.F_TRWUP_MOVE_CACHE_COLD] = __nums[34]
+            __res[PFC.F_TRWUP_PASSIVE_BAL] = __nums[35]
+
+        return __res
+
+    def next(self):
+        if len(self.all_parsed) == 0:
+            self.all_parsed = super(ProcRootSCHEDSTAT, self).next()
+
+        if len(self.all_parsed) == 0:
+            raise StopIteration
+
+        __pthru = dict()
+        __pthru[PFC.F_VERSION] = self.field[PFC.F_VERSION]
+        __pthru[PFC.F_TIMESTAMP] = self.field[PFC.F_TIMESTAMP]
+        self.field = __pthru
+
+        __cpu, __vals = self.all_parsed.popitem()
+        self.field[PFC.F_CPU_ID] = __cpu
+        for __key in __vals:
+            self.field[__key] = __vals[__key]
+
+        return(self.field)
+                 
+
+    def extra_next(self, sio):
+        __per_cpu = dict()
+        __cpu = self.__no_cpu
+
+        for __subrec in self.unused_recs:
+            __line = self.unused_recs[__subrec].split()
+            __tag = __line[0]
+
+            if __tag.startswith(self.__cpu_pref):
+                __per_cpu[__tag] = self.parse_cpu_line(__line)
+                __cpu = __tag
+            elif __cpu != self.__no_cpu and __tag.startswith(self.__dom_pref):
+                __dinfo = self.parse_domain_line(__line)
+                __per_cpu[__cpu][__tag] = __dinfo
+
+        return(__per_cpu)
+
+REGISTER_FILE("/proc/schedstat", ProcRootSCHEDSTAT)
+REGISTER_PARTIAL_FILE("schedstat", ProcRootSCHEDSTAT)
