@@ -960,6 +960,57 @@ class TaggedMultiLineFile(object):
             raise StopIteration
 
         return(self.extra_next(sio))
+
+
+
+# ---
+class SingleTextField(object):
+    """
+    Base class for files that are one line of text, not to be parsed
+    """
+
+    def extra_init(self, *opts):
+        """No-op version of optional call-out from '__init__' method"""
+        return
+
+    def extra_next(self, sio):
+        """No-op version of optional call-out from 'next' method"""
+
+        __line = sio.buff.partition("\n")[0]
+        self.field[PFC.F_DATA] = __line
+        return(__line)
+
+    def __init__(self, *opts):
+        if len(opts) > 0:
+            self.infile = proc_file_to_path(opts[0])
+        else:
+            self.infile = show_handler_file_path(self)
+        self.minfields = 0
+        self.skipped = ""
+        self.parse_rule = dict()
+        self.floating_rule = dict()
+
+        self.extra_init(*opts)
+
+        self.field = dict()
+        self.curr_sio = SeqFileIO.SeqFileIO()
+        self.curr_sio.open_file(self.infile, self.minfields, self.skipped)
+        return
+
+    def __iter__(self):
+        return(self)
+
+    def next(self):
+        """
+        First call return the contents of the file.  The next call raise a
+        StopIteration condition.
+        """
+
+        self.field = dict()
+        sio = self.curr_sio
+        sio.read_line()
+
+        return(self.extra_next(sio))
         
             
 

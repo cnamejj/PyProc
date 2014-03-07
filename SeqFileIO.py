@@ -54,6 +54,14 @@ class SeqFileIO:
         return __word
 
 
+    def close_file(self):
+        """Used when the caller want to skip the rest of the file."""
+        if self.is_open == 1:
+            self.is_open = 0
+            self.pnt_fd.close()
+        return
+        
+
     def read_line(self):
         """Read/Parse the next line in the open file."""
 

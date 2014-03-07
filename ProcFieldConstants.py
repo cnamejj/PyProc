@@ -846,3 +846,22 @@ F_ASYNC = "async"
 F_GENIV = "geniv"
 F_IVSIZE = "ivsize"
 F_BLOCKSIZE = "blocksize"
+
+# -- added for /proc/self/autogroup
+F_ID = "id"
+F_NICE = "nice"
+
+# -- added for /proc/self/comm
+F_COMM = "command"
+
+# -- added for base class SingleTextField
+F_DATA = "data"
+
+# -- added for /proc/self/cpuset
+F_CPU_SET = "cpu-set"
+
+# -- added for /proc/self/syscall
+F_SYSCALL = "syscall-summary"
+
+# -- added for /proc/self/wchan
+F_WCHAN = "wchan"

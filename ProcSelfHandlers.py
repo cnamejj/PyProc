@@ -1679,3 +1679,169 @@ REGISTER_FILE("/proc/self/personality", ProcSelfPERSONALITY)
 REGISTER_PARTIAL_FILE("personality", ProcSelfPERSONALITY)
 
 
+
+
+#
+class ProcSelfAUTOGROUP(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/self/autogroup file
+    """
+
+# source: kernel/sched_autogroup.c
+#
+#  seq_printf(m, "/autogroup-%ld nice %d\n", ag->id, ag->nice);
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 3
+
+        PBR.add_parse_rule(self, { POS: 0, PREFIX: "/autogroup-", CONV: long, 
+                NAME: PFC.F_ID } )
+        PBR.add_parse_rule(self, { POS: 2, CONV: long, NAME: PFC.F_NICE } )
+        return
+                 
+
+    def extra_next(self, sio):
+
+        __id = self.field[PFC.F_ID]
+        __nice = self.field[PFC.F_NICE]
+
+        return(__id, __nice)
+
+REGISTER_FILE("/proc/autogroup", ProcSelfAUTOGROUP)
+REGISTER_PARTIAL_FILE("autogroup", ProcSelfAUTOGROUP)
+
+
+
+
+#
+class ProcSelfCOMM(PBR.SingleTextField):
+    """
+    Parse /proc/self/comm file
+    """
+
+# source: fs/proc/base.c
+#
+#  seq_printf(m, "%s\n", p->comm);
+#
+
+    def extra_next(self, sio):
+        __line = sio.buff.partition("\n")[0]
+        self.field[PFC.F_COMM] = __line
+        return(__line)
+
+REGISTER_FILE("/proc/comm", ProcSelfCOMM)
+REGISTER_PARTIAL_FILE("comm", ProcSelfCOMM)
+
+
+
+
+#
+class ProcSelfCMDLINE(PBR.SingleTextField):
+    """
+    Parse /proc/self/cmdline file
+    """
+
+# source: fs/proc/cmdline.c
+#
+#   seq_printf(m, "%s\n", saved_command_line);
+#
+
+    def extra_next(self, sio):
+        __split = sio.buff.split("\0")
+        self.field[PFC.F_COMM] = " ".join(__split)
+        return(self.field[PFC.F_COMM])
+
+REGISTER_FILE("/proc/self/cmdline", ProcSelfCMDLINE)
+REGISTER_PARTIAL_FILE("self-cmdline", ProcSelfCMDLINE)
+
+
+
+
+#
+class ProcSelfCPUSET(PBR.SingleTextField):
+    """
+    Parse /proc/self/cpuset file
+    """
+
+# source: 
+#
+#
+#
+
+    def extra_next(self, sio):
+        __line = sio.buff.partition("\n")[0]
+        self.field[PFC.F_CPU_SET] = __line
+        return(self.field[PFC.F_CPU_SET])
+
+REGISTER_FILE("/proc/self/cpuset", ProcSelfCPUSET)
+REGISTER_PARTIAL_FILE("cpuset", ProcSelfCPUSET)
+
+
+
+
+#
+class ProcSelfSYSCALL(PBR.SingleTextField):
+    """
+    Parse /proc/self/syscall file
+    """
+
+# source: fs/proc/base.c
+#
+# Excerpt from that code
+#
+# if (task_current_syscall(task, &nr, args, 6, &sp, &pc))
+#         res = sprintf(buffer, "running\n");
+# else if (nr < 0)
+#         res = sprintf(buffer, "%ld 0x%lx 0x%lx\n", nr, sp, pc);
+# else
+#         res = sprintf(buffer,
+#                "%ld 0x%lx 0x%lx 0x%lx 0x%lx 0x%lx 0x%lx 0x%lx 0x%lx\n",
+#                nr,
+#                args[0], args[1], args[2], args[3], args[4], args[5],
+#                sp, pc);
+#
+
+    def extra_next(self, sio):
+        __line = sio.buff.partition("\n")[0]
+        self.field[PFC.F_SYSCALL] = __line
+
+        sio.close_file()
+
+        return(self.field[PFC.F_SYSCALL])
+
+REGISTER_FILE("/proc/self/syscall", ProcSelfSYSCALL)
+REGISTER_PARTIAL_FILE("syscall", ProcSelfSYSCALL)
+
+
+
+
+#
+class ProcSelfWCHAN(PBR.SingleTextField):
+    """
+    Parse /proc/self/wchan file
+    """
+
+# source: fs/proc/base.c
+#
+# Excerpt from that code
+#
+# if (lookup_symbol_name(wchan, symname) < 0)
+#         if (!ptrace_may_access(task, PTRACE_MODE_READ))
+#                 return 0;
+#         else
+#                 return sprintf(buffer, "%lu", wchan);
+# else
+#         return sprintf(buffer, "%s", symname);
+#
+
+    def extra_next(self, sio):
+        __line = sio.buff.partition("\n")[0]
+        self.field[PFC.F_WCHAN] = __line
+
+        sio.close_file()
+
+        return(self.field[PFC.F_WCHAN])
+
+REGISTER_FILE("/proc/self/wchan", ProcSelfWCHAN)
+REGISTER_PARTIAL_FILE("wchan", ProcSelfWCHAN)

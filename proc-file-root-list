@@ -46,7 +46,7 @@ swaps DONE WSD ProcRootSWAPS
 vmallocinfo DONE WSD ProcRootVMALLOCINFO NOHEADER ROOTONLY
 zoneinfo DONE REPORT ProcRootZONEINFO
 vmstat DONE WSD ProcRootVMSTAT NOHEADER
-pagetypeinfo NEED NESTED
+pagetypeinfo NEED REPORT
 buddyinfo DONE WSD ProcRootBUDDYINFO NOHEADER
 latency_stats NEED one-line nowhere-only NOHEADER
 kallsyms DONE WSD ProcRootKALLSYMS NOHEADER HUGE
