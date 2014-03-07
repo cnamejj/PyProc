@@ -29,6 +29,7 @@ SUFFIX_VAL = "suffix"
 BEFORE_VAL = "before"
 AFTER_VAL = "after"
 HAS_VAL = "has"
+WORDS_VAL = "words"
 
 # --
 PROC_PATH_PREFIX_LIST = ( "/proc", "/proc/", "/proc/net/", "/proc/self/net/",
@@ -85,6 +86,9 @@ def matches_all_crit(rawdata, rule):
     """
 
     __result = True
+
+    if __result and rule.has_key(WORDS_VAL):
+        __result = rule[HAS_VAL] == len(rawdata.split())
 
     if __result and rule.has_key(HAS_VAL):
         __result = rawdata.find(rule[HAS_VAL]) != -1
@@ -913,11 +917,17 @@ class TaggedMultiLineFile(object):
             raise StopIteration
 
         __done = False
+        __empty = True
 
         self.field = dict()
         self.unused_recs = dict()
         __subrec = 0
         sio = self.curr_sio
+
+        for __rulenum in self.parse_rule:
+            __cr = self.parse_rule[__rulenum]
+            if __cr.has_key(FIELD_NAME):
+                self.field[__cr[FIELD_NAME]] = error_by_rule(__cr)
 
         while not __done:
             try:
@@ -930,6 +940,7 @@ class TaggedMultiLineFile(object):
                     __cr = self.parse_rule[__rulenum]
                     if __cr.has_key(FIELD_NAME):
                         if matches_all_crit(__line, __cr):
+                            __empty = False
                             __parsed = convert_by_rule(__line, __cr)
                             self.field[__cr[FIELD_NAME]] = __parsed
                             __matches += 1
@@ -945,7 +956,7 @@ class TaggedMultiLineFile(object):
                 self.at_eof = True
                 __done = True
 
-        if len(self.field) == 0:
+        if __empty:
             raise StopIteration
 
         return(self.extra_next(sio))

@@ -21,7 +21,7 @@ file-name STATUS FORMAT <Handler> FLAGS
 sysrq-trigger SKIP NOTDATA ROOTONLY
 partitions DONE WSD ProcRootPARTITIONS
 diskstats DONE WSD ProcRootDISKSTATS NOHEADER
-crypto NEED NESTED new-handler
+crypto DONE NESTED ProcRootCRYPTO
 key-users DONE WSD ProcRootKEYUSERS one-line NOHEADER
 version_signature DONE WSD ProcRootVERSIONSIGNATURE one-line NOHEADER
 kpageflags SKIP BINARY ROOTONLY
@@ -57,7 +57,7 @@ timer_list NEED REPORT
 iomem NEED TBD NOHEADER
 ioports NEED TBD NOHEADER
 execdomains DONE WSD ProcRootEXECDOMAINS NOHEADER
-schedstat NEED NESTED
+schedstat DONE NESTED ProcRootSCHEDSTAT
 sched_debug NEED REPORT
 mdstat DONE NESTED ProcRootMDSTAT
 misc DONE WSD ProcRootMISC NOHEADER

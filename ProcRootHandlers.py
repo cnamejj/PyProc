@@ -38,6 +38,7 @@ PREFIX = PBR.PREFIX_VAL
 SUFFIX = PBR.SUFFIX_VAL
 BEFORE = PBR.BEFORE_VAL
 AFTER = PBR.AFTER_VAL
+WORDS = PBR.WORDS_VAL
 
 REGISTER_FILE = PBR.register_file
 REGISTER_PARTIAL_FILE = PBR.register_partial_file
@@ -2850,3 +2851,71 @@ class ProcRootSCHEDSTAT(PBR.TaggedMultiLineFile):
 
 REGISTER_FILE("/proc/schedstat", ProcRootSCHEDSTAT)
 REGISTER_PARTIAL_FILE("schedstat", ProcRootSCHEDSTAT)
+
+
+
+
+#
+class ProcRootCRYPTO(PBR.TaggedMultiLineFile):
+    """
+    Parse /proc/crypto file
+    """
+
+# source: crypto/proc.c  (primary code source)
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcRootHandlers" to reduce the size of this module.
+#
+
+    def extra_init(self, *opts):
+        # "minfields" has to be set to "0" since blank lines are the
+        # EOR indicators
+        self.minfields = 0
+
+        PBR.add_parse_rule(self, { PREFIX: "name", AFTER: ": ",
+                NAME: PFC.F_NAME } )
+        PBR.add_parse_rule(self, { PREFIX: "driver", AFTER: ": ",
+                NAME: PFC.F_DRIVER } )
+        PBR.add_parse_rule(self, { PREFIX: "module", AFTER: ": ",
+                NAME: PFC.F_MODULE } )
+        PBR.add_parse_rule(self, { PREFIX: "priority", AFTER: ": ", CONV: long,
+                NAME: PFC.F_PRIORITY } )
+        PBR.add_parse_rule(self, { PREFIX: "refcnt", AFTER: ": ", CONV: long,
+                NAME: PFC.F_REF_COUNT } )
+        PBR.add_parse_rule(self, { PREFIX: "selftest", AFTER: ": ",
+                NAME: PFC.F_SELFTEST } )
+        PBR.add_parse_rule(self, { PREFIX: "flags", AFTER: ": 0x", CONV: long,
+                NAME: PFC.F_FLAGS, BASE: 16 } )
+        PBR.add_parse_rule(self, { PREFIX: "digestsize", AFTER: ": ",
+                NAME: PFC.F_DIGEST_SIZE, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "maxauthsize", AFTER: ": ",
+                NAME: PFC.F_MAX_AUTH_SIZE, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "max keysize", AFTER: ": ",
+                NAME: PFC.F_MAX_KEYSIZE, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "min keysize", AFTER: ": ",
+                NAME: PFC.F_MIN_KEYSIZE, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "async", AFTER: ": ",
+                NAME: PFC.F_ASYNC } )
+        PBR.add_parse_rule(self, { PREFIX: "geniv", AFTER: ": ",
+                NAME: PFC.F_GENIV } )
+        PBR.add_parse_rule(self, { PREFIX: "ivsize", AFTER: ": ",
+                NAME: PFC.F_IVSIZE, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "blocksize", AFTER: ": ",
+                NAME: PFC.F_BLOCKSIZE, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "type", AFTER: ": ",
+                NAME: PFC.F_TYPE } )
+
+        self.add_eor_rule( "", { WORDS: 0, CONV: str } )
+        return
+                 
+
+    def extra_next(self, sio):
+
+        for __key in self.field:
+            if type(self.field[__key]) is str:
+                self.field[__key] = self.field[__key].strip()
+
+        return(self.field)
+
+REGISTER_FILE("/proc/crypto", ProcRootCRYPTO)
+REGISTER_PARTIAL_FILE("crypto", ProcRootCRYPTO)
