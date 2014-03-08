@@ -2460,7 +2460,6 @@ class ProcRootSTAT(PBR.TaggedMultiLineFile):
         return(self.field)
 
 REGISTER_FILE("/proc/stat", ProcRootSTAT)
-REGISTER_PARTIAL_FILE("/stat", ProcRootSTAT)
 
 
 

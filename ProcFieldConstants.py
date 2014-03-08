@@ -865,3 +865,47 @@ F_SYSCALL = "syscall-summary"
 
 # -- added for /proc/self/wchan
 F_WCHAN = "wchan"
+
+# -- added for /proc/self/sessionid
+F_SESSIONID = "session-id"
+
+# -- added for /proc/self/loginuid
+F_LOGINUID = "login-uid"
+
+# -- added for /proc/self/statm
+F_RESIDENT_SIZE = "resident-size"
+F_SHARED_SIZE = "shared-size"
+F_TEXT_SIZE = "text-size"
+F_DATA_SIZE = "data-size"
+
+# -- added for /proc/self/stat
+F_PID_NR = "pid-nr"
+F_PGID = "pgid"
+F_SID = "sid"
+F_TTY_NR = "tty-nr"
+F_TTY_PGRP = "tty-pgrp"
+F_MIN_FLT = "min-flt"
+F_CMIN_FLT = "cmin-flt"
+F_MAJ_FLT = "maj-flt"
+F_CMAJ_FLT = "cmaj-flt"
+F_UTIME = "user-time"
+F_STIME = "sys-time"
+F_CUTIME = "cu-user-time"
+F_CSTIME = "cu-sys-time"
+F_START_TIME = "start-time"
+F_VSIZE = "vsize"
+F_RSS_SIZE = "rss-size"
+F_RSS_LIM = "rss-limit"
+F_START_CODE = "start-code"
+F_END_CODE = "end-code"
+F_START_STACK = "start-stack"
+F_ESP = "esp"
+F_EIP = "eip"
+F_SIG_IGNORE = "signal-ignore"
+F_SIG_CATCH = "signal-catch"
+F_EXIT_SIG = "exit-signal"
+F_TASK = "task"
+F_RT_PRIORITY = "rt-priority"
+F_IO_TICKS = "io-ticks"
+F_GTIME = "gtime"
+F_CGTIME = "cu-gtime"

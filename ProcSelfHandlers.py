@@ -1845,3 +1845,183 @@ class ProcSelfWCHAN(PBR.SingleTextField):
 
 REGISTER_FILE("/proc/self/wchan", ProcSelfWCHAN)
 REGISTER_PARTIAL_FILE("wchan", ProcSelfWCHAN)
+
+
+
+
+#
+class ProcSelfSESSIONID(PBR.SingleTextField):
+    """
+    Parse /proc/self/sessionid file
+    """
+
+# source: fs/proc/base.c
+#
+# Excerpt from that code
+#
+# length = scnprintf(tmpbuf, TMPBUFLEN, "%u",
+#                         audit_get_sessionid(task));
+# put_task_struct(task);
+# return simple_read_from_buffer(buf, count, ppos, tmpbuf, length);
+#
+
+    def extra_next(self, sio):
+        __line = sio.buff.partition("\n")[0]
+        self.field[PFC.F_SESSIONID] = __line
+
+        return(self.field[PFC.F_SESSIONID])
+
+REGISTER_FILE("/proc/self/sessionid", ProcSelfSESSIONID)
+REGISTER_PARTIAL_FILE("sessionid", ProcSelfSESSIONID)
+
+
+
+
+#
+class ProcSelfLOGINUID(PBR.SingleTextField):
+    """
+    Parse /proc/self/loginuid file
+    """
+
+# source: fs/proc/base.c
+#
+# Excerpt from that code
+#
+# length = scnprintf(tmpbuf, TMPBUFLEN, "%u",
+#                         audit_get_loginuid(task));
+# put_task_struct(task);
+# return simple_read_from_buffer(buf, count, ppos, tmpbuf, length);
+#
+
+    def extra_next(self, sio):
+        __line = sio.buff.partition("\n")[0]
+        self.field[PFC.F_LOGINUID] = __line
+
+        return(self.field[PFC.F_LOGINUID])
+
+REGISTER_FILE("/proc/self/loginuid", ProcSelfLOGINUID)
+REGISTER_PARTIAL_FILE("loginuid", ProcSelfLOGINUID)
+
+
+
+
+class ProcSelfSTATM(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/self/statm file
+    """
+
+# source: fs/proc/array.c
+#
+# Excerpt from that code
+#
+# seq_printf(m, "%lu %lu %lu %lu 0 %lu 0\n",
+#                 size, resident, shared, text, data);
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 7
+
+        PBR.add_parse_rule(self, { POS: 0, CONV: long, NAME: PFC.F_SIZE } )
+        PBR.add_parse_rule(self, { POS: 1, CONV: long, NAME: PFC.F_RESIDENT_SIZE } )
+        PBR.add_parse_rule(self, { POS: 2, CONV: long, NAME: PFC.F_SHARED_SIZE } )
+        PBR.add_parse_rule(self, { POS: 3, CONV: long, NAME: PFC.F_TEXT_SIZE } )
+        PBR.add_parse_rule(self, { POS: 5, CONV: long, NAME: PFC.F_DATA_SIZE } )
+        return
+                 
+
+    def extra_next(self, sio):
+
+        __size = self.field[PFC.F_SIZE]
+        __resident = self.field[PFC.F_RESIDENT_SIZE]
+        __shared = self.field[PFC.F_SHARED_SIZE]
+        __text = self.field[PFC.F_TEXT_SIZE]
+        __data = self.field[PFC.F_DATA_SIZE]
+
+        return(__size, __resident, __shared, __text, __data)
+
+REGISTER_FILE("/proc/self/statm", ProcSelfSTATM)
+REGISTER_PARTIAL_FILE("statm", ProcSelfSTATM)
+
+
+
+
+class ProcSelfSTAT(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/self/stat file
+    """
+
+# source: 
+#
+# Excerpt from that code
+#
+#
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 7
+
+        PBR.add_parse_rule(self, { POS: 0, CONV: long, NAME: PFC.F_PID_NR } )
+        PBR.add_parse_rule(self, { POS: 1, BEFORE: "(", AFTER: ")",
+                NAME: PFC.F_COMM } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_STATE } )
+        PBR.add_parse_rule(self, { POS: 3, CONV: long, NAME: PFC.F_PPID } )
+        PBR.add_parse_rule(self, { POS: 4, CONV: long, NAME: PFC.F_PGID } )
+        PBR.add_parse_rule(self, { POS: 5, CONV: long, NAME: PFC.F_SID } )
+        PBR.add_parse_rule(self, { POS: 6, CONV: long, NAME: PFC.F_TTY_NR } )
+        PBR.add_parse_rule(self, { POS: 7, CONV: long, NAME: PFC.F_TTY_PGRP } )
+        PBR.add_parse_rule(self, { POS: 8, CONV: long, NAME: PFC.F_FLAGS } )
+        PBR.add_parse_rule(self, { POS: 9, CONV: long, NAME: PFC.F_MIN_FLT } )
+        PBR.add_parse_rule(self, { POS: 10, CONV: long,
+                NAME: PFC.F_CMIN_FLT } )
+        PBR.add_parse_rule(self, { POS: 11, CONV: long, NAME: PFC.F_MAJ_FLT } )
+        PBR.add_parse_rule(self, { POS: 12, CONV: long,
+                NAME: PFC.F_CMAJ_FLT } )
+        PBR.add_parse_rule(self, { POS: 13, CONV: long, NAME: PFC.F_UTIME } )
+        PBR.add_parse_rule(self, { POS: 14, CONV: long, NAME: PFC.F_STIME } )
+        PBR.add_parse_rule(self, { POS: 15, CONV: long, NAME: PFC.F_CUTIME } )
+        PBR.add_parse_rule(self, { POS: 16, CONV: long, NAME: PFC.F_CSTIME } )
+        PBR.add_parse_rule(self, { POS: 17, CONV: long,
+                NAME: PFC.F_PRIORITY } )
+        PBR.add_parse_rule(self, { POS: 18, CONV: long, NAME: PFC.F_NICE } )
+        PBR.add_parse_rule(self, { POS: 19, CONV: long, NAME: PFC.F_THREADS } )
+        PBR.add_parse_rule(self, { POS: 21, CONV: long,
+                NAME: PFC.F_START_TIME } )
+        PBR.add_parse_rule(self, { POS: 22, CONV: long, NAME: PFC.F_VSIZE } )
+        PBR.add_parse_rule(self, { POS: 23, CONV: long,
+                NAME: PFC.F_RSS_SIZE } )
+        PBR.add_parse_rule(self, { POS: 24, CONV: long, NAME: PFC.F_RSS_LIM } )
+                
+        PBR.add_parse_rule(self, { POS: 25, CONV: long,
+                NAME: PFC.F_START_CODE } )
+        PBR.add_parse_rule(self, { POS: 26, CONV: long,
+                NAME: PFC.F_END_CODE } )
+        PBR.add_parse_rule(self, { POS: 27, CONV: long,
+                NAME: PFC.F_START_STACK } )
+        PBR.add_parse_rule(self, { POS: 28, CONV: long, NAME: PFC.F_ESP } )
+        PBR.add_parse_rule(self, { POS: 29, CONV: long, NAME: PFC.F_EIP } )
+        PBR.add_parse_rule(self, { POS: 30, CONV: long,
+                NAME: PFC.F_SIG_PEND } )
+        PBR.add_parse_rule(self, { POS: 31, CONV: long,
+                NAME: PFC.F_SIG_BLOCK } )
+        PBR.add_parse_rule(self, { POS: 32, CONV: long,
+                NAME: PFC.F_SIG_IGNORE } )
+        PBR.add_parse_rule(self, { POS: 33, CONV: long,
+                NAME: PFC.F_SIG_CATCH } )
+        PBR.add_parse_rule(self, { POS: 34, CONV: long, NAME: PFC.F_WCHAN } )
+        PBR.add_parse_rule(self, { POS: 37, CONV: long,
+                NAME: PFC.F_EXIT_SIG } )
+        PBR.add_parse_rule(self, { POS: 38, CONV: long, NAME: PFC.F_TASK } )
+        PBR.add_parse_rule(self, { POS: 39, CONV: long,
+                NAME: PFC.F_RT_PRIORITY } )
+        PBR.add_parse_rule(self, { POS: 40, CONV: long, NAME: PFC.F_POLICY } )
+        PBR.add_parse_rule(self, { POS: 41, CONV: long,
+                NAME: PFC.F_IO_TICKS } )
+        PBR.add_parse_rule(self, { POS: 42, CONV: long, NAME: PFC.F_GTIME } )
+        PBR.add_parse_rule(self, { POS: 43, CONV: long, NAME: PFC.F_CGTIME } )
+        return
+                 
+
+    def extra_next(self, sio):
+        return(self.field)
+
+REGISTER_FILE("/proc/self/stat", ProcSelfSTAT)
