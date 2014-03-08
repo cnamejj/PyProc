@@ -909,3 +909,8 @@ F_RT_PRIORITY = "rt-priority"
 F_IO_TICKS = "io-ticks"
 F_GTIME = "gtime"
 F_CGTIME = "cu-gtime"
+
+# -- added for /proc/self/schedstat
+F_RUN_TIME = "run-time"
+F_RUNQUEUE_TIME = "queue-wait-time"
+F_RUN_TIMESLICES = "timeslices-run"

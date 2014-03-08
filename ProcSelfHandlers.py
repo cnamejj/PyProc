@@ -2025,3 +2025,44 @@ class ProcSelfSTAT(PBR.FixedWhitespaceDelimRecs):
         return(self.field)
 
 REGISTER_FILE("/proc/self/stat", ProcSelfSTAT)
+
+
+
+
+class ProcSelfSCHEDSTAT(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/self/statm file
+    """
+
+# source: fs/proc/base.c
+#
+# Excerpt from that code
+#
+#static int proc_pid_schedstat(struct task_struct *task, char *buffer)
+#{
+#    return sprintf(buffer, "%llu %llu %lu\n",
+#             (unsigned long long)task->se.sum_exec_runtime,
+#             (unsigned long long)task->sched_info.run_delay,
+#                task->sched_info.pcount);
+#}
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 3
+
+        PBR.add_parse_rule(self, { POS: 0, CONV: long, NAME: PFC.F_RUN_TIME } )
+        PBR.add_parse_rule(self, { POS: 1, CONV: long, NAME: PFC.F_RUNQUEUE_TIME } )
+        PBR.add_parse_rule(self, { POS: 2, CONV: long, NAME: PFC.F_RUN_TIMESLICES } )
+        return
+                 
+
+    def extra_next(self, sio):
+
+        __run = self.field[PFC.F_RUN_TIME]
+        __queue = self.field[PFC.F_RUNQUEUE_TIME]
+        __slices = self.field[PFC.F_RUN_TIMESLICES]
+
+        return(__run, __queue, __slices)
+
+REGISTER_FILE("/proc/self/schedstat", ProcSelfSCHEDSTAT)
+REGISTER_PARTIAL_FILE("ps/schedstat", ProcSelfSCHEDSTAT)

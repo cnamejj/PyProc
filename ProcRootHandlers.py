@@ -2849,7 +2849,7 @@ class ProcRootSCHEDSTAT(PBR.TaggedMultiLineFile):
         return(__per_cpu)
 
 REGISTER_FILE("/proc/schedstat", ProcRootSCHEDSTAT)
-REGISTER_PARTIAL_FILE("schedstat", ProcRootSCHEDSTAT)
+REGISTER_PARTIAL_FILE("pr/schedstat", ProcRootSCHEDSTAT)
 
 
 
