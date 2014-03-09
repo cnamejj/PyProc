@@ -2460,6 +2460,7 @@ class ProcRootSTAT(PBR.TaggedMultiLineFile):
         return(self.field)
 
 REGISTER_FILE("/proc/stat", ProcRootSTAT)
+REGISTER_PARTIAL_FILE("pr/stat", ProcRootSTAT)
 
 
 
@@ -2918,3 +2919,284 @@ class ProcRootCRYPTO(PBR.TaggedMultiLineFile):
 
 REGISTER_FILE("/proc/crypto", ProcRootCRYPTO)
 REGISTER_PARTIAL_FILE("crypto", ProcRootCRYPTO)
+
+
+
+
+#
+class ProcRootLATENCYSTATS(PBR.FixedWhitespaceDelimRecs):
+    """
+    Handler for /proc/latency_stats and /proc/self/latency files
+    """
+
+# source: kernel/latencytop.c
+#
+#static int lstats_show(struct seq_file *m, void *v)
+#{
+#    int i;
+#
+#    seq_puts(m, "Latency Top version : v0.1\n");
+#
+#    for (i = 0; i < MAXLR; i++) {
+#        struct latency_record *lr = &latency_record[i];
+#
+#        if (lr->backtrace[0]) {
+#            int q;
+#            seq_printf(m, "%i %lu %lu",
+#                   lr->count, lr->time, lr->max);
+#            for (q = 0; q < LT_BACKTRACEDEPTH; q++) {
+#                unsigned long bt = lr->backtrace[q];
+#                if (!bt)
+#                    break;
+#                if (bt == ULONG_MAX)
+#                    break;
+#                seq_printf(m, " %ps", (void *)bt);
+#            }
+#            seq_printf(m, "\n");
+#        }
+#    }
+#    return 0;
+#}
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 4
+        self.skipped = "Latency"
+
+        PBR.add_parse_rule(self, { POS: 0, CONV: long, NAME: PFC.F_HITS } )
+        PBR.add_parse_rule(self, { POS: 1, CONV: long,
+                NAME: PFC.F_ACCUM_LATENCY } )
+        PBR.add_parse_rule(self, { POS: 2, CONV: long,
+                NAME: PFC.F_MAX_LATENCY } )
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+# Latency Top version : v0.1
+# 5 1113 256 do_fork sys_vfork stub_vfork
+# 5 707 159 do_wait sys_wait4 system_call_fastpath
+# 1 93 93 ep_poll sys_epoll_wait system_call_fastpath
+
+        self.field[PFC.F_BACKTRACE] = sio.lineparts[3:]
+        __hits = self.field[PFC.F_HITS]
+        __accum = self.field[PFC.F_ACCUM_LATENCY]
+        __max = self.field[PFC.F_MAX_LATENCY]
+        __trace = " ".join(self.field[PFC.F_BACKTRACE])
+
+        return(__hits, __accum, __max, __trace)
+
+REGISTER_FILE("/proc/latency_stats", ProcRootLATENCYSTATS)
+REGISTER_PARTIAL_FILE("latency_stats", ProcRootLATENCYSTATS)
+REGISTER_PARTIAL_FILE("latency", ProcRootLATENCYSTATS)
+
+
+
+
+#
+class ProcRootIOPORTS(PBR.FixedWhitespaceDelimRecs):
+    """
+    Handler for /proc/ioports files
+    """
+
+# source: kernel/resource.c
+#
+# for (depth = 0, p = r; depth < MAX_IORES_LEVEL; depth++, p = p->parent)
+#     if (p->parent == root)
+#         break;
+# seq_printf(m, "%*s%0*llx-%0*llx : %s\n",
+#         depth * 2, "",
+#         width, (unsigned long long) r->start,
+#         width, (unsigned long long) r->end,
+#         r->name ? r->name : "<BAD>");
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 3
+
+        PBR.add_parse_rule(self, { POS: 0, CONV: long, BEFORE: "-", BASE: 16,
+                NAME: PFC.F_START } )
+        PBR.add_parse_rule(self, { POS: 0, CONV: long, AFTER: "-", BASE: 16,
+                NAME: PFC.F_END } )
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+#03b0-03df : PCI Bus 0000:00
+#03e0-0cf7 : PCI Bus 0000:00
+#  03f8-03ff : serial
+#  0400-0453 : pnp 00:09
+#    0400-0403 : ACPI PM1a_EVT_BLK
+#    0404-0405 : ACPI PM1a_CNT_BLK
+#    0408-040b : ACPI PM_TMR
+
+        __desc = " ".join(sio.lineparts[2:])
+        self.field[PFC.F_PORT_NAME] = __desc
+
+        __level = (len(sio.buff) - len(sio.buff.lstrip(" "))) / 2
+        self.field[PFC.F_LEVEL] = __level
+
+        __low = self.field[PFC.F_START]
+        __high = self.field[PFC.F_END]
+
+        return(__low, __high, __level, __desc)
+
+REGISTER_FILE("/proc/ioports", ProcRootIOPORTS)
+REGISTER_PARTIAL_FILE("ioports", ProcRootIOPORTS)
+
+
+
+
+#
+class ProcRootIOMEM(PBR.FixedWhitespaceDelimRecs):
+    """
+    Handler for /proc/iomem files
+    """
+
+# source: kernel/resource.c
+#
+# for (depth = 0, p = r; depth < MAX_IORES_LEVEL; depth++, p = p->parent)
+#     if (p->parent == root)
+#         break;
+# seq_printf(m, "%*s%0*llx-%0*llx : %s\n",
+#         depth * 2, "",
+#         width, (unsigned long long) r->start,
+#         width, (unsigned long long) r->end,
+#         r->name ? r->name : "<BAD>");
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 3
+
+        PBR.add_parse_rule(self, { POS: 0, CONV: long, BEFORE: "-", BASE: 16,
+                NAME: PFC.F_START } )
+        PBR.add_parse_rule(self, { POS: 0, CONV: long, AFTER: "-", BASE: 16,
+                NAME: PFC.F_END } )
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+#ceff7000-ceffffff : System RAM
+#cf000000-cfffffff : RAM buffer
+#d0000000-fbffffff : PCI Bus 0000:00
+#  d0000000-dfffffff : PCI Bus 0000:01
+#    d0000000-dfffffff : 0000:01:00.0
+#      d0000000-d01effff : efifb
+#  e0000000-efffffff : PCI MMCONFIG 0000 [bus 00-ff]
+#    e0000000-efffffff : reserved
+
+        __desc = " ".join(sio.lineparts[2:])
+        self.field[PFC.F_MEM_DESC] = __desc
+
+        __level = (len(sio.buff) - len(sio.buff.lstrip(" "))) / 2
+        self.field[PFC.F_LEVEL] = __level
+
+        __low = self.field[PFC.F_START]
+        __high = self.field[PFC.F_END]
+
+        return(__low, __high, __level, __desc)
+
+REGISTER_FILE("/proc/iomem", ProcRootIOMEM)
+REGISTER_PARTIAL_FILE("iomem", ProcRootIOMEM)
+
+
+
+
+#
+class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
+    """
+    Handler for /proc/timer_stats files
+    """
+
+# --- File: /proc/timer_stats
+#
+# source: kernel/time/timer_stats.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcRootHandlers" to reduce the size of this module.
+
+    def extra_init(self, *opts):
+        self.minfields = 4
+        self.__timer_tag = "Timer"
+        self.__sample_tag = "Sample"
+        self.__total_tag = "total"
+
+        self.__hold = dict()
+        self.__hold[PFC.F_VERSION] = ""
+        self.__hold[PFC.F_SAMPLE_PERIOD] = 0.0
+        self.__hold[PFC.F_EVENT_TOTAL] = 0
+        self.__hold[PFC.F_EVENT_RATE] = 0.0
+
+        PBR.add_parse_rule(self, { POS: 0, BEFORE: ",",
+                NAME: PFC.F_DEFERRABLE } )
+        PBR.add_parse_rule(self, { POS: 1, CONV: long, NAME: PFC.F_PID } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_PROC_NAME } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_INIT_ROUT } )
+        PBR.add_parse_rule(self, { POS: 4, AFTER: "(", BEFORE: ")",
+                NAME: PFC.F_CBACK_ROUT } )
+        PBR.add_parse_rule(self, { POS: 99, CONV: long, NAME: PFC.F_COUNT } )
+        PBR.add_parse_rule(self, { POS: 99, CONV: str, NAME: PFC.F_VERSION } )
+        PBR.add_parse_rule(self, { POS: 99, CONV: float, NAME: PFC.F_SAMPLE_PERIOD } )
+        PBR.add_parse_rule(self, { POS: 99, CONV: long, NAME: PFC.F_EVENT_TOTAL } )
+        PBR.add_parse_rule(self, { POS: 99, CONV: float, NAME: PFC.F_EVENT_RATE } )
+        return
+
+    def extra_next(self, sio):
+
+# -- Sample records
+#
+#Timer Stats Version: v0.2
+#Sample period: 17.263 s
+#   18,  1947 varnishd         hrtimer_start_range_ns (hrtimer_wakeup)
+#  478,     0 swapper/6        hrtimer_start_range_ns (tick_sched_timer)
+# 1460, 16314 Timer            hrtimer_start_range_ns (hrtimer_wakeup)
+#   26,     0 swapper/0        hrtimer_start (tick_sched_timer)
+#  172,  1945 varnishd         hrtimer_start_range_ns (hrtimer_wakeup)
+#  201,     0 swapper/0        hrtimer_start_range_ns (tick_sched_timer)
+# 149D, 11069 kworker/0:1      schedule_delayed_work_on (delayed_work_timer_fn)
+
+        __first = sio.get_word(0)
+        __sec = sio.get_word(1)
+
+        if __first == self.__timer_tag:
+            self.__hold[PFC.F_VERSION] = sio.get_word(3)
+            self.next()
+
+        if __first == self.__sample_tag:
+            __val = PBR.convert_by_rule(sio.get_word(2), { CONV: float } )
+            self.next()
+
+        if __sec == self.__total_tag:
+            self.field[PFC.F_DEFERRABLE] = ""
+            self.field[PFC.F_PID] = 0
+            self.field[PFC.F_PROC_NAME] = ""
+            self.field[PFC.F_INIT_ROUT] = ""
+            self.field[PFC.F_CBACK_ROUT] = ""
+
+            __val = PBR.convert_by_rule(sio.get_word(0), { CONV: long } )
+            self.field[PFC.F_EVENT_TOTAL] = __val
+            __val = PBR.convert_by_rule(sio.get_word(3), { CONV: float } )
+            self.field[PFC.F_EVENT_RATE] = __val
+
+        else:
+            __first = self.field[PFC.F_DEFERRABLE]
+            if __first[:-1] == "D":
+                __first = __first[:-1]
+                __val = "D"
+            else:
+                __val = ""
+            self.field[PFC.F_DEFERRABLE] = __val
+            self.field[PFC.F_COUNT] = PBR.convert_by_rule(__first, { CONV: long } )
+
+        self.field[PFC.F_VERSION] = self.__hold[PFC.F_VERSION]
+        self.field[PFC.F_SAMPLE_PERIOD] = self.__hold[PFC.F_SAMPLE_PERIOD]
+
+        return(self.field)
+
+REGISTER_FILE("/proc/timer_stats", ProcRootTIMERSTATS)
+REGISTER_PARTIAL_FILE("timer_stats", ProcRootTIMERSTATS)

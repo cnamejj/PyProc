@@ -2025,6 +2025,7 @@ class ProcSelfSTAT(PBR.FixedWhitespaceDelimRecs):
         return(self.field)
 
 REGISTER_FILE("/proc/self/stat", ProcSelfSTAT)
+REGISTER_PARTIAL_FILE("ps/stat", ProcSelfSTAT)
 
 
 
@@ -2066,3 +2067,132 @@ class ProcSelfSCHEDSTAT(PBR.FixedWhitespaceDelimRecs):
 
 REGISTER_FILE("/proc/self/schedstat", ProcSelfSCHEDSTAT)
 REGISTER_PARTIAL_FILE("ps/schedstat", ProcSelfSCHEDSTAT)
+
+
+
+
+class ProcSelfCOREDUMPFILTER(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/self/coredump_filter file
+    """
+
+# source: fs/proc/base.c
+#
+# Excerpt from that code
+#
+# len = snprintf(buffer, sizeof(buffer), "%08lx\n",
+#                ((mm->flags & MMF_DUMP_FILTER_MASK) >>
+#                 MMF_DUMP_FILTER_SHIFT));
+# mmput(mm);
+# ret = simple_read_from_buffer(buf, count, ppos, buffer, len);
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 1
+        PBR.add_parse_rule(self, { POS: 0, CONV: long, BASE: 16,
+                NAME: PFC.F_COREDUMP_FILTER } )
+        return
+                 
+    def extra_next(self, sio):
+        return(self.field[PFC.F_COREDUMP_FILTER])
+
+REGISTER_FILE("/proc/self/coredump_filter", ProcSelfCOREDUMPFILTER)
+REGISTER_PARTIAL_FILE("ps/coredump_filter", ProcSelfCOREDUMPFILTER)
+
+
+
+
+class ProcSelfOOMSCORE(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/self/oom_score file
+    """
+
+# source: fs/proc/base.c
+#
+# Excerpt from that code
+#
+# if (pid_alive(task))
+#         points = oom_badness(task, NULL, NULL,
+#                                 totalram_pages + total_swap_pages);
+# read_unlock(&tasklist_lock);
+# return sprintf(buffer, "%lu\n", points);
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 1
+        PBR.add_parse_rule(self, { POS: 0, CONV: long,
+                NAME: PFC.F_OOM_SCORE } )
+        return
+                 
+    def extra_next(self, sio):
+        return(self.field[PFC.F_OOM_SCORE])
+
+REGISTER_FILE("/proc/self/oom_score", ProcSelfOOMSCORE)
+REGISTER_PARTIAL_FILE("oom_score", ProcSelfOOMSCORE)
+
+
+
+
+class ProcSelfOOMADJ(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/self/oom_adj file
+    """
+
+# source: fs/proc/base.c
+#
+# Excerpt from that code
+#
+# if (lock_task_sighand(task, &flags)) {
+#         oom_adjust = task->signal->oom_adj;
+#         unlock_task_sighand(task, &flags);
+# }
+#
+# put_task_struct(task);
+#
+# len = snprintf(buffer, sizeof(buffer), "%i\n", oom_adjust);
+#
+# return simple_read_from_buffer(buf, count, ppos, buffer, len);
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 1
+        PBR.add_parse_rule(self, { POS: 0, CONV: long, NAME: PFC.F_OOM_ADJ } )
+        return
+                 
+    def extra_next(self, sio):
+        return(self.field[PFC.F_OOM_ADJ])
+
+REGISTER_FILE("/proc/self/oom_adj", ProcSelfOOMADJ)
+REGISTER_PARTIAL_FILE("oom_adj", ProcSelfOOMADJ)
+
+
+
+
+class ProcSelfOOMSCOREADJ(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/self/oom_adj file
+    """
+
+# source: fs/proc/base.c
+#
+# Excerpt from that code
+#
+# if (lock_task_sighand(task, &flags)) {
+#         oom_score_adj = task->signal->oom_score_adj;
+#         unlock_task_sighand(task, &flags);
+# }
+# put_task_struct(task);
+# len = snprintf(buffer, sizeof(buffer), "%d\n", oom_score_adj);
+# return simple_read_from_buffer(buf, count, ppos, buffer, len);
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 1
+        PBR.add_parse_rule(self, { POS: 0, CONV: long, NAME: PFC.F_OOM_SCORE_ADJ } )
+        return
+                 
+    def extra_next(self, sio):
+        return(self.field[PFC.F_OOM_SCORE_ADJ])
+
+REGISTER_FILE("/proc/self/oom_score_adj", ProcSelfOOMSCOREADJ)
+REGISTER_PARTIAL_FILE("oom_score_adj", ProcSelfOOMSCOREADJ)

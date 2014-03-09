@@ -914,3 +914,37 @@ F_CGTIME = "cu-gtime"
 F_RUN_TIME = "run-time"
 F_RUNQUEUE_TIME = "queue-wait-time"
 F_RUN_TIMESLICES = "timeslices-run"
+
+# -- added for /proc/self/coredump_filter
+F_COREDUMP_FILTER = "coredump-filter"
+
+# -- added for /proc/self/oom_score
+F_OOM_SCORE = "oom-score"
+
+# -- added for /proc/self/oom_adj
+F_OOM_ADJ = "oom-adj"
+
+# -- added for /proc/self/oom_score_adj
+F_OOM_SCORE_ADJ = "oom-score-adj"
+
+# -- added for /proc/latency_stats and /proc/self/latency
+F_HITS = "hits"
+F_ACCUM_LATENCY = "accum-latency-ms"
+F_MAX_LATENCY = "max-latency-ms"
+F_BACKTRACE = "backtrace"
+
+# -- added for /proc/ioports
+F_PORT_NAME = "port-name"
+F_LEVEL = "level"
+
+# -- added for /proc/iomem
+F_MEM_DESC = "memory-description"
+
+# -- added for /proc/timer_stats
+F_CBACK_ROUT = "callback-routine"
+F_DEFERRABLE = "deferrable"
+F_EVENT_RATE = "event-rate"
+F_EVENT_TOTAL = "total-events"
+F_INIT_ROUT = "initial-routine"
+F_PROC_NAME = "process-name"
+F_SAMPLE_PERIOD = "sample-period"
