@@ -1943,9 +1943,9 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
         self.field[PFC.F_PAGES_TOTAL] = PBR.convert_by_rule(sio.get_word(1),
                 { CONV: long, AFTER: self.__num_split } )
 
-        self.field[PFC.F_PAGES_NOMISS_KB] = PBR.convert_by_rule(sio.get_word(3),
-                { CONV: long, SUFFIX: self.__pages_suff,
-                  PREFIX: self.__pages_pref } )
+        self.field[PFC.F_PAGES_NOMISS_KB] = PBR.convert_by_rule(
+                sio.get_word(3), { CONV: long, SUFFIX: self.__pages_suff,
+                PREFIX: self.__pages_pref } )
 
         __curr = sio.get_word(4)
         if __curr.endswith(self.__kb_suff):

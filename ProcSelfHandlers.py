@@ -1921,11 +1921,16 @@ class ProcSelfSTATM(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 7
 
-        PBR.add_parse_rule(self, { POS: 0, CONV: long, NAME: PFC.F_SIZE } )
-        PBR.add_parse_rule(self, { POS: 1, CONV: long, NAME: PFC.F_RESIDENT_SIZE } )
-        PBR.add_parse_rule(self, { POS: 2, CONV: long, NAME: PFC.F_SHARED_SIZE } )
-        PBR.add_parse_rule(self, { POS: 3, CONV: long, NAME: PFC.F_TEXT_SIZE } )
-        PBR.add_parse_rule(self, { POS: 5, CONV: long, NAME: PFC.F_DATA_SIZE } )
+        PBR.add_parse_rule(self, { POS: 0, CONV: long,
+                NAME: PFC.F_SIZE } )
+        PBR.add_parse_rule(self, { POS: 1, CONV: long,
+                NAME: PFC.F_RESIDENT_SIZE } )
+        PBR.add_parse_rule(self, { POS: 2, CONV: long,
+                NAME: PFC.F_SHARED_SIZE } )
+        PBR.add_parse_rule(self, { POS: 3, CONV: long,
+                NAME: PFC.F_TEXT_SIZE } )
+        PBR.add_parse_rule(self, { POS: 5, CONV: long,
+                NAME: PFC.F_DATA_SIZE } )
         return
                  
 
@@ -2052,8 +2057,10 @@ class ProcSelfSCHEDSTAT(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 3
 
         PBR.add_parse_rule(self, { POS: 0, CONV: long, NAME: PFC.F_RUN_TIME } )
-        PBR.add_parse_rule(self, { POS: 1, CONV: long, NAME: PFC.F_RUNQUEUE_TIME } )
-        PBR.add_parse_rule(self, { POS: 2, CONV: long, NAME: PFC.F_RUN_TIMESLICES } )
+        PBR.add_parse_rule(self, { POS: 1, CONV: long,
+                NAME: PFC.F_RUNQUEUE_TIME } )
+        PBR.add_parse_rule(self, { POS: 2, CONV: long,
+                NAME: PFC.F_RUN_TIMESLICES } )
         return
                  
 
@@ -2188,7 +2195,8 @@ class ProcSelfOOMSCOREADJ(PBR.FixedWhitespaceDelimRecs):
 
     def extra_init(self, *opts):
         self.minfields = 1
-        PBR.add_parse_rule(self, { POS: 0, CONV: long, NAME: PFC.F_OOM_SCORE_ADJ } )
+        PBR.add_parse_rule(self, { POS: 0, CONV: long,
+                NAME: PFC.F_OOM_SCORE_ADJ } )
         return
                  
     def extra_next(self, sio):

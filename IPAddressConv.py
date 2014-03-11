@@ -24,8 +24,8 @@ def ipv6_hexstring_to_presentation(hexip):
     """    
 
     __delim = ipv6_hexstring_to_hexdelimited(hexip)
-    __pres = socket.inet_ntop(socket.AF_INET6, socket.inet_pton(socket.AF_INET6,
-                 __delim))
+    __pres = socket.inet_ntop(socket.AF_INET6, socket.inet_pton(
+            socket.AF_INET6, __delim))
     if __pres == ANY_IPV6_ADDR:
         __pres = PRESENT_ANY_IPV6_ADDR
     return __pres
@@ -48,9 +48,9 @@ def ipv6_hexstring_to_hexdelimited(hexip):
         __chunk = int(hexip[__off*8: (__off+1) * 8], 16)
         __unpacked = struct.unpack("!L", struct.pack("=L", __chunk))[0]
         __net_hex = '{0:08x}'.format(__unpacked)
-        __delim = "{partial}{chunk1}{separator}{chunk2}".format(partial=__delim,
-                      chunk1=__net_hex[0:4], separator=__delim_ipv6,
-                      chunk2=__net_hex[4:8])
+        __delim = "{partial}{chunk1}{separator}{chunk2}".format(
+                      partial=__delim, chunk1=__net_hex[0:4],
+                      separator=__delim_ipv6, chunk2=__net_hex[4:8])
 
     return __delim
 

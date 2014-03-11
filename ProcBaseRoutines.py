@@ -246,7 +246,8 @@ def get_partial_file_registry():
 
 def proc_file_to_path(proc_file):
     """
-    If the arg passed in doesn't exist, try prepending well known directories to find the file.
+    If the arg passed in doesn't exist, try prepending well known directories
+    to find the file.
     """
 
     __path = ""
@@ -263,7 +264,8 @@ def proc_file_to_path(proc_file):
 
 def proc_file_to_symlink(proc_file):
     """
-    If the arg passed in doesn't exist, try prepending well known directories to find the file.
+    If the arg passed in doesn't exist, try prepending well known directories
+    to find the file.
     """
 
     __path = ""
@@ -280,7 +282,8 @@ def proc_file_to_symlink(proc_file):
 
 def get_handler(proc_file):
     """
-    Lookup routine to find the code that knows how to parse the requested /proc/net/ datafile
+    Lookup routine to find the code that knows how to parse the requested
+    /proc/net/ datafile
     """
 
     __handler = 0
@@ -315,7 +318,8 @@ def register_file(proc_file, handler):
 
 def register_partial_file(end_of_path, handler):
     """
-    Associate the given code object with a filename pattern to allow partial matches
+    Associate the given code object with a filename pattern to allow partial
+    matches
     """
 
     PARTIAL_HANDLER_REGISTRY[end_of_path] = handler
@@ -329,7 +333,8 @@ def show_proc_file_handlers():
 
 def show_partial_proc_file_handlers():
     """
-    Print a list of all the known 'end of path' file patterns and their handler mappings
+    Print a list of all the known 'end of path' file patterns and their handler
+    mappings
     """
 
     for __patt in PARTIAL_HANDLER_REGISTRY:
@@ -338,8 +343,8 @@ def show_partial_proc_file_handlers():
 
 def show_handler_file_path(cl_instance):
     """
-    Return the fullpath of the /proc file associated with the base class of the instance
-    provided
+    Return the fullpath of the /proc file associated with the base class of the
+    instance provided
     """
 
     __key = "<class '{tmod}.{tcl}'>".format(
@@ -370,8 +375,8 @@ def add_parse_rule(handler, rule):
 # ---
 class ProcNetNULL(object):
     """
-    Dummy class that just acts like reading from an empty file, returned as the handler
-    for unrecognized files.
+    Dummy class that just acts like reading from an empty file, returned as the
+    handler for unrecognized files.
     """
 
     def __init__(self, *opts):
@@ -393,7 +398,8 @@ register_file(F_NULL_HANDLER, ProcNetNULL)
 # ---
 class FixedWhitespaceDelimRecs(object):
     """
-    Base class to read simple files with whitespace delimited columns, consistent record format
+    Base class to read simple files with whitespace delimited columns,
+    consistent record format
     """
 
     def extra_init(self, *opts):
@@ -456,7 +462,8 @@ class FixedWhitespaceDelimRecs(object):
                     __match = 1
 
                     if __cr.has_key(PREFIX_VAL):
-                        __match = __match and __val.startswith(__cr[PREFIX_VAL])
+                        __match = __match and __val.startswith(
+                                __cr[PREFIX_VAL])
 
                     if __cr.has_key(SUFFIX_VAL):
                         __match = __match and __val.endswith(__cr[SUFFIX_VAL])
@@ -497,7 +504,8 @@ class FixedWhitespaceDelimRecs(object):
 # ---
 class SingleNameValueList(object):
     """
-    Base class to read files where each line is two fields, one name and an associated value
+    Base class to read files where each line is two fields, one name and an
+    associated value
     """
 
     def extra_init(self, *opts):
@@ -561,7 +569,8 @@ class SingleNameValueList(object):
 # ---
 class TwoLineLogicalRecs(object):
     """
-    Base class to read 'netstat', 'snmp' and any others with the same two-line logical record format
+    Base class to read 'netstat', 'snmp' and any others with the same two-line
+    logical record format
     """
 
     def extra_init(self, *opts):
@@ -623,7 +632,8 @@ class TwoLineLogicalRecs(object):
 # ---
 class LabelledPairList(object):
     """
-    Base class to read 'sockstat', 'sockstat6' and others files w/ independent records of name/value pairs
+    Base class to read 'sockstat', 'sockstat6' and others files w/ independent
+    records of name/value pairs
     """
 
     def extra_init(self, *opts):
@@ -684,7 +694,8 @@ class LabelledPairList(object):
 # ---
 class ListOfTerms(object):
     """
-    Base class to read files that are just a list of terms, one per line, like 'ip_tables_*' files
+    Base class to read files that are just a list of terms, one per line,
+    like 'ip_tables_*' files
     """
 
     def extra_init(self, *opts):
@@ -742,7 +753,7 @@ class ListOfTerms(object):
 # ---
 class FixedColumnRecs(object):
     """
-    Class used to read files where the fields are consistently in specific columns
+    Class to read files whose fields are consistently in specific columns
     """
 
     def extra_init(self, *opts):

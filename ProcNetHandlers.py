@@ -297,7 +297,8 @@ class ProcNetPROTOCOLS(PBR.FixedWhitespaceDelimRecs):
         self.memory = self.field[PFC.F_MEMORY]
         self.module = self.field[PFC.F_MODULE]
 
-        return(self.protocol, self.size, self.sockets, self.memory, self.module)
+        return(self.protocol, self.size, self.sockets, self.memory,
+                self.module)
 #
 REGISTER_FILE("/proc/net/protocols", ProcNetPROTOCOLS)
 REGISTER_PARTIAL_FILE("protocols", ProcNetPROTOCOLS)
@@ -887,7 +888,8 @@ class ProcNetIGMP6(PBR.FixedWhitespaceDelimRecs):
         self.mcast_users = self.field[PFC.F_MCAST_USERS]
         self.mcast_flags = self.field[PFC.F_MCAST_FLAGS]
 
-        return(self.device, self.mcast_addr, self.mcast_users, self.mcast_flags)
+        return(self.device, self.mcast_addr, self.mcast_users,
+                self.mcast_flags)
 #
 REGISTER_FILE("/proc/net/igmp6", ProcNetIGMP6)
 REGISTER_PARTIAL_FILE("igmp6", ProcNetIGMP6)
@@ -1111,7 +1113,6 @@ class ProcNetIPV6ROUTE(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 10
         self.ipconv = IPAddressConv
 
-#...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_DEST_HEXIP } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_DEST_PREFIX_LEN_HEX } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_DEST_PREFIX_LEN,
@@ -1233,9 +1234,10 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
-# -- Sample records, there is no header line and the fields presented can very from record to record, only the
-# -- first 3 are guaranteed to always the protocol name, protocol number, and timeout. The rest will always
-# -- be in the same order, but a number of fields may or may not be there.
+# -- Sample records, there is no header line and the fields presented can very
+# -- from record to record, only the first 3 are guaranteed to always the
+# -- protocol name, protocol number, and timeout. The rest will always be in
+# -- the same order, but a number of fields may or may not be there.
 # ipv4     2 tcp      6 14 TIME_WAIT src=192.168.1.14 dst=192.168.1.1 sport=55894 dport=80 src=192.168.1.1 dst=192.168.1.14 sport=80 dport=55894 [ASSURED] mark=0 zone=0 use=2
 # ipv4     2 tcp      6 9 TIME_WAIT src=192.168.1.14 dst=192.168.1.1 sport=55890 dport=80 src=192.168.1.1 dst=192.168.1.14 sport=80 dport=55890 [ASSURED] mark=0 zone=0 use=2
 # ipv4     2 tcp      6 21 TIME_WAIT src=192.168.1.14 dst=192.168.1.1 sport=55900 dport=80 src=192.168.1.1 dst=192.168.1.14 sport=80 dport=55900 [ASSURED] mark=0 zone=0 use=2
@@ -1411,7 +1413,6 @@ class ProcNetPSCHED(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 4
 
-#...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_NSEC_PER_USEC,
                 CONV: long, BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_PSCHED_TICKS,
@@ -2642,8 +2643,9 @@ class ProcNetUDP6(PBR.FixedWhitespaceDelimRecs):
                     self.ipconv.ipv6_hexstring_to_presentation(
                     self.field[PFC.F_DEST_HEXIP])
 
-            if self.field[PFC.F_HEXSTATE] in STATE_LIST:
-                self.field[PFC.F_STATE] = STATE_LIST[self.field[PFC.F_HEXSTATE]]
+            __hst = self.field[PFC.F_HEXSTATE]
+            if __hst in STATE_LIST:
+                self.field[PFC.F_STATE] = STATE_LIST[__hst]
             else:
                 self.field[PFC.F_STATE] = PDC.UNKNOWN_STATE
 
@@ -2761,8 +2763,9 @@ class ProcNetUDP(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_DEST_IP] = socket.inet_ntop(socket.AF_INET,
                     binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
 
-            if self.field[PFC.F_HEXSTATE] in STATE_LIST:
-                self.field[PFC.F_STATE] = STATE_LIST[self.field[PFC.F_HEXSTATE]]
+            __hst = self.field[PFC.F_HEXSTATE]
+            if __hst in STATE_LIST:
+                self.field[PFC.F_STATE] = STATE_LIST[__hst]
             else:
                 self.field[PFC.F_STATE] = PDC.UNKNOWN_STATE
 
@@ -2899,7 +2902,7 @@ REGISTER_PARTIAL_FILE("snmp6", ProcNetSNMP6)
 # ---
 class ProcNetDEVSNMP6(PBR.SingleNameValueList):
     """
-    Pull records from a device specific file in the /proc/net/dev_snmp6/ directory
+    Pull recs from a device specific file in the /proc/net/dev_snmp6/ directory
     """
 
 # source: net/ipv6/proc.c

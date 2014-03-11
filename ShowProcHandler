@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-"""Show the handler routine for the indicated /proc/net file, if there is one"""
+"""
+Show the handler routine for the indicated /proc/net file, if there is one
+"""
 
 import sys
 import ProcHandlers
