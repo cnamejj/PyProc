@@ -459,7 +459,7 @@ class FixedWhitespaceDelimRecs(object):
                 if self.floating_rule[__rulenum]:
                     __cr = self.parse_rule[__rulenum]
                     __name = __cr[FIELD_NAME]
-                    __match = 1
+                    __match = True
 
                     if __cr.has_key(PREFIX_VAL):
                         __match = __match and __val.startswith(

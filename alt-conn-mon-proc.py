@@ -35,11 +35,11 @@ NO_PROCESS_SUMMARY = PSI.NO_PROCESS_SUMMARY
 SESSION_PAIR = set()
 SEEN_FREQ = dict()
 
-DONE = 0
+DONE = False
 
 HANDLE_TCP = GET_HANDLER("/proc/net/tcp")
 
-while DONE != 1:
+while not DONE:
     try:
 
         NEW_SESSIONS = set()
@@ -88,7 +88,7 @@ while DONE != 1:
 
     except KeyboardInterrupt:
         print "Stopping..."
-        DONE = 1
+        DONE = True
 
 
 ORDERED_FREQ = sorted(SEEN_FREQ.items(), key=operator.itemgetter(1))

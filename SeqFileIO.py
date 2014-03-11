@@ -21,7 +21,7 @@ class SeqFileIO:
         self.lineparts = dict()
         self.linewords = 0
         self.buff = ""
-        self.is_open = 0
+        self.is_open = False
         self.min_words = 0
         self.skip_line = ""
 
@@ -33,9 +33,9 @@ class SeqFileIO:
 
         try:
             self.pnt_fd = open(procfile)
-            self.is_open = 1
+            self.is_open = True
         except IOError:
-            self.is_open = 0
+            self.is_open = False
 
         if len(options) > 0:
             self.min_words = options[0]
@@ -56,8 +56,8 @@ class SeqFileIO:
 
     def close_file(self):
         """Used when the caller want to skip the rest of the file."""
-        if self.is_open == 1:
-            self.is_open = 0
+        if self.is_open:
+            self.is_open = False
             self.pnt_fd.close()
         return
         
@@ -69,7 +69,7 @@ class SeqFileIO:
         self.linewords = 0
         self.buff = ""
 
-        if self.is_open == 0:
+        if not self.is_open:
             raise StopIteration
 
         else:
@@ -87,7 +87,7 @@ class SeqFileIO:
 
             if self.buff == "":
                 self.pnt_fd.close()
-                self.is_open = 0
+                self.is_open = False
                 raise StopIteration
 
             else:
@@ -110,7 +110,7 @@ class SeqFileIO:
         if not self.is_open:
             raise StopIteration
 
-        if self.is_open != 0:
+        if self.is_open:
             __lines = self.pnt_fd.readlines()
 
             try:
@@ -131,7 +131,7 @@ class SeqFileIO:
                     elif __lines[__off] == "":
                         __lines[__off:__off+1] = []
 
-            self.is_open = 0
+            self.is_open = False
 
         return __lines
 
@@ -159,7 +159,7 @@ class SeqFileIO:
                 else:
                     __unknown_label.add(__sock_type)
         except StopIteration:
-            self.is_open = 0
+            self.is_open = False
 
         return(__result, __unknown_label)
 
@@ -196,7 +196,7 @@ class SeqFileIO:
         except StopIteration:
             self.lineparts = dict()
             self.linewords = 0
-            self.is_open = 0
+            self.is_open = False
 
         return
 

@@ -695,8 +695,8 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         self.__flag_xprt_udp = "udp"
         self.__flag_xprt_tcp = "tcp"
 
-        self.__is_per_op = 0
-        self.__have_partial = 0
+        self.__is_per_op = False
+        self.__have_partial = False
         self.__partial = dict()
         self.__partial[PFC.F_DEVICE] = ""
         self.__partial[PFC.F_MOUNTPOINT] = ""
@@ -736,7 +736,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         logical record.
         """
 
-        self.__have_partial = 0
+        self.__have_partial = False
 
         self.field[PFC.F_DEVICE] = self.__partial[PFC.F_DEVICE]
         self.field[PFC.F_MOUNTPOINT] = self.__partial[PFC.F_MOUNTPOINT]
@@ -755,7 +755,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
     def parse_device_line(self, sio):
         """Parse device subrecord"""
 
-        self.__have_partial = 1
+        self.__have_partial = True
 
         if sio.get_word(0) == self.__prefix_dev:
             self.__partial[PFC.F_DEVICE] = sio.get_word(1)
@@ -1074,7 +1074,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         elif __first == self.__prefix_xprt:
             self.parse_xprt_line(sio)
         elif __first == self.__prefix_per_op:
-            self.__is_per_op = 1
+            self.__is_per_op = True
         elif self.__is_per_op:
             self.parse_per_op_line(sio)
         else:
@@ -1135,7 +1135,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 # device none mounted on /sys/fs/fuse/connections with fstype fusectl
 
 #        print "dbg:: readline: '{line}'".format(line=sio.buff[:-1])
-        self.__is_per_op = 0
+        self.__is_per_op = False
         self.init_field_values()
 
         if sio.buff != "" and not self.__have_partial:
@@ -1145,7 +1145,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 
         self.partial_to_final()
 
-        __complete = 0
+        __complete = False
         while sio.buff != "" and not __complete:
             self.accumulate_info(sio)
 
@@ -1154,13 +1154,13 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
             if __first == self.__prefix_dev or \
                     (__first == self.__prefix_no
                     and __second == self.__prefix_dev):
-                __complete = 1
+                __complete = True
             else:
                 try:
                     sio.read_line()
 #                    print "dbg:: readline: '{line}'".format(line=sio.buff[:-1])
                 except StopIteration:
-                    __complete = 1
+                    __complete = True
 
         self.device = self.field[PFC.F_DEVICE]
         self.mountpoint = self.field[PFC.F_MOUNTPOINT]
