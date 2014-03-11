@@ -948,3 +948,9 @@ F_EVENT_TOTAL = "total-events"
 F_INIT_ROUT = "initial-routine"
 F_PROC_NAME = "process-name"
 F_SAMPLE_PERIOD = "sample-period"
+
+# -- added for /proc/pagetypeinfo
+F_BLOCK_ORDER = "block-order"
+F_PAGES_PER_BLOCK = "pages-per-block"
+F_MIGR_BRKOUT = "pages-allocated"
+F_MIGR_AGG = "total-blocks"

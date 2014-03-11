@@ -3141,9 +3141,12 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
                 NAME: PFC.F_CBACK_ROUT } )
         PBR.add_parse_rule(self, { POS: 99, CONV: long, NAME: PFC.F_COUNT } )
         PBR.add_parse_rule(self, { POS: 99, CONV: str, NAME: PFC.F_VERSION } )
-        PBR.add_parse_rule(self, { POS: 99, CONV: float, NAME: PFC.F_SAMPLE_PERIOD } )
-        PBR.add_parse_rule(self, { POS: 99, CONV: long, NAME: PFC.F_EVENT_TOTAL } )
-        PBR.add_parse_rule(self, { POS: 99, CONV: float, NAME: PFC.F_EVENT_RATE } )
+        PBR.add_parse_rule(self, { POS: 99, CONV: float,
+                NAME: PFC.F_SAMPLE_PERIOD } )
+        PBR.add_parse_rule(self, { POS: 99, CONV: long,
+                NAME: PFC.F_EVENT_TOTAL } )
+        PBR.add_parse_rule(self, { POS: 99, CONV: float,
+                NAME: PFC.F_EVENT_RATE } )
         return
 
     def extra_next(self, sio):
@@ -3191,7 +3194,8 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
             else:
                 __val = ""
             self.field[PFC.F_DEFERRABLE] = __val
-            self.field[PFC.F_COUNT] = PBR.convert_by_rule(__first, { CONV: long } )
+            self.field[PFC.F_COUNT] = PBR.convert_by_rule(__first,
+                    { CONV: long } )
 
         self.field[PFC.F_VERSION] = self.__hold[PFC.F_VERSION]
         self.field[PFC.F_SAMPLE_PERIOD] = self.__hold[PFC.F_SAMPLE_PERIOD]
@@ -3200,3 +3204,111 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
 
 REGISTER_FILE("/proc/timer_stats", ProcRootTIMERSTATS)
 REGISTER_PARTIAL_FILE("timer_stats", ProcRootTIMERSTATS)
+
+
+
+
+#
+class ProcRootPAGETYPEINFO(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/pagetypeinfo file
+    """
+
+# source: mm/vmstat.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcRootHandlers" to reduce the size of this module.
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 4
+        self.__in_numbers = False
+        self.__block_order_pref = "Page"
+        self.__per_block_pref = "Pages"
+        self.__order_pref = "Free"
+        self.__number_pref = "Number"
+        self.__order_start_data = 8
+        self.__migrate_start_data = 4
+        self.__start_ord_num = 6
+        self.__start_agg_num = 4
+        self.__order_colname = "order-"
+
+        self.__order_list = []
+        self.__migtype_list = []
+
+        self.__hold = dict()
+        self.__hold[PFC.F_BLOCK_ORDER] = 0
+        self.__hold[PFC.F_PAGES_PER_BLOCK] = 0
+
+        PBR.add_parse_rule(self, { POS: 1, CONV: long, SUFFIX: ",",
+                NAME: PFC.F_NODE } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_ZONE } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TYPE } )
+        return
+
+    def extra_next(self, sio):
+
+        __first = sio.get_word(0)
+
+        if __first == self.__block_order_pref:
+            __val = PBR.convert_by_rule(sio.get_word(3), { CONV: long } )
+            self.__hold[PFC.F_BLOCK_ORDER] = __val
+            self.next()
+            __first = sio.get_word(0)
+
+        if __first == self.__per_block_pref:
+            __val = PBR.convert_by_rule(sio.get_word(3), { CONV: long } )
+            self.__hold[PFC.F_PAGES_PER_BLOCK] = __val
+            self.next()
+            __first = sio.get_word(0)
+
+        if __first == self.__order_pref:
+            __off = self.__order_start_data
+            __ord = [""] * (sio.linewords - __off)
+            for __num in range(0, len(__ord)):
+                __ord[__num] = "{pref}{num}".format(pref=self.__order_colname,
+                        num=sio.get_word(__off))
+                __off += 1
+            self.__order_list = __ord
+            self.next()
+            __first = sio.get_word(0)
+
+        if __first == self.__number_pref:
+            self.__in_numbers = True
+            __off = self.__migrate_start_data
+            __mig = [""] * (sio.linewords - __off)
+            for __num in range(0, len(__mig)):
+                __mig[__num] = sio.get_word(__off)
+                __off += 1
+            self.__migtype_list = __mig
+            self.next()
+            __first = sio.get_word(0)
+
+        self.field[PFC.F_MIGR_BRKOUT] = dict()
+        self.field[PFC.F_MIGR_AGG] = dict()
+
+        if self.__in_numbers:
+            self.field[PFC.F_TYPE] = ""
+            __mig = self.__migtype_list
+            __off = self.__start_agg_num
+            for __num in range(0, len(__mig)):
+                __name = __mig[__num]
+                self.field[PFC.F_MIGR_AGG][__name] = PBR.convert_by_rule(
+                        sio.get_word(__off), { CONV: long } )
+                __off += 1
+        else:
+            __ord = self.__order_list
+            __off = 0
+            for __num in range(self.__start_ord_num, sio.linewords):
+                __name = __ord[__off]
+                __off += 1
+                self.field[PFC.F_MIGR_BRKOUT][__name] = PBR.convert_by_rule(
+                        sio.get_word(__num), { CONV: long } )
+
+        self.field[PFC.F_BLOCK_ORDER] = self.__hold[PFC.F_BLOCK_ORDER]
+        self.field[PFC.F_PAGES_PER_BLOCK] = self.__hold[PFC.F_PAGES_PER_BLOCK]
+
+        return(self.field)
+
+REGISTER_FILE("/proc/pagetypeinfo", ProcRootPAGETYPEINFO)
+REGISTER_PARTIAL_FILE("pagetypeinfo", ProcRootPAGETYPEINFO)
