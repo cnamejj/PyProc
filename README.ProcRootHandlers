@@ -1414,3 +1414,70 @@ Excerpts from that code:
 #        seq_putc(m, '\n');
 #}
 
+
+
+--- File: /proc/devices
+
+source: fs/proc/devices.c
+--and--
+source: fs/char_dev.c
+--and--
+source: block/genhd.c
+
+Excerpts from that code:
+
+# from: fs/proc/devices.c
+# ---
+# 
+# static int devinfo_show(struct seq_file *f, void *v)
+# {
+#         int i = *(loff_t *) v;
+# 
+#         if (i < CHRDEV_MAJOR_HASH_SIZE) {
+#                 if (i == 0)
+#                         seq_puts(f, "Character devices:\n");
+#                 chrdev_show(f, i);
+#         }
+# #ifdef CONFIG_BLOCK
+#         else {
+#                 i -= CHRDEV_MAJOR_HASH_SIZE;
+#                 if (i == 0)
+#                         seq_puts(f, "\nBlock devices:\n");
+#                 blkdev_show(f, i);
+#         }
+# #endif
+#         return 0;
+# }
+# 
+# 
+# 
+# from: fs/char_dev.c
+# ---
+# 
+# void chrdev_show(struct seq_file *f, off_t offset)
+# {
+#         struct char_device_struct *cd;
+# 
+#         if (offset < CHRDEV_MAJOR_HASH_SIZE) {
+#                 mutex_lock(&chrdevs_lock);
+#                 for (cd = chrdevs[offset]; cd; cd = cd->next)
+#                         seq_printf(f, "%3d %s\n", cd->major, cd->name);
+#                 mutex_unlock(&chrdevs_lock);
+#         }
+# }
+# 
+# 
+# from: block/genhd.c
+# ---
+# 
+# void blkdev_show(struct seq_file *seqf, off_t offset)
+# {
+#         struct blk_major_name *dp;
+# 
+#         if (offset < BLKDEV_MAJOR_HASH_SIZE) {
+#                 mutex_lock(&block_class_lock);
+#                 for (dp = major_names[offset]; dp; dp = dp->next)
+#                         seq_printf(seqf, "%3d %s\n", dp->major, dp->name);
+#                 mutex_unlock(&block_class_lock);
+#         }
+# }

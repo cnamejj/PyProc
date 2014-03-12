@@ -3312,3 +3312,51 @@ class ProcRootPAGETYPEINFO(PBR.FixedWhitespaceDelimRecs):
 
 REGISTER_FILE("/proc/pagetypeinfo", ProcRootPAGETYPEINFO)
 REGISTER_PARTIAL_FILE("pagetypeinfo", ProcRootPAGETYPEINFO)
+
+
+
+
+#
+class ProcRootDEVICES(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/devices file
+    """
+
+# source: mm/vmstat.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcRootHandlers" to reduce the size of this module.
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 2
+        self.__type_char = "character"
+        self.__type_block = "block"
+        self.__char_pref = "Character"
+        self.__block_pref = "Block"
+        self.__dev_type = "unknown"
+
+        PBR.add_parse_rule(self, { POS: 0, CONV: long, NAME: PFC.F_MAJOR_DEV } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_DEVICE_NAME } )
+        return
+
+    def extra_next(self, sio):
+
+        __first = sio.get_word(0)
+
+        if __first == self.__char_pref:
+            self.__dev_type = self.__type_char
+            self.next()
+            __first = sio.get_word(0)
+
+        if __first == self.__block_pref:
+            self.__dev_type = self.__type_block
+            self.next()
+
+        self.field[PFC.F_DEVICE_TYPE] = self.__dev_type
+
+        return(self.field[PFC.F_DEVICE_TYPE], self.field[PFC.F_MAJOR_DEV],
+                self.field[PFC.F_DEVICE_NAME])
+
+REGISTER_FILE("/proc/devices", ProcRootDEVICES)
+REGISTER_PARTIAL_FILE("devices", ProcRootDEVICES)
