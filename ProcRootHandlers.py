@@ -3336,7 +3336,8 @@ class ProcRootDEVICES(PBR.FixedWhitespaceDelimRecs):
         self.__block_pref = "Block"
         self.__dev_type = "unknown"
 
-        PBR.add_parse_rule(self, { POS: 0, CONV: long, NAME: PFC.F_MAJOR_DEV } )
+        PBR.add_parse_rule(self, { POS: 0, CONV: long,
+                NAME: PFC.F_MAJOR_DEV } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_DEVICE_NAME } )
         return
 
