@@ -332,3 +332,113 @@ Excerpts from that code:
 # 
 #         return 0;
 # }
+
+
+--- File: /proc/net/fib_triestat
+
+source: net/ipv4/fib_trie.c
+
+Excerpts from that code:
+
+# static int fib_triestat_seq_show(struct seq_file *seq, void *v)
+# {
+#         struct net *net = (struct net *)seq->private;
+#         unsigned int h;
+# 
+#         seq_printf(seq,
+#                    "Basic info: size of leaf:"
+#                    " %Zd bytes, size of tnode: %Zd bytes.\n",
+#                    sizeof(struct leaf), sizeof(struct tnode));
+# 
+#         for (h = 0; h < FIB_TABLE_HASHSZ; h++) {
+#                 struct hlist_head *head = &net->ipv4.fib_table_hash[h];
+#                 struct hlist_node *node;
+#                 struct fib_table *tb;
+# 
+#                 hlist_for_each_entry_rcu(tb, node, head, tb_hlist) {
+#                         struct trie *t = (struct trie *) tb->tb_data;
+#                         struct trie_stat stat;
+# 
+#                         if (!t)
+#                                 continue;
+# 
+#                         fib_table_print(seq, tb);
+# 
+#                         trie_collect_stats(t, &stat);
+#                         trie_show_stats(seq, &stat);
+# #ifdef CONFIG_IP_FIB_TRIE_STATS
+#                         trie_show_usage(seq, &t->stats);
+# #endif
+#                 }
+#         }
+# 
+#         return 0;
+# }
+# 
+# 
+# static void fib_table_print(struct seq_file *seq, struct fib_table *tb)
+# {
+#         if (tb->tb_id == RT_TABLE_LOCAL)
+#                 seq_puts(seq, "Local:\n");
+#         else if (tb->tb_id == RT_TABLE_MAIN)
+#                 seq_puts(seq, "Main:\n");
+#         else
+#                 seq_printf(seq, "Id %d:\n", tb->tb_id);
+# }
+# 
+# 
+# static void trie_show_stats(struct seq_file *seq, struct trie_stat *stat)
+# {
+#         unsigned int i, max, pointers, bytes, avdepth;
+# 
+#         if (stat->leaves)
+#                 avdepth = stat->totdepth*100 / stat->leaves;
+#         else
+#                 avdepth = 0;
+# 
+#         seq_printf(seq, "\tAver depth:     %u.%02d\n",
+#                    avdepth / 100, avdepth % 100);
+#         seq_printf(seq, "\tMax depth:      %u\n", stat->maxdepth);
+# 
+#         seq_printf(seq, "\tLeaves:         %u\n", stat->leaves);
+#         bytes = sizeof(struct leaf) * stat->leaves;
+# 
+#         seq_printf(seq, "\tPrefixes:       %u\n", stat->prefixes);
+#         bytes += sizeof(struct leaf_info) * stat->prefixes;
+# 
+#         seq_printf(seq, "\tInternal nodes: %u\n\t", stat->tnodes);
+#         bytes += sizeof(struct tnode) * stat->tnodes;
+# 
+#         max = MAX_STAT_DEPTH;
+#         while (max > 0 && stat->nodesizes[max-1] == 0)
+#                 max--;
+# 
+#         pointers = 0;
+#         for (i = 1; i <= max; i++)
+#                 if (stat->nodesizes[i] != 0) {
+#                         seq_printf(seq, "  %u: %u",  i, stat->nodesizes[i]);
+#                         pointers += (1<<i) * stat->nodesizes[i];
+#                 }
+#         seq_putc(seq, '\n');
+#         seq_printf(seq, "\tPointers: %u\n", pointers);
+# 
+#         bytes += sizeof(struct rt_trie_node *) * pointers;
+#         seq_printf(seq, "Null ptrs: %u\n", stat->nullpointers);
+#         seq_printf(seq, "Total size: %u  kB\n", (bytes + 1023) / 1024);
+# }
+# 
+# 
+# static void trie_show_usage(struct seq_file *seq,
+#                             const struct trie_use_stats *stats)
+# {
+#         seq_printf(seq, "\nCounters:\n---------\n");
+#         seq_printf(seq, "gets = %u\n", stats->gets);
+#         seq_printf(seq, "backtracks = %u\n", stats->backtrack);
+#         seq_printf(seq, "semantic match passed = %u\n",
+#                    stats->semantic_match_passed);
+#         seq_printf(seq, "semantic match miss = %u\n",
+#                    stats->semantic_match_miss);
+#         seq_printf(seq, "null node hit= %u\n", stats->null_node_hit);
+#         seq_printf(seq, "skipped node resize = %u\n\n",
+#                    stats->resize_node_skipped);
+# }

@@ -8,7 +8,7 @@ dev_snmp6 DONE DIR
 dev_snmp6/eth0 DONE ProcNetDEVSNMP6
 dev_snmp6/lo DONE ProcNetDEVSNMP6
 fib_trie DONE ProcNetFIBTRIE NONRECORD 
-fib_triestat NEED REPORT
+fib_triestat DONE ProcNetFIBTRIESTAT REPORT
 hci NEED aqui-only
 icmp NEED TBD EMPTY
 icmp6 NEED TBD EMPTY aqui-only

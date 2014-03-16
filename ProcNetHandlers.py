@@ -3402,7 +3402,7 @@ class ProcNetFIBTRIE(PBR.FixedWhitespaceDelimRecs):
     Parse /proc/net/fib_trie file
     """
 
-# source: fs/proc/devices.c
+# source: net/ipv4/fib_trie.c
 #
 # The kernel source snippets that generate this file are stored in
 # "README.ProcNetHandlers" to reduce the size of this module.
@@ -3566,6 +3566,134 @@ class ProcNetFIBTRIE(PBR.FixedWhitespaceDelimRecs):
 
 REGISTER_FILE("/proc/net/fib_trie", ProcNetFIBTRIE)
 REGISTER_PARTIAL_FILE("fib_trie", ProcNetFIBTRIE)
+
+
+
+#
+class ProcNetFIBTRIESTAT(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/net/fib_triestat file
+    """
+
+# source: net/ipv4/fib_trie.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcNetHandlers" to reduce the size of this module.
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 1
+        self.skipped = "Counters:"
+
+        self.__empty_tag = ""
+        self.__glinfo = (0, 0)
+        self.__hold_node = self.__empty_tag
+        self.__tag_suff = ":"
+        self.__id_pref = "Id"
+        self.__intnode_pref = "\t  "
+        self.__basic_tag = "Basic"
+
+        __aver_depth = "\tAver depth:"
+        __max_depth = "\tMax depth:"
+        __leaves = "\tLeaves:"
+        __prefixes = "\tPrefixes:"
+        __internal = "\tInternal nodes:"
+        __pointers = "\tPointers:"
+        __null_ptrs = "Null ptrs:"
+        __total = "Total size:"
+        __gets = "gets ="
+        __backtracks = "backtracks ="
+        __sem_pass = "semantic match passed ="
+        __sem_miss = "semantic match miss ="
+        __null_node = "null node hit="
+        __skipped = "skipped node resize ="
+
+        __rs = []
+        __rs = __rs + [ (PFC.F_AVER_DEPTH, { PREFIX: __aver_depth,
+                CONV: float }) ]
+        __rs = __rs + [ (PFC.F_MAX_DEPTH, { PREFIX: __max_depth,
+                CONV: long }) ]
+        __rs = __rs + [ (PFC.F_LEAVES, { PREFIX: __leaves, CONV: long }) ]
+        __rs = __rs + [ (PFC.F_PREFIXES, { PREFIX: __prefixes, CONV: long }) ]
+        __rs = __rs + [ (PFC.F_INT_NODES, { PREFIX: __internal, CONV: long }) ]
+        __rs = __rs + [ (PFC.F_POINTERS, { PREFIX: __pointers, CONV: long }) ]
+        __rs = __rs + [ (PFC.F_NULL_PTRS, { PREFIX: __null_ptrs,
+                CONV: long }) ]
+        __rs = __rs + [ (PFC.F_TOTAL_SIZE, { PREFIX: __total, CONV: long,
+                BEFORE: " kB" }) ]
+        __rs = __rs + [ (PFC.F_GETS, { PREFIX: __gets, CONV: long }) ]
+        __rs = __rs + [ (PFC.F_BACKTRACKS, { PREFIX: __backtracks,
+                CONV: long }) ]
+        __rs = __rs + [ (PFC.F_SEM_PASS, { PREFIX: __sem_pass, CONV: long }) ]
+        __rs = __rs + [ (PFC.F_SEM_MISS, { PREFIX: __sem_miss, CONV: long }) ]
+        __rs = __rs + [ (PFC.F_NULL_NODE, { PREFIX: __null_node, CONV: long }) ]
+        __rs = __rs + [ (PFC.F_SKIPPED, { PREFIX: __skipped, CONV: long }) ]
+        self.__rset = __rs
+
+        return
+
+    def apply_matching_rules(self):
+        """Match records with the appropriate parse rule"""
+
+        sio = self.curr_sio
+        __line = sio.buff.rstrip("\n")
+
+        for __field, __rule in self.__rset:
+            if PBR.matches_all_crit(__line, __rule):
+                self.field[__field] = PBR.convert_by_rule(__line, __rule)
+
+        return
+
+
+    def extra_next(self, sio):
+        __is_done = False
+
+        self.field[PFC.F_NODE_NAME] = self.__hold_node
+        self.field[PFC.F_INT_NODE_LIST] = dict()
+
+        if sio.get_word(0) == self.__basic_tag:
+            __leaf = PBR.convert_by_rule(sio.get_word(5), { CONV: long } )
+            __tnode = PBR.convert_by_rule(sio.get_word(10), { CONV: long } )
+            self.__glinfo = (__leaf, __tnode)
+            sio.read_line()
+
+        while not __is_done:
+            __first = sio.get_word(0)
+
+            if sio.linewords == 1 or __first == self.__id_pref:
+                __node = sio.get_word(sio.linewords-1)
+                if __node[-1:] == self.__tag_suff:
+                    __node = __node[:-1]
+                    self.__hold_node = __node
+                    if self.field[PFC.F_NODE_NAME] != self.__empty_tag:
+                        __is_done = True
+                    else:
+                        self.field[PFC.F_NODE_NAME] = __node
+
+            elif sio.buff.startswith(self.__intnode_pref):
+                __line = sio.buff.rstrip("\n")
+                __key = PBR.convert_by_rule(__line,
+                        { CONV: long, BEFORE: ":" } )
+                __val = PBR.convert_by_rule(__line,
+                        { CONV: long, AFTER: ":" } )
+                self.field[PFC.F_INT_NODE_LIST][__key] = __val
+
+            else:
+                self.apply_matching_rules()
+
+            if not __is_done:
+                try:
+                    sio.read_line()
+                except StopIteration:
+                    __is_done = True
+                
+        self.field[PFC.F_LEAF_SIZE] = self.__glinfo[0]
+        self.field[PFC.F_TNODE_SIZE] = self.__glinfo[1]
+
+        return(self.field)
+
+REGISTER_FILE("/proc/net/fib_triestat", ProcNetFIBTRIESTAT)
+REGISTER_PARTIAL_FILE("fib_triestat", ProcNetFIBTRIESTAT)
 
 
 
