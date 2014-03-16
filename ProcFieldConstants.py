@@ -954,3 +954,12 @@ F_BLOCK_ORDER = "block-order"
 F_PAGES_PER_BLOCK = "pages-per-block"
 F_MIGR_BRKOUT = "pages-allocated"
 F_MIGR_AGG = "total-blocks"
+
+# -- added for /proc/net/fib_trie
+F_NETWORK = "network-addr"
+F_FIB_TRIE = "fib-trie"
+F_FIB_BITS = "fib-bits"
+F_FULL_CHILDREN = "fib-full-children"
+F_EMPTY_CHILDREN = "fib-empty-children"
+F_FIB_LEAF = "fib-leaf"
+F_NODE_NAME = "node-name"

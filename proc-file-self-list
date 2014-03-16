@@ -21,12 +21,12 @@ fd/### DONE LINK ProcSelfFD
 cwd DONE LINK ProcSelfCWD
 root DONE LINK ProcSelfROOT
 exe DONE LINK ProcSelfEXE
-fdinfo/###
-ns/net
-ns/uts
-ns/ipc
-environ
-auxv
+fdinfo/### NEED research
+ns/net NEED research
+ns/uts NEED research
+ns/ipc NEED resesarch
+environ NEED
+auxv SKIP BINARY
 status DONE REPORT ProcSelfSTATUS
 personality DONE TBD ProcSelfPERSONALITY NOHEADER
 limits DONE FIXEDCOLS ProcSelfLIMITS
@@ -47,12 +47,12 @@ clear_refs SKIP
 smaps DONE MULTILINE ProcSelfSMAPS
 pagemap SKIP BINARY
 attr/current NEED WSD NOHEADER ONE-LINE
-attr/prev TBD
-attr/exec TBD
-attr/fscreate TBD
-attr/keycreate TBD
-attr/sockcreate TBD
-wchan DONE WSD ProcSelfWCHAN NOHEADER ONE-LINE
+attr/prev NEED TBD research
+attr/exec NEED TBD research
+attr/fscreate NEED TBD research
+attr/keycreate NEED TBD research
+attr/sockcreate NEED TBD research
+wchan DONE WSD ProcSelfWCHAN NOHE ADER ONE-LINE
 stack DONE WSD ProcSelfSTACK NOHEADER
 schedstat DONE WSD NOHEADER ProcSelfSCHEDSTAT ONE-LINE
 latency DONE WSD NOHEADER ProcRootLATENCYSTATS ONE-LINE

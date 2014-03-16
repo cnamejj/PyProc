@@ -7,8 +7,8 @@ dev_mcast DONE ProcNetDEVMCAST
 dev_snmp6 DONE DIR
 dev_snmp6/eth0 DONE ProcNetDEVSNMP6
 dev_snmp6/lo DONE ProcNetDEVSNMP6
-fib_trie NONRECORD
-fib_triestat NONRECORD
+fib_trie DONE ProcNetFIBTRIE NONRECORD 
+fib_triestat NEED REPORT
 hci NEED aqui-only
 icmp NEED TBD EMPTY
 icmp6 NEED TBD EMPTY aqui-only
@@ -70,4 +70,4 @@ udplite NEED TBD EMPTY
 udplite6 NEED TBD EMPTY
 unix DONE ProcNetUNIX
 wireless NEED TBD EMPTY
-xfrm_stat NOHEADER aqui-only
+xfrm_stat NEED NOHEADER aqui-only

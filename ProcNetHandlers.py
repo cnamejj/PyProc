@@ -3396,6 +3396,179 @@ REGISTER_PARTIAL_FILE("nf_queue", ProcNetNetfilterNFQUEUE)
 
 
 
+#
+class ProcNetFIBTRIE(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/net/fib_trie file
+    """
+
+# source: fs/proc/devices.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcNetHandlers" to reduce the size of this module.
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 1
+
+        self.__empty_tag = ""
+        self.__hold_type = self.__empty_tag
+        self.__tag_suff = ":"
+        self.__id_pref = "Id"
+        self.__node_pref = "+--"
+        self.__leaf_pref = "|--"
+        self.__error = "ParseError"
+        self.__is_done = False
+        return
+
+    def link_subrec(self, base, field, point):
+        """Attach a dictionary to the parent object"""
+
+        try:
+            __seq = len(base[field])
+        except KeyError:
+            __seq = 0
+            base[field] = dict()
+
+        base[field][__seq] = point
+
+        return
+
+    def add_node_subrec(self, spot):
+        """Parse a line describing a node"""
+
+        sio = self.curr_sio
+        spot[PFC.F_NETWORK] = PBR.convert_by_rule(sio.get_word(1),
+                { BEFORE: "/" } )
+        spot[PFC.F_NETMASK] = PBR.convert_by_rule(sio.get_word(1),
+                { AFTER: "/", CONV: long } )
+        spot[PFC.F_FIB_BITS] = PBR.convert_by_rule(sio.get_word(2),
+                { CONV: long } )
+        spot[PFC.F_FULL_CHILDREN] = PBR.convert_by_rule(sio.get_word(3),
+                { CONV: long } )
+        spot[PFC.F_EMPTY_CHILDREN] = PBR.convert_by_rule(sio.get_word(4),
+                { CONV: long } )
+
+        return
+
+    def add_leaf_subrec(self, spot):
+        """Parse a leaf record"""
+
+        sio = self.curr_sio
+        spot[PFC.F_NETWORK] = sio.get_word(1)
+
+        return
+
+    def add_scope_subrec(self, parent):
+        """Parse a line describing route under a leaf rec"""
+
+        sio = self.curr_sio
+        __val = dict()
+
+        __val[PFC.F_NETMASK] = PBR.convert_by_rule(sio.get_word(0),
+                { AFTER: "/", CONV: long } )
+        __val[PFC.F_SCOPE] = sio.get_word(1)
+        __val[PFC.F_TYPE] = sio.get_word(2)
+
+
+        self.link_subrec(parent, PFC.F_SCOPE, __val)
+        return
+
+
+    def parse_subrec(self, spot, parent):
+        """Figure out which type of record and call parser"""
+
+        sio = self.curr_sio
+        __first = sio.get_word(0)
+
+        if __first == self.__node_pref:
+            self.link_subrec(parent, PFC.F_NODE, spot)
+            self.add_node_subrec(spot)
+
+        elif __first == self.__leaf_pref:
+            self.link_subrec(parent, PFC.F_FIB_LEAF, spot)
+            self.add_leaf_subrec(spot)
+
+        else:
+            self.add_scope_subrec(parent)
+
+        return
+
+# Sample records:
+# 
+# Main:
+#   +-- 0.0.0.0/0 2 0 1
+#      |-- 0.0.0.0
+#         /0 universe UNICAST
+#      |-- 169.254.0.0
+#         /16 link UNICAST
+#      |-- 192.168.1.0
+#         /24 link UNICAST
+# Local:
+#   +-- 0.0.0.0/0 1 0 0
+#      +-- 127.0.0.0/8 1 0 0
+#         +-- 127.0.0.0/31 1 0 0
+#            |-- 127.0.0.0
+#               /32 link BROADCAST
+#               /8 host LOCAL
+
+    def extra_next(self, sio):
+        self.__is_done = False
+        __fib = dict()
+        __point = __fib
+        __lomap = dict()
+        __lomap[0] = __fib
+        __previous = 0
+
+        self.field[PFC.F_NODE_NAME] = self.__hold_type
+
+        while not self.__is_done:
+            __level = (len(sio.buff) - len(sio.buff.lstrip(" ")) + 1) / 3
+
+            if __level < __previous:
+                for __off in range(__level, __previous+1):
+                    __lomap[__off] = dict()
+
+            if __level == 0:
+                __type = sio.get_word(sio.linewords-1)
+                __type = __type.partition(self.__tag_suff)[0]
+                if self.field[PFC.F_NODE_NAME] == self.__empty_tag:
+                    self.field[PFC.F_NODE_NAME] = __type
+                if self.__hold_type != self.__empty_tag:
+                    self.__is_done = True
+                self.__hold_type = __type
+
+            else:
+                try:
+                    __point = __lomap[__level]
+                except KeyError:
+                    __point = self.__empty_tag
+
+                if __point == self.__empty_tag:
+                    __point = dict()
+                    __lomap[__level] = __point
+
+                __parent = __lomap[__level-1]
+
+                self.parse_subrec(__point, __parent)
+
+            __previous = __level
+
+            if not self.__is_done:
+                try:
+                    sio.read_line()
+                except StopIteration:
+                    self.__is_done = True
+
+        self.field[PFC.F_FIB_TRIE] = __fib
+
+        return(self.field)
+
+REGISTER_FILE("/proc/net/fib_trie", ProcNetFIBTRIE)
+REGISTER_PARTIAL_FILE("fib_trie", ProcNetFIBTRIE)
+
+
+
 if __name__ == "__main__":
 
     print "Collection of handlers to parse file in the /proc/net directory"

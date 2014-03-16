@@ -265,3 +265,70 @@ Excerpts from that code:
 #                    snmp4_udp_list[i].entry));
 #
 # seq_putc(seq, '\n');
+
+
+--- File: /proc/net/fib_trie
+
+source: net/ipv4/fib_trie.c
+
+Excerpts from that code:
+
+# static void fib_table_print(struct seq_file *seq, struct fib_table *tb)
+# {
+#         if (tb->tb_id == RT_TABLE_LOCAL)
+#                 seq_puts(seq, "Local:\n");
+#         else if (tb->tb_id == RT_TABLE_MAIN)
+#                 seq_puts(seq, "Main:\n");
+#         else
+#                 seq_printf(seq, "Id %d:\n", tb->tb_id);
+# }
+# 
+# 
+# /* Pretty print the trie */
+# static int fib_trie_seq_show(struct seq_file *seq, void *v)
+# {
+#         const struct fib_trie_iter *iter = seq->private;
+#         struct rt_trie_node *n = v;
+# 
+#         if (!node_parent_rcu(n))
+#                 fib_table_print(seq, iter->tb);
+# 
+#         if (IS_TNODE(n)) {
+#                 struct tnode *tn = (struct tnode *) n;
+#                 __be32 prf = htonl(mask_pfx(tn->key, tn->pos));
+# 
+#                 seq_indent(seq, iter->depth-1);
+#                 seq_printf(seq, "  +-- %pI4/%d %d %d %d\n",
+#                            &prf, tn->pos, tn->bits, tn->full_children,
+#                            tn->empty_children);
+# 
+#         } else {
+#                 struct leaf *l = (struct leaf *) n;
+#                 struct leaf_info *li;
+#                 struct hlist_node *node;
+#                 __be32 val = htonl(l->key);
+# 
+#                 seq_indent(seq, iter->depth);
+#                 seq_printf(seq, "  |-- %pI4\n", &val);
+# 
+#                 hlist_for_each_entry_rcu(li, node, &l->list, hlist) {
+#                         struct fib_alias *fa;
+# 
+#                         list_for_each_entry_rcu(fa, &li->falh, fa_list) {
+#                                 char buf1[32], buf2[32];
+# 
+#                                 seq_indent(seq, iter->depth+1);
+#                                 seq_printf(seq, "  /%d %s %s", li->plen,
+#                                            rtn_scope(buf1, sizeof(buf1),
+#                                                      fa->fa_info->fib_scope),
+#                                            rtn_type(buf2, sizeof(buf2),
+#                                                     fa->fa_type));
+#                                 if (fa->fa_tos)
+#                                         seq_printf(seq, " tos=%d", fa->fa_tos);
+#                                 seq_putc(seq, '\n');
+#                         }
+#                 }
+#         }
+# 
+#         return 0;
+# }

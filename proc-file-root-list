@@ -17,7 +17,6 @@ Terms:
 
  VARIES - the fields included vary from system to system
 ---
-file-name STATUS FORMAT <Handler> FLAGS
 sysrq-trigger SKIP NOTDATA ROOTONLY
 partitions DONE WSD ProcRootPARTITIONS
 diskstats DONE WSD ProcRootDISKSTATS NOHEADER
