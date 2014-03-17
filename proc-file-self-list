@@ -25,7 +25,7 @@ fdinfo/### NEED research
 ns/net NEED research
 ns/uts NEED research
 ns/ipc NEED research
-environ NEED
+environ DONE ProcSelfENVIRON
 auxv SKIP BINARY
 status DONE REPORT ProcSelfSTATUS
 personality DONE TBD ProcSelfPERSONALITY NOHEADER

@@ -2204,3 +2204,34 @@ class ProcSelfOOMSCOREADJ(PBR.FixedWhitespaceDelimRecs):
 
 REGISTER_FILE("/proc/self/oom_score_adj", ProcSelfOOMSCOREADJ)
 REGISTER_PARTIAL_FILE("oom_score_adj", ProcSelfOOMSCOREADJ)
+
+
+
+#
+class ProcSelfENVIRON(PBR.SingleTextField):
+    """
+    Parse /proc/self/environ file
+    """
+
+# source: fs/proc/base.c
+#
+# The routine responsible for gathering the data written to this file is
+# environ_read() but reviewing that code probably won't explain the contents of
+# the file very much.  The important point to note is that it's just a
+# collection of '\0' terminated name/value pairs string together.  And there's
+# no LF ('\n') on the end.
+#
+
+    def extra_next(self, sio):
+
+        __nvps = sio.buff.split("\0")
+        for __ref in __nvps:
+            __key = __ref.partition("=")[0]
+            if __key != __ref:
+                __val = __ref.partition("=")[2]
+                self.field[__key] = __val
+
+        return(self.field)
+
+REGISTER_FILE("/proc/self/environ", ProcSelfENVIRON)
+REGISTER_PARTIAL_FILE("environ", ProcSelfENVIRON)
