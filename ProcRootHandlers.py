@@ -39,6 +39,8 @@ SUFFIX = PBR.SUFFIX_VAL
 BEFORE = PBR.BEFORE_VAL
 AFTER = PBR.AFTER_VAL
 WORDS = PBR.WORDS_VAL
+PSUB = PBR.SUBWORD
+HAS = PBR.HAS_VAL
 
 REGISTER_FILE = PBR.register_file
 REGISTER_PARTIAL_FILE = PBR.register_partial_file
@@ -232,7 +234,7 @@ class ProcRootMTRR(PBR.FixedWhitespaceDelimRecs):
                 __offset += 1
                 if sio.get_word(__offset) == self.__size_pref:
                     __offset += 1
-            self.field[PFC.F_SIZE] = PBR.convert_by_rule(
+            self.field[PFC.F_SIZE] = PBR.conv_by_rules(
                     sio.get_word(__offset)[-8:], { CONV: long,
                     SUFFIX: "MB," } )
 
@@ -533,7 +535,7 @@ class ProcRootLOCKS(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_END] = 0
 
         else:
-            self.field[PFC.F_INDEX] = PBR.convert_by_rule(sio.get_word(0),
+            self.field[PFC.F_INDEX] = PBR.conv_by_rules(sio.get_word(0),
                     { CONV: long, SUFFIX: ":" } )
             if sio.get_word(1) != self.__skip_prefix:
                 __offset = 1
@@ -545,19 +547,19 @@ class ProcRootLOCKS(PBR.FixedWhitespaceDelimRecs):
             __offset += 1
             self.field[PFC.F_LOCK_IO] = sio.get_word(__offset)
             __offset += 1
-            self.field[PFC.F_PID] = PBR.convert_by_rule(
+            self.field[PFC.F_PID] = PBR.conv_by_rules(
                     sio.get_word(__offset), { CONV: long} )
             __offset += 1
             self.field[PFC.F_LOCK_INODE] = sio.get_word(__offset)
             __offset += 1
-            self.field[PFC.F_START] = PBR.convert_by_rule(
+            self.field[PFC.F_START] = PBR.conv_by_rules(
                     sio.get_word(__offset), { CONV: long } )
             __offset += 1
             self.field[PFC.F_END_STRING] = sio.get_word(__offset)
             if self.field[PFC.F_END_STRING] == "EOF":
                 self.field[PFC.F_END] = PDC.INF
             else:
-                self.field[PFC.F_END] = PBR.convert_by_rule(
+                self.field[PFC.F_END] = PBR.conv_by_rules(
                         self.field[PFC.F_END_STRING], { CONV: long } )
 
         self.index = self.field[PFC.F_INDEX]
@@ -1938,22 +1940,22 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
     def parse_bitmap_subrec(self, sio):
         """Parse bitmap subrecord"""
 
-        self.field[PFC.F_PAGES_NOMISS] = PBR.convert_by_rule(sio.get_word(1),
+        self.field[PFC.F_PAGES_NOMISS] = PBR.conv_by_rules(sio.get_word(1),
                 { CONV: long, BEFORE: self.__num_split } )
-        self.field[PFC.F_PAGES_TOTAL] = PBR.convert_by_rule(sio.get_word(1),
+        self.field[PFC.F_PAGES_TOTAL] = PBR.conv_by_rules(sio.get_word(1),
                 { CONV: long, AFTER: self.__num_split } )
 
-        self.field[PFC.F_PAGES_NOMISS_KB] = PBR.convert_by_rule(
+        self.field[PFC.F_PAGES_NOMISS_KB] = PBR.conv_by_rules(
                 sio.get_word(3), { CONV: long, SUFFIX: self.__pages_suff,
                 PREFIX: self.__pages_pref } )
 
         __curr = sio.get_word(4)
         if __curr.endswith(self.__kb_suff):
-            self.field[PFC.F_BITMAP_CHUNK] = PBR.convert_by_rule(__curr,
+            self.field[PFC.F_BITMAP_CHUNK] = PBR.conv_by_rules(__curr,
                     { CONV: long, SUFFIX: self.__kb_suff } )
             self.field[PFC.F_BITMAP_CHUNK] *= 1024
         else:
-            self.field[PFC.F_BITMAP_CHUNK] = PBR.convert_by_rule(__curr,
+            self.field[PFC.F_BITMAP_CHUNK] = PBR.conv_by_rules(__curr,
                     { CONV: long, SUFFIX: self.__b_suff } )
 
         if sio.linewords >= 7:
@@ -1985,27 +1987,27 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
                 __curr = sio.get_word(__off)
             else:
                 __curr = sio.get_word(__off)[1:]
-            self.field[PFC.F_PERCENT] = PBR.convert_by_rule(__curr,
+            self.field[PFC.F_PERCENT] = PBR.conv_by_rules(__curr,
                     { CONV: float, SUFFIX: self.__pc_end } )
 
             __off += 1
-            self.field[PFC.F_REBUILD_DONE] = PBR.convert_by_rule(
+            self.field[PFC.F_REBUILD_DONE] = PBR.conv_by_rules(
                     sio.get_word(__off),
                     { CONV: long, PREFIX: self.__open_npair,
                       BEFORE: self.__num_split } )
-            self.field[PFC.F_REBUILD_TOTAL] = PBR.convert_by_rule(
+            self.field[PFC.F_REBUILD_TOTAL] = PBR.conv_by_rules(
                     sio.get_word(__off),
                     { CONV: long, SUFFIX: self.__close_npair,
                       AFTER: self.__num_split } )
 
             __off += 1
-            self.field[PFC.F_FIN_TIME] = PBR.convert_by_rule(
+            self.field[PFC.F_FIN_TIME] = PBR.conv_by_rules(
                     sio.get_word(__off), { CONV: float,
                     AFTER: self.__value_pref,
                     SUFFIX: self.__finish_suff } )
 
             __off += 1
-            self.field[PFC.F_SPEED] = PBR.convert_by_rule(sio.get_word(__off),
+            self.field[PFC.F_SPEED] = PBR.conv_by_rules(sio.get_word(__off),
                     { CONV: long, AFTER: self.__value_pref,
                     SUFFIX: self.__speed_suff } )
         return
@@ -2014,7 +2016,7 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
     def parse_blocks_subrec(self, sio):
         """Parse device specific subrecord with block level info"""
 
-        self.field[PFC.F_BLOCKS] = PBR.convert_by_rule(sio.get_word(0),
+        self.field[PFC.F_BLOCKS] = PBR.conv_by_rules(sio.get_word(0),
                 { CONV: long } )
         __off = 2
 
@@ -2023,31 +2025,31 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
             __off += 2
 
         if sio.get_word(__off + 1) == self.__chunk_flag:
-            self.field[PFC.F_CHUNK] = PBR.convert_by_rule(sio.get_word(__off),
+            self.field[PFC.F_CHUNK] = PBR.conv_by_rules(sio.get_word(__off),
                     { CONV: long, SUFFIX: self.__k_suff } )
             __off += 2
 
         if sio.get_word(__off + 1) == self.__near_copy_flag:
-            self.field[PFC.F_NEAR_COPY] = PBR.convert_by_rule(
+            self.field[PFC.F_NEAR_COPY] = PBR.conv_by_rules(
                     sio.get_word(__off), { CONV: long } )
             __off += 2
 
         if sio.get_word(__off + 1) == self.__offset_copy_flag:
-            self.field[PFC.F_OFFSET_COPY] = PBR.convert_by_rule(
+            self.field[PFC.F_OFFSET_COPY] = PBR.conv_by_rules(
                     sio.get_word(__off), { CONV: long } )
             __off += 2
 
         if sio.get_word(__off + 1) == self.__far_copy_flag:
-            self.field[PFC.F_FAR_COPY] = PBR.convert_by_rule(
+            self.field[PFC.F_FAR_COPY] = PBR.conv_by_rules(
                     sio.get_word(__off), { CONV: long } )
             __off += 2
 
         __curr = sio.get_word(__off)
-        self.field[PFC.F_TOTAL_PARTS] = PBR.convert_by_rule(__curr,
+        self.field[PFC.F_TOTAL_PARTS] = PBR.conv_by_rules(__curr,
                 { CONV: long, PREFIX: self.__open_list,
                   SUFFIX: self.__close_list,
                   BEFORE: self.__num_split } )
-        self.field[PFC.F_ACTIVE_PARTS] = PBR.convert_by_rule(__curr,
+        self.field[PFC.F_ACTIVE_PARTS] = PBR.conv_by_rules(__curr,
                 { CONV: long, PREFIX: self.__open_list,
                   SUFFIX: self.__close_list, AFTER: self.__num_split } )
 
@@ -2337,7 +2339,7 @@ class ProcRootSOFTIRQS(PBR.FixedWhitespaceDelimRecs):
                     __irq = sio.get_word(0)[:-1]
                     __clist = dict()
                     for __col in range(1, sio.linewords):
-                        __clist[__cpus[__col]] = PBR.convert_by_rule(
+                        __clist[__cpus[__col]] = PBR.conv_by_rules(
                                 sio.get_word(__col), { CONV: long } )
                     self.field[__irq] = __clist
 
@@ -2687,11 +2689,11 @@ class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
         for __subrec in self.unused_recs:
             __line = self.unused_recs[__subrec].strip()
             if __line.startswith(self.__cpu_pref):
-                __cpu = PBR.convert_by_rule( __line, { AFTER: self.__cpu_pref,
+                __cpu = PBR.conv_by_rules( __line, { AFTER: self.__cpu_pref,
                         CONV: long } )
                 __per_cpu[__cpu] = dict()
             else:
-                __val = PBR.convert_by_rule( __line, { AFTER: ":",
+                __val = PBR.conv_by_rules( __line, { AFTER: ":",
                         CONV: long } )
                 if __line.startswith(self.__count_pref):
                     __per_cpu[__cpu][self.__count_key] = __val
@@ -2707,7 +2709,7 @@ class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
         __pl = self.field[PFC.F_PROTECTION].split(",")
         __nums = [0] * len(__pl)
         for __off in range(0, len(__pl)):
-            __nums[__off] = PBR.convert_by_rule(__pl[__off], { CONV: long } )
+            __nums[__off] = PBR.conv_by_rules(__pl[__off], { CONV: long } )
 
         self.field[PFC.F_PROTECTION] = __nums
                 
@@ -2760,8 +2762,8 @@ class ProcRootSCHEDSTAT(PBR.TaggedMultiLineFile):
             __res[PFC.F_SCH_IDLE] = __nums[3]
             __res[PFC.F_WUP_CALLS] = __nums[4]
             __res[PFC.F_WUP_LOC_CPU] = __nums[5]
-            __res[PFC.F_RUNNING] = __nums[6]
-            __res[PFC.F_WAITING] = __nums[7]
+            __res[PFC.F_RUNNING_SUM] = __nums[6]
+            __res[PFC.F_WAITING_SUM] = __nums[7]
             __res[PFC.F_SLICES] = __nums[8]
         return __res            
 
@@ -2872,40 +2874,41 @@ class ProcRootCRYPTO(PBR.TaggedMultiLineFile):
         # EOR indicators
         self.minfields = 0
 
+        __rpl = (PREFIX, SUFFIX, AFTER, BEFORE)
         PBR.add_parse_rule(self, { PREFIX: "name", AFTER: ": ",
-                NAME: PFC.F_NAME } )
+                NAME: PFC.F_NAME }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "driver", AFTER: ": ",
-                NAME: PFC.F_DRIVER } )
+                NAME: PFC.F_DRIVER }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "module", AFTER: ": ",
-                NAME: PFC.F_MODULE } )
+                NAME: PFC.F_MODULE }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "priority", AFTER: ": ", CONV: long,
-                NAME: PFC.F_PRIORITY } )
+                NAME: PFC.F_PRIORITY }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "refcnt", AFTER: ": ", CONV: long,
-                NAME: PFC.F_REF_COUNT } )
+                NAME: PFC.F_REF_COUNT }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "selftest", AFTER: ": ",
-                NAME: PFC.F_SELFTEST } )
+                NAME: PFC.F_SELFTEST }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "flags", AFTER: ": 0x", CONV: long,
-                NAME: PFC.F_FLAGS, BASE: 16 } )
+                NAME: PFC.F_FLAGS, BASE: 16 }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "digestsize", AFTER: ": ",
-                NAME: PFC.F_DIGEST_SIZE, CONV: long } )
+                NAME: PFC.F_DIGEST_SIZE, CONV: long }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "maxauthsize", AFTER: ": ",
-                NAME: PFC.F_MAX_AUTH_SIZE, CONV: long } )
+                NAME: PFC.F_MAX_AUTH_SIZE, CONV: long }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "max keysize", AFTER: ": ",
-                NAME: PFC.F_MAX_KEYSIZE, CONV: long } )
+                NAME: PFC.F_MAX_KEYSIZE, CONV: long }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "min keysize", AFTER: ": ",
-                NAME: PFC.F_MIN_KEYSIZE, CONV: long } )
+                NAME: PFC.F_MIN_KEYSIZE, CONV: long }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "async", AFTER: ": ",
-                NAME: PFC.F_ASYNC } )
+                NAME: PFC.F_ASYNC }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "geniv", AFTER: ": ",
-                NAME: PFC.F_GENIV } )
+                NAME: PFC.F_GENIV }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "ivsize", AFTER: ": ",
-                NAME: PFC.F_IVSIZE, CONV: long } )
+                NAME: PFC.F_IVSIZE, CONV: long }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "blocksize", AFTER: ": ",
-                NAME: PFC.F_BLOCKSIZE, CONV: long } )
+                NAME: PFC.F_BLOCKSIZE, CONV: long }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "type", AFTER: ": ",
-                NAME: PFC.F_TYPE } )
+                NAME: PFC.F_TYPE }, __rpl )
 
-        self.add_eor_rule( "", { WORDS: 0, CONV: str } )
+        self.add_eor_rule( "", { WORDS: 0, CONV: str, ERRVAL: "continue" } )
         return
                  
 
@@ -3171,7 +3174,7 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
             self.next()
 
         if __first == self.__sample_tag:
-            __val = PBR.convert_by_rule(sio.get_word(2), { CONV: float } )
+            __val = PBR.conv_by_rules(sio.get_word(2), { CONV: float } )
             self.next()
 
         if __sec == self.__total_tag:
@@ -3181,9 +3184,9 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_INIT_ROUT] = ""
             self.field[PFC.F_CBACK_ROUT] = ""
 
-            __val = PBR.convert_by_rule(sio.get_word(0), { CONV: long } )
+            __val = PBR.conv_by_rules(sio.get_word(0), { CONV: long } )
             self.field[PFC.F_EVENT_TOTAL] = __val
-            __val = PBR.convert_by_rule(sio.get_word(3), { CONV: float } )
+            __val = PBR.conv_by_rules(sio.get_word(3), { CONV: float } )
             self.field[PFC.F_EVENT_RATE] = __val
 
         else:
@@ -3194,7 +3197,7 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
             else:
                 __val = ""
             self.field[PFC.F_DEFERRABLE] = __val
-            self.field[PFC.F_COUNT] = PBR.convert_by_rule(__first,
+            self.field[PFC.F_COUNT] = PBR.conv_by_rules(__first,
                     { CONV: long } )
 
         self.field[PFC.F_VERSION] = self.__hold[PFC.F_VERSION]
@@ -3251,13 +3254,13 @@ class ProcRootPAGETYPEINFO(PBR.FixedWhitespaceDelimRecs):
         __first = sio.get_word(0)
 
         if __first == self.__block_order_pref:
-            __val = PBR.convert_by_rule(sio.get_word(3), { CONV: long } )
+            __val = PBR.conv_by_rules(sio.get_word(3), { CONV: long } )
             self.__hold[PFC.F_BLOCK_ORDER] = __val
             self.next()
             __first = sio.get_word(0)
 
         if __first == self.__per_block_pref:
-            __val = PBR.convert_by_rule(sio.get_word(3), { CONV: long } )
+            __val = PBR.conv_by_rules(sio.get_word(3), { CONV: long } )
             self.__hold[PFC.F_PAGES_PER_BLOCK] = __val
             self.next()
             __first = sio.get_word(0)
@@ -3293,7 +3296,7 @@ class ProcRootPAGETYPEINFO(PBR.FixedWhitespaceDelimRecs):
             __off = self.__start_agg_num
             for __num in range(0, len(__mig)):
                 __name = __mig[__num]
-                self.field[PFC.F_MIGR_AGG][__name] = PBR.convert_by_rule(
+                self.field[PFC.F_MIGR_AGG][__name] = PBR.conv_by_rules(
                         sio.get_word(__off), { CONV: long } )
                 __off += 1
         else:
@@ -3302,7 +3305,7 @@ class ProcRootPAGETYPEINFO(PBR.FixedWhitespaceDelimRecs):
             for __num in range(self.__start_ord_num, sio.linewords):
                 __name = __ord[__off]
                 __off += 1
-                self.field[PFC.F_MIGR_BRKOUT][__name] = PBR.convert_by_rule(
+                self.field[PFC.F_MIGR_BRKOUT][__name] = PBR.conv_by_rules(
                         sio.get_word(__num), { CONV: long } )
 
         self.field[PFC.F_BLOCK_ORDER] = self.__hold[PFC.F_BLOCK_ORDER]
@@ -3361,3 +3364,301 @@ class ProcRootDEVICES(PBR.FixedWhitespaceDelimRecs):
 
 REGISTER_FILE("/proc/devices", ProcRootDEVICES)
 REGISTER_PARTIAL_FILE("devices", ProcRootDEVICES)
+
+
+
+#
+class ProcRootTIMERLIST(PBR.TaggedMultiLineFile):
+    """
+    Parse /proc/timer_list file
+    """
+
+# source: kernel/time/timer_list.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcRootHandlers" to reduce the size of this module.
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 0
+
+        self.__no_clock = -1
+        self.__no_timer = -1
+        self.__empty_tag = ""
+        self.__empty_rec = ""
+        self.__act_timer_clue = ", S:"
+        self.__glinfo = ("v0.0", 0, 0)
+        self.__bcast_clue = "Broadcast device"
+
+        __rpl = (HAS, PREFIX, SUFFIX, PSUB, AFTER, BEFORE)
+
+        PBR.add_parse_rule(self, { PREFIX: "Timer List Version:",
+                NAME: PFC.F_VERSION } )
+        PBR.add_parse_rule(self, { PREFIX: "HRTIMER_MAX_CLOCK_BASES:",
+                NAME: PFC.F_HRT_MAX_CL_BASES, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "now at", SUFFIX: "nsecs",
+                NAME: PFC.F_TIME_NOW, CONV: long } )
+
+        PBR.add_parse_rule(self, { PREFIX: "cpu:",
+                NAME: PFC.F_CPU, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .expires_next", AFTER: ":",
+                NAME: PFC.F_NEXT_EXPIRE, CONV: long, SUFFIX: "nsecs" },
+                __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .hres_active", AFTER: ":",
+                NAME: PFC.F_HRES_ACTIVE, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .nr_events", AFTER: ":",
+                NAME: PFC.F_NR_EVENTS, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .nr_retries", AFTER: ":",
+                NAME: PFC.F_NR_RETRIES, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .nr_hangs", AFTER: ":",
+                NAME: PFC.F_NR_HANGS, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .max_hang_time", AFTER: ":",
+                NAME: PFC.F_MAX_HANG_TIME, CONV: long, SUFFIX: "nsecs" },
+                __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .nohz_mode", AFTER: ":",
+                NAME: PFC.F_NOHZ_MODE, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .idle_tick", AFTER: ":",
+                NAME: PFC.F_IDLE_TICK, CONV: long, SUFFIX: "nsecs" },
+                __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .tick_stopped", AFTER: ":",
+                NAME: PFC.F_TICK_STOP, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .idle_jiffies", AFTER: ":",
+                NAME: PFC.F_IDLE_JIFFIES, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .idle_calls", AFTER: ":",
+                NAME: PFC.F_IDLE_CALLS, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .idle_sleeps", AFTER: ":",
+                NAME: PFC.F_IDLE_SLEEPS, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .idle_entrytime", AFTER: ":",
+                NAME: PFC.F_IDLE_ENTRY, CONV: long, SUFFIX: "nsecs" },
+                __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .idle_waketime", AFTER: ":",
+                NAME: PFC.F_IDLE_WAKE, CONV: long, SUFFIX: "nsecs" },
+                __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .idle_exittime", AFTER: ":",
+                NAME: PFC.F_IDLE_EXIT, CONV: long, SUFFIX: "nsecs" },
+                __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .idle_sleeptime", AFTER: ":",
+                NAME: PFC.F_IDLE_SLEEPTIME, CONV: long, SUFFIX: "nsecs" },
+                __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .iowait_sleeptime", AFTER: ":",
+                NAME: PFC.F_IOWAIT_SLEEP, CONV: long, SUFFIX: "nsecs" },
+                __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .last_jiffies", AFTER: ":",
+                NAME: PFC.F_LAST_JIFFIES, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .next_jiffies", AFTER: ":",
+                NAME: PFC.F_NEXT_JIFFIES, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .idle_expires", AFTER: ":",
+                NAME: PFC.F_IDLE_EXPIRES, CONV: long, SUFFIX: "nsecs" },
+                __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "jiffies:", 
+                NAME: PFC.F_JIFFIES, CONV: long }, __rpl )
+
+        PBR.add_parse_rule(self, { PREFIX: "Tick Device: mode:",
+                NAME: PFC.F_TICK_DEV, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "Per CPU device:",
+                NAME: PFC.F_PER_CPU_DEV, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "Clock Event Device: ",
+                NAME: PFC.F_CLOCK_EV_DEV }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: " max_delta_ns:",
+                NAME: PFC.F_MAX_DELTA, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: " min_delta_ns:",
+                NAME: PFC.F_MIN_DELTA, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: " mult:",
+                NAME: PFC.F_MULT, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: " shift:",
+                NAME: PFC.F_SHIFT, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: " mode:",
+                NAME: PFC.F_MODE, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: " next_event:", CONV: long,
+                NAME: PFC.F_NEXT_EVENT, SUFFIX: "nsecs" },  __rpl )
+        PBR.add_parse_rule(self, { PREFIX: " set_next_event:",
+                NAME: PFC.F_SET_NEXT_EVENT }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: " set_mode:",
+                NAME: PFC.F_SET_MODE }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: " event_handler:",
+                NAME: PFC.F_EVENT_HANDLER }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: " retries:",
+                NAME: PFC.F_RETRIES, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "tick_broadcast_mask:",
+                NAME: PFC.F_TICK_BCAST_MASK }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "tick_broadcast_oneshot_mask:",
+                NAME: PFC.F_TICK_BCAST_ONESHOT }, __rpl )
+        PBR.add_parse_rule(self, { HAS: self.__bcast_clue,
+                NAME: PFC.F_BCAST_DEVICE }, __rpl )
+
+        self.add_eor_rule( "", { WORDS: 0, CONV: str, ERRVAL: "continue" } )
+
+        __rs = []
+        __rs = __rs + [ (PFC.F_CLOCK_ID, { PREFIX: " clock", SUFFIX: ":",
+                CONV: long }) ]
+        __rs = __rs + [ (PFC.F_CLOCK_BASE, { PREFIX: "  .base:", BASE: 16,
+                CONV: long }) ]
+        __rs = __rs + [ (PFC.F_CLOCK_INDEX, { PREFIX: "  .index:",
+                CONV: long }) ]
+        __rs = __rs + [ (PFC.F_CLOCK_RES, { PREFIX: "  .resolution:",
+                SUFFIX: "nsecs", CONV: long }) ]
+        __rs = __rs + [ (PFC.F_CLOCK_GETTIME, { PREFIX: "  .get_time:", }) ]
+        __rs = __rs + [ (PFC.F_CLOCK_OFFSET, { PREFIX: "  .offset:",
+                SUFFIX: "nsecs",  CONV: long }) ]
+
+        __rs = __rs + [ (PFC.F_ACTIVE_TIMERS, { HAS: "active timers:",
+                CONV: str }) ]
+
+        __rs = __rs + [ (PFC.F_TIMER_NUM, { HAS: ", S:",
+                CONV: long, PSUB: 0, AFTER: "#", BEFORE: ":" }, __rpl) ]
+        __rs = __rs + [ (PFC.F_TIMER_ADDR, { HAS: ", S:",
+                CONV: long, BASE: 16, PSUB: 1, AFTER: "<", BEFORE: ">" },
+                __rpl) ]
+        __rs = __rs + [ (PFC.F_TIMER_FUNC, { HAS: ", S:",
+                CONV: str, PSUB: 2, BEFORE: "," }, __rpl) ]
+        __rs = __rs + [ (PFC.F_TIMER_STATE, { HAS: ", S:",
+                CONV: long, BASE: 16, PSUB: 3, AFTER: "S:", BEFORE: "," },
+                __rpl) ]
+        __rs = __rs + [ (PFC.F_START_SITE, { HAS: ", S:",
+                CONV: str, PSUB: 4, BEFORE: "," }, __rpl) ]
+
+        __rs = __rs + [ (PFC.F_SOFT_EXP, { HAS: " # expires at ",
+                CONV: long, PSUB: 3, BEFORE: "-"}, __rpl) ]
+        __rs = __rs + [ (PFC.F_EXP, { HAS: " # expires at ",
+                CONV: long, PSUB: 3, AFTER: "-" }, __rpl) ]
+        __rs = __rs + [ (PFC.F_SOFT_EXP_DIFF, { HAS: " # expires at ",
+                CONV: long, PSUB: 6 }, __rpl) ]
+        __rs = __rs + [ (PFC.F_EXP_DIFF, { HAS: " # expires at ",
+                CONV: long, PSUB: 8 }, __rpl) ]
+
+        self.__rset = __rs
+
+        self.__active_tag = PFC.F_ACTIVE_TIMERS
+        self.__clock_tag = PFC.F_CLOCK_ID
+
+        return
+
+    def parse_by_ruleset(self, buff):
+        """Match records with the appropriate parse rule"""
+
+        __matched = False
+        __result = dict()
+
+        __tag = self.__empty_tag
+        __val = self.__empty_tag
+
+        for __cset in self.__rset:
+            __key = __cset[0]
+            __rule = __cset[1]
+            try:
+                __rpl = __cset[2]
+            except IndexError:
+                __rpl = ""
+            if PBR.matches_all_crit(buff, __rule, __rpl):
+                __matched = True
+                __tag = __key
+                __val = PBR.conv_by_rules(buff, __rule, __rpl)
+                if type(__val) is str:
+                    __val = __val.strip()
+                __result[__tag] = __val
+
+        return(__matched, __result)
+
+
+    def extra_next(self, sio):
+
+        if self.lines_read == 0:
+            raise StopIteration
+
+        try:
+            if self.field[PFC.F_BCAST_DEVICE] == self.__bcast_clue:
+                self.field[PFC.F_BCAST_DEVICE] = True
+            else:
+                self.field[PFC.F_BCAST_DEVICE] = False
+        except KeyError:
+            self.field[PFC.F_BCAST_DEVICE] = False
+   
+        if self.field[PFC.F_VERSION] != "":
+            __ver = self.field[PFC.F_VERSION].strip()
+            __clb = self.field[PFC.F_HRT_MAX_CL_BASES]
+            __now = self.field[PFC.F_TIME_NOW]
+            self.__glinfo = (__ver, __clb, __now)
+            self.next()
+
+        self.field[PFC.F_VERSION] = self.__glinfo[0]
+        self.field[PFC.F_HRT_MAX_CL_BASES] = self.__glinfo[1]
+        self.field[PFC.F_TIME_NOW] = self.__glinfo[2]
+
+        __clock = self.__no_clock
+        __clock_list = dict()
+        __in_active = False
+        __detail = dict()
+        __actnum = self.__no_timer
+        __st_comm = ""
+        __st_pid = PDC.NO_PID
+
+        for __subrec in self.unused_recs:
+            __line = self.unused_recs[__subrec]
+            __hit, __plist = self.parse_by_ruleset(__line)
+
+            if __line.find(self.__act_timer_clue) != -1:
+                __last = __line.split(",")[-1:][0].strip()
+                __parts = __last.rpartition("/")
+                if len(__parts) == 3:
+                    __st_comm = __parts[0]
+                    __st_pid = PBR.conv_by_rules(__parts[2], { CONV: long } )
+
+            for __tag in __plist:
+                __val = __plist[__tag]
+                if __tag == self.__clock_tag:
+                    if len(__detail) > 0:
+                        try:
+                            __active = __detail[self.__active_tag]
+                            try:
+                                __notimer = __active[self.__no_timer]
+                                if len(__notimer) == 0:
+                                    __active.pop(self.__no_timer, None)
+                            except KeyError:
+                                pass
+                        except KeyError:
+                            __detail[self.__active_tag] = dict()
+                        
+                    __in_active = False
+                    __detail = dict()
+                    __seq = len(__clock_list)
+                    __clock_list[__seq] = __detail
+                    __clock = __val
+                elif __tag == self.__active_tag:
+                    __in_active = True
+                    __active = dict()
+                    __detail[__tag] = __active
+                    __actnum = self.__no_timer
+
+                if __in_active:
+                    if __plist.has_key(PFC.F_TIMER_NUM):
+                        __actnum = __plist[PFC.F_TIMER_NUM]
+
+                    if __actnum != self.__no_timer:
+                        try:
+                            __act = __active[__actnum]
+                        except KeyError:
+                            __act = dict()
+                            __active[__actnum] = __act
+
+                        if __st_pid != PDC.NO_PID:
+                            __act[PFC.F_START_COMM] = __st_comm
+                            __act[PFC.F_START_PID] = __st_pid
+                            __st_comm = ""
+                            __st_pid = PDC.NO_PID
+
+                    if __tag != self.__active_tag:
+                        __act[__tag] = __val
+
+                elif __clock != self.__no_clock:
+                    __detail[__tag] = __val
+
+        self.field[PFC.F_CLOCK_LIST] = __clock_list
+
+        for __key in self.field:
+            if type(self.field[__key]) is str:
+                self.field[__key] = self.field[__key].strip()
+
+        return(self.field)
+
+REGISTER_FILE("/proc/timer_list", ProcRootTIMERLIST)
+REGISTER_PARTIAL_FILE("timer_list", ProcRootTIMERLIST)

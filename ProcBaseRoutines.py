@@ -30,6 +30,7 @@ BEFORE_VAL = "before"
 AFTER_VAL = "after"
 HAS_VAL = "has"
 WORDS_VAL = "words"
+SUBWORD = "subword"
 
 # --
 PROC_PATH_PREFIX_LIST = ( "/proc", "/proc/", "/proc/net/", "/proc/self/net/",
@@ -48,7 +49,10 @@ def hilo_pair_from_str(raw):
 
     __parts = raw.partition(".")
     if len(__parts) == 3:
-        __res = long(__parts[0]) * 1000000 + long(__parts[2])
+        try:
+            __res = long(__parts[0]) * 1000000 + long(__parts[2])
+        except ValueError:
+            __res = 0
     else:
         __res = 0
 
@@ -79,49 +83,109 @@ def error_by_rule(rule):
 
     return __err
 
-def matches_all_crit(rawdata, rule):
+def apply_string_check(rawdata, check, val):
+    """
+    Apply the selection criteria and return hit/miss and transformed string
+    """
+
+    __hit = True
+    __trans = rawdata
+
+    if check is WORDS_VAL:
+        __hit = val == len(__trans.split())
+
+    if check is HAS_VAL:
+        __hit = __trans.find(val) != -1
+
+    if check is SUBWORD:
+        __split = __trans.split()
+        __hit = val < len(__split)
+        if __hit:
+            __trans = __split[val]
+
+    if check is PREFIX_VAL:
+        __hit = __trans.startswith(val)
+        if __hit:
+            __trans = __trans[len(val):]
+
+    if check is SUFFIX_VAL:
+        __hit = __trans.endswith(val)
+        if __hit:
+            __trans = __trans[:-len(val)]
+
+    if check is BEFORE_VAL:
+        __split = __trans.partition(val)
+        if len(__split) == 3:
+            if len(__split[1]) > 0:
+                __trans = __split[0]
+            else:
+                __hit = False
+        else:
+            __hit = False
+
+    if check is AFTER_VAL:
+        __split = __trans.partition(val)
+        if len(__split) != 3:
+            __hit = False
+        elif len(__split[1]) == 0:
+            __hit = False
+        else:
+            __trans = __split[2]
+
+    return(__hit, __trans)
+
+def matches_all_crit(rawdata, rule, order = ""):
     """
     Test to see if 'rawdata' passes all selection tests in the given 
     parse rule.
     """
 
     __result = True
+    __raw = rawdata
+    __crit = dict()
+    __def_order = ( WORDS_VAL, HAS_VAL, PREFIX_VAL, SUFFIX_VAL, BEFORE_VAL,
+            AFTER_VAL )
 
-    if __result and rule.has_key(WORDS_VAL):
-        __result = rule[HAS_VAL] == len(rawdata.split())
+    if order == "":
+        order = __def_order
 
-    if __result and rule.has_key(HAS_VAL):
-        __result = rawdata.find(rule[HAS_VAL]) != -1
+#    print "dbg:: MAC: order({olist})".format(olist=str(order))
 
-    if __result and rule.has_key(PREFIX_VAL):
-        __result = rawdata.startswith(rule[PREFIX_VAL])
-        rawdata = rawdata[len(rule[PREFIX_VAL]):]
+    for __check in order:
+        __crit[__check] = True
+        if __result and rule.has_key(__check):
+            __val = rule[__check]
+            __result, __raw = apply_string_check(__raw, __check, __val)
+#            print "dbg:: MAC: L1: rc({rc}) ch({ch}) v({val}) buf({raw})".format(ch=__check, rc=__result, raw=__raw, val=__val)
 
-    if __result and rule.has_key(SUFFIX_VAL):
-        __result = rawdata.endswith(rule[SUFFIX_VAL])
-        rawdata = rawdata[:-len(rule[SUFFIX_VAL])]
+#    print "dbg:: MAC: break: crit({crit})".format(crit=str(__crit))
 
-    if __result and rule.has_key(BEFORE_VAL):
-        __split = rawdata.partition(rule[BEFORE_VAL])
-        if len(__split) == 3:
-            if len(__split[1]) > 0:
-                rawdata = __split[0]
-            else:
-                __result = False
+    for __check in rule:
+#        print "dbg:: MAC: L2.1: rc({rc}) ch({ch}) has({has})".format(ch=__check, rc=__result, has=__crit.has_key(__check))
+ 
+        if not __result:
+            __need = False
+        elif __crit.has_key(__check): 
+            __need = not __crit[__check]
         else:
-            __result = False
+            __need = True
+      
+        if __need:
+            __val = rule[__check]
+            __result, __raw = apply_string_check(__raw, __check, __val)
+#            print "dbg:: MAC: L2.2: rc({rc}) ch({ch}) v({val}) buf({raw})".format(ch=__check, rc=__result, raw=__raw, val=__val)
 
-    if __result and rule.has_key(AFTER_VAL):
-        __split = rawdata.partition(rule[AFTER_VAL])
-        if len(__split) != 3:
-            __result = False
-        elif len(__split[1]) == 0:
-            __result = False
+    return __result
 
-    return __result    
+def conv_by_rules(rawdata, rule, order=""):
+    """Apply ruleset to string, by order if given, return parsed result"""
 
-def convert_by_rule(rawdata, rule):
-    """Apply the given ruleset to the specified string and return the result"""
+    __def_order = ( SUBWORD, BEFORE_VAL, AFTER_VAL, PREFIX_VAL, SUFFIX_VAL )
+
+    if order == "":
+        order = __def_order
+
+#    print "dbg:: CBR: order({order})".format(order=str(order))
 
     try:
         __conv = rule[CONVERSION]
@@ -133,59 +197,39 @@ def convert_by_rule(rawdata, rule):
     except KeyError:
         __base = 10
 
-    try:
-        __pref = rule[PREFIX_VAL]
-    except KeyError:
-        __pref = ""
-
-    try:
-        __suff = rule[SUFFIX_VAL]
-    except KeyError:
-        __suff = ""
-
-    try:
-        __before = rule[BEFORE_VAL]
-    except KeyError:
-        __before = ""
-
-    try:
-        __after = rule[AFTER_VAL]
-    except KeyError:
-        __after = ""
-
+    __hit = True
     __val = rawdata
+    __used = dict()
 
+    for __cr in order:
+        __used[__cr] = True
+        if __hit and rule.has_key(__cr):
+            __hit, __val = apply_string_check(__val, __cr, rule[__cr])
 
-    if __before != "":
-        __split = __val.partition(__before)
-        __val = __split[0]
+    for __cr in rule:
+#        print "dbg:: CBR: L2.1: rc({rc}) ch({ch}) has({has})".format(ch=__cr, rc=__hit, has=__used.has_key(__cr))
+        if not __hit:
+            __need = False
+        elif __used.has_key(__cr):
+            __need = not __used[__cr]
+        else:
+            __need = True
 
-    if __after != "":
-        __split = __val.partition(__after)
-        if len(__split) == 3:
-            __val = __split[2]
+        if __need:
+            __hit, __val = apply_string_check(__val, __cr, rule[__cr])
+#            print "dbg:: CBR: L2.2: rc({rc}) ch({ch}) v({val}) buf({raw})".format(ch=__cr, rc=__hit, raw=__val, val=rule[__cr])
 
-    if __val.startswith(__pref):
-        __val = __val[len(__pref):]
-
-    if __val.endswith(__suff):
-        __val = __val[:len(__val) - len(__suff)]
-
-    if __conv == int:
-        try:
+    try:
+        if not __hit:
+            __val = error_by_rule(rule)
+        elif __conv == int:
             __val = int(__val, __base)
-        except ValueError:
-            __val = error_by_rule(rule)
-    elif __conv == long:
-        try:
+        elif __conv == long:
             __val = long(__val, __base)
-        except ValueError:
-            __val = error_by_rule(rule)
-    elif __conv == float:
-        try:
+        elif __conv == float:
             __val = float(__val)
-        except ValueError:
-            __val = error_by_rule(rule)
+    except ValueError:
+        __val = error_by_rule(rule)
 
     return __val
 
@@ -352,7 +396,7 @@ def show_handler_file_path(cl_instance):
                 tcl=cl_instance.__class__.__name__)
     return HANDLER_TO_PATH[__key]
 
-def add_parse_rule(handler, rule):
+def add_parse_rule(handler, rule, order=""):
     """
     Append the supplied ruleset to the list of parsing rules defined
     for the instance of the file parser.
@@ -370,7 +414,7 @@ def add_parse_rule(handler, rule):
     else:
         handler.floating_rule[__rn] = False
 
-    handler.parse_rule[__rn] = rule
+    handler.parse_rule[__rn] = (rule, order)
 
 # ---
 class ProcNetNULL(object):
@@ -457,7 +501,12 @@ class FixedWhitespaceDelimRecs(object):
             __val = sio.lineparts[__off]
             for __rulenum in self.parse_rule:
                 if self.floating_rule[__rulenum]:
-                    __cr = self.parse_rule[__rulenum]
+                    __rinfo = self.parse_rule[__rulenum]
+                    __cr = __rinfo[0]
+                    try:
+                        __ord = __rinfo[1]
+                    except IndexError:
+                        __ord = ""
                     __name = __cr[FIELD_NAME]
                     __match = True
 
@@ -469,14 +518,19 @@ class FixedWhitespaceDelimRecs(object):
                         __match = __match and __val.endswith(__cr[SUFFIX_VAL])
 
                     if __match:
-                        self.field[__name] = convert_by_rule(__val, __cr)
+                        self.field[__name] = conv_by_rules(__val, __cr, __ord)
                         __hit_rule[__rulenum] = 1
 
         # -- run through the rules and convert fixed columns as directed, this
         # -- has to be done separately to make sure error values are set for
         # -- fields that match columns past the ones we got in the last read.
         for __rulenum in self.parse_rule:
-            __cr = self.parse_rule[__rulenum]
+            __rinfo = self.parse_rule[__rulenum]
+            __cr = __rinfo[0]
+            try:
+                __ord = __rinfo[1]
+            except IndexError:
+                __ord = ""
             if __cr.has_key(FIELD_NUMBER) and __cr.has_key(FIELD_NAME):
                 __hit_rule[__rulenum] = 1
                 __off = __cr[FIELD_NUMBER]
@@ -487,11 +541,12 @@ class FixedWhitespaceDelimRecs(object):
                 else:
 #                    print "dbg:: nx/fixed: v({val}) r({rule})".format(
 #                            val=sio.lineparts[__off], rule=str(__cr))
-                    self.field[__name] = convert_by_rule(sio.lineparts[__off],
-                                             __cr)
+                    self.field[__name] = conv_by_rules(sio.lineparts[__off],
+                                             __cr, __ord)
 
         for __rulenum in self.parse_rule:
-            __cr = self.parse_rule[__rulenum]
+            __rinfo = self.parse_rule[__rulenum]
+            __cr = __rinfo[0]
             if __cr.has_key(FIELD_NAME) and not __hit_rule.has_key(__rulenum):
                 self.field[__cr[FIELD_NAME]] = error_by_rule(__cr)
 #                print "dbg:: nx/nohit: n:{rn:d} f({field}) r({rule})".format(
@@ -889,8 +944,10 @@ class TaggedMultiLineFile(object):
         self.skipped = ""
         self.eor_value = ""
         self.eor_rule = dict()
+        self.eor_order = ""
         self.parse_rule = dict()
         self.floating_rule = dict()
+        self.lines_read = 0
 
         self.extra_init(*opts)
 
@@ -909,13 +966,14 @@ class TaggedMultiLineFile(object):
         """No-op version of logical record post-processing method"""
         return(self.field)
 
-    def add_eor_rule(self, eor, rule):
+    def add_eor_rule(self, eor, rule, order=""):
         """
         Define a parse rule for detecting an 'end of logical record'
         line in the target file.
         """
         self.eor_value = eor
         self.eor_rule = rule
+        self.eor_order = order
 
     def next(self):
         """
@@ -929,6 +987,7 @@ class TaggedMultiLineFile(object):
 
         __done = False
         __empty = True
+        self.lines_read = 0
 
         self.field = dict()
         self.unused_recs = dict()
@@ -936,7 +995,8 @@ class TaggedMultiLineFile(object):
         sio = self.curr_sio
 
         for __rulenum in self.parse_rule:
-            __cr = self.parse_rule[__rulenum]
+            __rinfo = self.parse_rule[__rulenum]
+            __cr = __rinfo[0]
             if __cr.has_key(FIELD_NAME):
                 self.field[__cr[FIELD_NAME]] = error_by_rule(__cr)
 
@@ -944,31 +1004,42 @@ class TaggedMultiLineFile(object):
             try:
                 sio.read_line()
                 __subrec += 1
-                __line = sio.buff[:-1]
+                self.lines_read += 1
+#                __line = sio.buff[:-1]
+                __line = sio.buff.strip("\n")
+#                print "dbg:: Tagged: l({line})".format(line=__line)
                 __matches = 0
 
                 for __rulenum in self.parse_rule:
-                    __cr = self.parse_rule[__rulenum]
+                    __rinfo = self.parse_rule[__rulenum]
+                    __cr = __rinfo[0]
+                    try:
+                        __ord = __rinfo[1]
+                    except IndexError:
+                        __ord = ""
                     if __cr.has_key(FIELD_NAME):
-                        if matches_all_crit(__line, __cr):
+                        if matches_all_crit(__line, __cr, __ord):
+#                            print "dbg:: Tagged: pr.. hit r({rule}) o({ord})".format(rule=str(__cr), ord=str(__ord))
                             __empty = False
-                            __parsed = convert_by_rule(__line, __cr)
+                            __parsed = conv_by_rules(__line, __cr, __ord)
                             self.field[__cr[FIELD_NAME]] = __parsed
                             __matches += 1
+#                            print "dbg:: Tagged: pr.. hit v({conv})".format(conv=__parsed)
+#                        else:
+#                            print "dbg:: Tagged: pr.. mis r({rule})".format(rule=str(__cr))
 
                 if __matches == 0:
                     self.unused_recs[__subrec] = __line
 
-                __is_eor = convert_by_rule(__line, self.eor_rule)
-                if __is_eor == self.eor_value:
+#                print "dbg:: Tagged: eor: l:{line} v({val}) r({rule})".format(line=__line, val=self.eor_value, rule=str(self.eor_rule))
+                __is_eor = conv_by_rules(__line, self.eor_rule, self.eor_order)
+                if __is_eor == self.eor_value and not __empty:
                     __done = True
+#                print "dbg:: Tagged: eor: done:{eor} v({val}) ch({ch})".format(eor=__done, val=__is_eor, ch=self.eor_value)
                     
             except StopIteration:
                 self.at_eof = True
                 __done = True
-
-        if __empty:
-            raise StopIteration
 
         return(self.extra_next(sio))
 

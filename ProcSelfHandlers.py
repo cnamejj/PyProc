@@ -809,7 +809,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 
         for __mount_opt in self.__nfs_mount_opts_long:
             try:
-                self.field[__mount_opt] = PBR.convert_by_rule(
+                self.field[__mount_opt] = PBR.conv_by_rules(
                         __opt[__mount_opt],
                         { CONV: long } )
             except KeyError:
@@ -817,7 +817,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 
         for __mount_opt in self.__nfs_mount_opts_hex:
             try:
-                self.field[__mount_opt] = PBR.convert_by_rule(
+                self.field[__mount_opt] = PBR.conv_by_rules(
                         __opt[__mount_opt],
                         { CONV: long, BASE: 16 } )
             except KeyError:
@@ -837,7 +837,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
     def parse_age_line(self, sio):
         """Parse an 'age' subrecord"""
 
-        self.field[PFC.F_AGE] = PBR.convert_by_rule(sio.get_word(1),
+        self.field[PFC.F_AGE] = PBR.conv_by_rules(sio.get_word(1),
                 { CONV: long } )
         return
 
@@ -852,15 +852,15 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 #            print "dbg:: Caps post-BOL key'{key}' val'{val}'".format(key=__key,
 #                    val=__caps[__key])
 
-        self.field[PFC.F_CAPS] = PBR.convert_by_rule(__caps[PFC.F_CAPS],
+        self.field[PFC.F_CAPS] = PBR.conv_by_rules(__caps[PFC.F_CAPS],
                 { CONV: long, BASE: 16, PREFIX: "0x" } )
-        self.field[PFC.F_WTMULT] = PBR.convert_by_rule(__caps[PFC.F_WTMULT],
+        self.field[PFC.F_WTMULT] = PBR.conv_by_rules(__caps[PFC.F_WTMULT],
                 { CONV: long } )
-        self.field[PFC.F_DTSIZE] = PBR.convert_by_rule(__caps[PFC.F_DTSIZE],
+        self.field[PFC.F_DTSIZE] = PBR.conv_by_rules(__caps[PFC.F_DTSIZE],
                 { CONV: long } )
-        self.field[PFC.F_BSIZE] = PBR.convert_by_rule(__caps[PFC.F_BSIZE],
+        self.field[PFC.F_BSIZE] = PBR.conv_by_rules(__caps[PFC.F_BSIZE],
                 { CONV: long } )
-        self.field[PFC.F_NAMELEN] = PBR.convert_by_rule(__caps[PFC.F_NAMELEN],
+        self.field[PFC.F_NAMELEN] = PBR.conv_by_rules(__caps[PFC.F_NAMELEN],
                 { CONV: long } )
         return
 
@@ -872,11 +872,11 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         """
         __opts = PBR.breakout_option_list(sio.get_word(1))
 
-        self.field[PFC.F_NFSV4_BM0] = PBR.convert_by_rule(
+        self.field[PFC.F_NFSV4_BM0] = PBR.conv_by_rules(
                 __opts[PFC.F_NFSV4_BM0], { CONV: long, BASE: 16 } )
-        self.field[PFC.F_NFSV4_BM1] = PBR.convert_by_rule(
+        self.field[PFC.F_NFSV4_BM1] = PBR.conv_by_rules(
                 __opts[PFC.F_NFSV4_BM1], { CONV: long, BASE: 16 } )
-        self.field[PFC.F_NFSV4_ACL] = PBR.convert_by_rule(
+        self.field[PFC.F_NFSV4_ACL] = PBR.conv_by_rules(
                 __opts[PFC.F_NFSV4_ACL], { CONV: long, BASE: 16 } )
 
         if __opts.has_key(PFC.F_SESSIONS):
@@ -896,11 +896,11 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         """Parse security subrecord"""
 
         __optlist = PBR.breakout_option_list(sio.get_word(1))
-        self.field[PFC.F_FLAVOR] = PBR.convert_by_rule(
+        self.field[PFC.F_FLAVOR] = PBR.conv_by_rules(
                 __optlist[self.__prefix_flavor],
                 { CONV: long } )
         try:
-            self.field[PFC.F_PSEUDOFLAVOR] = PBR.convert_by_rule(
+            self.field[PFC.F_PSEUDOFLAVOR] = PBR.conv_by_rules(
                     __optlist[self.__prefix_pseudoflavor],
                     { CONV: long } )
         except KeyError:
@@ -1037,8 +1037,8 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         elif __rectype == self.__flag_xprt_tcp:
             __val = self.parse_xprt_tcp(sio)
 
-        else:
-            print "dbg:: xprt mismatch '{line}'".format(line=sio.buff[:-1])
+#        else:
+#            print "dbg:: xprt mismatch '{line}'".format(line=sio.buff[:-1])
 
         self.field[PFC.F_XPRT_STATS][__rectype] = __val
         return
@@ -1077,8 +1077,8 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
             self.__is_per_op = True
         elif self.__is_per_op:
             self.parse_per_op_line(sio)
-        else:
-            print "dbg:: Ignoring rec '{line}'".format(line=sio.buff[:-1])
+#        else:
+#            print "dbg:: Ignoring rec '{line}'".format(line=sio.buff[:-1])
         return
 
     def next(self):
@@ -1290,7 +1290,7 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
 
             try:
                 __field = self.__pref2field[__pref]
-                self.field[__field] = PBR.convert_by_rule(sio.get_word(1),
+                self.field[__field] = PBR.conv_by_rules(sio.get_word(1),
                         { CONV: long } )
             except KeyError:
                 pass
@@ -1466,7 +1466,7 @@ class ProcSelfSTATUS(PBR.TaggedMultiLineFile):
 
         __cr = { CONV: long, ERRVAL: PDC.NO_UID }
         for __off in range(0, min(len(__split), len(__conv))):
-            __conv[__off] = PBR.convert_by_rule(__split[__off], __cr)
+            __conv[__off] = PBR.conv_by_rules(__split[__off], __cr)
 
         self.field[PFC.F_UID] = __conv[0]
         self.field[PFC.F_EUID] = __conv[1]
@@ -1482,7 +1482,7 @@ class ProcSelfSTATUS(PBR.TaggedMultiLineFile):
 
         __cr = { CONV: long, ERRVAL: PDC.NO_UID }
         for __off in range(0, min(len(__split), len(__conv))):
-            __conv[__off] = PBR.convert_by_rule(__split[__off], __cr)
+            __conv[__off] = PBR.conv_by_rules(__split[__off], __cr)
 
         self.field[PFC.F_GID] = __conv[0]
         self.field[PFC.F_EGID] = __conv[1]
@@ -1496,7 +1496,7 @@ class ProcSelfSTATUS(PBR.TaggedMultiLineFile):
 
         for __off in range(0, len(__conv)):
             __val = __conv[__off]
-            __conv[__off] = PBR.convert_by_rule(__val, { CONV: long,
+            __conv[__off] = PBR.conv_by_rules(__val, { CONV: long,
                     ERRVAL: PDC.NO_GID } )
 
         self.field[PFC.F_GROUPS] = __conv
@@ -1621,12 +1621,12 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
 
     def extra_next(self, sio):
         __mix = self.field[PFC.F_PROGRAM]
-        self.field[PFC.F_PID] = PBR.convert_by_rule(__mix, { NAME: PFC.F_PID,
+        self.field[PFC.F_PID] = PBR.conv_by_rules(__mix, { NAME: PFC.F_PID,
                 AFTER: "(", BEFORE: ",", CONV: long } )
-        self.field[PFC.F_THREADS] = PBR.convert_by_rule(__mix, {
+        self.field[PFC.F_THREADS] = PBR.conv_by_rules(__mix, {
                 NAME: PFC.F_PID, AFTER: "#threads: ", BEFORE: ")",
                 CONV: long } )
-        self.field[PFC.F_PROGRAM] = PBR.convert_by_rule(__mix, { 
+        self.field[PFC.F_PROGRAM] = PBR.conv_by_rules(__mix, { 
                 NAME: PFC.F_PID, BEFORE: " (" } )
 
         for __key in self.__two_longs:

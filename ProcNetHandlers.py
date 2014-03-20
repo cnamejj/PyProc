@@ -377,15 +377,15 @@ class ProcNetROUTE(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_NETMASK] = PDC.ANY_IP_ADDR
     
         else:
-            __lip = PBR.convert_by_rule(self.field[PFC.F_DEST_HEXIP],
+            __lip = PBR.conv_by_rules(self.field[PFC.F_DEST_HEXIP],
                     { CONV: long, BASE: 16 } )
             self.field[PFC.F_DEST_IP] = socket.inet_ntop(socket.AF_INET,
                     binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
-            __lip = PBR.convert_by_rule(self.field[PFC.F_GATE_HEXIP],
+            __lip = PBR.conv_by_rules(self.field[PFC.F_GATE_HEXIP],
                     { CONV: long, BASE: 16 } )
             self.field[PFC.F_GATEWAY] = socket.inet_ntop(socket.AF_INET,
                     binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
-            __lip = PBR.convert_by_rule(self.field[PFC.F_MASK_HEXIP],
+            __lip = PBR.conv_by_rules(self.field[PFC.F_MASK_HEXIP],
                     { CONV: long, BASE: 16 } )
             self.field[PFC.F_NETMASK] = socket.inet_ntop(socket.AF_INET,
                     binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
@@ -979,17 +979,17 @@ class ProcNetIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
                 self.field[PFC.F_STATE] = __word
                 __off += 1
 
-            self.field[PFC.F_OR_SRC_IP] = PBR.convert_by_rule(
+            self.field[PFC.F_OR_SRC_IP] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=" } )
             __off += 1
-            self.field[PFC.F_OR_DST_IP] = PBR.convert_by_rule(
+            self.field[PFC.F_OR_DST_IP] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=" } )
             __off += 1
-            self.field[PFC.F_OR_SRC_PORT] = PBR.convert_by_rule(
+            self.field[PFC.F_OR_SRC_PORT] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=",
                     CONV: long } )
             __off += 1
-            self.field[PFC.F_OR_DST_PORT] = PBR.convert_by_rule(
+            self.field[PFC.F_OR_DST_PORT] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=",
                     CONV: long } )
             __off += 1
@@ -1001,44 +1001,44 @@ class ProcNetIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
                 __word = sio.get_word(__off)
 
             if __word.startswith(self.__packets_pref):
-                self.field[PFC.F_OR_PACKETS] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_OR_PACKETS] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__packets_pref,
                           AFTER: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
             if __word.startswith(self.__bytes_pref):
-                self.field[PFC.F_OR_BYTES] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_OR_BYTES] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__bytes_pref,
                           AFTER: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
-            self.field[PFC.F_RE_SRC_IP] = PBR.convert_by_rule(
+            self.field[PFC.F_RE_SRC_IP] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=" } )
             __off += 1
-            self.field[PFC.F_RE_DST_IP] = PBR.convert_by_rule(
+            self.field[PFC.F_RE_DST_IP] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=" } )
             __off += 1
-            self.field[PFC.F_RE_SRC_PORT] = PBR.convert_by_rule(
+            self.field[PFC.F_RE_SRC_PORT] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=",
                     CONV: long } )
             __off += 1
-            self.field[PFC.F_RE_DST_PORT] = PBR.convert_by_rule(
+            self.field[PFC.F_RE_DST_PORT] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=",
                     CONV: long } )
             __off += 1
 
             __word = sio.get_word(__off)
             if __word.startswith(self.__packets_pref):
-                self.field[PFC.F_RE_PACKETS] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_RE_PACKETS] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__packets_pref,
                           AFTER: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
             if __word.startswith(self.__bytes_pref):
-                self.field[PFC.F_RE_BYTES] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_RE_BYTES] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__bytes_pref,
                           AFTER: self.__val_delim } )
                 __off += 1
@@ -1051,21 +1051,21 @@ class ProcNetIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
                 __word = sio.get_word(__off)
 
             if __word.startswith(self.__mark_pref):
-                self.field[PFC.F_MARK] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_MARK] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__mark_pref,
                           AFTER: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
             if __word.startswith(self.__secctx_pref):
-                self.field[PFC.F_SECCTX] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_SECCTX] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__secctx_pref,
                           AFTER: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
             if __word.startswith(self.__use_pref):
-                self.field[PFC.F_USE] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_USE] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__use_pref,
                           AFTER: self.__val_delim } )
            
@@ -1280,17 +1280,17 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
                 self.field[PFC.F_STATE] = __word
                 __off += 1
 
-            self.field[PFC.F_OR_SRC_IP] = PBR.convert_by_rule(
+            self.field[PFC.F_OR_SRC_IP] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=" } )
             __off += 1
-            self.field[PFC.F_OR_DST_IP] = PBR.convert_by_rule(
+            self.field[PFC.F_OR_DST_IP] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=" } )
             __off += 1
-            self.field[PFC.F_OR_SRC_PORT] = PBR.convert_by_rule(
+            self.field[PFC.F_OR_SRC_PORT] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=",
                     CONV: long } )
             __off += 1
-            self.field[PFC.F_OR_DST_PORT] = PBR.convert_by_rule(
+            self.field[PFC.F_OR_DST_PORT] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=",
                     CONV: long } )
             __off += 1
@@ -1302,44 +1302,44 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
                 __word = sio.get_word(__off)
 
             if __word.startswith(self.__packets_pref):
-                self.field[PFC.F_OR_PACKETS] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_OR_PACKETS] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__packets_pref,
                           AFTER: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
             if __word.startswith(self.__bytes_pref):
-                self.field[PFC.F_OR_BYTES] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_OR_BYTES] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__bytes_pref,
                           AFTER: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
-            self.field[PFC.F_RE_SRC_IP] = PBR.convert_by_rule(
+            self.field[PFC.F_RE_SRC_IP] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=" } )
             __off += 1
-            self.field[PFC.F_RE_DST_IP] = PBR.convert_by_rule(
+            self.field[PFC.F_RE_DST_IP] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=" } )
             __off += 1
-            self.field[PFC.F_RE_SRC_PORT] = PBR.convert_by_rule(
+            self.field[PFC.F_RE_SRC_PORT] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=",
                     CONV: long } )
             __off += 1
-            self.field[PFC.F_RE_DST_PORT] = PBR.convert_by_rule(
+            self.field[PFC.F_RE_DST_PORT] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=",
                     CONV: long } )
             __off += 1
 
             __word = sio.get_word(__off)
             if __word.startswith(self.__packets_pref):
-                self.field[PFC.F_RE_PACKETS] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_RE_PACKETS] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__packets_pref,
                           AFTER: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
             if __word.startswith(self.__bytes_pref):
-                self.field[PFC.F_RE_BYTES] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_RE_BYTES] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__bytes_pref,
                           AFTER: self.__val_delim } )
                 __off += 1
@@ -1351,28 +1351,28 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
                 __word = sio.get_word(__off)
 
             if __word.startswith(self.__mark_pref):
-                self.field[PFC.F_MARK] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_MARK] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__mark_pref,
                           AFTER: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
             if __word.startswith(self.__secctx_pref):
-                self.field[PFC.F_SECCTX] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_SECCTX] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__secctx_pref,
                           AFTER: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
             if __word.startswith(self.__zone_pref):
-                self.field[PFC.F_ZONE] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_ZONE] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__zone_pref,
                           AFTER: self.__val_delim } )
                 __off += 1
                 __word = sio.get_word(__off)
 
             if __word.startswith(self.__delta_time_pref):
-                self.field[PFC.F_DELTA_TIME] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_DELTA_TIME] = PBR.conv_by_rules(__word,
                         { CONV: long,
                           PREFIX: self.__delta_time_pref,
                           AFTER: self.__val_delim } )
@@ -1380,7 +1380,7 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
                 __word = sio.get_word(__off)
 
             if __word.startswith(self.__use_pref):
-                self.field[PFC.F_USE] = PBR.convert_by_rule(__word,
+                self.field[PFC.F_USE] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__use_pref,
                           AFTER: self.__val_delim } )
            
@@ -1669,19 +1669,19 @@ class ProcNetRTCACHE(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_SPEC_DST] = PDC.ANY_IP_ADDR
 
         else:
-            __lip = PBR.convert_by_rule(self.field[PFC.F_DEST_HEXIP],
+            __lip = PBR.conv_by_rules(self.field[PFC.F_DEST_HEXIP],
                     { CONV: long, BASE: 16 } )
             self.field[PFC.F_DEST_IP] = socket.inet_ntop(socket.AF_INET,
                     binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
-            __lip = PBR.convert_by_rule(self.field[PFC.F_GATE_HEXIP],
+            __lip = PBR.conv_by_rules(self.field[PFC.F_GATE_HEXIP],
                     { CONV: long, BASE: 16 } )
             self.field[PFC.F_GATEWAY] = socket.inet_ntop(socket.AF_INET,
                     binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
-            __lip = PBR.convert_by_rule(self.field[PFC.F_SRCE_HEXIP],
+            __lip = PBR.conv_by_rules(self.field[PFC.F_SRCE_HEXIP],
                     { CONV: long, BASE: 16 } )
             self.field[PFC.F_SOURCE] = socket.inet_ntop(socket.AF_INET,
                     binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
-            __lip = PBR.convert_by_rule(self.field[PFC.F_SPEC_HEXIP],
+            __lip = PBR.conv_by_rules(self.field[PFC.F_SPEC_HEXIP],
                     { CONV: long, BASE: 16 } )
             self.field[PFC.F_SPEC_DST] = socket.inet_ntop(socket.AF_INET,
                     binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
@@ -2508,11 +2508,11 @@ class ProcNetTCP(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_SSTART_THRESH] = 0
 
         else:
-            __lip = PBR.convert_by_rule(self.field[PFC.F_ORIG_HEXIP],
+            __lip = PBR.conv_by_rules(self.field[PFC.F_ORIG_HEXIP],
                     { CONV: long, BASE: 16 } )
             self.field[PFC.F_ORIG_IP] = socket.inet_ntop(socket.AF_INET,
                     binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
-            __lip = PBR.convert_by_rule(self.field[PFC.F_DEST_HEXIP],
+            __lip = PBR.conv_by_rules(self.field[PFC.F_DEST_HEXIP],
                     { CONV: long, BASE: 16 } )
             self.field[PFC.F_DEST_IP] = socket.inet_ntop(socket.AF_INET,
                     binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
@@ -2754,11 +2754,11 @@ class ProcNetUDP(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_DROPS] = 0
 
         else:
-            __lip = PBR.convert_by_rule(self.field[PFC.F_ORIG_HEXIP],
+            __lip = PBR.conv_by_rules(self.field[PFC.F_ORIG_HEXIP],
                     { CONV: long, BASE: 16 } )
             self.field[PFC.F_ORIG_IP] = socket.inet_ntop(socket.AF_INET,
                     binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
-            __lip = PBR.convert_by_rule(self.field[PFC.F_DEST_HEXIP],
+            __lip = PBR.conv_by_rules(self.field[PFC.F_DEST_HEXIP],
                     { CONV: long, BASE: 16 } )
             self.field[PFC.F_DEST_IP] = socket.inet_ntop(socket.AF_INET,
                     binascii.unhexlify('{0:08x}'.format(socket.htonl(__lip))))
@@ -3020,15 +3020,15 @@ class ProcNetIGMP(PBR.FixedWhitespaceDelimRecs):
                 self.field[PFC.F_REPORTER] = 0
 
             else:
-                self.field[PFC.F_GROUP] = PBR.convert_by_rule(sio.get_word(0),
+                self.field[PFC.F_GROUP] = PBR.conv_by_rules(sio.get_word(0),
                         { CONV: long, BASE: 16 } )
-                self.field[PFC.F_USERS] = PBR.convert_by_rule(sio.get_word(1),
+                self.field[PFC.F_USERS] = PBR.conv_by_rules(sio.get_word(1),
                         { CONV: long } )
-                self.field[PFC.F_TIMER] = PBR.convert_by_rule(sio.get_word(2),
+                self.field[PFC.F_TIMER] = PBR.conv_by_rules(sio.get_word(2),
                         { CONV: long, BEFORE: ":" } )
-                self.field[PFC.F_ZERO1] = PBR.convert_by_rule(sio.get_word(2),
+                self.field[PFC.F_ZERO1] = PBR.conv_by_rules(sio.get_word(2),
                         { CONV: long, BASE: 16, AFTER: ":" } )
-                self.field[PFC.F_REPORTER] = PBR.convert_by_rule(
+                self.field[PFC.F_REPORTER] = PBR.conv_by_rules(
                         sio.get_word(3), { CONV: long } )
 
         self.index = self.field[PFC.F_INDEX]
@@ -3438,15 +3438,15 @@ class ProcNetFIBTRIE(PBR.FixedWhitespaceDelimRecs):
         """Parse a line describing a node"""
 
         sio = self.curr_sio
-        spot[PFC.F_NETWORK] = PBR.convert_by_rule(sio.get_word(1),
+        spot[PFC.F_NETWORK] = PBR.conv_by_rules(sio.get_word(1),
                 { BEFORE: "/" } )
-        spot[PFC.F_NETMASK] = PBR.convert_by_rule(sio.get_word(1),
+        spot[PFC.F_NETMASK] = PBR.conv_by_rules(sio.get_word(1),
                 { AFTER: "/", CONV: long } )
-        spot[PFC.F_FIB_BITS] = PBR.convert_by_rule(sio.get_word(2),
+        spot[PFC.F_FIB_BITS] = PBR.conv_by_rules(sio.get_word(2),
                 { CONV: long } )
-        spot[PFC.F_FULL_CHILDREN] = PBR.convert_by_rule(sio.get_word(3),
+        spot[PFC.F_FULL_CHILDREN] = PBR.conv_by_rules(sio.get_word(3),
                 { CONV: long } )
-        spot[PFC.F_EMPTY_CHILDREN] = PBR.convert_by_rule(sio.get_word(4),
+        spot[PFC.F_EMPTY_CHILDREN] = PBR.conv_by_rules(sio.get_word(4),
                 { CONV: long } )
 
         return
@@ -3465,7 +3465,7 @@ class ProcNetFIBTRIE(PBR.FixedWhitespaceDelimRecs):
         sio = self.curr_sio
         __val = dict()
 
-        __val[PFC.F_NETMASK] = PBR.convert_by_rule(sio.get_word(0),
+        __val[PFC.F_NETMASK] = PBR.conv_by_rules(sio.get_word(0),
                 { AFTER: "/", CONV: long } )
         __val[PFC.F_SCOPE] = sio.get_word(1)
         __val[PFC.F_TYPE] = sio.get_word(2)
@@ -3626,7 +3626,8 @@ class ProcNetFIBTRIESTAT(PBR.FixedWhitespaceDelimRecs):
                 CONV: long }) ]
         __rs = __rs + [ (PFC.F_SEM_PASS, { PREFIX: __sem_pass, CONV: long }) ]
         __rs = __rs + [ (PFC.F_SEM_MISS, { PREFIX: __sem_miss, CONV: long }) ]
-        __rs = __rs + [ (PFC.F_NULL_NODE, { PREFIX: __null_node, CONV: long }) ]
+        __rs = __rs + [ (PFC.F_NULL_NODE, { PREFIX: __null_node,
+                CONV: long }) ]
         __rs = __rs + [ (PFC.F_SKIPPED, { PREFIX: __skipped, CONV: long }) ]
         self.__rset = __rs
 
@@ -3638,9 +3639,15 @@ class ProcNetFIBTRIESTAT(PBR.FixedWhitespaceDelimRecs):
         sio = self.curr_sio
         __line = sio.buff.rstrip("\n")
 
-        for __field, __rule in self.__rset:
-            if PBR.matches_all_crit(__line, __rule):
-                self.field[__field] = PBR.convert_by_rule(__line, __rule)
+        for __rinfo in self.__rset:
+            __field = __rinfo[0]
+            __rule = __rinfo[1]
+            try:
+                __ord = __rinfo[2]
+            except IndexError:
+                __ord = ""
+            if PBR.matches_all_crit(__line, __rule, __ord):
+                self.field[__field] = PBR.conv_by_rules(__line, __rule, __ord)
 
         return
 
@@ -3652,8 +3659,8 @@ class ProcNetFIBTRIESTAT(PBR.FixedWhitespaceDelimRecs):
         self.field[PFC.F_INT_NODE_LIST] = dict()
 
         if sio.get_word(0) == self.__basic_tag:
-            __leaf = PBR.convert_by_rule(sio.get_word(5), { CONV: long } )
-            __tnode = PBR.convert_by_rule(sio.get_word(10), { CONV: long } )
+            __leaf = PBR.conv_by_rules(sio.get_word(5), { CONV: long } )
+            __tnode = PBR.conv_by_rules(sio.get_word(10), { CONV: long } )
             self.__glinfo = (__leaf, __tnode)
             sio.read_line()
 
@@ -3672,9 +3679,9 @@ class ProcNetFIBTRIESTAT(PBR.FixedWhitespaceDelimRecs):
 
             elif sio.buff.startswith(self.__intnode_pref):
                 __line = sio.buff.rstrip("\n")
-                __key = PBR.convert_by_rule(__line,
+                __key = PBR.conv_by_rules(__line,
                         { CONV: long, BEFORE: ":" } )
-                __val = PBR.convert_by_rule(__line,
+                __val = PBR.conv_by_rules(__line,
                         { CONV: long, AFTER: ":" } )
                 self.field[PFC.F_INT_NODE_LIST][__key] = __val
 
