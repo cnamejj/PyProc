@@ -1,0 +1,17 @@
+{
+    "0": {
+        "source": "TEST/data/pr/execdomains"
+    },
+    "1": {
+        "exec-domain-module": "[kernel]",
+        "exec-domain-name": "Linux",
+        "pers-high": 0,
+        "pers-low": 0
+    },
+    "2": {
+        "exec-domain-module": "[spurn]",
+        "exec-domain-name": "OtherLinux",
+        "pers-high": 11,
+        "pers-low": 4
+    }
+}

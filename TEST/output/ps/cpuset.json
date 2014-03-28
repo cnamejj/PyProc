@@ -1,0 +1,8 @@
+{
+    "0": {
+        "source": "TEST/data/ps/cpuset"
+    },
+    "1": {
+        "cpu-set": "/"
+    }
+}

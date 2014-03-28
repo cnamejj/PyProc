@@ -1,0 +1,9 @@
+{
+    "0": {
+        "source": "TEST/data/ps/exe"
+    },
+    "1": {
+        "filepath": "TEST/data/ps/exe",
+        "symlink-target": "/bin/bash"
+    }
+}

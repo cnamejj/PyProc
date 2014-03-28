@@ -1,0 +1,26 @@
+{
+    "0": {
+        "source": "TEST/data/pn/dev_mcast"
+    },
+    "1": {
+        "device": "eth0",
+        "device_address": "01005e000001",
+        "global_use": 0,
+        "int_index": 2,
+        "ref_count": 1
+    },
+    "2": {
+        "device": "eth0",
+        "device_address": "333300000001",
+        "global_use": 0,
+        "int_index": 2,
+        "ref_count": 1
+    },
+    "3": {
+        "device": "eth0",
+        "device_address": "3333ff01e486",
+        "global_use": 0,
+        "int_index": 2,
+        "ref_count": 1
+    }
+}

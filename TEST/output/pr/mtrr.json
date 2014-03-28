@@ -1,0 +1,68 @@
+{
+    "0": {
+        "source": "TEST/data/pr/mtrr"
+    },
+    "1": {
+        "base-memory-address": 0,
+        "count": 1,
+        "index": 0,
+        "size": 2048,
+        "type": "write-back"
+    },
+    "2": {
+        "base-memory-address": 2048,
+        "count": 1,
+        "index": 1,
+        "size": 1024,
+        "type": "write-back"
+    },
+    "3": {
+        "base-memory-address": 3072,
+        "count": 1,
+        "index": 2,
+        "size": 256,
+        "type": "write-back"
+    },
+    "4": {
+        "base-memory-address": 3320,
+        "count": 1,
+        "index": 3,
+        "size": 8,
+        "type": "uncachable"
+    },
+    "5": {
+        "base-memory-address": 4096,
+        "count": 1,
+        "index": 4,
+        "size": 4096,
+        "type": "write-back"
+    },
+    "6": {
+        "base-memory-address": 8192,
+        "count": 1,
+        "index": 5,
+        "size": 8192,
+        "type": "write-back"
+    },
+    "7": {
+        "base-memory-address": 16384,
+        "count": 1,
+        "index": 6,
+        "size": 16384,
+        "type": "write-back"
+    },
+    "8": {
+        "base-memory-address": 32768,
+        "count": 1,
+        "index": 7,
+        "size": 512,
+        "type": "write-back"
+    },
+    "9": {
+        "base-memory-address": 33280,
+        "count": 1,
+        "index": 8,
+        "size": 256,
+        "type": "write-back"
+    }
+}

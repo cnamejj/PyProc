@@ -1,0 +1,75 @@
+#!/bin/bash
+
+data=$1
+
+# ---
+
+DATA_DIR="TEST/data/"
+RES_DIR="TEST/output/"
+NO_HANDLER="ProcNetNULL"
+
+declare -A prefix=( \
+  [ProcNetHandlers]="pn/"
+  [ProcSelfHandlers]="ps/"
+  [ProcRootHandlers]="pr/"
+)
+
+# ---
+
+err_exit() \
+{
+    echo "Error : $*"
+    exit 1
+}
+
+# ---
+
+if [ "${data}" = "" ]
+then
+	err_exit "No filename given."
+fi
+
+# ---
+
+summary=( $(./ShowProcHandler "${data}") )
+
+if [ "${#summary[@]}" -lt 7 ]
+then
+	err_exit "Handler lookup failed for '${data}'."
+fi
+
+module="${summary[-1]}"
+class="${summary[-3]}"
+data_pref="${prefix[${module}]}"
+
+# ---
+
+if [ "${class}" = "${NO_HANDLER}" ]
+then
+	err_exit "No handler available for file '${data}'."
+fi
+
+# ---
+
+#echo "dbg:: Module:${module} Class:${class} Pref:${data_pref}"
+
+inp="${DATA_DIR}${data_pref}${data}"
+csv="${RES_DIR}${data_pref}${data}.csv"
+json="${RES_DIR}${data_pref}${data}.json"
+
+if [ ! -f "${inp}" ]
+then
+	err_exit "No data file '${inp}' found."
+fi
+
+# ---
+
+#echo "dbg:: Read:${inp}"
+#echo "dbg:: CSV::${csv} $(./proc2csv ${inp} | sum) $(sum ${csv})"
+#echo "dbg:: JSON:${json} $(./proc2json ${inp} | sum) $(sum ${json})"
+
+[ "$(./proc2csv ${inp} | sum)" = "$(sum ${csv})" -a \
+  "$(./proc2json ${inp} | sum)" = "$(sum ${json})" ] \
+|| compare="Fail" && compare="Pass"
+
+echo "${compare} ${data}"

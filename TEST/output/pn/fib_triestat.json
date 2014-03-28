@@ -1,0 +1,49 @@
+{
+    "0": {
+        "source": "TEST/data/pn/fib_triestat"
+    },
+    "1": {
+        "average-depth": 1.0,
+        "backtracks": 0,
+        "get-counts": 1043566,
+        "int-node-list": {
+            "2": 1
+        },
+        "internal-nodes": 1,
+        "leaf-size": 40,
+        "leaves": 3,
+        "max-depth": 1,
+        "node-name": "Main",
+        "null-node-hit": 123899,
+        "null-pointers": 1,
+        "pointers": 4,
+        "prefixes": 3,
+        "sem-match-miss": 0,
+        "sem-match-pass": 1043387,
+        "skipped-node-resize": 0,
+        "tnode-size": 56,
+        "total-size": 1
+    },
+    "2": {
+        "average-depth": 2.66,
+        "backtracks": 1456034,
+        "get-counts": 1722427,
+        "int-node-list": {
+            "1": 5
+        },
+        "internal-nodes": 5,
+        "leaf-size": 40,
+        "leaves": 6,
+        "max-depth": 3,
+        "node-name": "Local",
+        "null-node-hit": 0,
+        "null-pointers": 0,
+        "pointers": 10,
+        "prefixes": 7,
+        "sem-match-miss": 0,
+        "sem-match-pass": 678315,
+        "skipped-node-resize": 0,
+        "tnode-size": 56,
+        "total-size": 1
+    }
+}

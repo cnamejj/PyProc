@@ -1,0 +1,18 @@
+{
+    "0": {
+        "source": "TEST/data/pn/ip_tables_matches"
+    },
+    "1": {
+        "list_of_terms": [
+            "limit",
+            "addrtype",
+            "state",
+            "ttl",
+            "udplite",
+            "udp",
+            "tcp",
+            "addrtype",
+            "icmp"
+        ]
+    }
+}

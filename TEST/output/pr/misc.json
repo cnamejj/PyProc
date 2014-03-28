@@ -1,0 +1,73 @@
+{
+    "0": {
+        "source": "TEST/data/pr/misc"
+    },
+    "1": {
+        "device": "vboxnetctl",
+        "minor-dev-num": 56
+    },
+    "2": {
+        "device": "vboxdrv",
+        "minor-dev-num": 57
+    },
+    "3": {
+        "device": "network_throughput",
+        "minor-dev-num": 58
+    },
+    "4": {
+        "device": "network_latency",
+        "minor-dev-num": 59
+    },
+    "5": {
+        "device": "cpu_dma_latency",
+        "minor-dev-num": 60
+    },
+    "6": {
+        "device": "device-mapper",
+        "minor-dev-num": 236
+    },
+    "7": {
+        "device": "uinput",
+        "minor-dev-num": 223
+    },
+    "8": {
+        "device": "psaux",
+        "minor-dev-num": 1
+    },
+    "9": {
+        "device": "tun",
+        "minor-dev-num": 200
+    },
+    "10": {
+        "device": "loop-control",
+        "minor-dev-num": 237
+    },
+    "11": {
+        "device": "hpet",
+        "minor-dev-num": 228
+    },
+    "12": {
+        "device": "fuse",
+        "minor-dev-num": 229
+    },
+    "13": {
+        "device": "ecryptfs",
+        "minor-dev-num": 61
+    },
+    "14": {
+        "device": "snapshot",
+        "minor-dev-num": 231
+    },
+    "15": {
+        "device": "mcelog",
+        "minor-dev-num": 227
+    },
+    "16": {
+        "device": "rfkill",
+        "minor-dev-num": 62
+    },
+    "17": {
+        "device": "vga_arbiter",
+        "minor-dev-num": 63
+    }
+}

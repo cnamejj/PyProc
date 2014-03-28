@@ -1,0 +1,12 @@
+TEST/data/pr/crypto|max-keysize|max-auth-size|type|name|digest-size|geniv|driver|module|priority|flags|selftest|blocksize|async|min-keysize|ref-count|ivsize
+1|32|0|blkcipher|cbc(aes)|0|<default>|cbc(aes-generic)|kernel|100|0|passed|16||16|1|16
+2|0|0|shash|hmac(sha256)|32||hmac(sha256-generic)|kernel|0|0|passed|64||0|2|0
+3|0|0|shash|hmac(sha1)|20||hmac(sha1-generic)|kernel|0|0|passed|64||0|2|0
+4|0|0|rng|stdrng|0||krng|kernel|200|0|passed|0||0|1|0
+5|0|0|shash|crc32c|4||crc32c-generic|kernel|100|0|passed|1||0|1|0
+6|32|0|cipher|aes|0||aes-generic|kernel|100|0|passed|16||16|1|0
+7|0|0|shash|sha256|32||sha256-generic|kernel|0|0|passed|64||0|3|0
+8|0|0|shash|sha224|28||sha224-generic|kernel|0|0|passed|64||0|1|0
+9|0|0|shash|sha1|20||sha1-generic|kernel|0|0|passed|64||0|3|0
+10|0|0|shash|md5|16||md5-generic|kernel|0|0|passed|64||0|1|0
+11|0|0|shash|crc32c|4||crc32c-intel|kernel|200|0|passed|1||0|1|0

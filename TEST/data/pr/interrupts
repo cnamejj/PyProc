@@ -1,0 +1,53 @@
+            CPU0       CPU1       CPU2       CPU3       CPU4       CPU5       CPU6       CPU7       
+   0:         59       9178          0          0          0          0          0          0   IO-APIC-edge      timer
+   1:          1          2          0          0          0          0          0          0   IO-APIC-edge      i8042
+   4:          1          3          0          0          0          0          0          0   IO-APIC-edge    
+   8:          0          1          0          0          0          0          0          0   IO-APIC-edge      rtc0
+   9:          0          0          0          0          0          0          0          0   IO-APIC-fasteoi   acpi
+  12:          0          4          0          0          0          0          0          0   IO-APIC-edge      i8042
+  17:          1          0         25          0          0      42988          0          0   IO-APIC-fasteoi   firewire_ohci
+  23:       2249          0          0        515   19539606          0          0          0   IO-APIC-fasteoi   ehci_hcd:usb1, ehci_hcd:usb2
+  64:          0          0          0          0          0          0          0          0   PCI-MSI-edge      PCIe PME
+  65:          0          0          0          0          0          0          0          0   PCI-MSI-edge      PCIe PME
+  66:          0          0          0          0          0          0          0          0   PCI-MSI-edge      PCIe PME
+  67:          0          0          0          0          0          0          0          0   PCI-MSI-edge      PCIe PME
+  68:          0          0          0          0          0          0          0          0   PCI-MSI-edge      PCIe PME
+  69:          0          0          0          0          0          0          0          0   PCI-MSI-edge      PCIe PME
+  70:          0          0          0          0          0          0          0          0   PCI-MSI-edge      PCIe PME
+  71:          0          0          0          0          0          0          0          0   PCI-MSI-edge      PCIe PME
+  72:          0          0          0          0          0          0          0          0   PCI-MSI-edge      PCIe PME
+  73:   65117139          0          0          0          0          0      14467          0   PCI-MSI-edge      ahci
+  74:          0          0          0          0          0          0          0          0   PCI-MSI-edge      ahci
+  75:       7851   10402964          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  76:          0          0          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  77:          0          0          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  78:          0          0          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  79:          0          0          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  80:          0          0          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  81:          0          0          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  82:          0          0          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  83:          0          0          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  84:          0          0          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  85:          0          0          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  86:          0          0          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  87:          0          0          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  88:          0          0          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  89:          0          0          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  90:          0          0          0          0          0          0          0          0   PCI-MSI-edge      xhci_hcd
+  91:   27224743          0        121          0          0          0          0          0   PCI-MSI-edge      eth0
+  92:          0          0          0          0          0          0          9          0   PCI-MSI-edge      mei
+  93:      11474        501          0          0          0          0          0          0   PCI-MSI-edge      snd_hda_intel
+ NMI:      40981      40581      41238      36610      16346      16268      14042      13452   Non-maskable interrupts
+ LOC:   85880438   88651505   87101397   89900542   71658442   64214219   64302726   54898862   Local timer interrupts
+ SPU:          0          0          0          0          0          0          0          0   Spurious interrupts
+ PMI:      40981      40581      41238      36610      16346      16268      14042      13452   Performance monitoring interrupts
+ IWI:          0          0          0          0          0          0          0          0   IRQ work interrupts
+ RES:  168642893  151284677  146721312  134225605   22645974   22238015   23079211   22350064   Rescheduling interrupts
+ CAL:       3830       3799       3790       3228       3904       3919       3370       2191   Function call interrupts
+ TLB:     907919     948255    1048865     975781     390541     510088     373508     404430   TLB shootdowns
+ TRM:          0          0          0          0          0          0          0          0   Thermal event interrupts
+ THR:          0          0          0          0          0          0          0          0   Threshold APIC interrupts
+ MCE:          0          0          0          0          0          0          0          0   Machine check exceptions
+ MCP:       9178       9178       9178       9178       9178       9178       9178       9178   Machine check polls
+ ERR:        123
+ MIS:       8778

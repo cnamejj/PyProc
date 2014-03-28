@@ -1,0 +1,12 @@
+{
+    "0": {
+        "source": "TEST/data/pn/ip_tables_targets"
+    },
+    "1": {
+        "list_of_terms": [
+            "REJECT",
+            "LOG",
+            "ERROR"
+        ]
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "0": {
+        "source": "TEST/data/ps/statm"
+    },
+    "1": {
+        "data-size": 78,
+        "resident-size": 88,
+        "shared-size": 69,
+        "size": 1796,
+        "text-size": 11
+    }
+}

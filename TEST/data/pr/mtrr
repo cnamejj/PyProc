@@ -1,0 +1,9 @@
+reg00: base=0x000000000 (    0MB), size= 2048MB, count=1: write-back
+reg01: base=0x080000000 ( 2048MB), size= 1024MB, count=1: write-back
+reg02: base=0x0c0000000 ( 3072MB), size=  256MB, count=1: write-back
+reg03: base=0x0cf800000 ( 3320MB), size=    8MB, count=1: uncachable
+reg04: base=0x100000000 ( 4096MB), size= 4096MB, count=1: write-back
+reg05: base=0x200000000 ( 8192MB), size= 8192MB, count=1: write-back
+reg06: base=0x400000000 (16384MB), size=16384MB, count=1: write-back
+reg07: base=0x800000000 (32768MB), size=  512MB, count=1: write-back
+reg08: base=0x820000000 (33280MB), size=  256MB, count=1: write-back

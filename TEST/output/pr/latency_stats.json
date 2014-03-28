@@ -1,0 +1,106 @@
+{
+    "0": {
+        "source": "TEST/data/pr/latency_stats"
+    },
+    "1": {
+        "accum-latency-ms": 15406,
+        "backtrace": [
+            "poll_schedule_timeout",
+            "do_select",
+            "core_sys_select",
+            "sys_select",
+            "system_call_fastpath"
+        ],
+        "hits": 35,
+        "max-latency-ms": 4787
+    },
+    "2": {
+        "accum-latency-ms": 93786,
+        "backtrace": [
+            "poll_schedule_timeout",
+            "do_poll.isra.4",
+            "do_sys_poll",
+            "sys_poll",
+            "system_call_fastpath"
+        ],
+        "hits": 94,
+        "max-latency-ms": 4946
+    },
+    "3": {
+        "accum-latency-ms": 108987,
+        "backtrace": [
+            "futex_wait_queue_me",
+            "futex_wait",
+            "do_futex",
+            "sys_futex",
+            "system_call_fastpath"
+        ],
+        "hits": 450,
+        "max-latency-ms": 4952
+    },
+    "4": {
+        "accum-latency-ms": 1113,
+        "backtrace": [
+            "do_fork",
+            "sys_vfork",
+            "stub_vfork"
+        ],
+        "hits": 5,
+        "max-latency-ms": 256
+    },
+    "5": {
+        "accum-latency-ms": 9483,
+        "backtrace": [
+            "unix_stream_data_wait",
+            "unix_stream_recvmsg",
+            "do_sock_read.isra.12",
+            "sock_aio_read.part.13",
+            "sock_aio_read",
+            "do_sync_read",
+            "vfs_read",
+            "sys_read",
+            "system_call_fastpath"
+        ],
+        "hits": 99,
+        "max-latency-ms": 308
+    },
+    "6": {
+        "accum-latency-ms": 707,
+        "backtrace": [
+            "do_wait",
+            "sys_wait4",
+            "system_call_fastpath"
+        ],
+        "hits": 5,
+        "max-latency-ms": 159
+    },
+    "7": {
+        "accum-latency-ms": 93,
+        "backtrace": [
+            "ep_poll",
+            "sys_epoll_wait",
+            "system_call_fastpath"
+        ],
+        "hits": 1,
+        "max-latency-ms": 93
+    },
+    "8": {
+        "accum-latency-ms": 30576,
+        "backtrace": [
+            "md_write_start.part.43",
+            "md_write_start",
+            "make_request",
+            "md_make_request",
+            "generic_make_request.part.50",
+            "generic_make_request",
+            "submit_bio",
+            "ext4_io_submit",
+            "mpage_da_submit_io",
+            "mpage_da_map_and_submit",
+            "ext4_da_writepages",
+            "do_writepages"
+        ],
+        "hits": 1,
+        "max-latency-ms": 30576
+    }
+}

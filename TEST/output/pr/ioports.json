@@ -1,0 +1,359 @@
+{
+    "0": {
+        "source": "TEST/data/pr/ioports"
+    },
+    "1": {
+        "end-addr": 943,
+        "level": 0,
+        "port-name": "PCI Bus 0000:00",
+        "start-addr": 0
+    },
+    "2": {
+        "end-addr": 31,
+        "level": 1,
+        "port-name": "dma1",
+        "start-addr": 0
+    },
+    "3": {
+        "end-addr": 33,
+        "level": 1,
+        "port-name": "pic1",
+        "start-addr": 32
+    },
+    "4": {
+        "end-addr": 67,
+        "level": 1,
+        "port-name": "timer0",
+        "start-addr": 64
+    },
+    "5": {
+        "end-addr": 83,
+        "level": 1,
+        "port-name": "timer1",
+        "start-addr": 80
+    },
+    "6": {
+        "end-addr": 96,
+        "level": 1,
+        "port-name": "keyboard",
+        "start-addr": 96
+    },
+    "7": {
+        "end-addr": 98,
+        "level": 1,
+        "port-name": "EC data",
+        "start-addr": 98
+    },
+    "8": {
+        "end-addr": 100,
+        "level": 1,
+        "port-name": "keyboard",
+        "start-addr": 100
+    },
+    "9": {
+        "end-addr": 102,
+        "level": 1,
+        "port-name": "EC cmd",
+        "start-addr": 102
+    },
+    "10": {
+        "end-addr": 113,
+        "level": 1,
+        "port-name": "rtc0",
+        "start-addr": 112
+    },
+    "11": {
+        "end-addr": 143,
+        "level": 1,
+        "port-name": "dma page reg",
+        "start-addr": 128
+    },
+    "12": {
+        "end-addr": 161,
+        "level": 1,
+        "port-name": "pic2",
+        "start-addr": 160
+    },
+    "13": {
+        "end-addr": 223,
+        "level": 1,
+        "port-name": "dma2",
+        "start-addr": 192
+    },
+    "14": {
+        "end-addr": 255,
+        "level": 1,
+        "port-name": "fpu",
+        "start-addr": 240
+    },
+    "15": {
+        "end-addr": 671,
+        "level": 1,
+        "port-name": "pnp 00:02",
+        "start-addr": 656
+    },
+    "16": {
+        "end-addr": 991,
+        "level": 0,
+        "port-name": "PCI Bus 0000:00",
+        "start-addr": 944
+    },
+    "17": {
+        "end-addr": 3319,
+        "level": 0,
+        "port-name": "PCI Bus 0000:00",
+        "start-addr": 992
+    },
+    "18": {
+        "end-addr": 1023,
+        "level": 1,
+        "port-name": "serial",
+        "start-addr": 1016
+    },
+    "19": {
+        "end-addr": 1107,
+        "level": 1,
+        "port-name": "pnp 00:09",
+        "start-addr": 1024
+    },
+    "20": {
+        "end-addr": 1027,
+        "level": 2,
+        "port-name": "ACPI PM1a_EVT_BLK",
+        "start-addr": 1024
+    },
+    "21": {
+        "end-addr": 1029,
+        "level": 2,
+        "port-name": "ACPI PM1a_CNT_BLK",
+        "start-addr": 1028
+    },
+    "22": {
+        "end-addr": 1035,
+        "level": 2,
+        "port-name": "ACPI PM_TMR",
+        "start-addr": 1032
+    },
+    "23": {
+        "end-addr": 1045,
+        "level": 2,
+        "port-name": "ACPI CPU throttle",
+        "start-addr": 1040
+    },
+    "24": {
+        "end-addr": 1071,
+        "level": 2,
+        "port-name": "ACPI GPE0_BLK",
+        "start-addr": 1056
+    },
+    "25": {
+        "end-addr": 1104,
+        "level": 2,
+        "port-name": "ACPI PM2_CNT_BLK",
+        "start-addr": 1104
+    },
+    "26": {
+        "end-addr": 1111,
+        "level": 1,
+        "port-name": "pnp 00:0a",
+        "start-addr": 1108
+    },
+    "27": {
+        "end-addr": 1151,
+        "level": 1,
+        "port-name": "pnp 00:09",
+        "start-addr": 1112
+    },
+    "28": {
+        "end-addr": 1233,
+        "level": 1,
+        "port-name": "pnp 00:06",
+        "start-addr": 1232
+    },
+    "29": {
+        "end-addr": 1407,
+        "level": 1,
+        "port-name": "pnp 00:09",
+        "start-addr": 1280
+    },
+    "30": {
+        "end-addr": 3327,
+        "level": 0,
+        "port-name": "PCI conf1",
+        "start-addr": 3320
+    },
+    "31": {
+        "end-addr": 65535,
+        "level": 0,
+        "port-name": "PCI Bus 0000:00",
+        "start-addr": 3328
+    },
+    "32": {
+        "end-addr": 4511,
+        "level": 1,
+        "port-name": "pnp 00:09",
+        "start-addr": 4480
+    },
+    "33": {
+        "end-addr": 53247,
+        "level": 1,
+        "port-name": "PCI Bus 0000:09",
+        "start-addr": 49152
+    },
+    "34": {
+        "end-addr": 49407,
+        "level": 2,
+        "port-name": "0000:09:00.0",
+        "start-addr": 49152
+    },
+    "35": {
+        "end-addr": 57343,
+        "level": 1,
+        "port-name": "PCI Bus 0000:08",
+        "start-addr": 53248
+    },
+    "36": {
+        "end-addr": 53279,
+        "level": 2,
+        "port-name": "0000:08:00.0",
+        "start-addr": 53248
+    },
+    "37": {
+        "end-addr": 53279,
+        "level": 3,
+        "port-name": "ahci",
+        "start-addr": 53248
+    },
+    "38": {
+        "end-addr": 53283,
+        "level": 2,
+        "port-name": "0000:08:00.0",
+        "start-addr": 53280
+    },
+    "39": {
+        "end-addr": 53283,
+        "level": 3,
+        "port-name": "ahci",
+        "start-addr": 53280
+    },
+    "40": {
+        "end-addr": 53303,
+        "level": 2,
+        "port-name": "0000:08:00.0",
+        "start-addr": 53296
+    },
+    "41": {
+        "end-addr": 53303,
+        "level": 3,
+        "port-name": "ahci",
+        "start-addr": 53296
+    },
+    "42": {
+        "end-addr": 53315,
+        "level": 2,
+        "port-name": "0000:08:00.0",
+        "start-addr": 53312
+    },
+    "43": {
+        "end-addr": 53315,
+        "level": 3,
+        "port-name": "ahci",
+        "start-addr": 53312
+    },
+    "44": {
+        "end-addr": 53335,
+        "level": 2,
+        "port-name": "0000:08:00.0",
+        "start-addr": 53328
+    },
+    "45": {
+        "end-addr": 53335,
+        "level": 3,
+        "port-name": "ahci",
+        "start-addr": 53328
+    },
+    "46": {
+        "end-addr": 61439,
+        "level": 1,
+        "port-name": "PCI Bus 0000:01",
+        "start-addr": 57344
+    },
+    "47": {
+        "end-addr": 57599,
+        "level": 2,
+        "port-name": "0000:01:00.0",
+        "start-addr": 57344
+    },
+    "48": {
+        "end-addr": 61471,
+        "level": 1,
+        "port-name": "0000:00:1f.3",
+        "start-addr": 61440
+    },
+    "49": {
+        "end-addr": 61503,
+        "level": 1,
+        "port-name": "0000:00:1f.2",
+        "start-addr": 61472
+    },
+    "50": {
+        "end-addr": 61503,
+        "level": 2,
+        "port-name": "ahci",
+        "start-addr": 61472
+    },
+    "51": {
+        "end-addr": 61535,
+        "level": 1,
+        "port-name": "0000:00:19.0",
+        "start-addr": 61504
+    },
+    "52": {
+        "end-addr": 61539,
+        "level": 1,
+        "port-name": "0000:00:1f.2",
+        "start-addr": 61536
+    },
+    "53": {
+        "end-addr": 61539,
+        "level": 2,
+        "port-name": "ahci",
+        "start-addr": 61536
+    },
+    "54": {
+        "end-addr": 61559,
+        "level": 1,
+        "port-name": "0000:00:1f.2",
+        "start-addr": 61552
+    },
+    "55": {
+        "end-addr": 61559,
+        "level": 2,
+        "port-name": "ahci",
+        "start-addr": 61552
+    },
+    "56": {
+        "end-addr": 61571,
+        "level": 1,
+        "port-name": "0000:00:1f.2",
+        "start-addr": 61568
+    },
+    "57": {
+        "end-addr": 61571,
+        "level": 2,
+        "port-name": "ahci",
+        "start-addr": 61568
+    },
+    "58": {
+        "end-addr": 61591,
+        "level": 1,
+        "port-name": "0000:00:1f.2",
+        "start-addr": 61584
+    },
+    "59": {
+        "end-addr": 61591,
+        "level": 2,
+        "port-name": "ahci",
+        "start-addr": 61584
+    }
+}

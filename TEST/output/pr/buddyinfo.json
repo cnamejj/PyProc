@@ -1,0 +1,50 @@
+{
+    "0": {
+        "source": "TEST/data/pr/buddyinfo"
+    },
+    "1": {
+        "area1-freebl": "1",
+        "area10-freebl": "1",
+        "area11-freebl": "3",
+        "area2-freebl": "0",
+        "area3-freebl": "1",
+        "area4-freebl": "0",
+        "area5-freebl": "1",
+        "area6-freebl": "1",
+        "area7-freebl": "1",
+        "area8-freebl": "0",
+        "area9-freebl": "1",
+        "node": 0,
+        "zone": "DMA"
+    },
+    "2": {
+        "area1-freebl": "5465",
+        "area10-freebl": "22",
+        "area11-freebl": "107",
+        "area2-freebl": "5384",
+        "area3-freebl": "5273",
+        "area4-freebl": "5209",
+        "area5-freebl": "4918",
+        "area6-freebl": "4086",
+        "area7-freebl": "3367",
+        "area8-freebl": "1448",
+        "area9-freebl": "25",
+        "node": 0,
+        "zone": "DMA32"
+    },
+    "3": {
+        "area1-freebl": "16129",
+        "area10-freebl": "0",
+        "area11-freebl": "1",
+        "area2-freebl": "5237",
+        "area3-freebl": "3302",
+        "area4-freebl": "2929",
+        "area5-freebl": "29725",
+        "area6-freebl": "27250",
+        "area7-freebl": "16365",
+        "area8-freebl": "5131",
+        "area9-freebl": "14",
+        "node": 0,
+        "zone": "Normal"
+    }
+}

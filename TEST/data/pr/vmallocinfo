@@ -1,0 +1,174 @@
+0xffffc90000000000-0xffffc90000002000    8192 hpet_enable+0x2f/0x1a3 phys=fed00000 ioremap
+0xffffc90000002000-0xffffc90000004000    8192 acpi_os_map_memory+0x98/0x119 phys=cefd7000 ioremap
+0xffffc90000004000-0xffffc90000006000    8192 acpi_os_map_memory+0x98/0x119 phys=cefd1000 ioremap
+0xffffc90000006000-0xffffc90000008000    8192 acpi_os_map_memory+0x98/0x119 phys=cefd0000 ioremap
+0xffffc90000008000-0xffffc9000000d000   20480 efi_ioremap+0x1a/0x57 phys=fed1c000 ioremap
+0xffffc9000000d000-0xffffc9000001e000   69632 alloc_large_system_hash+0x14b/0x215 pages=16 vmalloc N0=16
+0xffffc9000001e000-0xffffc90000027000   36864 alloc_large_system_hash+0x14b/0x215 pages=8 vmalloc N0=8
+0xffffc90000028000-0xffffc9000002a000    8192 acpi_os_map_memory+0x98/0x119 phys=fed40000 ioremap
+0xffffc9000002a000-0xffffc9000002c000    8192 acpi_os_map_memory+0x98/0x119 phys=fed1f000 ioremap
+0xffffc9000002c000-0xffffc9000002f000   12288 alloc_large_system_hash+0x14b/0x215 pages=2 vmalloc N0=2
+0xffffc90000030000-0xffffc9000003a000   40960 acpi_os_map_memory+0x98/0x119 phys=cee12000 ioremap
+0xffffc9000003a000-0xffffc9000003f000   20480 alloc_large_system_hash+0x14b/0x215 pages=4 vmalloc N0=4
+0xffffc90000040000-0xffffc90000042000    8192 pci_iomap+0x80/0xc0 phys=fbb00000 ioremap
+0xffffc90000042000-0xffffc90000044000    8192 pci_iomap+0x80/0xc0 phys=fbf45000 ioremap
+0xffffc90000044000-0xffffc90000046000    8192 usb_hcd_pci_probe+0x228/0x3d0 phys=fbf47000 ioremap
+0xffffc90000046000-0xffffc90000048000    8192 usb_hcd_pci_probe+0x228/0x3d0 phys=fbf46000 ioremap
+0xffffc90000048000-0xffffc9000004a000    8192 msix_capability_init+0xb7/0x260 phys=fbd02000 ioremap
+0xffffc9000004a000-0xffffc9000004c000    8192 msix_capability_init+0xb7/0x260 phys=fbc02000 ioremap
+0xffffc9000004c000-0xffffc9000004e000    8192 e1000_probe+0x268/0xa0b [e1000e] phys=fbf48000 ioremap
+0xffffc9000004e000-0xffffc90000050000    8192 pci_iomap+0x80/0xc0 phys=fba00000 ioremap
+0xffffc90000050000-0xffffc90000059000   36864 usb_hcd_pci_probe+0x228/0x3d0 phys=fbd00000 ioremap
+0xffffc9000005a000-0xffffc9000005c000    8192 pci_iomap+0x80/0xc0 phys=fbf49000 ioremap
+0xffffc9000005e000-0xffffc90000060000    8192 dm_vcalloc+0x2b/0x30 pages=1 vmalloc N0=1
+0xffffc90000060000-0xffffc90000069000   36864 usb_hcd_pci_probe+0x228/0x3d0 phys=fbc00000 ioremap
+0xffffc90000069000-0xffffc9000006d000   16384 e1000e_setup_tx_resources+0x34/0xc0 [e1000e] pages=3 vmalloc N0=3
+0xffffc9000006d000-0xffffc90000071000   16384 e1000e_setup_rx_resources+0x2f/0x150 [e1000e] pages=3 vmalloc N0=3
+0xffffc90000073000-0xffffc90000076000   12288 sys_swapon+0x168/0x570 pages=2 vmalloc N0=2
+0xffffc90000076000-0xffffc9000007b000   20480 swap_cgroup_swapon+0x60/0x170 pages=4 vmalloc N0=4
+0xffffc9000007b000-0xffffc9000007e000   12288 sys_swapon+0x168/0x570 pages=2 vmalloc N0=2
+0xffffc90000080000-0xffffc90010081000 268439552 efi_ioremap+0x1a/0x57 phys=e0000000 ioremap
+0xffffc90010088000-0xffffc9001008d000   20480 pci_ioremap_bar+0x46/0x80 phys=fbf20000 ioremap
+0xffffc9001008d000-0xffffc9001009e000   69632 snd_malloc_sgbuf_pages+0x29a/0x304 [snd_page_alloc] vmap
+0xffffc9001009e000-0xffffc900100af000   69632 snd_malloc_sgbuf_pages+0x29a/0x304 [snd_page_alloc] vmap
+0xffffc900100b5000-0xffffc900100ba000   20480 swap_cgroup_swapon+0x60/0x170 pages=4 vmalloc N0=4
+0xffffc900100ba000-0xffffc900100bd000   12288 sys_swapon+0x168/0x570 pages=2 vmalloc N0=2
+0xffffc900100bd000-0xffffc900100c0000   12288 sys_swapon+0x168/0x570 pages=2 vmalloc N0=2
+0xffffc900100c0000-0xffffc900100e1000  135168 e1000_probe+0x21b/0xa0b [e1000e] phys=fbf00000 ioremap
+0xffffc900100e1000-0xffffc900100f2000   69632 snd_malloc_sgbuf_pages+0x29a/0x304 [snd_page_alloc] vmap
+0xffffc900100fb000-0xffffc90010100000   20480 swap_cgroup_swapon+0x60/0x170 pages=4 vmalloc N0=4
+0xffffc90010100000-0xffffc90011101000 16781312 efi_ioremap+0x1a/0x57 phys=ff000000 ioremap
+0xffffc90011101000-0xffffc90013102000 33558528 alloc_large_system_hash+0x14b/0x215 pages=8192 vmalloc vpages N0=8192
+0xffffc90013102000-0xffffc90014103000 16781312 alloc_large_system_hash+0x14b/0x215 pages=4096 vmalloc vpages N0=4096
+0xffffc90014103000-0xffffc90014108000   20480 swap_cgroup_swapon+0x60/0x170 pages=4 vmalloc N0=4
+0xffffc90014108000-0xffffc90014119000   69632 snd_malloc_sgbuf_pages+0x29a/0x304 [snd_page_alloc] vmap
+0xffffc90014119000-0xffffc9001412f000   90112 kvmalloc+0x50/0x60 pages=21 vmalloc N0=21
+0xffffc9001413c000-0xffffc90014143000   28672 xt_alloc_table_info+0xda/0x10e [x_tables] pages=6 vmalloc N0=6
+0xffffc90014143000-0xffffc9001414a000   28672 xt_alloc_table_info+0xda/0x10e [x_tables] pages=6 vmalloc N0=6
+0xffffc9001414a000-0xffffc90014151000   28672 xt_alloc_table_info+0xda/0x10e [x_tables] pages=6 vmalloc N0=6
+0xffffc90014151000-0xffffc90014158000   28672 xt_alloc_table_info+0xda/0x10e [x_tables] pages=6 vmalloc N0=6
+0xffffc90014158000-0xffffc9001415f000   28672 xt_alloc_table_info+0xda/0x10e [x_tables] pages=6 vmalloc N0=6
+0xffffc9001415f000-0xffffc90014166000   28672 xt_alloc_table_info+0xda/0x10e [x_tables] pages=6 vmalloc N0=6
+0xffffc90014166000-0xffffc9001416d000   28672 xt_alloc_table_info+0xda/0x10e [x_tables] pages=6 vmalloc N0=6
+0xffffc9001416d000-0xffffc90014174000   28672 xt_alloc_table_info+0xda/0x10e [x_tables] pages=6 vmalloc N0=6
+0xffffc90014180000-0xffffc90024181000 268439552 pci_mmcfg_arch_init+0x30/0x84 phys=e0000000 ioremap
+0xffffc90024181000-0xffffc90024582000 4198400 alloc_large_system_hash+0x14b/0x215 pages=1024 vmalloc vpages N0=1024
+0xffffc90024582000-0xffffc90024d83000 8392704 alloc_large_system_hash+0x14b/0x215 pages=2048 vmalloc vpages N0=2048
+0xffffc90024d83000-0xffffc90024e84000 1052672 alloc_large_system_hash+0x14b/0x215 pages=256 vmalloc N0=256
+0xffffc90024e84000-0xffffc90024f05000  528384 alloc_large_system_hash+0x14b/0x215 pages=128 vmalloc N0=128
+0xffffc90024f05000-0xffffc90024f86000  528384 alloc_large_system_hash+0x14b/0x215 pages=128 vmalloc N0=128
+0xffffc90024f98000-0xffffc90024fa1000   36864 xt_alloc_table_info+0xda/0x10e [x_tables] pages=8 vmalloc N0=8
+0xffffc90024fa1000-0xffffc90024faa000   36864 xt_alloc_table_info+0xda/0x10e [x_tables] pages=8 vmalloc N0=8
+0xffffc90024faa000-0xffffc90024fb3000   36864 xt_alloc_table_info+0xda/0x10e [x_tables] pages=8 vmalloc N0=8
+0xffffc90024fb3000-0xffffc90024fd8000  151552 kvmalloc+0x50/0x60 pages=36 vmalloc N0=36
+0xffffc90024fd8000-0xffffc90024fee000   90112 kvmalloc+0x50/0x60 pages=21 vmalloc N0=21
+0xffffc90025000000-0xffffc900251f1000 2035712 efifb_probe+0x20b/0x497 phys=d0000000 ioremap
+0xffffc900251f1000-0xffffc900251fa000   36864 xt_alloc_table_info+0xda/0x10e [x_tables] pages=8 vmalloc N0=8
+0xffffc900251fa000-0xffffc90025203000   36864 xt_alloc_table_info+0xda/0x10e [x_tables] pages=8 vmalloc N0=8
+0xffffc90025203000-0xffffc9002520c000   36864 xt_alloc_table_info+0xda/0x10e [x_tables] pages=8 vmalloc N0=8
+0xffffc9002520c000-0xffffc90025215000   36864 xt_alloc_table_info+0xda/0x10e [x_tables] pages=8 vmalloc N0=8
+0xffffc90025215000-0xffffc9002521e000   36864 xt_alloc_table_info+0xda/0x10e [x_tables] pages=8 vmalloc N0=8
+0xffffc9002532b000-0xffffc90025350000  151552 kvmalloc+0x50/0x60 pages=36 vmalloc N0=36
+0xffffc90025800000-0xffffc90025c01000 4198400 sys_swapon+0x168/0x570 pages=1024 vmalloc vpages N0=1024
+0xffffc90025c01000-0xffffc90026002000 4198400 sys_swapon+0x168/0x570 pages=1024 vmalloc vpages N0=1024
+0xffffc90026002000-0xffffc90026403000 4198400 sys_swapon+0x168/0x570 pages=1024 vmalloc vpages N0=1024
+0xffffc90026403000-0xffffc90026804000 4198400 sys_swapon+0x168/0x570 pages=1024 vmalloc vpages N0=1024
+0xffffe8ffffc00000-0xffffe8ffffe00000 2097152 pcpu_get_vm_areas+0x0/0x530 vmalloc
+0xffffffffa0000000-0xffffffffa0005000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0008000-0xffffffffa000d000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0010000-0xffffffffa0016000   24576 module_alloc_update_bounds+0x1d/0x80 pages=5 vmalloc N0=5
+0xffffffffa0019000-0xffffffffa0023000   40960 module_alloc_update_bounds+0x1d/0x80 pages=9 vmalloc N0=9
+0xffffffffa0027000-0xffffffffa002c000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa002f000-0xffffffffa0046000   94208 module_alloc_update_bounds+0x1d/0x80 pages=22 vmalloc N0=22
+0xffffffffa0046000-0xffffffffa006e000  163840 module_alloc_update_bounds+0x1d/0x80 pages=39 vmalloc N0=39
+0xffffffffa006e000-0xffffffffa0073000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0073000-0xffffffffa0078000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0079000-0xffffffffa007e000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa007e000-0xffffffffa008f000   69632 module_alloc_update_bounds+0x1d/0x80 pages=16 vmalloc N0=16
+0xffffffffa008f000-0xffffffffa0094000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0097000-0xffffffffa00a3000   49152 module_alloc_update_bounds+0x1d/0x80 pages=11 vmalloc N0=11
+0xffffffffa00a7000-0xffffffffa00b1000   40960 module_alloc_update_bounds+0x1d/0x80 pages=9 vmalloc N0=9
+0xffffffffa00b1000-0xffffffffa00cb000  106496 module_alloc_update_bounds+0x1d/0x80 pages=25 vmalloc N0=25
+0xffffffffa00cb000-0xffffffffa00dc000   69632 module_alloc_update_bounds+0x1d/0x80 pages=16 vmalloc N0=16
+0xffffffffa00dc000-0xffffffffa00e2000   24576 module_alloc_update_bounds+0x1d/0x80 pages=5 vmalloc N0=5
+0xffffffffa00e2000-0xffffffffa00e8000   24576 module_alloc_update_bounds+0x1d/0x80 pages=5 vmalloc N0=5
+0xffffffffa00e8000-0xffffffffa00ed000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa00ed000-0xffffffffa00fa000   53248 module_alloc_update_bounds+0x1d/0x80 pages=12 vmalloc N0=12
+0xffffffffa00fa000-0xffffffffa00ff000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0100000-0xffffffffa0106000   24576 module_alloc_update_bounds+0x1d/0x80 pages=5 vmalloc N0=5
+0xffffffffa0106000-0xffffffffa010b000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa010b000-0xffffffffa0118000   53248 module_alloc_update_bounds+0x1d/0x80 pages=12 vmalloc N0=12
+0xffffffffa0118000-0xffffffffa011d000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa011d000-0xffffffffa0122000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0122000-0xffffffffa0132000   65536 module_alloc_update_bounds+0x1d/0x80 pages=15 vmalloc N0=15
+0xffffffffa0132000-0xffffffffa0137000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0137000-0xffffffffa0145000   57344 module_alloc_update_bounds+0x1d/0x80 pages=13 vmalloc N0=13
+0xffffffffa0145000-0xffffffffa014b000   24576 module_alloc_update_bounds+0x1d/0x80 pages=5 vmalloc N0=5
+0xffffffffa014b000-0xffffffffa0151000   24576 module_alloc_update_bounds+0x1d/0x80 pages=5 vmalloc N0=5
+0xffffffffa0151000-0xffffffffa018e000  249856 module_alloc_update_bounds+0x1d/0x80 pages=60 vmalloc N0=60
+0xffffffffa018e000-0xffffffffa019d000   61440 module_alloc_update_bounds+0x1d/0x80 pages=14 vmalloc N0=14
+0xffffffffa019d000-0xffffffffa01a2000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa01a3000-0xffffffffa01b4000   69632 module_alloc_update_bounds+0x1d/0x80 pages=16 vmalloc N0=16
+0xffffffffa01b4000-0xffffffffa01ba000   24576 module_alloc_update_bounds+0x1d/0x80 pages=5 vmalloc N0=5
+0xffffffffa01bc000-0xffffffffa01d3000   94208 module_alloc_update_bounds+0x1d/0x80 pages=22 vmalloc N0=22
+0xffffffffa01d3000-0xffffffffa01d9000   24576 module_alloc_update_bounds+0x1d/0x80 pages=5 vmalloc N0=5
+0xffffffffa01db000-0xffffffffa0233000  360448 module_alloc_update_bounds+0x1d/0x80 pages=87 vmalloc N0=87
+0xffffffffa0233000-0xffffffffa023f000   49152 module_alloc_update_bounds+0x1d/0x80 pages=11 vmalloc N0=11
+0xffffffffa023f000-0xffffffffa0244000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0244000-0xffffffffa024a000   24576 module_alloc_update_bounds+0x1d/0x80 pages=5 vmalloc N0=5
+0xffffffffa024a000-0xffffffffa028f000  282624 module_alloc_update_bounds+0x1d/0x80 pages=68 vmalloc N0=68
+0xffffffffa028f000-0xffffffffa029e000   61440 module_alloc_update_bounds+0x1d/0x80 pages=14 vmalloc N0=14
+0xffffffffa029e000-0xffffffffa02a5000   28672 module_alloc_update_bounds+0x1d/0x80 pages=6 vmalloc N0=6
+0xffffffffa02a5000-0xffffffffa02aa000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa02aa000-0xffffffffa02af000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa02af000-0xffffffffa02c4000   86016 module_alloc_update_bounds+0x1d/0x80 pages=20 vmalloc N0=20
+0xffffffffa02c4000-0xffffffffa02c9000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa02c9000-0xffffffffa02ce000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa02ce000-0xffffffffa02d7000   36864 module_alloc_update_bounds+0x1d/0x80 pages=8 vmalloc N0=8
+0xffffffffa02d7000-0xffffffffa02dc000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa02dc000-0xffffffffa02ed000   69632 module_alloc_update_bounds+0x1d/0x80 pages=16 vmalloc N0=16
+0xffffffffa02ed000-0xffffffffa0304000   94208 module_alloc_update_bounds+0x1d/0x80 pages=22 vmalloc N0=22
+0xffffffffa0304000-0xffffffffa0309000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa030a000-0xffffffffa0310000   24576 module_alloc_update_bounds+0x1d/0x80 pages=5 vmalloc N0=5
+0xffffffffa0310000-0xffffffffa0319000   36864 module_alloc_update_bounds+0x1d/0x80 pages=8 vmalloc N0=8
+0xffffffffa0319000-0xffffffffa0321000   32768 module_alloc_update_bounds+0x1d/0x80 pages=7 vmalloc N0=7
+0xffffffffa0323000-0xffffffffa032c000   36864 module_alloc_update_bounds+0x1d/0x80 pages=8 vmalloc N0=8
+0xffffffffa032c000-0xffffffffa0345000  102400 module_alloc_update_bounds+0x1d/0x80 pages=24 vmalloc N0=24
+0xffffffffa0345000-0xffffffffa035b000   90112 module_alloc_update_bounds+0x1d/0x80 pages=21 vmalloc N0=21
+0xffffffffa035b000-0xffffffffa0360000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0360000-0xffffffffa0365000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0366000-0xffffffffa036b000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa036b000-0xffffffffa0371000   24576 module_alloc_update_bounds+0x1d/0x80 pages=5 vmalloc N0=5
+0xffffffffa0373000-0xffffffffa0394000  135168 module_alloc_update_bounds+0x1d/0x80 pages=32 vmalloc N0=32
+0xffffffffa0394000-0xffffffffa039e000   40960 module_alloc_update_bounds+0x1d/0x80 pages=9 vmalloc N0=9
+0xffffffffa039e000-0xffffffffa03a3000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa03a4000-0xffffffffa03a9000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa03a9000-0xffffffffa03b1000   32768 module_alloc_update_bounds+0x1d/0x80 pages=7 vmalloc N0=7
+0xffffffffa03b1000-0xffffffffa03b6000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa03b6000-0xffffffffa03bb000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa03bb000-0xffffffffa03f3000  229376 module_alloc_update_bounds+0x1d/0x80 pages=55 vmalloc N0=55
+0xffffffffa03f3000-0xffffffffa03fb000   32768 module_alloc_update_bounds+0x1d/0x80 pages=7 vmalloc N0=7
+0xffffffffa03fb000-0xffffffffa0400000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0400000-0xffffffffa0405000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0405000-0xffffffffa040a000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa040a000-0xffffffffa040f000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa040f000-0xffffffffa0414000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0414000-0xffffffffa041a000   24576 module_alloc_update_bounds+0x1d/0x80 pages=5 vmalloc N0=5
+0xffffffffa041e000-0xffffffffa0423000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0423000-0xffffffffa0428000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0428000-0xffffffffa042d000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa042d000-0xffffffffa0432000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0432000-0xffffffffa043b000   36864 module_alloc_update_bounds+0x1d/0x80 pages=8 vmalloc N0=8
+0xffffffffa043b000-0xffffffffa0440000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0440000-0xffffffffa0446000   24576 module_alloc_update_bounds+0x1d/0x80 pages=5 vmalloc N0=5
+0xffffffffa0446000-0xffffffffa0473000  184320 module_alloc_update_bounds+0x1d/0x80 pages=44 vmalloc N0=44
+0xffffffffa0473000-0xffffffffa0478000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0478000-0xffffffffa047f000   28672 module_alloc_update_bounds+0x1d/0x80 pages=6 vmalloc N0=6
+0xffffffffa0483000-0xffffffffa0488000   20480 module_alloc_update_bounds+0x1d/0x80 pages=4 vmalloc N0=4
+0xffffffffa0488000-0xffffffffa048e000   24576 module_alloc_update_bounds+0x1d/0x80 pages=5 vmalloc N0=5
+0xffffffffa0490000-0xffffffffa0497000   28672 module_alloc_update_bounds+0x1d/0x80 pages=6 vmalloc N0=6
+0xffffffffa04a0000-0xffffffffa04a6000   24576 module_alloc_update_bounds+0x1d/0x80 pages=5 vmalloc N0=5
+0xffffffffa04a6000-0xffffffffa04b0000   40960 module_alloc_update_bounds+0x1d/0x80 pages=9 vmalloc N0=9
+0xffffffffa04b8000-0xffffffffa04c5000   53248 module_alloc_update_bounds+0x1d/0x80 pages=12 vmalloc N0=12
+0xffffffffa04c5000-0xffffffffa050d000  294912 module_alloc_update_bounds+0x1d/0x80 pages=71 vmalloc N0=71
+0xffffffffa050d000-0xffffffffa068e000 1576960 VBoxHost_RTR0MemExecInit+0x64/0x1a0 [vboxdrv] pages=384 vmalloc N0=384

@@ -1,0 +1,113 @@
+name         : cbc(aes)
+driver       : cbc(aes-generic)
+module       : kernel
+priority     : 100
+refcnt       : 1
+selftest     : passed
+type         : blkcipher
+blocksize    : 16
+min keysize  : 16
+max keysize  : 32
+ivsize       : 16
+geniv        : <default>
+
+name         : hmac(sha256)
+driver       : hmac(sha256-generic)
+module       : kernel
+priority     : 0
+refcnt       : 2
+selftest     : passed
+type         : shash
+blocksize    : 64
+digestsize   : 32
+
+name         : hmac(sha1)
+driver       : hmac(sha1-generic)
+module       : kernel
+priority     : 0
+refcnt       : 2
+selftest     : passed
+type         : shash
+blocksize    : 64
+digestsize   : 20
+
+name         : stdrng
+driver       : krng
+module       : kernel
+priority     : 200
+refcnt       : 1
+selftest     : passed
+type         : rng
+seedsize     : 0
+
+name         : crc32c
+driver       : crc32c-generic
+module       : kernel
+priority     : 100
+refcnt       : 1
+selftest     : passed
+type         : shash
+blocksize    : 1
+digestsize   : 4
+
+name         : aes
+driver       : aes-generic
+module       : kernel
+priority     : 100
+refcnt       : 1
+selftest     : passed
+type         : cipher
+blocksize    : 16
+min keysize  : 16
+max keysize  : 32
+
+name         : sha256
+driver       : sha256-generic
+module       : kernel
+priority     : 0
+refcnt       : 3
+selftest     : passed
+type         : shash
+blocksize    : 64
+digestsize   : 32
+
+name         : sha224
+driver       : sha224-generic
+module       : kernel
+priority     : 0
+refcnt       : 1
+selftest     : passed
+type         : shash
+blocksize    : 64
+digestsize   : 28
+
+name         : sha1
+driver       : sha1-generic
+module       : kernel
+priority     : 0
+refcnt       : 3
+selftest     : passed
+type         : shash
+blocksize    : 64
+digestsize   : 20
+
+name         : md5
+driver       : md5-generic
+module       : kernel
+priority     : 0
+refcnt       : 1
+selftest     : passed
+type         : shash
+blocksize    : 64
+digestsize   : 16
+
+name         : crc32c
+driver       : crc32c-intel
+module       : kernel
+priority     : 200
+refcnt       : 1
+selftest     : passed
+type         : shash
+blocksize    : 1
+digestsize   : 4
+

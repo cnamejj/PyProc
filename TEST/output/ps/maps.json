@@ -1,0 +1,185 @@
+{
+    "0": {
+        "source": "TEST/data/ps/maps"
+    },
+    "1": {
+        "end-addr": 4239360,
+        "flags": "r-xp",
+        "inode": 149422164,
+        "major-dev-num": 9,
+        "minor-dev-num": 1,
+        "page-offset": 0,
+        "path": "/bin/cat",
+        "start-addr": 4194304
+    },
+    "2": {
+        "end-addr": 6336512,
+        "flags": "r--p",
+        "inode": 149422164,
+        "major-dev-num": 9,
+        "minor-dev-num": 1,
+        "page-offset": 40960,
+        "path": "/bin/cat",
+        "start-addr": 6332416
+    },
+    "3": {
+        "end-addr": 6340608,
+        "flags": "rw-p",
+        "inode": 149422164,
+        "major-dev-num": 9,
+        "minor-dev-num": 1,
+        "page-offset": 45056,
+        "path": "/bin/cat",
+        "start-addr": 6336512
+    },
+    "4": {
+        "end-addr": 11825152,
+        "flags": "rw-p",
+        "inode": 0,
+        "major-dev-num": 0,
+        "minor-dev-num": 0,
+        "page-offset": 0,
+        "path": "[heap]",
+        "start-addr": 11689984
+    },
+    "5": {
+        "end-addr": 139982264406016,
+        "flags": "r--p",
+        "inode": 29890584,
+        "major-dev-num": 9,
+        "minor-dev-num": 1,
+        "page-offset": 0,
+        "path": "/usr/lib/locale/locale-archive",
+        "start-addr": 139982261485568
+    },
+    "6": {
+        "end-addr": 139982266195968,
+        "flags": "r-xp",
+        "inode": 75238875,
+        "major-dev-num": 9,
+        "minor-dev-num": 1,
+        "page-offset": 0,
+        "path": "/lib/x86_64-linux-gnu/libc-2.15.so",
+        "start-addr": 139982264406016
+    },
+    "7": {
+        "end-addr": 139982268293120,
+        "flags": "---p",
+        "inode": 75238875,
+        "major-dev-num": 9,
+        "minor-dev-num": 1,
+        "page-offset": 1789952,
+        "path": "/lib/x86_64-linux-gnu/libc-2.15.so",
+        "start-addr": 139982266195968
+    },
+    "8": {
+        "end-addr": 139982268309504,
+        "flags": "r--p",
+        "inode": 75238875,
+        "major-dev-num": 9,
+        "minor-dev-num": 1,
+        "page-offset": 1789952,
+        "path": "/lib/x86_64-linux-gnu/libc-2.15.so",
+        "start-addr": 139982268293120
+    },
+    "9": {
+        "end-addr": 139982268317696,
+        "flags": "rw-p",
+        "inode": 75238875,
+        "major-dev-num": 9,
+        "minor-dev-num": 1,
+        "page-offset": 1806336,
+        "path": "/lib/x86_64-linux-gnu/libc-2.15.so",
+        "start-addr": 139982268309504
+    },
+    "10": {
+        "end-addr": 139982268338176,
+        "flags": "rw-p",
+        "inode": 0,
+        "major-dev-num": 0,
+        "minor-dev-num": 0,
+        "page-offset": 0,
+        "path": "",
+        "start-addr": 139982268317696
+    },
+    "11": {
+        "end-addr": 139982268477440,
+        "flags": "r-xp",
+        "inode": 75239027,
+        "major-dev-num": 9,
+        "minor-dev-num": 1,
+        "page-offset": 0,
+        "path": "/lib/x86_64-linux-gnu/ld-2.15.so",
+        "start-addr": 139982268338176
+    },
+    "12": {
+        "end-addr": 139982270431232,
+        "flags": "rw-p",
+        "inode": 0,
+        "major-dev-num": 0,
+        "minor-dev-num": 0,
+        "page-offset": 0,
+        "path": "",
+        "start-addr": 139982270418944
+    },
+    "13": {
+        "end-addr": 139982270574592,
+        "flags": "rw-p",
+        "inode": 0,
+        "major-dev-num": 0,
+        "minor-dev-num": 0,
+        "page-offset": 0,
+        "path": "",
+        "start-addr": 139982270566400
+    },
+    "14": {
+        "end-addr": 139982270578688,
+        "flags": "r--p",
+        "inode": 75239027,
+        "major-dev-num": 9,
+        "minor-dev-num": 1,
+        "page-offset": 139264,
+        "path": "/lib/x86_64-linux-gnu/ld-2.15.so",
+        "start-addr": 139982270574592
+    },
+    "15": {
+        "end-addr": 139982270586880,
+        "flags": "rw-p",
+        "inode": 75239027,
+        "major-dev-num": 9,
+        "minor-dev-num": 1,
+        "page-offset": 143360,
+        "path": "/lib/x86_64-linux-gnu/ld-2.15.so",
+        "start-addr": 139982270578688
+    },
+    "16": {
+        "end-addr": 140734350729216,
+        "flags": "rw-p",
+        "inode": 0,
+        "major-dev-num": 0,
+        "minor-dev-num": 0,
+        "page-offset": 0,
+        "path": "[stack]",
+        "start-addr": 140734350594048
+    },
+    "17": {
+        "end-addr": 140734351015936,
+        "flags": "r-xp",
+        "inode": 0,
+        "major-dev-num": 0,
+        "minor-dev-num": 0,
+        "page-offset": 0,
+        "path": "[vdso]",
+        "start-addr": 140734351011840
+    },
+    "18": {
+        "end-addr": 18446744073699069952,
+        "flags": "r-xp",
+        "inode": 0,
+        "major-dev-num": 0,
+        "minor-dev-num": 0,
+        "page-offset": 0,
+        "path": "[vsyscall]",
+        "start-addr": 18446744073699065856
+    }
+}

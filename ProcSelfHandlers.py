@@ -46,12 +46,6 @@ REGISTER_FILE = PBR.register_file
 REGISTER_PARTIAL_FILE = PBR.register_partial_file
 
 
-# --- !!! move to the end once all the handlers are added !!!
-if __name__ == "__main__":
-
-    print "Collection of handlers to parse file in the root /proc/self and \
-/proc/[0-9]* directories"
-
 
 # ---
 class ProcSelfLIMITS(PBR.FixedColumnRecs):
@@ -1708,7 +1702,7 @@ class ProcSelfAUTOGROUP(PBR.FixedWhitespaceDelimRecs):
 
         return(__id, __nice)
 
-REGISTER_FILE("/proc/autogroup", ProcSelfAUTOGROUP)
+REGISTER_FILE("/proc/self/autogroup", ProcSelfAUTOGROUP)
 REGISTER_PARTIAL_FILE("autogroup", ProcSelfAUTOGROUP)
 
 
@@ -1730,7 +1724,7 @@ class ProcSelfCOMM(PBR.SingleTextField):
         self.field[PFC.F_COMM] = __line
         return(__line)
 
-REGISTER_FILE("/proc/comm", ProcSelfCOMM)
+REGISTER_FILE("/proc/self/comm", ProcSelfCOMM)
 REGISTER_PARTIAL_FILE("comm", ProcSelfCOMM)
 
 
@@ -2235,3 +2229,12 @@ class ProcSelfENVIRON(PBR.SingleTextField):
 
 REGISTER_FILE("/proc/self/environ", ProcSelfENVIRON)
 REGISTER_PARTIAL_FILE("environ", ProcSelfENVIRON)
+
+
+
+
+if __name__ == "__main__":
+
+    print "Collection of handlers to parse file in the root /proc/self and \
+/proc/[0-9]* directories"
+

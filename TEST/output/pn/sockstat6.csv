@@ -1,0 +1,16 @@
+TEST/data/pn/sockstat6|UDP6:|UDPLITE6:|FRAG6:|TCP6:|RAW6:
+
+1|Label|inuse
+1|UDP6:|5
+
+1|Label|inuse
+1|UDPLITE6:|0
+
+1|Label|memory|inuse
+1|FRAG6:|0|0
+
+1|Label|inuse
+1|TCP6:|8
+
+1|Label|inuse
+1|RAW6:|0

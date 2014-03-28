@@ -1,0 +1,23 @@
+{
+    "0": {
+        "source": "TEST/data/pn/sockstat6"
+    },
+    "1": {
+        "FRAG6:": {
+            "inuse": "0",
+            "memory": "0"
+        },
+        "RAW6:": {
+            "inuse": "0"
+        },
+        "TCP6:": {
+            "inuse": "8"
+        },
+        "UDP6:": {
+            "inuse": "5"
+        },
+        "UDPLITE6:": {
+            "inuse": "0"
+        }
+    }
+}

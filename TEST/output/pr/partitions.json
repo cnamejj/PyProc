@@ -1,0 +1,143 @@
+{
+    "0": {
+        "source": "TEST/data/pr/partitions"
+    },
+    "1": {
+        "blocks": 1953514584,
+        "major-dev-num": 8,
+        "minor-dev-num": 0,
+        "partition-name": "sda"
+    },
+    "2": {
+        "blocks": 102400,
+        "major-dev-num": 8,
+        "minor-dev-num": 1,
+        "partition-name": "sda1"
+    },
+    "3": {
+        "blocks": 1610612736,
+        "major-dev-num": 8,
+        "minor-dev-num": 2,
+        "partition-name": "sda2"
+    },
+    "4": {
+        "blocks": 16777216,
+        "major-dev-num": 8,
+        "minor-dev-num": 3,
+        "partition-name": "sda3"
+    },
+    "5": {
+        "blocks": 326021120,
+        "major-dev-num": 8,
+        "minor-dev-num": 4,
+        "partition-name": "sda4"
+    },
+    "6": {
+        "blocks": 1953514584,
+        "major-dev-num": 8,
+        "minor-dev-num": 16,
+        "partition-name": "sdb"
+    },
+    "7": {
+        "blocks": 104857600,
+        "major-dev-num": 8,
+        "minor-dev-num": 17,
+        "partition-name": "sdb1"
+    },
+    "8": {
+        "blocks": 1610612736,
+        "major-dev-num": 8,
+        "minor-dev-num": 18,
+        "partition-name": "sdb2"
+    },
+    "9": {
+        "blocks": 16777216,
+        "major-dev-num": 8,
+        "minor-dev-num": 19,
+        "partition-name": "sdb3"
+    },
+    "10": {
+        "blocks": 221265920,
+        "major-dev-num": 8,
+        "minor-dev-num": 20,
+        "partition-name": "sdb4"
+    },
+    "11": {
+        "blocks": 1953514584,
+        "major-dev-num": 8,
+        "minor-dev-num": 32,
+        "partition-name": "sdc"
+    },
+    "12": {
+        "blocks": 104857600,
+        "major-dev-num": 8,
+        "minor-dev-num": 33,
+        "partition-name": "sdc1"
+    },
+    "13": {
+        "blocks": 1610612736,
+        "major-dev-num": 8,
+        "minor-dev-num": 34,
+        "partition-name": "sdc2"
+    },
+    "14": {
+        "blocks": 16777216,
+        "major-dev-num": 8,
+        "minor-dev-num": 35,
+        "partition-name": "sdc3"
+    },
+    "15": {
+        "blocks": 221265920,
+        "major-dev-num": 8,
+        "minor-dev-num": 36,
+        "partition-name": "sdc4"
+    },
+    "16": {
+        "blocks": 1953514584,
+        "major-dev-num": 8,
+        "minor-dev-num": 48,
+        "partition-name": "sdd"
+    },
+    "17": {
+        "blocks": 1610612736,
+        "major-dev-num": 8,
+        "minor-dev-num": 49,
+        "partition-name": "sdd1"
+    },
+    "18": {
+        "blocks": 16777216,
+        "major-dev-num": 8,
+        "minor-dev-num": 50,
+        "partition-name": "sdd2"
+    },
+    "19": {
+        "blocks": 326123520,
+        "major-dev-num": 8,
+        "minor-dev-num": 51,
+        "partition-name": "sdd3"
+    },
+    "20": {
+        "blocks": 1048575,
+        "major-dev-num": 11,
+        "minor-dev-num": 0,
+        "partition-name": "sr0"
+    },
+    "21": {
+        "blocks": 3221222400,
+        "major-dev-num": 9,
+        "minor-dev-num": 1,
+        "partition-name": "md1"
+    },
+    "22": {
+        "blocks": 104856064,
+        "major-dev-num": 9,
+        "minor-dev-num": 0,
+        "partition-name": "md0"
+    },
+    "23": {
+        "blocks": 1094660096,
+        "major-dev-num": 252,
+        "minor-dev-num": 0,
+        "partition-name": "dm-0"
+    }
+}

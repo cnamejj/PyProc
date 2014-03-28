@@ -180,7 +180,9 @@ def matches_all_crit(rawdata, rule, order = ""):
 def conv_by_rules(rawdata, rule, order=""):
     """Apply ruleset to string, by order if given, return parsed result"""
 
-    __def_order = ( SUBWORD, BEFORE_VAL, AFTER_VAL, PREFIX_VAL, SUFFIX_VAL )
+# see if we can use a different default without breaking too many things...
+#    __def_order = ( SUBWORD, BEFORE_VAL, AFTER_VAL, PREFIX_VAL, SUFFIX_VAL )
+    __def_order = ( PREFIX_VAL, SUFFIX_VAL, SUBWORD, AFTER_VAL, BEFORE_VAL )
 
     if order == "":
         order = __def_order
@@ -373,7 +375,7 @@ def show_proc_file_handlers():
 
     for __file in FILE_HANDLER_REGISTRY:
         print "For {file} use {handler}".format(file=__file,
-               handler=str(FILE_HANDLER_REGISTRY[__file]))
+               handler=str(FILE_HANDLER_REGISTRY[__file].__name__))
 
 def show_partial_proc_file_handlers():
     """
@@ -1040,6 +1042,9 @@ class TaggedMultiLineFile(object):
             except StopIteration:
                 self.at_eof = True
                 __done = True
+
+        if self.lines_read == 0:
+            raise StopIteration
 
         return(self.extra_next(sio))
 

@@ -1,0 +1,307 @@
+{
+    "0": {
+        "source": "TEST/data/ps/numa_maps"
+    },
+    "1": {
+        "active-pages": 0,
+        "anon": 0,
+        "buffer-name": "default",
+        "dirty": 0,
+        "filepath": "/bin/cat",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 2,
+        "mapped": 7,
+        "node-list": {
+            "0": "7"
+        },
+        "stack": 0,
+        "start-addr": 4194304,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "2": {
+        "active-pages": 0,
+        "anon": 1,
+        "buffer-name": "default",
+        "dirty": 1,
+        "filepath": "/bin/cat",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 0,
+        "mapped": 0,
+        "node-list": {
+            "0": "1"
+        },
+        "stack": 0,
+        "start-addr": 6332416,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "3": {
+        "active-pages": 0,
+        "anon": 1,
+        "buffer-name": "default",
+        "dirty": 1,
+        "filepath": "/bin/cat",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 0,
+        "mapped": 0,
+        "node-list": {
+            "0": "1"
+        },
+        "stack": 0,
+        "start-addr": 6336512,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "4": {
+        "active-pages": 0,
+        "anon": 3,
+        "buffer-name": "default",
+        "dirty": 3,
+        "filepath": "",
+        "heap": 1,
+        "huge": 0,
+        "mapmax": 0,
+        "mapped": 0,
+        "node-list": {
+            "0": "3"
+        },
+        "stack": 0,
+        "start-addr": 30076928,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "5": {
+        "active-pages": 0,
+        "anon": 0,
+        "buffer-name": "default",
+        "dirty": 0,
+        "filepath": "/usr/lib/locale/locale-archive",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 86,
+        "mapped": 11,
+        "node-list": {
+            "0": "11"
+        },
+        "stack": 0,
+        "start-addr": 140514102501376,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "6": {
+        "active-pages": 0,
+        "anon": 0,
+        "buffer-name": "default",
+        "dirty": 0,
+        "filepath": "/lib/x86_64-linux-gnu/libc-2.15.so",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 167,
+        "mapped": 82,
+        "node-list": {
+            "0": "82"
+        },
+        "stack": 0,
+        "start-addr": 140514105421824,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "7": {
+        "active-pages": 0,
+        "anon": 0,
+        "buffer-name": "default",
+        "dirty": 0,
+        "filepath": "/lib/x86_64-linux-gnu/libc-2.15.so",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 0,
+        "mapped": 0,
+        "node-list": {},
+        "stack": 0,
+        "start-addr": 140514107211776,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "8": {
+        "active-pages": 0,
+        "anon": 4,
+        "buffer-name": "default",
+        "dirty": 4,
+        "filepath": "/lib/x86_64-linux-gnu/libc-2.15.so",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 0,
+        "mapped": 0,
+        "node-list": {
+            "0": "4"
+        },
+        "stack": 0,
+        "start-addr": 140514109308928,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "9": {
+        "active-pages": 0,
+        "anon": 2,
+        "buffer-name": "default",
+        "dirty": 2,
+        "filepath": "/lib/x86_64-linux-gnu/libc-2.15.so",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 0,
+        "mapped": 0,
+        "node-list": {
+            "0": "2"
+        },
+        "stack": 0,
+        "start-addr": 140514109325312,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "10": {
+        "active-pages": 1,
+        "anon": 3,
+        "buffer-name": "default",
+        "dirty": 3,
+        "filepath": "",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 0,
+        "mapped": 0,
+        "node-list": {
+            "0": "3"
+        },
+        "stack": 0,
+        "start-addr": 140514109333504,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "11": {
+        "active-pages": 0,
+        "anon": 0,
+        "buffer-name": "default",
+        "dirty": 0,
+        "filepath": "/lib/x86_64-linux-gnu/ld-2.15.so",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 158,
+        "mapped": 27,
+        "node-list": {
+            "0": "27"
+        },
+        "stack": 0,
+        "start-addr": 140514109353984,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "12": {
+        "active-pages": 0,
+        "anon": 3,
+        "buffer-name": "default",
+        "dirty": 3,
+        "filepath": "",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 0,
+        "mapped": 0,
+        "node-list": {
+            "0": "3"
+        },
+        "stack": 0,
+        "start-addr": 140514111434752,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "13": {
+        "active-pages": 0,
+        "anon": 2,
+        "buffer-name": "default",
+        "dirty": 2,
+        "filepath": "",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 0,
+        "mapped": 0,
+        "node-list": {
+            "0": "2"
+        },
+        "stack": 0,
+        "start-addr": 140514111582208,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "14": {
+        "active-pages": 0,
+        "anon": 1,
+        "buffer-name": "default",
+        "dirty": 1,
+        "filepath": "/lib/x86_64-linux-gnu/ld-2.15.so",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 0,
+        "mapped": 0,
+        "node-list": {
+            "0": "1"
+        },
+        "stack": 0,
+        "start-addr": 140514111590400,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "15": {
+        "active-pages": 0,
+        "anon": 2,
+        "buffer-name": "default",
+        "dirty": 2,
+        "filepath": "/lib/x86_64-linux-gnu/ld-2.15.so",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 0,
+        "mapped": 0,
+        "node-list": {
+            "0": "2"
+        },
+        "stack": 0,
+        "start-addr": 140514111594496,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "16": {
+        "active-pages": 0,
+        "anon": 2,
+        "buffer-name": "default",
+        "dirty": 2,
+        "filepath": "",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 0,
+        "mapped": 0,
+        "node-list": {
+            "0": "2"
+        },
+        "stack": 1,
+        "start-addr": 140736472297472,
+        "swapcache": 0,
+        "writeback": 0
+    },
+    "17": {
+        "active-pages": 0,
+        "anon": 0,
+        "buffer-name": "default",
+        "dirty": 0,
+        "filepath": "",
+        "heap": 0,
+        "huge": 0,
+        "mapmax": 0,
+        "mapped": 0,
+        "node-list": {},
+        "stack": 0,
+        "start-addr": 140736473264128,
+        "swapcache": 0,
+        "writeback": 0
+    }
+}

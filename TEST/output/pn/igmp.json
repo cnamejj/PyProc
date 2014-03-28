@@ -1,0 +1,27 @@
+{
+    "0": {
+        "source": "TEST/data/pn/igmp"
+    },
+    "1": {
+        "count": 1,
+        "device": "lo",
+        "group": 16777440,
+        "index": 1,
+        "querier": "V3",
+        "reporter": 0,
+        "timer": 0,
+        "users": 1,
+        "zero1": 0
+    },
+    "2": {
+        "count": 1,
+        "device": "eth0",
+        "group": 16777440,
+        "index": 2,
+        "querier": "V3",
+        "reporter": 0,
+        "timer": 0,
+        "users": 1,
+        "zero1": 0
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "0": {
+        "source": "TEST/data/pn/connector"
+    },
+    "1": {
+        "id_idx": 1,
+        "id_val": 6,
+        "name": "cn_proc"
+    }
+}

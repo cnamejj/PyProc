@@ -1,0 +1,101 @@
+{
+    "0": {
+        "source": "TEST/data/pn/softnet_stat"
+    },
+    "1": {
+        "cpu_collision": 0,
+        "dropped": 0,
+        "processed": 5963626,
+        "received_rps": 0,
+        "time_squeeze": 0,
+        "zero1": 0,
+        "zero2": 0,
+        "zero3": 0,
+        "zero4": 0,
+        "zero5": 0
+    },
+    "2": {
+        "cpu_collision": 0,
+        "dropped": 0,
+        "processed": 67740,
+        "received_rps": 0,
+        "time_squeeze": 0,
+        "zero1": 0,
+        "zero2": 0,
+        "zero3": 0,
+        "zero4": 0,
+        "zero5": 0
+    },
+    "3": {
+        "cpu_collision": 0,
+        "dropped": 0,
+        "processed": 53448,
+        "received_rps": 0,
+        "time_squeeze": 0,
+        "zero1": 0,
+        "zero2": 0,
+        "zero3": 0,
+        "zero4": 0,
+        "zero5": 0
+    },
+    "4": {
+        "cpu_collision": 0,
+        "dropped": 0,
+        "processed": 58026,
+        "received_rps": 0,
+        "time_squeeze": 0,
+        "zero1": 0,
+        "zero2": 0,
+        "zero3": 0,
+        "zero4": 0,
+        "zero5": 0
+    },
+    "5": {
+        "cpu_collision": 0,
+        "dropped": 0,
+        "processed": 23075,
+        "received_rps": 0,
+        "time_squeeze": 0,
+        "zero1": 0,
+        "zero2": 0,
+        "zero3": 0,
+        "zero4": 0,
+        "zero5": 0
+    },
+    "6": {
+        "cpu_collision": 0,
+        "dropped": 0,
+        "processed": 27674,
+        "received_rps": 0,
+        "time_squeeze": 0,
+        "zero1": 0,
+        "zero2": 0,
+        "zero3": 0,
+        "zero4": 0,
+        "zero5": 0
+    },
+    "7": {
+        "cpu_collision": 0,
+        "dropped": 0,
+        "processed": 20627,
+        "received_rps": 0,
+        "time_squeeze": 0,
+        "zero1": 0,
+        "zero2": 0,
+        "zero3": 0,
+        "zero4": 0,
+        "zero5": 0
+    },
+    "8": {
+        "cpu_collision": 0,
+        "dropped": 0,
+        "processed": 32534,
+        "received_rps": 0,
+        "time_squeeze": 0,
+        "zero1": 0,
+        "zero2": 0,
+        "zero3": 0,
+        "zero4": 0,
+        "zero5": 0
+    }
+}

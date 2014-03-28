@@ -1,0 +1,125 @@
+{
+    "0": {
+        "source": "TEST/data/pr/filesystems"
+    },
+    "1": {
+        "filesystem": "sysfs",
+        "requires-device": "nodev"
+    },
+    "2": {
+        "filesystem": "rootfs",
+        "requires-device": "nodev"
+    },
+    "3": {
+        "filesystem": "bdev",
+        "requires-device": "nodev"
+    },
+    "4": {
+        "filesystem": "proc",
+        "requires-device": "nodev"
+    },
+    "5": {
+        "filesystem": "cgroup",
+        "requires-device": "nodev"
+    },
+    "6": {
+        "filesystem": "cpuset",
+        "requires-device": "nodev"
+    },
+    "7": {
+        "filesystem": "tmpfs",
+        "requires-device": "nodev"
+    },
+    "8": {
+        "filesystem": "devtmpfs",
+        "requires-device": "nodev"
+    },
+    "9": {
+        "filesystem": "debugfs",
+        "requires-device": "nodev"
+    },
+    "10": {
+        "filesystem": "securityfs",
+        "requires-device": "nodev"
+    },
+    "11": {
+        "filesystem": "sockfs",
+        "requires-device": "nodev"
+    },
+    "12": {
+        "filesystem": "pipefs",
+        "requires-device": "nodev"
+    },
+    "13": {
+        "filesystem": "anon_inodefs",
+        "requires-device": "nodev"
+    },
+    "14": {
+        "filesystem": "devpts",
+        "requires-device": "nodev"
+    },
+    "15": {
+        "filesystem": "ext3",
+        "requires-device": ""
+    },
+    "16": {
+        "filesystem": "ext4",
+        "requires-device": ""
+    },
+    "17": {
+        "filesystem": "ramfs",
+        "requires-device": "nodev"
+    },
+    "18": {
+        "filesystem": "hugetlbfs",
+        "requires-device": "nodev"
+    },
+    "19": {
+        "filesystem": "ecryptfs",
+        "requires-device": "nodev"
+    },
+    "20": {
+        "filesystem": "fuseblk",
+        "requires-device": ""
+    },
+    "21": {
+        "filesystem": "fuse",
+        "requires-device": "nodev"
+    },
+    "22": {
+        "filesystem": "fusectl",
+        "requires-device": "nodev"
+    },
+    "23": {
+        "filesystem": "pstore",
+        "requires-device": "nodev"
+    },
+    "24": {
+        "filesystem": "mqueue",
+        "requires-device": "nodev"
+    },
+    "25": {
+        "filesystem": "vfat",
+        "requires-device": ""
+    },
+    "26": {
+        "filesystem": "rpc_pipefs",
+        "requires-device": "nodev"
+    },
+    "27": {
+        "filesystem": "binfmt_misc",
+        "requires-device": "nodev"
+    },
+    "28": {
+        "filesystem": "nfs",
+        "requires-device": "nodev"
+    },
+    "29": {
+        "filesystem": "nfs4",
+        "requires-device": "nodev"
+    },
+    "30": {
+        "filesystem": "nfsd",
+        "requires-device": "nodev"
+    }
+}

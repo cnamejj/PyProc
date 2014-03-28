@@ -1,0 +1,9 @@
+{
+    "0": {
+        "source": "TEST/data/ps/cwd"
+    },
+    "1": {
+        "filepath": "TEST/data/ps/cwd",
+        "symlink-target": "/tmp"
+    }
+}

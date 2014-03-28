@@ -1,0 +1,4 @@
+TEST/data/pn/route|iface|netmask_hex|dest_hexip|metric|netmask|ref_count|gateway_hex|use_count|window|flags|gateway|mtu|irtt|dest_ip
+1|eth0|00000000|00000000|0|0.0.0.0|0|0101A8C0|0|0|3|192.168.1.1|0|0|0.0.0.0
+2|eth0|0000FFFF|0000FEA9|1000|255.255.0.0|0|00000000|0|0|1|0.0.0.0|0|0|169.254.0.0
+3|eth0|00FFFFFF|0001A8C0|1|255.255.255.0|0|00000000|0|0|1|0.0.0.0|0|0|192.168.1.0

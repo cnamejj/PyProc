@@ -1,0 +1,14 @@
+{
+    "0": {
+        "source": "TEST/data/pn/rt6_stats"
+    },
+    "1": {
+        "dest_ops": 2,
+        "fib_discarded_routes": 874,
+        "fib_nodes": 0,
+        "fib_route_alloc": 1,
+        "fib_route_cache": 6,
+        "fib_route_entries": 5,
+        "fib_route_nodes": 4
+    }
+}

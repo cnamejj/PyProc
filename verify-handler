@@ -1,0 +1,95 @@
+#!/bin/bash
+
+code=$1
+
+# ---
+
+DATA_DIR="TEST/data/"
+RES_DIR="TEST/output/"
+NO_HANDLER="ProcNetNULL"
+NO_DATAFILE="N/A"
+
+declare -A preftrans=(
+  [#/proc/net/]="pn/"
+  [#/proc/self/]="ps/"
+)
+
+# -- Can't be in the list, since it collides
+last_from="#/proc/"
+last_sub="pr/"
+
+# ---
+
+err_exit() \
+{
+    echo "Error : $*"
+    exit 1
+}
+
+# ---
+
+if [ "${code}" = "" ]
+then
+	err_exit "No handler class given."
+fi
+
+# ---
+
+if [ "${code}" = "${NO_HANDLER}" ]
+then
+	err_exit "Dummy handler '${NO_HANDLER}' does not produce any output."
+fi
+
+summary=( $(./ShowHandlerDataFile "${code}") )
+
+if [ "${#summary[@]}" -lt 4 ]
+then
+	err_exit "Lookup of data used by '${code}' failed."
+fi
+
+datafile="${summary[-1]}"
+
+# ---
+
+if [ "${datafile}" = "${NO_DATAFILE}" ]
+then
+	err_exit "No datafile mapping available for '${code}'."
+fi
+
+# ---
+
+#echo "dbg:: Handler:${code} Data:${datafile}"
+
+for pref in ${!preftrans[@]}
+do
+	datafile="${datafile/${pref}/${preftrans[${pref}]}}"
+#	echo "${pref} > ${preftrans[${pref}]} : ${datafile}"
+done
+
+#echo "dbg:: Handler:${code} Data:${datafile}"
+
+datafile="${datafile/${last_from}/${last_sub}}"
+#echo "${last_from} > ${last_sub} : ${datafile}"
+
+#echo "dbg:: Handler:${code} Data:${datafile}"
+
+inp="${DATA_DIR}${datafile}"
+csv="${RES_DIR}${datafile}.csv"
+json="${RES_DIR}${datafile}.json"
+
+if [ ! -f "${inp}" ]
+then
+	err_exit "The ${code} input file '${inp}' not found."
+fi
+
+# ---
+
+#echo "dbg:: Read:${inp}"
+#echo "dbg:: CSV::${csv} $(./proc2csv ${inp} | sum) $(sum ${csv})"
+#echo "dbg:: JSON:${json} $(./proc2json ${inp} | sum) $(sum ${json})"
+
+[ "$(./proc2csv ${inp} | sum)" = "$(sum ${csv})" -a \
+  "$(./proc2json ${inp} | sum)" = "$(sum ${json})" ] \
+|| compare="Fail" && compare="Pass"
+
+echo "${compare} ${code}"

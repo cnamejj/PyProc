@@ -1,0 +1,4 @@
+TEST/data/pn/igmp6|int_index|mcast_users|mcast_flags|device|mcast_addr|mcast_addr_hex
+1|1|1|0|lo|0:2ff::100:0|ff020000000000000000000000000001
+2|2|1|0|eth0|0:2ff::100:0:86e4:1ff|ff0200000000000000000001ff01e486
+3|2|1|0|eth0|0:2ff::100:0|ff020000000000000000000000000001

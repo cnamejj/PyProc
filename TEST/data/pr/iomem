@@ -1,0 +1,79 @@
+00000000-0000ffff : reserved
+00010000-0009ffff : System RAM
+000a0000-000bffff : PCI Bus 0000:00
+000c0000-000dffff : PCI Bus 0000:00
+  000c0000-000cffff : Video ROM
+000f0000-000fffff : System ROM
+00100000-ce6dafff : System RAM
+  01000000-01669cab : Kernel code
+  01669cac-01ce4f7f : Kernel data
+  01dd3000-01f28fff : Kernel bss
+ce6db000-ce7e3fff : ACPI Non-volatile Storage
+ce7e4000-ce91afff : reserved
+ce91b000-ceb1dfff : ACPI Non-volatile Storage
+ceb1e000-cee0afff : System RAM
+cee0b000-cee11fff : ACPI Non-volatile Storage
+cee12000-cee1afff : ACPI Tables
+cee1b000-cef4dfff : reserved
+cef4e000-cef5efff : ACPI Non-volatile Storage
+cef5f000-cef80fff : reserved
+cef81000-cef82fff : System RAM
+cef83000-cefcffff : reserved
+cefd0000-cefd9fff : ACPI Non-volatile Storage
+cefda000-ceff6fff : reserved
+ceff7000-ceffffff : System RAM
+cf000000-cfffffff : RAM buffer
+d0000000-fbffffff : PCI Bus 0000:00
+  d0000000-dfffffff : PCI Bus 0000:01
+    d0000000-dfffffff : 0000:01:00.0
+      d0000000-d01effff : efifb
+  e0000000-efffffff : PCI MMCONFIG 0000 [bus 00-ff]
+    e0000000-efffffff : reserved
+  fba00000-fbafffff : PCI Bus 0000:09
+    fba00000-fba007ff : 0000:09:00.0
+      fba00000-fba007ff : firewire_ohci
+  fbb00000-fbbfffff : PCI Bus 0000:08
+    fbb00000-fbb001ff : 0000:08:00.0
+      fbb00000-fbb001ff : ahci
+  fbc00000-fbcfffff : PCI Bus 0000:07
+    fbc00000-fbc07fff : 0000:07:00.0
+      fbc00000-fbc07fff : xhci_hcd
+  fbd00000-fbdfffff : PCI Bus 0000:06
+    fbd00000-fbd07fff : 0000:06:00.0
+      fbd00000-fbd07fff : xhci_hcd
+  fbe00000-fbefffff : PCI Bus 0000:01
+    fbe00000-fbe3ffff : 0000:01:00.0
+    fbe40000-fbe5ffff : 0000:01:00.0
+    fbe60000-fbe63fff : 0000:01:00.1
+  fbf00000-fbf1ffff : 0000:00:19.0
+    fbf00000-fbf1ffff : e1000e
+  fbf20000-fbf23fff : 0000:00:1b.0
+    fbf20000-fbf23fff : ICH HD audio
+  fbf44000-fbf440ff : 0000:00:1f.3
+  fbf45000-fbf457ff : 0000:00:1f.2
+    fbf45000-fbf457ff : ahci
+  fbf46000-fbf463ff : 0000:00:1d.0
+    fbf46000-fbf463ff : ehci_hcd
+  fbf47000-fbf473ff : 0000:00:1a.0
+    fbf47000-fbf473ff : ehci_hcd
+  fbf48000-fbf48fff : 0000:00:19.0
+    fbf48000-fbf48fff : e1000e
+  fbf49000-fbf4900f : 0000:00:16.0
+    fbf49000-fbf4900f : mei
+  fbf4a000-fbf4afff : 0000:00:05.4
+  fbfff000-fbffffff : pnp 00:01
+fc000000-fcffffff : pnp 00:01
+fd000000-fdffffff : pnp 00:01
+fe000000-feafffff : pnp 00:01
+feb00000-febfffff : pnp 00:01
+fec00000-fec003ff : IOAPIC 0
+fec01000-fec013ff : IOAPIC 1
+fed00000-fed003ff : HPET 0
+fed08000-fed08fff : pnp 00:09
+fed1c000-fed1ffff : reserved
+  fed1c000-fed1ffff : pnp 00:09
+fed45000-fedfffff : pnp 00:01
+fee00000-fee00fff : Local APIC
+ff000000-ffffffff : reserved
+  ff000000-ffffffff : pnp 00:09
+100000000-82fffffff : System RAM

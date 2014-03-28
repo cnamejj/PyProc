@@ -1,0 +1,17 @@
+TEST/data/pn/snmp|FragCreates|ReasmFails|OutNoRoutes|DefaultTTL|protocol|ReasmOKs|ReasmReqds|ReasmTimeout|FragFails|InReceives|OutDiscards|InUnknownProtos|InAddrErrors|FragOKs|InHdrErrors|InDelivers|Ip:|InDiscards|Forwarding|ForwDatagrams|OutRequests
+1|0|0|204|64|Ip|529|1108|0|0|37195630|0|0|0|0|0|36727926|Ip:|0|2|0|14382352
+
+TEST/data/pn/snmp|protocol|InRedirects|InMsgs|InSrcQuenchs|InAddrMasks|InTimestamps|OutEchos|OutParmProbs|InTimestampReps|InParmProbs|OutMsgs|OutTimestamps|OutAddrMaskReps|OutTimeExcds|Icmp:|OutErrors|InDestUnreachs|InTimeExcds|OutSrcQuenchs|OutEchoReps|OutAddrMasks|OutDestUnreachs|OutRedirects|InEchoReps|OutTimestampReps|InEchos|InErrors|InAddrMaskReps
+2|Icmp|0|16159|0|0|0|7377|0|0|0|16158|0|0|0|Icmp:|0|574|1008|0|7274|0|147|0|7303|0|7274|7|0
+
+TEST/data/pn/snmp|protocol|OutType3|OutType8|OutType69|InType0|InType8|InType3|IcmpMsg:|OutType0|InType11
+3|IcmpMsg|147|7377|1360|7303|7274|574|IcmpMsg:|7274|1008
+
+TEST/data/pn/snmp|InSegs|RtoAlgorithm|RetransSegs|InErrs|CurrEstab|RtoMin|protocol|OutSegs|OutRsts|PassiveOpens|RtoMax|Tcp:|ActiveOpens|MaxConn|EstabResets|AttemptFails
+4|36102462|1|8009|0|16|200|Tcp|106252739|28188|23213|120000|Tcp:|73180|-1|9593|2202
+
+TEST/data/pn/snmp|InDatagrams|OutDatagrams|protocol|RcvbufErrors|InErrors|SndbufErrors|NoPorts|Udp:
+5|611211|455759|Udp|0|0|0|111|Udp:
+
+TEST/data/pn/snmp|InDatagrams|OutDatagrams|protocol|RcvbufErrors|InErrors|UdpLite:|NoPorts|SndbufErrors
+6|0|0|UdpLite|0|0|UdpLite:|0|0

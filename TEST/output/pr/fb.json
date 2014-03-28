@@ -1,0 +1,9 @@
+{
+    "0": {
+        "source": "TEST/data/pr/fb"
+    },
+    "1": {
+        "id-list": "EFI VGA",
+        "node": 8
+    }
+}

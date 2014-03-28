@@ -1,0 +1,29 @@
+{
+    "0": {
+        "source": "TEST/data/pn/igmp6"
+    },
+    "1": {
+        "device": "lo",
+        "int_index": 1,
+        "mcast_addr": "0:2ff::100:0",
+        "mcast_addr_hex": "ff020000000000000000000000000001",
+        "mcast_flags": "0",
+        "mcast_users": 1
+    },
+    "2": {
+        "device": "eth0",
+        "int_index": 2,
+        "mcast_addr": "0:2ff::100:0:86e4:1ff",
+        "mcast_addr_hex": "ff0200000000000000000001ff01e486",
+        "mcast_flags": "0",
+        "mcast_users": 1
+    },
+    "3": {
+        "device": "eth0",
+        "int_index": 2,
+        "mcast_addr": "0:2ff::100:0",
+        "mcast_addr_hex": "ff020000000000000000000000000001",
+        "mcast_flags": "0",
+        "mcast_users": 1
+    }
+}

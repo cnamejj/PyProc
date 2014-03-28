@@ -1,0 +1,43 @@
+{
+    "0": {
+        "source": "TEST/data/pn/dev"
+    },
+    "1": {
+        "device": "lo",
+        "rx_bytes": 35154655,
+        "rx_compressed": 0,
+        "rx_drop": 0,
+        "rx_errors": 0,
+        "rx_fifo": 0,
+        "rx_frame": 0,
+        "rx_multicast": 0,
+        "rx_packets": 318872,
+        "tx_bytes": 35154655,
+        "tx_carrier": 0,
+        "tx_colls": 0,
+        "tx_compressed": 0,
+        "tx_drop": 0,
+        "tx_errors": 0,
+        "tx_fifo": 0,
+        "tx_packets": 318872
+    },
+    "2": {
+        "device": "eth0",
+        "rx_bytes": 4955662683,
+        "rx_compressed": 0,
+        "rx_drop": 0,
+        "rx_errors": 0,
+        "rx_fifo": 0,
+        "rx_frame": 0,
+        "rx_multicast": 916815,
+        "rx_packets": 5942493,
+        "tx_bytes": 747662119,
+        "tx_carrier": 0,
+        "tx_colls": 0,
+        "tx_compressed": 0,
+        "tx_drop": 0,
+        "tx_errors": 0,
+        "tx_fifo": 0,
+        "tx_packets": 4313005
+    }
+}

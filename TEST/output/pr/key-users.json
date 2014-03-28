@@ -1,0 +1,25 @@
+{
+    "0": {
+        "source": "TEST/data/pr/key-users"
+    },
+    "1": {
+        "max-bytes": 20000,
+        "max-keys": 200,
+        "num-keys": 3,
+        "num-keys-inst": 3,
+        "num-user-bytes": 0,
+        "num-user-keys": 0,
+        "uid": 0,
+        "usage": 4
+    },
+    "2": {
+        "max-bytes": 20000,
+        "max-keys": 200,
+        "num-keys": 13,
+        "num-keys-inst": 3,
+        "num-user-bytes": 10,
+        "num-user-keys": 0,
+        "uid": 1,
+        "usage": 4
+    }
+}

@@ -1,0 +1,33 @@
+{
+    "0": {
+        "source": "TEST/data/pr/swaps"
+    },
+    "1": {
+        "filename": "/dev/sda3",
+        "priority": -1,
+        "size": 16777212,
+        "type": "partition",
+        "used": 208
+    },
+    "2": {
+        "filename": "/dev/sdb3",
+        "priority": -2,
+        "size": 16777212,
+        "type": "partition",
+        "used": 0
+    },
+    "3": {
+        "filename": "/dev/sdc3",
+        "priority": -3,
+        "size": 16777212,
+        "type": "partition",
+        "used": 0
+    },
+    "4": {
+        "filename": "/dev/sdd2",
+        "priority": -4,
+        "size": 16777212,
+        "type": "partition",
+        "used": 0
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "0": {
+        "source": "TEST/data/ps/stack"
+    },
+    "1": {
+        "address": 18446744071578981510,
+        "stack-entry": "save_stack_trace_tsk+0x26/0x50"
+    },
+    "2": {
+        "address": 18446744071580782044,
+        "stack-entry": "proc_pid_stack+0xbc/0x110"
+    },
+    "3": {
+        "address": 18446744071580786588,
+        "stack-entry": "proc_single_show+0x5c/0xa0"
+    },
+    "4": {
+        "address": 18446744071580526091,
+        "stack-entry": "seq_read+0x12b/0x3d0"
+    },
+    "5": {
+        "address": 18446744071580384960,
+        "stack-entry": "vfs_read+0xb0/0x180"
+    },
+    "6": {
+        "address": 18446744071580385242,
+        "stack-entry": "sys_read+0x4a/0x90"
+    },
+    "7": {
+        "address": 18446744071585549698,
+        "stack-entry": "system_call_fastpath+0x16/0x1b"
+    },
+    "8": {
+        "address": 18446744073709551615,
+        "stack-entry": "0xffffffffffffffff"
+    }
+}

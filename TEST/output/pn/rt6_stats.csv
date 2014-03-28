@@ -1,0 +1,2 @@
+TEST/data/pn/rt6_stats|fib_discarded_routes|dest_ops|fib_route_alloc|fib_nodes|fib_route_cache|fib_route_nodes|fib_route_entries
+1|874|2|1|0|6|4|5

@@ -1,0 +1,9 @@
+TEST/data/pn/stat/ndisc_cache|unres_dis_count|gc_forc_count|arp_entries|destroy_count|rx_ucast_count|lookup_count|alloc_count|hash_grow_count|hit_count|rx_mcast_count|gc_peri_count|res_fail_count
+1|0|0|1|0|0|951|884|0|34|0|0|0
+2|0|0|1|0|0|0|0|0|0|0|0|0
+3|0|0|1|884|0|1|0|0|1|0|76545|0
+4|0|0|1|0|0|0|0|0|0|0|0|0
+5|0|0|1|0|0|0|0|0|0|0|0|0
+6|0|0|1|0|0|0|0|0|0|0|0|0
+7|0|0|1|0|0|1|1|0|0|0|0|0
+8|0|0|1|0|0|0|0|0|0|0|0|0

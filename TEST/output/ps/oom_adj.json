@@ -1,0 +1,8 @@
+{
+    "0": {
+        "source": "TEST/data/ps/oom_adj"
+    },
+    "1": {
+        "oom-adj": -17
+    }
+}

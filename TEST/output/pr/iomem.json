@@ -1,0 +1,479 @@
+{
+    "0": {
+        "source": "TEST/data/pr/iomem"
+    },
+    "1": {
+        "end-addr": 65535,
+        "level": 0,
+        "memory-description": "reserved",
+        "start-addr": 0
+    },
+    "2": {
+        "end-addr": 655359,
+        "level": 0,
+        "memory-description": "System RAM",
+        "start-addr": 65536
+    },
+    "3": {
+        "end-addr": 786431,
+        "level": 0,
+        "memory-description": "PCI Bus 0000:00",
+        "start-addr": 655360
+    },
+    "4": {
+        "end-addr": 917503,
+        "level": 0,
+        "memory-description": "PCI Bus 0000:00",
+        "start-addr": 786432
+    },
+    "5": {
+        "end-addr": 851967,
+        "level": 1,
+        "memory-description": "Video ROM",
+        "start-addr": 786432
+    },
+    "6": {
+        "end-addr": 1048575,
+        "level": 0,
+        "memory-description": "System ROM",
+        "start-addr": 983040
+    },
+    "7": {
+        "end-addr": 3463294975,
+        "level": 0,
+        "memory-description": "System RAM",
+        "start-addr": 1048576
+    },
+    "8": {
+        "end-addr": 23501995,
+        "level": 1,
+        "memory-description": "Kernel code",
+        "start-addr": 16777216
+    },
+    "9": {
+        "end-addr": 30297983,
+        "level": 1,
+        "memory-description": "Kernel data",
+        "start-addr": 23501996
+    },
+    "10": {
+        "end-addr": 32673791,
+        "level": 1,
+        "memory-description": "Kernel bss",
+        "start-addr": 31272960
+    },
+    "11": {
+        "end-addr": 3464380415,
+        "level": 0,
+        "memory-description": "ACPI Non-volatile Storage",
+        "start-addr": 3463294976
+    },
+    "12": {
+        "end-addr": 3465654271,
+        "level": 0,
+        "memory-description": "reserved",
+        "start-addr": 3464380416
+    },
+    "13": {
+        "end-addr": 3467763711,
+        "level": 0,
+        "memory-description": "ACPI Non-volatile Storage",
+        "start-addr": 3465654272
+    },
+    "14": {
+        "end-addr": 3470831615,
+        "level": 0,
+        "memory-description": "System RAM",
+        "start-addr": 3467763712
+    },
+    "15": {
+        "end-addr": 3470860287,
+        "level": 0,
+        "memory-description": "ACPI Non-volatile Storage",
+        "start-addr": 3470831616
+    },
+    "16": {
+        "end-addr": 3470897151,
+        "level": 0,
+        "memory-description": "ACPI Tables",
+        "start-addr": 3470860288
+    },
+    "17": {
+        "end-addr": 3472154623,
+        "level": 0,
+        "memory-description": "reserved",
+        "start-addr": 3470897152
+    },
+    "18": {
+        "end-addr": 3472224255,
+        "level": 0,
+        "memory-description": "ACPI Non-volatile Storage",
+        "start-addr": 3472154624
+    },
+    "19": {
+        "end-addr": 3472363519,
+        "level": 0,
+        "memory-description": "reserved",
+        "start-addr": 3472224256
+    },
+    "20": {
+        "end-addr": 3472371711,
+        "level": 0,
+        "memory-description": "System RAM",
+        "start-addr": 3472363520
+    },
+    "21": {
+        "end-addr": 3472687103,
+        "level": 0,
+        "memory-description": "reserved",
+        "start-addr": 3472371712
+    },
+    "22": {
+        "end-addr": 3472728063,
+        "level": 0,
+        "memory-description": "ACPI Non-volatile Storage",
+        "start-addr": 3472687104
+    },
+    "23": {
+        "end-addr": 3472846847,
+        "level": 0,
+        "memory-description": "reserved",
+        "start-addr": 3472728064
+    },
+    "24": {
+        "end-addr": 3472883711,
+        "level": 0,
+        "memory-description": "System RAM",
+        "start-addr": 3472846848
+    },
+    "25": {
+        "end-addr": 3489660927,
+        "level": 0,
+        "memory-description": "RAM buffer",
+        "start-addr": 3472883712
+    },
+    "26": {
+        "end-addr": 4227858431,
+        "level": 0,
+        "memory-description": "PCI Bus 0000:00",
+        "start-addr": 3489660928
+    },
+    "27": {
+        "end-addr": 3758096383,
+        "level": 1,
+        "memory-description": "PCI Bus 0000:01",
+        "start-addr": 3489660928
+    },
+    "28": {
+        "end-addr": 3758096383,
+        "level": 2,
+        "memory-description": "0000:01:00.0",
+        "start-addr": 3489660928
+    },
+    "29": {
+        "end-addr": 3491692543,
+        "level": 3,
+        "memory-description": "efifb",
+        "start-addr": 3489660928
+    },
+    "30": {
+        "end-addr": 4026531839,
+        "level": 1,
+        "memory-description": "PCI MMCONFIG 0000 [bus 00-ff]",
+        "start-addr": 3758096384
+    },
+    "31": {
+        "end-addr": 4026531839,
+        "level": 2,
+        "memory-description": "reserved",
+        "start-addr": 3758096384
+    },
+    "32": {
+        "end-addr": 4222615551,
+        "level": 1,
+        "memory-description": "PCI Bus 0000:09",
+        "start-addr": 4221566976
+    },
+    "33": {
+        "end-addr": 4221569023,
+        "level": 2,
+        "memory-description": "0000:09:00.0",
+        "start-addr": 4221566976
+    },
+    "34": {
+        "end-addr": 4221569023,
+        "level": 3,
+        "memory-description": "firewire_ohci",
+        "start-addr": 4221566976
+    },
+    "35": {
+        "end-addr": 4223664127,
+        "level": 1,
+        "memory-description": "PCI Bus 0000:08",
+        "start-addr": 4222615552
+    },
+    "36": {
+        "end-addr": 4222616063,
+        "level": 2,
+        "memory-description": "0000:08:00.0",
+        "start-addr": 4222615552
+    },
+    "37": {
+        "end-addr": 4222616063,
+        "level": 3,
+        "memory-description": "ahci",
+        "start-addr": 4222615552
+    },
+    "38": {
+        "end-addr": 4224712703,
+        "level": 1,
+        "memory-description": "PCI Bus 0000:07",
+        "start-addr": 4223664128
+    },
+    "39": {
+        "end-addr": 4223696895,
+        "level": 2,
+        "memory-description": "0000:07:00.0",
+        "start-addr": 4223664128
+    },
+    "40": {
+        "end-addr": 4223696895,
+        "level": 3,
+        "memory-description": "xhci_hcd",
+        "start-addr": 4223664128
+    },
+    "41": {
+        "end-addr": 4225761279,
+        "level": 1,
+        "memory-description": "PCI Bus 0000:06",
+        "start-addr": 4224712704
+    },
+    "42": {
+        "end-addr": 4224745471,
+        "level": 2,
+        "memory-description": "0000:06:00.0",
+        "start-addr": 4224712704
+    },
+    "43": {
+        "end-addr": 4224745471,
+        "level": 3,
+        "memory-description": "xhci_hcd",
+        "start-addr": 4224712704
+    },
+    "44": {
+        "end-addr": 4226809855,
+        "level": 1,
+        "memory-description": "PCI Bus 0000:01",
+        "start-addr": 4225761280
+    },
+    "45": {
+        "end-addr": 4226023423,
+        "level": 2,
+        "memory-description": "0000:01:00.0",
+        "start-addr": 4225761280
+    },
+    "46": {
+        "end-addr": 4226154495,
+        "level": 2,
+        "memory-description": "0000:01:00.0",
+        "start-addr": 4226023424
+    },
+    "47": {
+        "end-addr": 4226170879,
+        "level": 2,
+        "memory-description": "0000:01:00.1",
+        "start-addr": 4226154496
+    },
+    "48": {
+        "end-addr": 4226940927,
+        "level": 1,
+        "memory-description": "0000:00:19.0",
+        "start-addr": 4226809856
+    },
+    "49": {
+        "end-addr": 4226940927,
+        "level": 2,
+        "memory-description": "e1000e",
+        "start-addr": 4226809856
+    },
+    "50": {
+        "end-addr": 4226957311,
+        "level": 1,
+        "memory-description": "0000:00:1b.0",
+        "start-addr": 4226940928
+    },
+    "51": {
+        "end-addr": 4226957311,
+        "level": 2,
+        "memory-description": "ICH HD audio",
+        "start-addr": 4226940928
+    },
+    "52": {
+        "end-addr": 4227088639,
+        "level": 1,
+        "memory-description": "0000:00:1f.3",
+        "start-addr": 4227088384
+    },
+    "53": {
+        "end-addr": 4227094527,
+        "level": 1,
+        "memory-description": "0000:00:1f.2",
+        "start-addr": 4227092480
+    },
+    "54": {
+        "end-addr": 4227094527,
+        "level": 2,
+        "memory-description": "ahci",
+        "start-addr": 4227092480
+    },
+    "55": {
+        "end-addr": 4227097599,
+        "level": 1,
+        "memory-description": "0000:00:1d.0",
+        "start-addr": 4227096576
+    },
+    "56": {
+        "end-addr": 4227097599,
+        "level": 2,
+        "memory-description": "ehci_hcd",
+        "start-addr": 4227096576
+    },
+    "57": {
+        "end-addr": 4227101695,
+        "level": 1,
+        "memory-description": "0000:00:1a.0",
+        "start-addr": 4227100672
+    },
+    "58": {
+        "end-addr": 4227101695,
+        "level": 2,
+        "memory-description": "ehci_hcd",
+        "start-addr": 4227100672
+    },
+    "59": {
+        "end-addr": 4227108863,
+        "level": 1,
+        "memory-description": "0000:00:19.0",
+        "start-addr": 4227104768
+    },
+    "60": {
+        "end-addr": 4227108863,
+        "level": 2,
+        "memory-description": "e1000e",
+        "start-addr": 4227104768
+    },
+    "61": {
+        "end-addr": 4227108879,
+        "level": 1,
+        "memory-description": "0000:00:16.0",
+        "start-addr": 4227108864
+    },
+    "62": {
+        "end-addr": 4227108879,
+        "level": 2,
+        "memory-description": "mei",
+        "start-addr": 4227108864
+    },
+    "63": {
+        "end-addr": 4227117055,
+        "level": 1,
+        "memory-description": "0000:00:05.4",
+        "start-addr": 4227112960
+    },
+    "64": {
+        "end-addr": 4227858431,
+        "level": 1,
+        "memory-description": "pnp 00:01",
+        "start-addr": 4227854336
+    },
+    "65": {
+        "end-addr": 4244635647,
+        "level": 0,
+        "memory-description": "pnp 00:01",
+        "start-addr": 4227858432
+    },
+    "66": {
+        "end-addr": 4261412863,
+        "level": 0,
+        "memory-description": "pnp 00:01",
+        "start-addr": 4244635648
+    },
+    "67": {
+        "end-addr": 4272947199,
+        "level": 0,
+        "memory-description": "pnp 00:01",
+        "start-addr": 4261412864
+    },
+    "68": {
+        "end-addr": 4273995775,
+        "level": 0,
+        "memory-description": "pnp 00:01",
+        "start-addr": 4272947200
+    },
+    "69": {
+        "end-addr": 4273996799,
+        "level": 0,
+        "memory-description": "IOAPIC 0",
+        "start-addr": 4273995776
+    },
+    "70": {
+        "end-addr": 4274000895,
+        "level": 0,
+        "memory-description": "IOAPIC 1",
+        "start-addr": 4273999872
+    },
+    "71": {
+        "end-addr": 4275045375,
+        "level": 0,
+        "memory-description": "HPET 0",
+        "start-addr": 4275044352
+    },
+    "72": {
+        "end-addr": 4275081215,
+        "level": 0,
+        "memory-description": "pnp 00:09",
+        "start-addr": 4275077120
+    },
+    "73": {
+        "end-addr": 4275175423,
+        "level": 0,
+        "memory-description": "reserved",
+        "start-addr": 4275159040
+    },
+    "74": {
+        "end-addr": 4275175423,
+        "level": 1,
+        "memory-description": "pnp 00:09",
+        "start-addr": 4275159040
+    },
+    "75": {
+        "end-addr": 4276092927,
+        "level": 0,
+        "memory-description": "pnp 00:01",
+        "start-addr": 4275326976
+    },
+    "76": {
+        "end-addr": 4276097023,
+        "level": 0,
+        "memory-description": "Local APIC",
+        "start-addr": 4276092928
+    },
+    "77": {
+        "end-addr": 4294967295,
+        "level": 0,
+        "memory-description": "reserved",
+        "start-addr": 4278190080
+    },
+    "78": {
+        "end-addr": 4294967295,
+        "level": 1,
+        "memory-description": "pnp 00:09",
+        "start-addr": 4278190080
+    },
+    "79": {
+        "end-addr": 35165044735,
+        "level": 0,
+        "memory-description": "System RAM",
+        "start-addr": 4294967296
+    }
+}

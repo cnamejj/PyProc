@@ -1,0 +1,8 @@
+[<ffffffff81021486>] save_stack_trace_tsk+0x26/0x50
+[<ffffffff811d8ddc>] proc_pid_stack+0xbc/0x110
+[<ffffffff811d9f9c>] proc_single_show+0x5c/0xa0
+[<ffffffff8119a60b>] seq_read+0x12b/0x3d0
+[<ffffffff81177ec0>] vfs_read+0xb0/0x180
+[<ffffffff81177fda>] sys_read+0x4a/0x90
+[<ffffffff81664d82>] system_call_fastpath+0x16/0x1b
+[<ffffffffffffffff>] 0xffffffffffffffff

@@ -1,0 +1,389 @@
+{
+    "0": {
+        "source": "TEST/data/pr/vmstat"
+    },
+    "1": {
+        "category": "nr_free_pages",
+        "count": 3939213
+    },
+    "2": {
+        "category": "nr_inactive_anon",
+        "count": 283017
+    },
+    "3": {
+        "category": "nr_active_anon",
+        "count": 218254
+    },
+    "4": {
+        "category": "nr_inactive_file",
+        "count": 571533
+    },
+    "5": {
+        "category": "nr_active_file",
+        "count": 2922749
+    },
+    "6": {
+        "category": "nr_unevictable",
+        "count": 1166
+    },
+    "7": {
+        "category": "nr_mlock",
+        "count": 1166
+    },
+    "8": {
+        "category": "nr_anon_pages",
+        "count": 496921
+    },
+    "9": {
+        "category": "nr_mapped",
+        "count": 49384
+    },
+    "10": {
+        "category": "nr_file_pages",
+        "count": 3499809
+    },
+    "11": {
+        "category": "nr_dirty",
+        "count": 43
+    },
+    "12": {
+        "category": "nr_writeback",
+        "count": 0
+    },
+    "13": {
+        "category": "nr_slab_reclaimable",
+        "count": 170070
+    },
+    "14": {
+        "category": "nr_slab_unreclaimable",
+        "count": 11947
+    },
+    "15": {
+        "category": "nr_page_table_pages",
+        "count": 8942
+    },
+    "16": {
+        "category": "nr_kernel_stack",
+        "count": 579
+    },
+    "17": {
+        "category": "nr_unstable",
+        "count": 0
+    },
+    "18": {
+        "category": "nr_bounce",
+        "count": 0
+    },
+    "19": {
+        "category": "nr_vmscan_write",
+        "count": 135
+    },
+    "20": {
+        "category": "nr_vmscan_immediate_reclaim",
+        "count": 15643
+    },
+    "21": {
+        "category": "nr_writeback_temp",
+        "count": 0
+    },
+    "22": {
+        "category": "nr_isolated_anon",
+        "count": 0
+    },
+    "23": {
+        "category": "nr_isolated_file",
+        "count": 0
+    },
+    "24": {
+        "category": "nr_shmem",
+        "count": 4672
+    },
+    "25": {
+        "category": "nr_dirtied",
+        "count": 7397779
+    },
+    "26": {
+        "category": "nr_written",
+        "count": 6335497
+    },
+    "27": {
+        "category": "numa_hit",
+        "count": 2043032796
+    },
+    "28": {
+        "category": "numa_miss",
+        "count": 0
+    },
+    "29": {
+        "category": "numa_foreign",
+        "count": 0
+    },
+    "30": {
+        "category": "numa_interleave",
+        "count": 17885
+    },
+    "31": {
+        "category": "numa_local",
+        "count": 2043032796
+    },
+    "32": {
+        "category": "numa_other",
+        "count": 0
+    },
+    "33": {
+        "category": "nr_anon_transparent_hugepages",
+        "count": 0
+    },
+    "34": {
+        "category": "nr_dirty_threshold",
+        "count": 793476
+    },
+    "35": {
+        "category": "nr_dirty_background_threshold",
+        "count": 396738
+    },
+    "36": {
+        "category": "pgpgin",
+        "count": 11427367
+    },
+    "37": {
+        "category": "pgpgout",
+        "count": 36070178
+    },
+    "38": {
+        "category": "pswpin",
+        "count": 8
+    },
+    "39": {
+        "category": "pswpout",
+        "count": 135
+    },
+    "40": {
+        "category": "pgalloc_dma",
+        "count": 16
+    },
+    "41": {
+        "category": "pgalloc_dma32",
+        "count": 832671
+    },
+    "42": {
+        "category": "pgalloc_normal",
+        "count": 2050907074
+    },
+    "43": {
+        "category": "pgalloc_movable",
+        "count": 0
+    },
+    "44": {
+        "category": "pgfree",
+        "count": 2055681036
+    },
+    "45": {
+        "category": "pgactivate",
+        "count": 9287159
+    },
+    "46": {
+        "category": "pgdeactivate",
+        "count": 1867098
+    },
+    "47": {
+        "category": "pgfault",
+        "count": 491060586
+    },
+    "48": {
+        "category": "pgmajfault",
+        "count": 2505
+    },
+    "49": {
+        "category": "pgrefill_dma",
+        "count": 0
+    },
+    "50": {
+        "category": "pgrefill_dma32",
+        "count": 130782
+    },
+    "51": {
+        "category": "pgrefill_normal",
+        "count": 1767077
+    },
+    "52": {
+        "category": "pgrefill_movable",
+        "count": 0
+    },
+    "53": {
+        "category": "pgsteal_dma",
+        "count": 0
+    },
+    "54": {
+        "category": "pgsteal_dma32",
+        "count": 2689
+    },
+    "55": {
+        "category": "pgsteal_normal",
+        "count": 876503
+    },
+    "56": {
+        "category": "pgsteal_movable",
+        "count": 0
+    },
+    "57": {
+        "category": "pgscan_kswapd_dma",
+        "count": 0
+    },
+    "58": {
+        "category": "pgscan_kswapd_dma32",
+        "count": 18423
+    },
+    "59": {
+        "category": "pgscan_kswapd_normal",
+        "count": 890152
+    },
+    "60": {
+        "category": "pgscan_kswapd_movable",
+        "count": 0
+    },
+    "61": {
+        "category": "pgscan_direct_dma",
+        "count": 0
+    },
+    "62": {
+        "category": "pgscan_direct_dma32",
+        "count": 0
+    },
+    "63": {
+        "category": "pgscan_direct_normal",
+        "count": 0
+    },
+    "64": {
+        "category": "pgscan_direct_movable",
+        "count": 0
+    },
+    "65": {
+        "category": "zone_reclaim_failed",
+        "count": 0
+    },
+    "66": {
+        "category": "pginodesteal",
+        "count": 0
+    },
+    "67": {
+        "category": "slabs_scanned",
+        "count": 123904
+    },
+    "68": {
+        "category": "kswapd_steal",
+        "count": 879192
+    },
+    "69": {
+        "category": "kswapd_inodesteal",
+        "count": 26
+    },
+    "70": {
+        "category": "kswapd_low_wmark_hit_quickly",
+        "count": 0
+    },
+    "71": {
+        "category": "kswapd_high_wmark_hit_quickly",
+        "count": 1450
+    },
+    "72": {
+        "category": "kswapd_skip_congestion_wait",
+        "count": 0
+    },
+    "73": {
+        "category": "pageoutrun",
+        "count": 5113
+    },
+    "74": {
+        "category": "allocstall",
+        "count": 0
+    },
+    "75": {
+        "category": "pgrotated",
+        "count": 2812
+    },
+    "76": {
+        "category": "compact_blocks_moved",
+        "count": 0
+    },
+    "77": {
+        "category": "compact_pages_moved",
+        "count": 0
+    },
+    "78": {
+        "category": "compact_pagemigrate_failed",
+        "count": 0
+    },
+    "79": {
+        "category": "compact_stall",
+        "count": 0
+    },
+    "80": {
+        "category": "compact_fail",
+        "count": 0
+    },
+    "81": {
+        "category": "compact_success",
+        "count": 0
+    },
+    "82": {
+        "category": "htlb_buddy_alloc_success",
+        "count": 0
+    },
+    "83": {
+        "category": "htlb_buddy_alloc_fail",
+        "count": 0
+    },
+    "84": {
+        "category": "unevictable_pgs_culled",
+        "count": 33105
+    },
+    "85": {
+        "category": "unevictable_pgs_scanned",
+        "count": 0
+    },
+    "86": {
+        "category": "unevictable_pgs_rescued",
+        "count": 2139807
+    },
+    "87": {
+        "category": "unevictable_pgs_mlocked",
+        "count": 2141760
+    },
+    "88": {
+        "category": "unevictable_pgs_munlocked",
+        "count": 2140594
+    },
+    "89": {
+        "category": "unevictable_pgs_cleared",
+        "count": 0
+    },
+    "90": {
+        "category": "unevictable_pgs_stranded",
+        "count": 0
+    },
+    "91": {
+        "category": "unevictable_pgs_mlockfreed",
+        "count": 0
+    },
+    "92": {
+        "category": "thp_fault_alloc",
+        "count": 0
+    },
+    "93": {
+        "category": "thp_fault_fallback",
+        "count": 0
+    },
+    "94": {
+        "category": "thp_collapse_alloc",
+        "count": 0
+    },
+    "95": {
+        "category": "thp_collapse_alloc_failed",
+        "count": 0
+    },
+    "96": {
+        "category": "thp_split",
+        "count": 0
+    }
+}

@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+"""
+Show the primary data file associated with the given handler name
+"""
+
+import sys
+import ProcHandlers
+
+PBR = ProcHandlers.PBR
+
+NOT_FOUND = "N/A"
+    
+if sys.platform == "darwin":
+    print "MacOS doesn't have a '/proc' filesystem, quitting."
+    sys.exit(0)
+
+if len(sys.argv) > 1:
+    HANDLER = sys.argv[1]
+else:
+    HANDLER = "ProcNetTCP"
+
+primary = NOT_FOUND
+
+REG = PBR.get_file_registry()
+
+for datafile in REG:
+    if primary == NOT_FOUND:
+        if REG[datafile].__name__ == HANDLER:
+            primary = datafile
+
+print "Handler {code} parses {file}".format(code=HANDLER, file=primary)
+

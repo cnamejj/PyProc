@@ -1,0 +1,16 @@
+{
+    "0": {
+        "source": "TEST/data/pn/packet"
+    },
+    "1": {
+        "inode": 23744,
+        "int_index": 2,
+        "protocol": 3,
+        "ref_count": 3,
+        "rmem_alloc": 0,
+        "running": 1,
+        "socket_pointer": 18446612165542125568,
+        "type": 3,
+        "uid": 0
+    }
+}

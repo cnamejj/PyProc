@@ -1,0 +1,5 @@
+Filename				Type		Size	Used	Priority
+/dev/sda3                               partition	16777212	208	-1
+/dev/sdb3                               partition	16777212	0	-2
+/dev/sdc3                               partition	16777212	0	-3
+/dev/sdd2                               partition	16777212	0	-4

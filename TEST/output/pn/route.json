@@ -1,0 +1,53 @@
+{
+    "0": {
+        "source": "TEST/data/pn/route"
+    },
+    "1": {
+        "dest_hexip": "00000000",
+        "dest_ip": "0.0.0.0",
+        "flags": 3,
+        "gateway": "192.168.1.1",
+        "gateway_hex": "0101A8C0",
+        "iface": "eth0",
+        "irtt": 0,
+        "metric": 0,
+        "mtu": 0,
+        "netmask": "0.0.0.0",
+        "netmask_hex": "00000000",
+        "ref_count": 0,
+        "use_count": 0,
+        "window": 0
+    },
+    "2": {
+        "dest_hexip": "0000FEA9",
+        "dest_ip": "169.254.0.0",
+        "flags": 1,
+        "gateway": "0.0.0.0",
+        "gateway_hex": "00000000",
+        "iface": "eth0",
+        "irtt": 0,
+        "metric": 1000,
+        "mtu": 0,
+        "netmask": "255.255.0.0",
+        "netmask_hex": "0000FFFF",
+        "ref_count": 0,
+        "use_count": 0,
+        "window": 0
+    },
+    "3": {
+        "dest_hexip": "0001A8C0",
+        "dest_ip": "192.168.1.0",
+        "flags": 1,
+        "gateway": "0.0.0.0",
+        "gateway_hex": "00000000",
+        "iface": "eth0",
+        "irtt": 0,
+        "metric": 1,
+        "mtu": 0,
+        "netmask": "255.255.255.0",
+        "netmask_hex": "00FFFFFF",
+        "ref_count": 0,
+        "use_count": 0,
+        "window": 0
+    }
+}

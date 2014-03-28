@@ -1,0 +1,67 @@
+device rootfs mounted on / with fstype rootfs
+device sysfs mounted on /sys with fstype sysfs
+device proc mounted on /proc with fstype proc
+device udev mounted on /dev with fstype devtmpfs
+device devpts mounted on /dev/pts with fstype devpts
+device tmpfs mounted on /run with fstype tmpfs
+device /dev/disk/by-uuid/a959862a-84b7-4373-b7d6-954ac9005249 mounted on / with fstype ext4
+device none mounted on /sys/fs/fuse/connections with fstype fusectl
+device none mounted on /sys/kernel/debug with fstype debugfs
+device none mounted on /sys/kernel/security with fstype securityfs
+device none mounted on /run/lock with fstype tmpfs
+device none mounted on /run/shm with fstype tmpfs
+device /dev/mapper/bulkvg-bulk mounted on /bulk with fstype ext4
+device /dev/md0 mounted on /boot with fstype ext4
+device /dev/sda1 mounted on /boot/efi with fstype vfat
+device binfmt_misc mounted on /proc/sys/fs/binfmt_misc with fstype binfmt_misc
+device rpc_pipefs mounted on /run/rpc_pipefs with fstype rpc_pipefs
+device gvfs-fuse-daemon mounted on /var/lib/lightdm/.gvfs with fstype fuse.gvfs-fuse-daemon
+device 192.168.1.13:/bulk/ mounted on /aqui/bulk with fstype nfs4 statvers=1.0
+	opts:	rw,vers=4,rsize=1048576,wsize=1048576,namlen=255,acregmin=3,acregmax=60,acdirmin=30,acdirmax=60,hard,proto=tcp,port=0,timeo=600,retrans=2,sec=sys,clientaddr=192.168.1.14,minorversion=0,local_lock=none
+	age:	111
+	caps:	caps=0x7fff,wtmult=512,dtsize=32768,bsize=0,namlen=255
+	nfsv4:	bm0=0xfdffbfff,bm1=0xf9be3e,acl=0x3
+	sec:	flavor=1,pseudoflavor=1
+	events:	0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+	bytes:	0 0 0 0 0 0 0 0 
+	RPC iostats version: 1.0  p/v: 100003/4 (nfs)
+	xprt:	tcp 808 0 1 0 82 19 19 0 19 0
+	per-op statistics
+	        NULL: 0 0 0 0 0 0 0 0
+	        READ: 0 0 0 0 0 0 0 0
+	       WRITE: 0 0 0 0 0 0 0 0
+	      COMMIT: 0 0 0 0 0 0 0 0
+	        OPEN: 0 0 0 0 0 0 0 0
+	OPEN_CONFIRM: 0 0 0 0 0 0 0 0
+	 OPEN_NOATTR: 0 0 0 0 0 0 0 0
+	OPEN_DOWNGRADE: 0 0 0 0 0 0 0 0
+	       CLOSE: 0 0 0 0 0 0 0 0
+	     SETATTR: 0 0 0 0 0 0 0 0
+	      FSINFO: 1 1 0 132 108 0 0 0
+	       RENEW: 0 0 0 0 0 0 0 0
+	 SETCLIENTID: 0 0 0 0 0 0 0 0
+	SETCLIENTID_CONFIRM: 0 0 0 0 0 0 0 0
+	        LOCK: 0 0 0 0 0 0 0 0
+	       LOCKT: 0 0 0 0 0 0 0 0
+	       LOCKU: 0 0 0 0 0 0 0 0
+	      ACCESS: 0 0 0 0 0 0 0 0
+	     GETATTR: 1 1 0 132 188 0 0 0
+	      LOOKUP: 0 0 0 0 0 0 0 0
+	 LOOKUP_ROOT: 0 0 0 0 0 0 0 0
+	      REMOVE: 0 0 0 0 0 0 0 0
+	      RENAME: 0 0 0 0 0 0 0 0
+	        LINK: 0 0 0 0 0 0 0 0
+	     SYMLINK: 0 0 0 0 0 0 0 0
+	      CREATE: 0 0 0 0 0 0 0 0
+	    PATHCONF: 1 1 0 128 72 0 0 0
+	      STATFS: 2 2 0 268 232 0 0 0
+	    READLINK: 0 0 0 0 0 0 0 0
+	     READDIR: 0 0 0 0 0 0 0 0
+	 SERVER_CAPS: 2 2 0 256 176 0 0 0
+	 DELEGRETURN: 0 0 0 0 0 0 0 0
+	      GETACL: 0 0 0 0 0 0 0 0
+	      SETACL: 0 0 0 0 0 0 0 0
+	FS_LOCATIONS: 0 0 0 0 0 0 0 0
+	RELEASE_LOCKOWNER: 0 0 0 0 0 0 0 0
+	     SECINFO: 0 0 0 0 0 0 0 0
+

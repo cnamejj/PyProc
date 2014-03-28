@@ -1,0 +1,17 @@
+TEST/data/ps/limits|units|limit|hard-limit|soft-limit
+1|seconds|Max cpu time|inf|inf
+2|bytes|Max file size|inf|inf
+3|bytes|Max data size|inf|inf
+4|bytes|Max stack size|inf|8388608
+5|bytes|Max core file size|inf|0
+6|bytes|Max resident set|inf|inf
+7|processes|Max processes|257104|257104
+8|files|Max open files|4096|1024
+9|bytes|Max locked memory|65536|65536
+10|bytes|Max address space|inf|inf
+11|locks|Max file locks|inf|inf
+12|signals|Max pending signals|257104|257104
+13|bytes|Max msgqueue size|819200|819200
+14||Max nice priority|0|0
+15||Max realtime priority|0|0
+16|us|Max realtime timeout|inf|inf

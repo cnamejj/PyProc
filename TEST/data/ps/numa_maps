@@ -1,0 +1,17 @@
+00400000 default file=/bin/cat mapped=7 mapmax=2 N0=7
+0060a000 default file=/bin/cat anon=1 dirty=1 N0=1
+0060b000 default file=/bin/cat anon=1 dirty=1 N0=1
+01caf000 default heap anon=3 dirty=3 active=0 N0=3
+7fcbfd2a6000 default file=/usr/lib/locale/locale-archive mapped=11 mapmax=86 N0=11
+7fcbfd56f000 default file=/lib/x86_64-linux-gnu/libc-2.15.so mapped=82 mapmax=167 N0=82
+7fcbfd724000 default file=/lib/x86_64-linux-gnu/libc-2.15.so
+7fcbfd924000 default file=/lib/x86_64-linux-gnu/libc-2.15.so anon=4 dirty=4 N0=4
+7fcbfd928000 default file=/lib/x86_64-linux-gnu/libc-2.15.so anon=2 dirty=2 N0=2
+7fcbfd92a000 default anon=3 dirty=3 active=1 N0=3
+7fcbfd92f000 default file=/lib/x86_64-linux-gnu/ld-2.15.so mapped=27 mapmax=158 N0=27
+7fcbfdb2b000 default anon=3 dirty=3 N0=3
+7fcbfdb4f000 default anon=2 dirty=2 N0=2
+7fcbfdb51000 default file=/lib/x86_64-linux-gnu/ld-2.15.so anon=1 dirty=1 N0=1
+7fcbfdb52000 default file=/lib/x86_64-linux-gnu/ld-2.15.so anon=2 dirty=2 N0=2
+7fffc3703000 default stack anon=2 dirty=2 N0=2
+7fffc37ef000 default

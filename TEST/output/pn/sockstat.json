@@ -1,0 +1,31 @@
+{
+    "0": {
+        "source": "TEST/data/pn/sockstat"
+    },
+    "1": {
+        "FRAG:": {
+            "inuse": "0",
+            "memory": "0"
+        },
+        "RAW:": {
+            "inuse": "0"
+        },
+        "TCP:": {
+            "alloc": "46",
+            "inuse": "37",
+            "mem": "465",
+            "orphan": "0",
+            "tw": "0"
+        },
+        "UDP:": {
+            "inuse": "7",
+            "mem": "2"
+        },
+        "UDPLITE:": {
+            "inuse": "0"
+        },
+        "sockets:": {
+            "used": "884"
+        }
+    }
+}

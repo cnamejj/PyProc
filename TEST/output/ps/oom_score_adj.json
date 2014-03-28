@@ -1,0 +1,8 @@
+{
+    "0": {
+        "source": "TEST/data/ps/oom_score_adj"
+    },
+    "1": {
+        "oom-score-adj": 0
+    }
+}

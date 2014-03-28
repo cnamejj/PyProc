@@ -1,0 +1,314 @@
+{
+    "0": {
+        "source": "TEST/data/pr/zoneinfo"
+    },
+    "1": {
+        "all-unreclaimed": 77,
+        "inactive-ratio": 79,
+        "node": 999,
+        "nr-active-anon": 10,
+        "nr-active-file": 12,
+        "nr-anon-pages": 15,
+        "nr-anon-transparent-hugepages": 40,
+        "nr-bounce": 25,
+        "nr-dirtied": 32,
+        "nr-dirty": 18,
+        "nr-file-pages": 17,
+        "nr-free-pages": 8,
+        "nr-inactive-anon": 9,
+        "nr-inactive-file": 11,
+        "nr-isolated-anon": 29,
+        "nr-isolated-file": 30,
+        "nr-kernel-stack": 23,
+        "nr-mapped": 16,
+        "nr-mlock": 14,
+        "nr-page-table-pages": 22,
+        "nr-shmem": 31,
+        "nr-slab-reclaimable": 20,
+        "nr-slab-unreclaimable": 21,
+        "nr-unevictable": 13,
+        "nr-unstable": 24,
+        "nr-vmscan-immediate-reclaim": 27,
+        "nr-vmscan-write": 26,
+        "nr-writeback": 19,
+        "nr-writeback-temp": 28,
+        "nr-written": 33,
+        "numa-foreign": 36,
+        "numa-hit": 34,
+        "numa-interleave": 37,
+        "numa-local": 38,
+        "numa-miss": 35,
+        "numa-other": 39,
+        "pages-free": 1,
+        "pages-high": 4,
+        "pages-low": 3,
+        "pages-min": 2,
+        "pages-present": 7,
+        "pages-scanned": 5,
+        "pages-spanned": 6,
+        "pagesets-per-cpu": {
+            "0": {
+                "batch": 47,
+                "count": 45,
+                "high": 46,
+                "vm-stats-thresh": 48
+            },
+            "1": {
+                "batch": 51,
+                "count": 49,
+                "high": 50,
+                "vm-stats-thresh": 52
+            },
+            "2": {
+                "batch": 55,
+                "count": 53,
+                "high": 54,
+                "vm-stats-thresh": 56
+            },
+            "3": {
+                "batch": 59,
+                "count": 57,
+                "high": 58,
+                "vm-stats-thresh": 60
+            },
+            "4": {
+                "batch": 63,
+                "count": 61,
+                "high": 62,
+                "vm-stats-thresh": 64
+            },
+            "5": {
+                "batch": 67,
+                "count": 65,
+                "high": 66,
+                "vm-stats-thresh": 68
+            },
+            "6": {
+                "batch": 71,
+                "count": 69,
+                "high": 70,
+                "vm-stats-thresh": 72
+            },
+            "7": {
+                "batch": 75,
+                "count": 73,
+                "high": 74,
+                "vm-stats-thresh": 76
+            }
+        },
+        "protection": [
+            41,
+            42,
+            43,
+            44
+        ],
+        "start-pfn": 78,
+        "zone": "DMA"
+    },
+    "2": {
+        "all-unreclaimed": 0,
+        "inactive-ratio": 5,
+        "node": 0,
+        "nr-active-anon": 4253,
+        "nr-active-file": 42719,
+        "nr-anon-pages": 10998,
+        "nr-anon-transparent-hugepages": 0,
+        "nr-bounce": 0,
+        "nr-dirtied": 4989057,
+        "nr-dirty": 0,
+        "nr-file-pages": 741130,
+        "nr-free-pages": 32167,
+        "nr-inactive-anon": 6745,
+        "nr-inactive-file": 698411,
+        "nr-isolated-anon": 0,
+        "nr-isolated-file": 0,
+        "nr-kernel-stack": 0,
+        "nr-mapped": 711,
+        "nr-mlock": 0,
+        "nr-page-table-pages": 55,
+        "nr-shmem": 0,
+        "nr-slab-reclaimable": 37093,
+        "nr-slab-unreclaimable": 225,
+        "nr-unevictable": 0,
+        "nr-unstable": 0,
+        "nr-vmscan-immediate-reclaim": 21095,
+        "nr-vmscan-write": 712,
+        "nr-writeback": 0,
+        "nr-writeback-temp": 0,
+        "nr-written": 3929159,
+        "numa-foreign": 0,
+        "numa-hit": 43681123,
+        "numa-interleave": 0,
+        "numa-local": 43681123,
+        "numa-miss": 0,
+        "numa-other": 0,
+        "pages-free": 32167,
+        "pages-high": 2536,
+        "pages-low": 2113,
+        "pages-min": 1691,
+        "pages-present": 825875,
+        "pages-scanned": 0,
+        "pages-spanned": 1044480,
+        "pagesets-per-cpu": {
+            "0": {
+                "batch": 31,
+                "count": 149,
+                "high": 186,
+                "vm-stats-thresh": 48
+            },
+            "1": {
+                "batch": 31,
+                "count": 161,
+                "high": 186,
+                "vm-stats-thresh": 48
+            },
+            "2": {
+                "batch": 31,
+                "count": 168,
+                "high": 186,
+                "vm-stats-thresh": 48
+            },
+            "3": {
+                "batch": 31,
+                "count": 94,
+                "high": 186,
+                "vm-stats-thresh": 48
+            },
+            "4": {
+                "batch": 31,
+                "count": 81,
+                "high": 186,
+                "vm-stats-thresh": 48
+            },
+            "5": {
+                "batch": 31,
+                "count": 171,
+                "high": 186,
+                "vm-stats-thresh": 48
+            },
+            "6": {
+                "batch": 31,
+                "count": 153,
+                "high": 186,
+                "vm-stats-thresh": 48
+            },
+            "7": {
+                "batch": 31,
+                "count": 167,
+                "high": 186,
+                "vm-stats-thresh": 48
+            }
+        },
+        "protection": [
+            0,
+            0,
+            28980,
+            28980
+        ],
+        "start-pfn": 4096,
+        "zone": "DMA32"
+    },
+    "3": {
+        "all-unreclaimed": 0,
+        "inactive-ratio": 16,
+        "node": 0,
+        "nr-active-anon": 492701,
+        "nr-active-file": 864732,
+        "nr-anon-pages": 711474,
+        "nr-anon-transparent-hugepages": 0,
+        "nr-bounce": 0,
+        "nr-dirtied": 60638223,
+        "nr-dirty": 55,
+        "nr-file-pages": 6379896,
+        "nr-free-pages": 27857,
+        "nr-inactive-anon": 224347,
+        "nr-inactive-file": 5507867,
+        "nr-isolated-anon": 0,
+        "nr-isolated-file": 0,
+        "nr-kernel-stack": 667,
+        "nr-mapped": 50793,
+        "nr-mlock": 1665,
+        "nr-page-table-pages": 11531,
+        "nr-shmem": 4874,
+        "nr-slab-reclaimable": 157049,
+        "nr-slab-unreclaimable": 13026,
+        "nr-unevictable": 1665,
+        "nr-unstable": 0,
+        "nr-vmscan-immediate-reclaim": 34045,
+        "nr-vmscan-write": 13902,
+        "nr-writeback": 0,
+        "nr-writeback-temp": 0,
+        "nr-written": 50148123,
+        "numa-foreign": 0,
+        "numa-hit": 5002773714,
+        "numa-interleave": 17885,
+        "numa-local": 5002773714,
+        "numa-miss": 0,
+        "numa-other": 0,
+        "pages-free": 27857,
+        "pages-high": 22794,
+        "pages-low": 18995,
+        "pages-min": 15196,
+        "pages-present": 7418880,
+        "pages-scanned": 0,
+        "pages-spanned": 7536640,
+        "pagesets-per-cpu": {
+            "0": {
+                "batch": 31,
+                "count": 89,
+                "high": 186,
+                "vm-stats-thresh": 72
+            },
+            "1": {
+                "batch": 31,
+                "count": 52,
+                "high": 186,
+                "vm-stats-thresh": 72
+            },
+            "2": {
+                "batch": 31,
+                "count": 26,
+                "high": 186,
+                "vm-stats-thresh": 72
+            },
+            "3": {
+                "batch": 31,
+                "count": 13,
+                "high": 186,
+                "vm-stats-thresh": 72
+            },
+            "4": {
+                "batch": 31,
+                "count": 170,
+                "high": 186,
+                "vm-stats-thresh": 72
+            },
+            "5": {
+                "batch": 31,
+                "count": 124,
+                "high": 186,
+                "vm-stats-thresh": 72
+            },
+            "6": {
+                "batch": 31,
+                "count": 172,
+                "high": 186,
+                "vm-stats-thresh": 72
+            },
+            "7": {
+                "batch": 31,
+                "count": 148,
+                "high": 186,
+                "vm-stats-thresh": 72
+            }
+        },
+        "protection": [
+            0,
+            0,
+            0,
+            0
+        ],
+        "start-pfn": 1048576,
+        "zone": "Normal"
+    }
+}

@@ -1,0 +1,24 @@
+Page block order: 9
+Pages per block:  512
+
+Free pages count per migrate type at order       0      1      2      3      4      5      6      7      8      9     10 
+Node    0, zone      DMA, type    Unmovable      1      0      0      0      1      1      1      0      1      0      0 
+Node    0, zone      DMA, type  Reclaimable      0      0      0      0      0      0      0      0      0      0      0 
+Node    0, zone      DMA, type      Movable      0      0      0      0      0      0      0      0      0      0      3 
+Node    0, zone      DMA, type      Reserve      0      0      0      0      0      0      0      0      0      1      0 
+Node    0, zone      DMA, type      Isolate      0      0      0      0      0      0      0      0      0      0      0 
+Node    0, zone    DMA32, type    Unmovable     99     34      2      0      0      0      0      0      0      0      0 
+Node    0, zone    DMA32, type  Reclaimable  24321  17407   4476      0      0      0      0      0      0      0      0 
+Node    0, zone    DMA32, type      Movable   6219   3106   1541     61      0      0      0      0      0      0      0 
+Node    0, zone    DMA32, type      Reserve      0      0      0      0      0      0      0      1      0      0      0 
+Node    0, zone    DMA32, type      Isolate      0      0      0      0      0      0      0      0      0      0      0 
+Node    0, zone   Normal, type    Unmovable      0      0     10      0      0      0      0      0      0      0      0 
+Node    0, zone   Normal, type  Reclaimable   2519  25689      0      0      0      0      0      0      0      0      0 
+Node    0, zone   Normal, type      Movable  73480  83942   9994      0      0      0      0      0      0      0      0 
+Node    0, zone   Normal, type      Reserve      0      0      0      0      0      0      0      0      0      0      1 
+Node    0, zone   Normal, type      Isolate      0      0      0      0      0      0      0      0      0      0      0 
+
+Number of blocks type     Unmovable  Reclaimable      Movable      Reserve      Isolate 
+Node 0, zone      DMA            1            0            6            1            0 
+Node 0, zone    DMA32            2           60         1592            2            0 
+Node 0, zone   Normal          252          214        14252            2            0 

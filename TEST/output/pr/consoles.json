@@ -1,0 +1,11 @@
+{
+    "0": {
+        "source": "TEST/data/pr/consoles"
+    },
+    "1": {
+        "dev_name": "tty0",
+        "device-number": "4:7",
+        "flags": "EC p",
+        "io-type": "-WU"
+    }
+}

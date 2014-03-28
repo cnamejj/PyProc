@@ -1,0 +1,220 @@
+{
+    "0": {
+        "source": "TEST/data/pr/meminfo"
+    },
+    "1": {
+        "category": "MemTotal:",
+        "size": 32927900,
+        "units": "kB"
+    },
+    "2": {
+        "category": "MemFree:",
+        "size": 15754884,
+        "units": "kB"
+    },
+    "3": {
+        "category": "Buffers:",
+        "size": 514588,
+        "units": "kB"
+    },
+    "4": {
+        "category": "Cached:",
+        "size": 13484700,
+        "units": "kB"
+    },
+    "5": {
+        "category": "SwapCached:",
+        "size": 28,
+        "units": "kB"
+    },
+    "6": {
+        "category": "Active:",
+        "size": 12565332,
+        "units": "kB"
+    },
+    "7": {
+        "category": "Inactive:",
+        "size": 3418268,
+        "units": "kB"
+    },
+    "8": {
+        "category": "Active(anon):",
+        "size": 874324,
+        "units": "kB"
+    },
+    "9": {
+        "category": "Inactive(anon):",
+        "size": 1132068,
+        "units": "kB"
+    },
+    "10": {
+        "category": "Active(file):",
+        "size": 11691008,
+        "units": "kB"
+    },
+    "11": {
+        "category": "Inactive(file):",
+        "size": 2286200,
+        "units": "kB"
+    },
+    "12": {
+        "category": "Unevictable:",
+        "size": 4664,
+        "units": "kB"
+    },
+    "13": {
+        "category": "Mlocked:",
+        "size": 4664,
+        "units": "kB"
+    },
+    "14": {
+        "category": "SwapTotal:",
+        "size": 67108848,
+        "units": "kB"
+    },
+    "15": {
+        "category": "SwapFree:",
+        "size": 67108640,
+        "units": "kB"
+    },
+    "16": {
+        "category": "Dirty:",
+        "size": 72,
+        "units": "kB"
+    },
+    "17": {
+        "category": "Writeback:",
+        "size": 0,
+        "units": "kB"
+    },
+    "18": {
+        "category": "AnonPages:",
+        "size": 1988976,
+        "units": "kB"
+    },
+    "19": {
+        "category": "Mapped:",
+        "size": 197476,
+        "units": "kB"
+    },
+    "20": {
+        "category": "Shmem:",
+        "size": 18688,
+        "units": "kB"
+    },
+    "21": {
+        "category": "Slab:",
+        "size": 728052,
+        "units": "kB"
+    },
+    "22": {
+        "category": "SReclaimable:",
+        "size": 680280,
+        "units": "kB"
+    },
+    "23": {
+        "category": "SUnreclaim:",
+        "size": 47772,
+        "units": "kB"
+    },
+    "24": {
+        "category": "KernelStack:",
+        "size": 4632,
+        "units": "kB"
+    },
+    "25": {
+        "category": "PageTables:",
+        "size": 35760,
+        "units": "kB"
+    },
+    "26": {
+        "category": "NFS_Unstable:",
+        "size": 0,
+        "units": "kB"
+    },
+    "27": {
+        "category": "Bounce:",
+        "size": 0,
+        "units": "kB"
+    },
+    "28": {
+        "category": "WritebackTmp:",
+        "size": 0,
+        "units": "kB"
+    },
+    "29": {
+        "category": "CommitLimit:",
+        "size": 83572796,
+        "units": "kB"
+    },
+    "30": {
+        "category": "Committed_AS:",
+        "size": 5512872,
+        "units": "kB"
+    },
+    "31": {
+        "category": "VmallocTotal:",
+        "size": 34359738367,
+        "units": "kB"
+    },
+    "32": {
+        "category": "VmallocUsed:",
+        "size": 626600,
+        "units": "kB"
+    },
+    "33": {
+        "category": "VmallocChunk:",
+        "size": 34359103472,
+        "units": "kB"
+    },
+    "34": {
+        "category": "HardwareCorrupted:",
+        "size": 0,
+        "units": "kB"
+    },
+    "35": {
+        "category": "AnonHugePages:",
+        "size": 0,
+        "units": "kB"
+    },
+    "36": {
+        "category": "HugePages_Total:",
+        "size": 0,
+        "units": ""
+    },
+    "37": {
+        "category": "HugePages_Free:",
+        "size": 0,
+        "units": ""
+    },
+    "38": {
+        "category": "HugePages_Rsvd:",
+        "size": 0,
+        "units": ""
+    },
+    "39": {
+        "category": "HugePages_Surp:",
+        "size": 0,
+        "units": ""
+    },
+    "40": {
+        "category": "Hugepagesize:",
+        "size": 2048,
+        "units": "kB"
+    },
+    "41": {
+        "category": "DirectMap4k:",
+        "size": 112640,
+        "units": "kB"
+    },
+    "42": {
+        "category": "DirectMap2M:",
+        "size": 3016704,
+        "units": "kB"
+    },
+    "43": {
+        "category": "DirectMap1G:",
+        "size": 30408704,
+        "units": "kB"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "0": {
+        "source": "TEST/data/pn/ip6_tables_targets"
+    },
+    "1": {
+        "list_of_terms": [
+            "LOG",
+            "ERROR"
+        ]
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "0": {
+        "source": "TEST/data/ps/latency"
+    },
+    "1": {
+        "accum-latency-ms": 134,
+        "backtrace": [
+            "futex_wait_queue_me",
+            "futex_wait",
+            "do_futex",
+            "sys_futex",
+            "system_call_fastpath"
+        ],
+        "hits": 9,
+        "max-latency-ms": 22
+    },
+    "2": {
+        "accum-latency-ms": 169725,
+        "backtrace": [
+            "poll_schedule_timeout",
+            "do_poll.isra.4",
+            "do_sys_poll",
+            "sys_poll",
+            "system_call_fastpath"
+        ],
+        "hits": 68,
+        "max-latency-ms": 4990
+    }
+}

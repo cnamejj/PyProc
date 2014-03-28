@@ -1,0 +1,8 @@
+{
+    "0": {
+        "source": "TEST/data/ps/cmdline"
+    },
+    "1": {
+        "command-line": "cat\u0000/proc/self/cmdline\u0000"
+    }
+}

@@ -46,11 +46,6 @@ REGISTER_FILE = PBR.register_file
 REGISTER_PARTIAL_FILE = PBR.register_partial_file
 
 
-# --- !!! move to the end once all the handlers are added !!!
-if __name__ == "__main__":
-
-    print "Collection of handlers to parse file in the root /proc directory"
-
 
 # ---
 class ProcRootEXECDOMAINS(PBR.FixedWhitespaceDelimRecs):
@@ -930,7 +925,7 @@ class ProcRootKALLSYMS(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 3
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_ADDRESS, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_ADDRESS, CONV: long, BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_TYPE } )
         PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_SYMBOL } )
         PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_MODULE, PREFIX: "[",
@@ -2508,14 +2503,13 @@ class ProcRootINTERRUPTS(PBR.FixedWhitespaceDelimRecs):
 # 9:          0          0          0          0   IO-APIC-fasteoi   acpi
 #16:          5          5    5591774    4662973   IO-APIC-fasteoi   ahci, uhci_hcd:usb3, nouveau
 
-        if sio.buff != "" and self.__num_cpus == 0:
+        if self.__num_cpus == 0:
             self.__num_cpus = sio.linewords
             for __off in range(0, self.__num_cpus):
                 self.__cpu_list[__off] = sio.get_word(__off)
-            sio.read_line()
+            self.next()
 
-        if sio.buff != "":
-
+        else:
             if self.field[PFC.F_INTERRUPT] in self.__summ_only:
                 try:
                     __total = long(sio.get_word(1))
@@ -2537,7 +2531,7 @@ class ProcRootINTERRUPTS(PBR.FixedWhitespaceDelimRecs):
 
                 for __off in range(0, self.__num_cpus):
                     try:
-                        __conv = long(sio.get_word(__off))
+                        __conv = long(sio.get_word(__off+1))
                         __total += __conv
                     except ValueError:
                         __conv = 0
@@ -2561,6 +2555,8 @@ class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
     """
     Parse /proc/zoneinfo file
     """
+
+#!!!!broken, fix this...
 
 # source: mm/vmstat.c
 #
@@ -3562,9 +3558,6 @@ class ProcRootTIMERLIST(PBR.TaggedMultiLineFile):
 
     def extra_next(self, sio):
 
-        if self.lines_read == 0:
-            raise StopIteration
-
         try:
             if self.field[PFC.F_BCAST_DEVICE] == self.__bcast_clue:
                 self.field[PFC.F_BCAST_DEVICE] = True
@@ -3662,3 +3655,9 @@ class ProcRootTIMERLIST(PBR.TaggedMultiLineFile):
 
 REGISTER_FILE("/proc/timer_list", ProcRootTIMERLIST)
 REGISTER_PARTIAL_FILE("timer_list", ProcRootTIMERLIST)
+
+
+
+if __name__ == "__main__":
+
+    print "Collection of handlers to parse file in the root /proc directory"

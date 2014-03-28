@@ -1,0 +1,9 @@
+{
+    "0": {
+        "source": "TEST/data/pr/dma"
+    },
+    "1": {
+        "channel": 4,
+        "dev_name": "cascade"
+    }
+}

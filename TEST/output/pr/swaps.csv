@@ -1,0 +1,5 @@
+TEST/data/pr/swaps|priority|size|type|used|filename
+1|-1|16777212|partition|208|/dev/sda3
+2|-2|16777212|partition|0|/dev/sdb3
+3|-3|16777212|partition|0|/dev/sdc3
+4|-4|16777212|partition|0|/dev/sdd2

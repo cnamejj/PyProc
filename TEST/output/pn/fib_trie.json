@@ -1,0 +1,172 @@
+{
+    "0": {
+        "source": "TEST/data/pn/fib_trie"
+    },
+    "1": {
+        "fib-trie": {
+            "node": {
+                "0": {
+                    "fib-bits": 2,
+                    "fib-empty-children": 1,
+                    "fib-full-children": 0,
+                    "fib-leaf": {
+                        "0": {
+                            "network-addr": "0.0.0.0",
+                            "scope": {
+                                "0": {
+                                    "netmask": 0,
+                                    "scope": "universe",
+                                    "type": "UNICAST"
+                                }
+                            }
+                        },
+                        "1": {
+                            "network-addr": "169.254.0.0",
+                            "scope": {
+                                "0": {
+                                    "netmask": 16,
+                                    "scope": "link",
+                                    "type": "UNICAST"
+                                }
+                            }
+                        },
+                        "2": {
+                            "network-addr": "192.168.1.0",
+                            "scope": {
+                                "0": {
+                                    "netmask": 24,
+                                    "scope": "link",
+                                    "type": "UNICAST"
+                                }
+                            }
+                        }
+                    },
+                    "netmask": 0,
+                    "network-addr": "0.0.0.0"
+                }
+            }
+        },
+        "node-name": "Main"
+    },
+    "2": {
+        "fib-trie": {
+            "node": {
+                "0": {
+                    "fib-bits": 1,
+                    "fib-empty-children": 0,
+                    "fib-full-children": 0,
+                    "netmask": 0,
+                    "network-addr": "0.0.0.0",
+                    "node": {
+                        "0": {
+                            "fib-bits": 1,
+                            "fib-empty-children": 0,
+                            "fib-full-children": 0,
+                            "fib-leaf": {
+                                "0": {
+                                    "network-addr": "127.255.255.255",
+                                    "scope": {
+                                        "0": {
+                                            "netmask": 32,
+                                            "scope": "link",
+                                            "type": "BROADCAST"
+                                        }
+                                    }
+                                }
+                            },
+                            "netmask": 8,
+                            "network-addr": "127.0.0.0",
+                            "node": {
+                                "0": {
+                                    "fib-bits": 1,
+                                    "fib-empty-children": 0,
+                                    "fib-full-children": 0,
+                                    "fib-leaf": {
+                                        "0": {
+                                            "network-addr": "127.0.0.0",
+                                            "scope": {
+                                                "0": {
+                                                    "netmask": 32,
+                                                    "scope": "link",
+                                                    "type": "BROADCAST"
+                                                },
+                                                "1": {
+                                                    "netmask": 8,
+                                                    "scope": "host",
+                                                    "type": "LOCAL"
+                                                }
+                                            }
+                                        },
+                                        "1": {
+                                            "network-addr": "127.0.0.1",
+                                            "scope": {
+                                                "0": {
+                                                    "netmask": 32,
+                                                    "scope": "host",
+                                                    "type": "LOCAL"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "netmask": 31,
+                                    "network-addr": "127.0.0.0"
+                                }
+                            }
+                        },
+                        "1": {
+                            "fib-bits": 1,
+                            "fib-empty-children": 0,
+                            "fib-full-children": 0,
+                            "fib-leaf": {
+                                "0": {
+                                    "network-addr": "192.168.1.255",
+                                    "scope": {
+                                        "0": {
+                                            "netmask": 32,
+                                            "scope": "link",
+                                            "type": "BROADCAST"
+                                        }
+                                    }
+                                }
+                            },
+                            "netmask": 24,
+                            "network-addr": "192.168.1.0",
+                            "node": {
+                                "0": {
+                                    "fib-bits": 1,
+                                    "fib-empty-children": 0,
+                                    "fib-full-children": 0,
+                                    "fib-leaf": {
+                                        "0": {
+                                            "network-addr": "192.168.1.0",
+                                            "scope": {
+                                                "0": {
+                                                    "netmask": 32,
+                                                    "scope": "link",
+                                                    "type": "BROADCAST"
+                                                }
+                                            }
+                                        },
+                                        "1": {
+                                            "network-addr": "192.168.1.14",
+                                            "scope": {
+                                                "0": {
+                                                    "netmask": 32,
+                                                    "scope": "host",
+                                                    "type": "LOCAL"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "netmask": 28,
+                                    "network-addr": "192.168.1.0"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "node-name": "Local"
+    }
+}

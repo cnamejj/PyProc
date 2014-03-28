@@ -1,0 +1,10 @@
+{
+    "0": {
+        "source": "TEST/data/ps/schedstat"
+    },
+    "1": {
+        "queue-wait-time": 5391,
+        "run-time": 386479,
+        "timeslices-run": 2
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "0": {
+        "source": "TEST/data/pr/loadavg"
+    },
+    "1": {
+        "last-pid": 21870,
+        "load-average0": 0.55,
+        "load-average1": 0.38,
+        "load-average2": 0.34,
+        "running-tasks": 1,
+        "running-threads": 578
+    }
+}

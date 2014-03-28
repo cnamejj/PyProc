@@ -1,0 +1,14 @@
+TEST/data/pn/netfilter/nf_log|index|logger_list|name
+1|0||NONE
+2|1||NONE
+3|2|ipt_LOG|ipt_LOG
+4|3||NONE
+5|4||NONE
+6|5||NONE
+7|6||NONE
+8|7||NONE
+9|8||NONE
+10|9||NONE
+11|10|ip6t_LOG|ip6t_LOG
+12|11||NONE
+13|12||NONE

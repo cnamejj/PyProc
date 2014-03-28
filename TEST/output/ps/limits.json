@@ -1,0 +1,101 @@
+{
+    "0": {
+        "source": "TEST/data/ps/limits"
+    },
+    "1": {
+        "hard-limit": Infinity,
+        "limit": "Max cpu time",
+        "soft-limit": Infinity,
+        "units": "seconds"
+    },
+    "2": {
+        "hard-limit": Infinity,
+        "limit": "Max file size",
+        "soft-limit": Infinity,
+        "units": "bytes"
+    },
+    "3": {
+        "hard-limit": Infinity,
+        "limit": "Max data size",
+        "soft-limit": Infinity,
+        "units": "bytes"
+    },
+    "4": {
+        "hard-limit": Infinity,
+        "limit": "Max stack size",
+        "soft-limit": 8388608,
+        "units": "bytes"
+    },
+    "5": {
+        "hard-limit": Infinity,
+        "limit": "Max core file size",
+        "soft-limit": 0,
+        "units": "bytes"
+    },
+    "6": {
+        "hard-limit": Infinity,
+        "limit": "Max resident set",
+        "soft-limit": Infinity,
+        "units": "bytes"
+    },
+    "7": {
+        "hard-limit": 257104,
+        "limit": "Max processes",
+        "soft-limit": 257104,
+        "units": "processes"
+    },
+    "8": {
+        "hard-limit": 4096,
+        "limit": "Max open files",
+        "soft-limit": 1024,
+        "units": "files"
+    },
+    "9": {
+        "hard-limit": 65536,
+        "limit": "Max locked memory",
+        "soft-limit": 65536,
+        "units": "bytes"
+    },
+    "10": {
+        "hard-limit": Infinity,
+        "limit": "Max address space",
+        "soft-limit": Infinity,
+        "units": "bytes"
+    },
+    "11": {
+        "hard-limit": Infinity,
+        "limit": "Max file locks",
+        "soft-limit": Infinity,
+        "units": "locks"
+    },
+    "12": {
+        "hard-limit": 257104,
+        "limit": "Max pending signals",
+        "soft-limit": 257104,
+        "units": "signals"
+    },
+    "13": {
+        "hard-limit": 819200,
+        "limit": "Max msgqueue size",
+        "soft-limit": 819200,
+        "units": "bytes"
+    },
+    "14": {
+        "hard-limit": 0,
+        "limit": "Max nice priority",
+        "soft-limit": 0,
+        "units": ""
+    },
+    "15": {
+        "hard-limit": 0,
+        "limit": "Max realtime priority",
+        "soft-limit": 0,
+        "units": ""
+    },
+    "16": {
+        "hard-limit": Infinity,
+        "limit": "Max realtime timeout",
+        "soft-limit": Infinity,
+        "units": "us"
+    }
+}

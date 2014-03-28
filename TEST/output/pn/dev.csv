@@ -1,0 +1,3 @@
+TEST/data/pn/dev|rx_multicast|rx_packets|rx_compressed|rx_drop|rx_bytes|tx_errors|rx_fifo|tx_fifo|tx_bytes|tx_carrier|rx_frame|rx_errors|tx_colls|tx_drop|device|tx_packets|tx_compressed
+1|0|318872|0|0|35154655|0|0|0|35154655|0|0|0|0|0|lo|318872|0
+2|916815|5942493|0|0|4955662683|0|0|0|747662119|0|0|0|0|0|eth0|4313005|0

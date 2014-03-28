@@ -1,0 +1,270 @@
+{
+    "0": {
+        "source": "TEST/data/pr/devices"
+    },
+    "1": {
+        "dev_name": "mem",
+        "dev_type": "character",
+        "major-dev-num": 1
+    },
+    "2": {
+        "dev_name": "/dev/vc/0",
+        "dev_type": "character",
+        "major-dev-num": 4
+    },
+    "3": {
+        "dev_name": "tty",
+        "dev_type": "character",
+        "major-dev-num": 4
+    },
+    "4": {
+        "dev_name": "ttyS",
+        "dev_type": "character",
+        "major-dev-num": 4
+    },
+    "5": {
+        "dev_name": "/dev/tty",
+        "dev_type": "character",
+        "major-dev-num": 5
+    },
+    "6": {
+        "dev_name": "/dev/console",
+        "dev_type": "character",
+        "major-dev-num": 5
+    },
+    "7": {
+        "dev_name": "/dev/ptmx",
+        "dev_type": "character",
+        "major-dev-num": 5
+    },
+    "8": {
+        "dev_name": "ttyprintk",
+        "dev_type": "character",
+        "major-dev-num": 5
+    },
+    "9": {
+        "dev_name": "lp",
+        "dev_type": "character",
+        "major-dev-num": 6
+    },
+    "10": {
+        "dev_name": "vcs",
+        "dev_type": "character",
+        "major-dev-num": 7
+    },
+    "11": {
+        "dev_name": "misc",
+        "dev_type": "character",
+        "major-dev-num": 10
+    },
+    "12": {
+        "dev_name": "input",
+        "dev_type": "character",
+        "major-dev-num": 13
+    },
+    "13": {
+        "dev_name": "sound",
+        "dev_type": "character",
+        "major-dev-num": 14
+    },
+    "14": {
+        "dev_name": "sg",
+        "dev_type": "character",
+        "major-dev-num": 21
+    },
+    "15": {
+        "dev_name": "fb",
+        "dev_type": "character",
+        "major-dev-num": 29
+    },
+    "16": {
+        "dev_name": "ppdev",
+        "dev_type": "character",
+        "major-dev-num": 99
+    },
+    "17": {
+        "dev_name": "ppp",
+        "dev_type": "character",
+        "major-dev-num": 108
+    },
+    "18": {
+        "dev_name": "alsa",
+        "dev_type": "character",
+        "major-dev-num": 116
+    },
+    "19": {
+        "dev_name": "ptm",
+        "dev_type": "character",
+        "major-dev-num": 128
+    },
+    "20": {
+        "dev_name": "pts",
+        "dev_type": "character",
+        "major-dev-num": 136
+    },
+    "21": {
+        "dev_name": "usb",
+        "dev_type": "character",
+        "major-dev-num": 180
+    },
+    "22": {
+        "dev_name": "usb_device",
+        "dev_type": "character",
+        "major-dev-num": 189
+    },
+    "23": {
+        "dev_name": "rfcomm",
+        "dev_type": "character",
+        "major-dev-num": 216
+    },
+    "24": {
+        "dev_name": "mei",
+        "dev_type": "character",
+        "major-dev-num": 249
+    },
+    "25": {
+        "dev_name": "hidraw",
+        "dev_type": "character",
+        "major-dev-num": 250
+    },
+    "26": {
+        "dev_name": "firewire",
+        "dev_type": "character",
+        "major-dev-num": 251
+    },
+    "27": {
+        "dev_name": "usbmon",
+        "dev_type": "character",
+        "major-dev-num": 252
+    },
+    "28": {
+        "dev_name": "bsg",
+        "dev_type": "character",
+        "major-dev-num": 253
+    },
+    "29": {
+        "dev_name": "rtc",
+        "dev_type": "character",
+        "major-dev-num": 254
+    },
+    "30": {
+        "dev_name": "ramdisk",
+        "dev_type": "block",
+        "major-dev-num": 1
+    },
+    "31": {
+        "dev_name": "blkext",
+        "dev_type": "block",
+        "major-dev-num": 259
+    },
+    "32": {
+        "dev_name": "loop",
+        "dev_type": "block",
+        "major-dev-num": 7
+    },
+    "33": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 8
+    },
+    "34": {
+        "dev_name": "md",
+        "dev_type": "block",
+        "major-dev-num": 9
+    },
+    "35": {
+        "dev_name": "sr",
+        "dev_type": "block",
+        "major-dev-num": 11
+    },
+    "36": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 65
+    },
+    "37": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 66
+    },
+    "38": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 67
+    },
+    "39": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 68
+    },
+    "40": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 69
+    },
+    "41": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 70
+    },
+    "42": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 71
+    },
+    "43": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 128
+    },
+    "44": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 129
+    },
+    "45": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 130
+    },
+    "46": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 131
+    },
+    "47": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 132
+    },
+    "48": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 133
+    },
+    "49": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 134
+    },
+    "50": {
+        "dev_name": "sd",
+        "dev_type": "block",
+        "major-dev-num": 135
+    },
+    "51": {
+        "dev_name": "device-mapper",
+        "dev_type": "block",
+        "major-dev-num": 252
+    },
+    "52": {
+        "dev_name": "virtblk",
+        "dev_type": "block",
+        "major-dev-num": 253
+    },
+    "53": {
+        "dev_name": "mdp",
+        "dev_type": "block",
+        "major-dev-num": 254
+    }
+}

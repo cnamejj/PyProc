@@ -1,0 +1,19 @@
+TEST/data/pr/pagetypeinfo|node|zone|pages-allocated|total-blocks|pages-per-block|type|block-order
+1|0|DMA,|{'order-10': 0L, 'order-8': 1L, 'order-9': 0L, 'order-0': 1L, 'order-1': 0L, 'order-2': 0L, 'order-3': 0L, 'order-4': 1L, 'order-5': 1L, 'order-6': 1L, 'order-7': 0L}|{}|512|Unmovable|9
+2|0|DMA,|{'order-10': 0L, 'order-8': 0L, 'order-9': 0L, 'order-0': 0L, 'order-1': 0L, 'order-2': 0L, 'order-3': 0L, 'order-4': 0L, 'order-5': 0L, 'order-6': 0L, 'order-7': 0L}|{}|512|Reclaimable|9
+3|0|DMA,|{'order-10': 3L, 'order-8': 0L, 'order-9': 0L, 'order-0': 0L, 'order-1': 0L, 'order-2': 0L, 'order-3': 0L, 'order-4': 0L, 'order-5': 0L, 'order-6': 0L, 'order-7': 0L}|{}|512|Movable|9
+4|0|DMA,|{'order-10': 0L, 'order-8': 0L, 'order-9': 1L, 'order-0': 0L, 'order-1': 0L, 'order-2': 0L, 'order-3': 0L, 'order-4': 0L, 'order-5': 0L, 'order-6': 0L, 'order-7': 0L}|{}|512|Reserve|9
+5|0|DMA,|{'order-10': 0L, 'order-8': 0L, 'order-9': 0L, 'order-0': 0L, 'order-1': 0L, 'order-2': 0L, 'order-3': 0L, 'order-4': 0L, 'order-5': 0L, 'order-6': 0L, 'order-7': 0L}|{}|512|Isolate|9
+6|0|DMA32,|{'order-10': 0L, 'order-8': 0L, 'order-9': 0L, 'order-0': 99L, 'order-1': 34L, 'order-2': 2L, 'order-3': 0L, 'order-4': 0L, 'order-5': 0L, 'order-6': 0L, 'order-7': 0L}|{}|512|Unmovable|9
+7|0|DMA32,|{'order-10': 0L, 'order-8': 0L, 'order-9': 0L, 'order-0': 24321L, 'order-1': 17407L, 'order-2': 4476L, 'order-3': 0L, 'order-4': 0L, 'order-5': 0L, 'order-6': 0L, 'order-7': 0L}|{}|512|Reclaimable|9
+8|0|DMA32,|{'order-10': 0L, 'order-8': 0L, 'order-9': 0L, 'order-0': 6219L, 'order-1': 3106L, 'order-2': 1541L, 'order-3': 61L, 'order-4': 0L, 'order-5': 0L, 'order-6': 0L, 'order-7': 0L}|{}|512|Movable|9
+9|0|DMA32,|{'order-10': 0L, 'order-8': 0L, 'order-9': 0L, 'order-0': 0L, 'order-1': 0L, 'order-2': 0L, 'order-3': 0L, 'order-4': 0L, 'order-5': 0L, 'order-6': 0L, 'order-7': 1L}|{}|512|Reserve|9
+10|0|DMA32,|{'order-10': 0L, 'order-8': 0L, 'order-9': 0L, 'order-0': 0L, 'order-1': 0L, 'order-2': 0L, 'order-3': 0L, 'order-4': 0L, 'order-5': 0L, 'order-6': 0L, 'order-7': 0L}|{}|512|Isolate|9
+11|0|Normal,|{'order-10': 0L, 'order-8': 0L, 'order-9': 0L, 'order-0': 0L, 'order-1': 0L, 'order-2': 10L, 'order-3': 0L, 'order-4': 0L, 'order-5': 0L, 'order-6': 0L, 'order-7': 0L}|{}|512|Unmovable|9
+12|0|Normal,|{'order-10': 0L, 'order-8': 0L, 'order-9': 0L, 'order-0': 2519L, 'order-1': 25689L, 'order-2': 0L, 'order-3': 0L, 'order-4': 0L, 'order-5': 0L, 'order-6': 0L, 'order-7': 0L}|{}|512|Reclaimable|9
+13|0|Normal,|{'order-10': 0L, 'order-8': 0L, 'order-9': 0L, 'order-0': 73480L, 'order-1': 83942L, 'order-2': 9994L, 'order-3': 0L, 'order-4': 0L, 'order-5': 0L, 'order-6': 0L, 'order-7': 0L}|{}|512|Movable|9
+14|0|Normal,|{'order-10': 1L, 'order-8': 0L, 'order-9': 0L, 'order-0': 0L, 'order-1': 0L, 'order-2': 0L, 'order-3': 0L, 'order-4': 0L, 'order-5': 0L, 'order-6': 0L, 'order-7': 0L}|{}|512|Reserve|9
+15|0|Normal,|{'order-10': 0L, 'order-8': 0L, 'order-9': 0L, 'order-0': 0L, 'order-1': 0L, 'order-2': 0L, 'order-3': 0L, 'order-4': 0L, 'order-5': 0L, 'order-6': 0L, 'order-7': 0L}|{}|512|Isolate|9
+16|0|DMA|{}|{'Isolate': 0L, 'Unmovable': 1L, 'Movable': 6L, 'Reclaimable': 0L, 'Reserve': 1L}|512||9
+17|0|DMA32|{}|{'Isolate': 0L, 'Unmovable': 2L, 'Movable': 1592L, 'Reclaimable': 60L, 'Reserve': 2L}|512||9
+18|0|Normal|{}|{'Isolate': 0L, 'Unmovable': 252L, 'Movable': 14252L, 'Reclaimable': 214L, 'Reserve': 2L}|512||9

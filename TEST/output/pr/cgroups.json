@@ -1,0 +1,53 @@
+{
+    "0": {
+        "source": "TEST/data/pr/cgroups"
+    },
+    "1": {
+        "enabled": 0,
+        "hierarchy": 0,
+        "num-groups": 1,
+        "subsystem": "cpuset"
+    },
+    "2": {
+        "enabled": 0,
+        "hierarchy": 0,
+        "num-groups": 1,
+        "subsystem": "cpu"
+    },
+    "3": {
+        "enabled": 0,
+        "hierarchy": 0,
+        "num-groups": 1,
+        "subsystem": "cpuacct"
+    },
+    "4": {
+        "enabled": 0,
+        "hierarchy": 0,
+        "num-groups": 1,
+        "subsystem": "memory"
+    },
+    "5": {
+        "enabled": 0,
+        "hierarchy": 0,
+        "num-groups": 1,
+        "subsystem": "devices"
+    },
+    "6": {
+        "enabled": 0,
+        "hierarchy": 0,
+        "num-groups": 1,
+        "subsystem": "freezer"
+    },
+    "7": {
+        "enabled": 0,
+        "hierarchy": 0,
+        "num-groups": 1,
+        "subsystem": "blkio"
+    },
+    "8": {
+        "enabled": 0,
+        "hierarchy": 0,
+        "num-groups": 1,
+        "subsystem": "perf_event"
+    }
+}

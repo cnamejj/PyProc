@@ -1,0 +1,16 @@
+tcp      6 431939 ESTABLISHED src=192.168.1.14 dst=64.26.60.229 sport=46219 dport=993 src=64.26.60.229 dst=192.168.1.14 sport=993 dport=46219 [ASSURED] mark=0 use=2
+tcp      6 430906 ESTABLISHED src=192.168.1.14 dst=74.125.25.16 sport=36436 dport=993 src=74.125.25.16 dst=192.168.1.14 sport=993 dport=36436 [ASSURED] mark=0 use=2
+udp      17 24 src=192.168.1.1 dst=192.168.1.14 sport=56746 dport=514 [UNREPLIED] src=192.168.1.14 dst=192.168.1.1 sport=514 dport=56746 mark=0 use=2
+tcp      6 431918 ESTABLISHED src=192.168.1.14 dst=173.201.192.71 sport=32824 dport=993 src=173.201.192.71 dst=192.168.1.14 sport=993 dport=32824 [ASSURED] mark=0 use=2
+tcp      6 431932 ESTABLISHED src=192.168.1.14 dst=74.125.25.16 sport=38861 dport=993 src=74.125.25.16 dst=192.168.1.14 sport=993 dport=38861 [ASSURED] mark=0 use=2
+tcp      6 431987 ESTABLISHED src=192.168.1.14 dst=173.201.192.71 sport=34488 dport=993 src=173.201.192.71 dst=192.168.1.14 sport=993 dport=34488 [ASSURED] mark=0 use=2
+tcp      6 431880 ESTABLISHED src=192.168.1.14 dst=173.194.65.108 sport=58018 dport=993 src=173.194.65.108 dst=192.168.1.14 sport=993 dport=58018 [ASSURED] mark=0 use=2
+tcp      6 431742 ESTABLISHED src=192.168.1.14 dst=173.201.192.71 sport=34506 dport=993 src=173.201.192.71 dst=192.168.1.14 sport=993 dport=34506 [ASSURED] mark=0 use=2
+tcp      6 432000 ESTABLISHED src=192.168.1.252 dst=192.168.1.14 sport=61183 dport=22 src=192.168.1.14 dst=192.168.1.252 sport=22 dport=61183 [ASSURED] mark=0 use=2
+udp      17 24 src=127.0.0.1 dst=127.0.0.1 sport=59281 dport=53 src=127.0.0.1 dst=127.0.0.1 sport=53 dport=59281 mark=0 use=2
+tcp      6 431892 ESTABLISHED src=192.168.1.14 dst=173.201.192.71 sport=60972 dport=993 src=173.201.192.71 dst=192.168.1.14 sport=993 dport=60972 [ASSURED] mark=0 use=2
+tcp      6 430904 ESTABLISHED src=192.168.1.14 dst=74.125.25.16 sport=38860 dport=993 src=74.125.25.16 dst=192.168.1.14 sport=993 dport=38860 [ASSURED] mark=0 use=2
+tcp      6 431905 ESTABLISHED src=192.168.1.14 dst=173.201.192.71 sport=34262 dport=993 src=173.201.192.71 dst=192.168.1.14 sport=993 dport=34262 [ASSURED] mark=0 use=2
+tcp      6 381547 ESTABLISHED src=192.168.1.14 dst=173.194.65.108 sport=58017 dport=993 src=173.194.65.108 dst=192.168.1.14 sport=993 dport=58017 [ASSURED] mark=0 use=2
+tcp      6 431998 ESTABLISHED src=192.168.1.14 dst=74.125.25.16 sport=36596 dport=993 src=74.125.25.16 dst=192.168.1.14 sport=993 dport=36596 [ASSURED] mark=0 use=2
+tcp      6 431981 ESTABLISHED src=192.168.1.252 dst=192.168.1.14 sport=61163 dport=22 src=192.168.1.14 dst=192.168.1.252 sport=22 dport=61163 [ASSURED] mark=0 use=2
