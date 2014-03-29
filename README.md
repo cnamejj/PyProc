@@ -194,7 +194,7 @@ In "/proc/self" and other "/proc/###" pid-specific directories:
 |attr/exec NEED|TBD, files in the "attr" subdir need to be researched
 |attr/fscreate| TBD, files in the "attr" subdir need to be researched
 |attr/keycreate|TBD, files in the "attr" subdir need to be researched
-|attr/sockcreate TBD, files in the "attr" subdir need to be researched
+|attr/sockcreate| TBD, files in the "attr" subdir need to be researched
 |cgroup|TBD, it's an empty file, no idea what it's for yet
 
 
@@ -211,13 +211,13 @@ In "/proc/net" and subdirectories
 |ip6_flowlabel| TBD, the file is empty on all the systems I develop/test on
 |ip6_mr_cache|TBD, the file is empty on all the systems I develop/test on
 |ip6_mr_vif|TBD, the file is empty on the systems I have, plus it only readable by root
-|ip_conntrack_expect TBD, the file is empty on the systems I have, plus it only readable by root
+|ip_conntrack_expect |TBD, the file is empty on the systems I have, plus it only readable by root
 |ip_mr_cache| TBD, the file is empty on all the systems I develop/test on
 |ip_mr_vif| TBD, the file is empty on all the systems I develop/test on
 |l2cap| Planned, but only present on my Fedora system
 |mcfilter|TBD, the file is empty on all the systems I develop/test on
 |mcfilter6| TBD, the file is empty on all the systems I develop/test on
-|nf_conntrack_expect TBD, the file is empty on the systems I have, plus it only readable by root
+|nf_conntrack_expect |TBD, the file is empty on the systems I have, plus it only readable by root
 |raw| TBD, the file is empty on all the systems I develop/test on
 |raw6|TBD, the file is empty on all the systems I develop/test on
 |rt_acct| TBD, the file is empty on all the systems I develop/test on
