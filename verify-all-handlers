@@ -1,0 +1,26 @@
+#!/bin/bash
+
+codelist=( $(./ShowProcHandler all \
+    | gawk '$1 == "For" && !/ProcNetNULL/ { print $4; }')
+)
+
+# ---
+
+typeset -i seq total
+
+total="${#codelist[@]}"
+seq=1
+
+# ---
+
+echo ""
+echo "Note: This tool currently can't use be used to verify the output of either"
+echo "Note: the ProcNetDEVSNMP6 and ProcSelfFD classes.  All others should show"
+echo "Note: a 'Pass' result if the code it working properly."
+echo ""
+
+for handler in ${codelist[@]}
+do
+	echo "[${seq}/${total}] $(./verify-handler ${handler})"
+	seq=$(( ${seq} + 1 ))
+done

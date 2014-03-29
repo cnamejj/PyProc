@@ -57,7 +57,7 @@ inp="${DATA_DIR}${data_pref}${data}"
 csv="${RES_DIR}${data_pref}${data}.csv"
 json="${RES_DIR}${data_pref}${data}.json"
 
-if [ ! -f "${inp}" ]
+if [ ! -f "${inp}" -a ! -L "${inp}" ]
 then
 	err_exit "No data file '${inp}' found."
 fi

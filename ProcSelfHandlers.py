@@ -281,7 +281,7 @@ REGISTER_PARTIAL_FILE("stack", ProcSelfSTACK)
 
 # ---
 class ProcSelfIO(PBR.SingleNameValueList):
-    """Pull records from /proc/net/io"""
+    """Pull records from /proc/self/io"""
 #
 # source: fs/proc/base.c
 #
@@ -317,7 +317,7 @@ class ProcSelfIO(PBR.SingleNameValueList):
 #        self.debug_level = 1
         return
 
-REGISTER_FILE("/proc/net/io", ProcSelfIO)
+REGISTER_FILE("/proc/self/io", ProcSelfIO)
 REGISTER_PARTIAL_FILE("io", ProcSelfIO)
 
 

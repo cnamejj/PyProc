@@ -77,7 +77,7 @@ inp="${DATA_DIR}${datafile}"
 csv="${RES_DIR}${datafile}.csv"
 json="${RES_DIR}${datafile}.json"
 
-if [ ! -f "${inp}" ]
+if [ ! -f "${inp}" -a ! -L "${inp}" ]
 then
 	err_exit "The ${code} input file '${inp}' not found."
 fi
