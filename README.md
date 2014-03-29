@@ -11,48 +11,48 @@ Code to parse the following file format are included in this package.
 
 In the root of the "/proc" filesystem tree:
 
-> File Notes
-> ---- ----
-> partitions 
-> diskstats 
-> crypto 
-> key-users 
-> version_signature 
-> softirqs 
-> version 
-> uptime 
-> stat 
-> meminfo 
-> loadavg 
-> interrupts 
-> devices 
-> consoles 
-> cmdline 
-> locks 
-> filesystems 
-> slabinfo - File is only readable by root, other UID's get an empty dataset
-> swaps 
-> vmallocinfo - File is only readable by root, other UID's get an empty dataset
-> zoneinfo 
-> vmstat 
-> pagetypeinfo 
-> buddyinfo 
-> latency_stats 
-> kallsyms - HUGE file!
-> modules 
-> dma 
-> timer_stats 
-> timer_list 
-> iomem 
-> ioports 
-> execdomains 
-> schedstat - structured output, dictionaries within dictionaries
-> mdstat - structured output, dictionaries within dictionaries
-> misc 
-> fb 
-> mtrr 
-> cgroups 
-> mounts - the "mounts" file appears both in the root and the PID directories
+|File | Notes
+|---- | ----
+|partitions | 
+|diskstats | 
+|crypto | 
+|key-users | 
+|version_signature | 
+|softirqs | 
+|version | 
+|uptime | 
+|stat | 
+|meminfo | 
+|loadavg | 
+|interrupts | 
+|devices | 
+|consoles | 
+|cmdline | 
+|locks | 
+|filesystems | 
+|slabinfo | File is only readable by root, other UID's get an empty dataset
+|swaps | 
+|vmallocinfo | File is only readable by root, other UID's get an empty dataset
+|zoneinfo 
+|vmstat | 
+|pagetypeinfo | 
+|buddyinfo | 
+|latency_stats | 
+|kallsyms | HUGE file!
+|modules | 
+|dma | 
+|timer_stats | 
+|timer_list | 
+|iomem | 
+|ioports | 
+|execdomains | 
+|schedstat | structured output, dictionaries within dictionaries
+|mdstat | structured output, dictionaries within dictionaries
+|misc | 
+|fb | 
+|mtrr | 
+|cgroups | 
+|mounts | the "mounts" file appears both in the root and the PID directories
 
 
 
