@@ -37,5 +37,6 @@ else:
     if QUALIFY != "":
         TARGET = "{dir}/{file}".format(dir=TARGET, file=QUALIFY)
 
-    print "File {file} handled by {name:s} from {mod}".format(file=TARGET, name=HANDLER.__name__, mod=HANDLER.__module__)
+    print "File {file} handled by {name:s} from {mod}".format(file=TARGET,
+            name=HANDLER.__name__, mod=HANDLER.__module__)
 

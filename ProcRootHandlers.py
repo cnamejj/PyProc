@@ -925,7 +925,8 @@ class ProcRootKALLSYMS(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 3
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_ADDRESS, CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_ADDRESS, CONV: long,
+                BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_TYPE } )
         PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_SYMBOL } )
         PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_MODULE, PREFIX: "[",
