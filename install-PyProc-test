@@ -9,4 +9,4 @@ fi
 
 rsync -avnu --no-owner --exclude COPYING --exclude .git --exclude .gitignore --exclude TEST \
   --exclude \*.pyc --exclude README.\* --exclude proc-file-\* --exclude .pylintrc --exclude install-PyProc\* \
-  . "${INSTALL_DIR}"
+  --exclude verify\* . "${INSTALL_DIR}"
