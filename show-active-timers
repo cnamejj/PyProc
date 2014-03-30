@@ -1,0 +1,61 @@
+#!/usr/bin/env python
+"""List all the active timers currently on any CPU
+"""
+
+import sys
+import ProcHandlers
+import ProcFieldConstants
+
+if sys.platform == "darwin":
+    print "MacOS doesn't have a '/proc' filesystem, quitting."
+    sys.exit(0)
+    
+PFC = ProcFieldConstants
+
+TRECS = ProcHandlers.GET_HANDLER("timer_list")()
+
+HEAD = "{cpu:3s} {clock:3s} {seq:3s} {pid:>6s} {exp:>10s} {comm:15s} {cmd}"
+DATA = "{cpu:3d} {clock:3d} {seq:2d}. {pid:6d} {exp:9.3f}s {comm:15s} {cmd}"
+
+# ---
+
+print HEAD.format(cpu="CPU", clock="Clk", seq="Num", pid="PID",
+        exp="Expires", comm="Program", cmd="Command Line")
+print HEAD.format(cpu="---", clock="---", seq="---", pid="------",
+        exp="----------", comm="---------------", cmd="------------")
+
+# ---
+
+def pid_to_cmdline(target = "self"):
+    """Find the command line associated with the given process"""
+
+    __cmd = ""
+    __from = "/proc/{pid}/cmdline".format(pid=target)
+
+    __handler = ProcHandlers.GET_HANDLER("/proc/self/cmdline")
+    __act = __handler(__from)
+    for __res in __act:
+        if __cmd == "":
+            __cmd = __res
+    return __cmd
+
+# ---
+
+for dlist in TRECS:
+    cpu_id = dlist[PFC.F_CPU_ID]
+
+    cklist = dlist[PFC.F_CLOCK_LIST]
+    for cl_off in range(0, len(cklist)):
+        clock = cklist[cl_off]
+        clock_id = clock[PFC.F_CLOCK_ID]
+        clock_offset = clock[PFC.F_CLOCK_OFFSET]
+
+        actlist = clock[PFC.F_ACTIVE_TIMERS]
+        for ac_off in range(0, len(actlist)):
+            act = actlist[ac_off]
+            num = act[PFC.F_TIMER_NUM]
+            comm = act[PFC.F_START_COMM]
+            pid = act[PFC.F_START_PID]
+            delta = (act[PFC.F_EXP_DIFF] - clock_offset) / 1000000000.0
+            print DATA.format(cpu=cpu_id, clock=clock_id, seq=num,
+                pid=pid, exp=delta, comm=comm, cmd=pid_to_cmdline(pid))

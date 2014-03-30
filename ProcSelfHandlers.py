@@ -1747,7 +1747,8 @@ class ProcSelfCMDLINE(PBR.SingleTextField):
         return(self.field[PFC.F_COMM])
 
 REGISTER_FILE("/proc/self/cmdline", ProcSelfCMDLINE)
-REGISTER_PARTIAL_FILE("self-cmdline", ProcSelfCMDLINE)
+REGISTER_PARTIAL_FILE("ps/cmdline", ProcSelfCMDLINE)
+REGISTER_PARTIAL_FILE("cmdline", ProcSelfCMDLINE)
 
 
 

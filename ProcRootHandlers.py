@@ -1501,7 +1501,6 @@ class ProcRootCMDLINE(PBR.FixedWhitespaceDelimRecs):
         return(self.cmdline)
 #
 REGISTER_FILE("/proc/cmdline", ProcRootCMDLINE)
-REGISTER_PARTIAL_FILE("cmdline", ProcRootCMDLINE)
 
 
 
