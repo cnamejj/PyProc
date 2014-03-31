@@ -8,7 +8,7 @@ files in the /proc filesystem
 
 ## The Basic Idea
 
-The code provided in this repository strive to make it possible to read
+The code provided in this repository strives to make it possible to read
 information from any dataset in the "/proc" filesystem via a Python iterator.
 There are classes available to parse a variety of different file formats and
 each of them attempts to return a "logical record" that makes sense in the
