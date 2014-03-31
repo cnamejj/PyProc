@@ -6,6 +6,38 @@ files in the /proc filesystem
 
 ----------
 
+## The Basic Idea
+
+The code provided in this repository strive to make it possible to read
+information from any dataset in the "/proc" filesystem via a Python iterator.
+There are classes available to parse a variety of different file formats and
+each of them attempts to return a "logical record" that makes sense in the
+context of the dataset it's reading.
+
+The fields returned vary by dataset, obviously.  But if the code achieves it's
+goals, the method of fetching the data will be consistent.
+
+In the end the following high level steps should work to pull "records" of
+data from any "/proc" dataset.
+
+```python
+import ProcHandlers
+
+# -- Find the "handler" class for the dataset we want
+handler = ProcHandler.GET_HANDLER("/proc/net/arp")
+
+# -- get an active instance of that handler, open the file
+# -- passed or the canonical path for that handler if no
+# -- filename is given.
+act = handler()
+
+for hilit in act:
+    # -- print the dictionary listing all the field in the record
+    print act.field
+```
+
+----------
+
 ## Sample Code
 
 Most of the Python code included in this repository is useful as building
@@ -85,6 +117,23 @@ timer to expire.  It also reads the "/proc/###/cmdline" file for each process
 found while scanning the list of timers.  So this script provides an example
 of how to pull information from a "/proc" dataset and how to perform secondary
 lookups for process specific information as well.
+
+#### alt-conn-mon-proc.py, conn-mon-proc-ipv6.py, conn-mon-proc.py
+
+Very similar to **watch-tcp-connections** but they only monitor one dataset.
+The "ipv6" veriant monitoring "/proc/net/tcp6" for new IPv6 connections.  The
+other two monitor "/proc/net/tcp" so they only check for IPv4 connections.
+
+The difference between **conn-mon-proc.py** and the "alt-" version of the
+script is in how they pull the information they want from each logical record.
+One uses the selected fields returned by the iterator directly.  And the other
+pulls data from the dictionary decribing all the fields in the record.
+
+#### alt-conn-curr-proc.py, conn-curr-proc.py
+
+Similar to scripts whose names they resemble.  The difference is that these
+scripts show summary information about IPv4 socket connections on the system
+when the script is run only.  They don't iterate and check for new connections.
 
 ----------
 
