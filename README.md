@@ -6,10 +6,12 @@ files in the /proc filesystem
 
 ----------
 
+== Files Currently Supported
+
 Code to parse the following file format are included in this package.
 
 
-In the root of the "/proc" filesystem tree:
+= In the root of the "/proc" filesystem tree:
 
 |File | Notes
 |---- | ----
@@ -56,7 +58,7 @@ In the root of the "/proc" filesystem tree:
 
 
 
-In "/proc/net" and subdirectories:
+= In "/proc/net" and subdirectories:
 
 |File | Notes
 |---- | ----
@@ -110,7 +112,7 @@ In "/proc/net" and subdirectories:
 
 
 
-In "/proc/self" tree and "/proc/###" PID specific trees
+= In "/proc/self" tree and "/proc/###" PID specific trees
 
 |File |Notes
 |---- |----
@@ -153,6 +155,8 @@ In "/proc/self" tree and "/proc/###" PID specific trees
 
 ----------
 
+== Files Not Supported
+
 Here are a list of "/proc" files that I've seen in the dev/test systems I use
 that are not handled by the code in this repository at the moment.  Some may
 be added later, others aren't good candidates for the reasons listed below.
@@ -163,7 +167,7 @@ primarily used for setting/unsetting system parameters.
 
 
 
-In the "/proc" root directory:
+= In the "/proc" root directory:
 
 |File |Status
 |---- |----
@@ -177,7 +181,7 @@ In the "/proc" root directory:
  
  
  
-In "/proc/self" and other "/proc/###" pid-specific directories:
+= In "/proc/self" and other "/proc/###" pid-specific directories:
 
 |File |Status
 |---- |----
@@ -199,7 +203,7 @@ In "/proc/self" and other "/proc/###" pid-specific directories:
 
 
 
-In "/proc/net" and subdirectories
+= In "/proc/net" and subdirectories
 
 |File |Status
 |---- |----
@@ -229,7 +233,7 @@ In "/proc/net" and subdirectories
 |xfrm_stat| Planned, but only present on my Fedora system
 
 
-In "/proc/sysvipc"
+= In "/proc/sysvipc"
 
 |File|Status
 |----|----
