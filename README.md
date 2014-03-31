@@ -13,7 +13,7 @@ Code to parse the following file format are included in this package.
 
 ### In the root of the "/proc" filesystem tree:
 
-|File | Notes
+|:File |: Notes
 |---- | ----
 |partitions | 
 |diskstats | 
@@ -60,7 +60,7 @@ Code to parse the following file format are included in this package.
 
 ### In "/proc/net" and subdirectories:
 
-|File | Notes
+|:File |:Notes
 |---- | ----
 |arp 
 |connector 
@@ -114,7 +114,7 @@ Code to parse the following file format are included in this package.
 
 ### In "/proc/self" tree and "/proc/###" PID specific trees
 
-|File |Notes
+|:File |:Notes
 |---- |----
 |fd/### | The files in the "fd" subdir are symlinks, parsed value is the name of the real file
 |cwd | This one is a symlink to another file or dir, the parsed value is the name of the real file
@@ -169,7 +169,7 @@ primarily used for setting/unsetting system parameters.
 
 ### In the "/proc" root directory:
 
-|File |Status
+|:File |:Status
 |---- |----
 |sysrq-trigger |Skipping, it's a "write only" file (and only by root)
 |kpageflags|Skipping, it's a binary file only readable by root
@@ -183,7 +183,7 @@ primarily used for setting/unsetting system parameters.
  
 ### In "/proc/self" and other "/proc/###" pid-specific directories:
 
-|File |Status
+|:File |:Status
 |---- |----
 |fdinfo/###|TBD, not sure what, if any, useful info is in theses files
 |ns/net|TBD, files in the "ns" subdir need to be researched
@@ -205,7 +205,7 @@ primarily used for setting/unsetting system parameters.
 
 ### In "/proc/net" and subdirectories
 
-|File |Status
+|:File |:Status
 |---- |----
 |anycast6|TBD, the file is empty on all the systems I develop/test on
 |bnep|Planned, but only present on my Fedora system
@@ -235,7 +235,7 @@ primarily used for setting/unsetting system parameters.
 
 ### In "/proc/sysvipc"
 
-|File|Status
+|:File|:Status
 |----|----
 |msg|Planned, haven't looked into "sysvipc" file yet, and it's empty on my systems
 |sem|Planned, haven't looked into "sysvipc" file yet, looks really straightforward though
