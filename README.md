@@ -64,6 +64,27 @@ gracefully.  But some datasets produce complex structures that this script
 can't fully decode.  For instance parsing **fib_trie** yields deeply
 structured records that **ShowProcFields** only decodes down two levels.
 
+### Scripts that display system status
+
+#### watch-tcp-connections
+
+This script runs through the socket connections found in the "/proc/net/tcp"
+and "/proc/net/tcp6" datasets, waits for a few seconds and repeats the
+process.  Any new network connections are displayed as they are found.  In
+addition to summary information about the endpoints of the connection, the
+process id that owns the socket and it's associated command line are shown.
+When the program is interrupted with a '^c' the code will display summary
+stats showing the number of connections each IP address seen was associated
+with.
+
+#### show-active-timers
+
+The **show-active-timers** script pulls information from the
+"/proc/timer_list" dataset and lists all the processes that are waiting for
+timer to expire.  It also reads the "/proc/###/cmdline" file for each process
+found while scanning the list of timers.  So this script provides an example
+of how to pull information from a "/proc" dataset and how to perform secondary
+lookups for process specific information as well.
 
 ----------
 
