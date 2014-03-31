@@ -150,14 +150,14 @@ Code to parse the following file format are included in this package.
 |diskstats | 
 |crypto | 
 |key-users | 
-|version_signature | 
-|softirqs | 
+|version_signature |One line file, passed back unparsed
+|softirqs |A dictionary of IRQ's, each a dictionary with one counter per CPU
 |version | 
 |uptime | 
-|stat | 
+|stat |One record of structured data returned, including two level of dictionaries, some per-CPU
 |meminfo | 
 |loadavg | 
-|interrupts | 
+|interrupts |Each logical record includes per-CPU counters.
 |devices | 
 |consoles | 
 |cmdline | 
@@ -166,26 +166,26 @@ Code to parse the following file format are included in this package.
 |slabinfo | File is only readable by root, other UID's get an empty dataset
 |swaps | 
 |vmallocinfo | File is only readable by root, other UID's get an empty dataset
-|zoneinfo 
+|zoneinfo|Each record includes normal settings/counters, an array of counters, and a dictionary or per-CPU dictionaries
 |vmstat | 
-|pagetypeinfo | 
+|pagetypeinfo |Each record includes some global settings, and either migration type breakouts, or zone type summary info
 |buddyinfo | 
-|latency_stats | 
+|latency_stats |Records include counters and a backtrace array
 |kallsyms | HUGE file!
 |modules | 
 |dma | 
 |timer_stats | 
-|timer_list | 
+|timer_list |Records are structured data, with some global data, and either per-CPU fields of data about a timer device
 |iomem | 
 |ioports | 
 |execdomains | 
-|schedstat | structured output, dictionaries within dictionaries
-|mdstat | structured output, dictionaries within dictionaries
+|schedstat |Structured output, each record includes information for one CPU, with per-domain dictionaries
+|mdstat |Structured output, some of the fields are themselves dictionaries or arrays
 |misc | 
 |fb | 
 |mtrr | 
 |cgroups | 
-|mounts | the "mounts" file appears both in the root and the PID directories
+|mounts |The "mounts" file appears both in the root and the PID directories.  The "mount options" field is returned as-is and not parsed
 
 
 
