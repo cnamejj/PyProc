@@ -235,7 +235,7 @@ primarily used for setting/unsetting system parameters.
 |sysrq-trigger |Skipping, it's a "write only" file (and only by root)
 |kpageflags|Skipping, it's a binary file only readable by root
 |kpagecount|  Skipping, it's a binary file only readable by root
-|kmsg|      |Skipping, it's a binary file only readable by root
+|kmsg|Skipping, it's a binary file only readable by root
 |kcore| Skipping, it's a binary file only readable by root
 |cpuinfo| Unlikely, every HW plaform uses a unique format
 |sched_debug| Planned, the format is a PITA but will add eventually
