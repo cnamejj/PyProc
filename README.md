@@ -6,6 +6,67 @@ files in the /proc filesystem
 
 ----------
 
+## Sample Code
+
+Most of the Python code included in this repository is useful as building
+blocks for other scripts/applications.  As a result, they can't really be used
+asis.  But there are some sample programs included that make use of the core
+library.  Here's a list of those pieces and a brief description of how to use
+them.  They were included both as scripts that might be useful as written and
+also to serve as sample code for anyone interesting in writing their own
+scripts.
+
+### Scripts to disply "/proc" data in different formats
+
+There are a couple of scripts that can be used to parse any of the supported
+"/proc" dataset and convert them to another file format.  The resulting data
+should be easier to load into another program, like a Google spreadheet, pull
+into another program, or just to view.
+
+All of these scripts take command line arguments that identify file to be
+parsed.  It can be a file in the "/proc" filesystem or a copy of one of those
+files stored in an arbitrary location.  But since the name of the file, and
+not the contents, are used to figure out which "handler" (a class that knows
+how to parse a specific dataset), if you save a copy of a file from the
+"/proc" filesystem the path to that file should match the filename of the
+original.
+
+For instance, if you wanted to copy "/proc/net/tcp6" and wanted to extra data
+from it later, copying it to "/tmp/copy-of-tcp6" would work.  But copying it
+to "/tmp/tcp6-from-thursday" would not be recognized by the format conversion
+scripts.  The underlying library routines would happily parse any file you
+gave it, but the driver scripts are smart enough to connect the dots...
+
+Here's a list of the scripts included to re-format "/proc" datasets:
+
+#### proc2json
+
+Reads logical records from the indicated file and converts the collection of
+fields from each record to JSON format.
+
+#### pro2csv
+
+Writes each logical record out as a pipe ("|") delimited CSV record.  It will
+also create a header record, printed as the first line, to label each column.
+
+In cases where the fields returned change from logical record to logical
+record, a blank link and new header record will be written out.  The handlers
+included in this package attempt to standardize the fields returned for each
+record, even if that requires including empty fields on some records.  So only
+a few handlers generate multiple header lines.
+
+#### ShowProcFields
+
+This is mostly useful as a test program.  **ShowProcFields** generates a
+user-friendly display of the fields in each logical record read from the
+indicated dataset.  It's display the results of almost all the handlers
+gracefully.  But some datasets produce complex structures that this script
+can't fully decode.  For instance parsing **fib_trie** yields deeply
+structured records that **ShowProcFields** only decodes down two levels.
+
+
+----------
+
 ## Files Currently Supported
 
 Code to parse the following file format are included in this package.
