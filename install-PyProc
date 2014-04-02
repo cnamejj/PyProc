@@ -7,6 +7,6 @@ else
 	INSTALL_DIR="$1"
 fi
 
-rsync -avu --no-owner --exclude COPYING --exclude .git --exclude .gitignore --exclude TEST \
+rsync -avu --no-owner --no-group --exclude COPYING --exclude .git --exclude .gitignore --exclude TEST \
   --exclude \*.pyc --exclude README.\* --exclude proc-file-\* --exclude .pylintrc --exclude install-PyProc\* \
   --exclude verify\* . "${INSTALL_DIR}"
