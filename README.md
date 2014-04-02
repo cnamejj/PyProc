@@ -201,10 +201,10 @@ Code to parse the following file format are included in this package.
 |dev_snmp6/eth0 | since it's one handler for all files in "dev_snmp6" is a bit of a pain to use
 |dev_snmp6/lo | since it's one handler for all files in "dev_snmp6" is a bit of a pain to use
 |fib_trie | parsed data represented as a tree, dictionaries within dictionaries
-|fib_triestat 
-|if_inet6 
+|fib_triestat|one field in logical record returned is a dictionary of inodes, the rest are simple values
+|if_inet6|The IPv6 addresses in each logical record is provided as 32 character string (as listed in the file), and as converted to typical semicolon delimited display format
 |igmp DONE 
-|igmp6 DONE 
+|igmp6 DONE|The IPv6 field in the record is provided as-is, meaning a 32 character string, and in semicolon delimited display format
 |ip6_tables_matches | only root can read the file, other UID's get an empty dataset
 |ip6_tables_names | only root can read the file, other UID's get an empty dataset
 |ip6_tables_targets | only root can read the file, other UID's get an empty dataset
@@ -212,34 +212,34 @@ Code to parse the following file format are included in this package.
 |ip_tables_matches | only root can read the file, other UID's get an empty dataset
 |ip_tables_names | only root can read the file, other UID's get an empty dataset
 |ip_tables_targets | only root can read the file, other UID's get an empty dataset
-|ipv6_route 
+|ipv6_route|IPv6 address fields are provided as-is (meaning 32 character strings) and as semicolon delimited display format
 |netfilter/nf_log 
 |netfilter/nf_queue 
 |netlink 
-|netstat 
+|netstat|The fields returned vary from logical record to logical record since each represents a different network protocol
 |nf_conntrack | only root can read the file, other UID's get an empty dataset
 |packet 
 |protocols 
 |psched 
 |ptype 
-|route 
+|route|The IP addresses in the file are provided as-is, meaning an 8 digit hex string, and in period delimited display format
 |rt6_stats 
-|rt_cache 
-|snmp 
-|snmp6 
-|sockstat 
-|sockstat6 
+|rt_cache|The IP addresses in the file are provided as-is, meaning an 8 digit hex string, and in period delimited display format
+|snmp|The fields returned vary from logical record to logical record since each represents a different network protocol
+|snmp6|One logical record with all the settings listed in the dataset is returned
+|sockstat|One logical record is returned, each field identifies a protocol and it's value is a dictionary of counters
+|sockstat6|One logical record is returned, each field identifies a protocol and it's value is a dictionary of counters
 |softnet_stat 
 |stat/arp_cache 
 |stat/ip_conntrack 
 |stat/ndisc_cache 
 |stat/nf_conntrack 
 |stat/rt_cache 
-|tcp 
-|tcp6 
-|udp
-|udp6 
-|unix 
+|tcp|IP addresses, port numbers, and socket state are provided as given the input file and also translated to display format (IP's), decimal (port), and text representation (socket state)
+|tcp6|IP addresses, port numbers, and socket state are provided as given the input file and also translated to display format (IP's), decimal (port), and text representation (socket state)
+|udp|IP addresses, port numbers, and socket state are provided as given the input file and also translated to display format (IP's), decimal (port), and text representation (socket state)
+|udp6|IP addresses, port numbers, and socket state are provided as given the input file and also translated to display format (IP's), decimal (port), and text representation (socket state)
+|unix|The "path" field in the returned logical records are presentes as they appear in the input file and may include binary characters, usually "\0" characters
 
 
 
