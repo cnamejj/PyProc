@@ -252,26 +252,26 @@ Code to parse the following file format are included in this package.
 |root | This one is a symlink to another file or dir, the parsed value is the name of the real file
 |exe | This one is a symlink to another file or dir, the parsed value is the name of the real file
 |environ | Parsed value is a dictionary of name/value pairs describing all the ENV variables
-|status 
+|status|The 'groups' field in the logical record is a list of values, all other fields are simple values
 |personality 
 |limits 
 |sched 
 |autogroup 
 |comm 
-|syscall 
-|cmdline 
+|syscall|Results are a single line with a single field that contains the contents of the file
+|cmdline|The input file has a list of command line arguments separated by '\0' chars, the handler reconstructs the command by joining the arguments with spaces between them
 |stat 
 |statm 
 |maps 
-|numa_maps 
-|mounts | the "mounts" file appears both in the root and the PID directories
-|mountinfo 
-|mountstats 
+|numa_maps|The "node-list" field in the logical record is a dictionary
+|mounts|The "mounts" file appears both in the root and the PID directories.  The "mount-options" field is string showing the unparsed mount options field from the input file
+|mountinfo|The "mount-options" and "superblock-options" fields are presented as given in the input file and are not parsed
+|mountstats|For NFS volumes there are a number of extra field in the logical record, including dictionaries and dictionaries of dictionaries
 |smaps 
 |wchan 
 |stack 
 |schedstat 
-|latency 
+|latency|The "backtrace" field in the logical record is a list
 |cpuset 
 |oom_score 
 |oom_adj 
