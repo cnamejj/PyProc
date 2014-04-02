@@ -1,0 +1,41 @@
+{
+    "0": {
+        "source": "TEST/data/pi/sem"
+    },
+    "1": {
+        "change-time": 1395779560,
+        "creator-gid": 0,
+        "creator-uid": 0,
+        "id": 32768,
+        "key": 3121959,
+        "mode": 666,
+        "owner-gid": 0,
+        "owner-uid": 0,
+        "semaphores": 2,
+        "update-time": 1396450035
+    },
+    "2": {
+        "change-time": 1396190194,
+        "creator-gid": 0,
+        "creator-uid": 0,
+        "id": 131073,
+        "key": 0,
+        "mode": 600,
+        "owner-gid": 33,
+        "owner-uid": 33,
+        "semaphores": 1,
+        "update-time": 1396477418
+    },
+    "3": {
+        "change-time": 1395797851,
+        "creator-gid": 501,
+        "creator-uid": 501,
+        "id": 98306,
+        "key": 59918130,
+        "mode": 600,
+        "owner-gid": 501,
+        "owner-uid": 501,
+        "semaphores": 1,
+        "update-time": 1396390845
+    }
+}

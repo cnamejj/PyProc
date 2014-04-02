@@ -34,7 +34,7 @@ SUBWORD = "subword"
 
 # --
 PROC_PATH_PREFIX_LIST = ( "/proc", "/proc/", "/proc/net/", "/proc/self/net/",
-        "/proc/self/" )
+        "/proc/self/", "/proc/sysvipc/" )
 
 FILE_HANDLER_REGISTRY = dict()
 PARTIAL_HANDLER_REGISTRY = dict()

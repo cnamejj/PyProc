@@ -37,6 +37,7 @@ import ProcDataConstants
 import ProcNetHandlers
 import ProcRootHandlers
 import ProcSelfHandlers
+import ProcSysvipcHandlers
 
 PBR = ProcBaseRoutines
 PFC = ProcFieldConstants

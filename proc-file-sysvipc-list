@@ -17,6 +17,6 @@ Terms:
 
  VARIES - the fields included vary from system to system
 ---
-msg NEED WSD EMPTY
-sem NEED WSD
-shm NEED WSD
+msg DONE ProcSysvipcMSG WSD EMPTY
+sem DONE ProcSysvipcSEM WSD
+shm DONE ProcSysvipcSHM WSD

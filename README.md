@@ -242,6 +242,14 @@ Code to parse the following file format are included in this package.
 |unix|The "path" field in the returned logical records are presentes as they appear in the input file and may include binary characters, usually "\0" characters
 
 
+### In the "/proc/sysvipc" directory
+
+|File|Notes
+|:----|:----
+|msg|Coded based on a review of the kernel source, no real data to test with
+|sem|
+|shm|
+
 
 ### In "/proc/self" tree and "/proc/###" PID specific trees
 
@@ -363,11 +371,3 @@ primarily used for setting/unsetting system parameters.
 |wireless|TBD, the file is empty on all the systems I develop/test on
 |xfrm_stat| Planned, but only present on my Fedora system
 
-
-### In "/proc/sysvipc"
-
-|File|Status
-|:----|:----
-|msg|Planned, haven't looked into "sysvipc" file yet, and it's empty on my systems
-|sem|Planned, haven't looked into "sysvipc" file yet, looks really straightforward though
-|shm|Planned, haven't looked into "sysvipc" file yet, looks really straightforward though

@@ -12,6 +12,7 @@ NO_DATAFILE="N/A"
 declare -A preftrans=(
   [#/proc/net/]="pn/"
   [#/proc/self/]="ps/"
+  [#/proc/sysvipc/]="pi/"
 )
 
 # -- Can't be in the list, since it collides

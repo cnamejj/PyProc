@@ -1,0 +1,21 @@
+{
+    "0": {
+        "source": "TEST/data/pi/msg"
+    },
+    "1": {
+        "bytes": 8273,
+        "change-time": 1395779912,
+        "creator-gid": 0,
+        "creator-uid": 0,
+        "id": 768,
+        "key": 1959,
+        "mode": 666,
+        "num-queued": 1,
+        "owner-gid": 501,
+        "owner-uid": 501,
+        "receiver-pid": 8123,
+        "receiver-time": 1396236812,
+        "sender-pid": 231,
+        "sender-time": 1395779623
+    }
+}
