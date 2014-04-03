@@ -2,9 +2,11 @@
 """Get process related info from ip/port unique socket info"""
     
 from subprocess import Popen, PIPE
+import pwd
 
 import ProcHandlers
 PH = ProcHandlers
+PFC = PH.ProcFieldConstants
 
 ANY_IPV6_ADDR = "::"
 ANY_IP_ADDR = "0.0.0.0"
@@ -16,6 +18,32 @@ NO_RETURNCODE = None
 NO_UID = -1
 NO_COMMAND = "unknown"
 NO_USER = "unknown"
+
+def pid_to_process_summ(targetpid = "self"):
+    """Lookup username, uid, pid and comm of the indicated process"""
+
+    __uid = NO_UID
+    __pid = NO_CONN_PID
+    __comm = NO_COMMAND
+    __user = NO_USER
+
+    __stat_file = "/proc/{pid}/status".format(pid=targetpid)
+
+    __act = PH.GET_HANDLER(__stat_file)(__stat_file)
+
+    for __hilit in __act:
+        if __uid == NO_UID:
+            __uid = __act.field[PFC.F_UID]
+            __pid = __act.field[PFC.F_PID]
+            __comm = __act.field[PFC.F_PROG_NAME]
+            try:
+                __uinfo = pwd.getpwuid(__uid)
+                __user = __uinfo.pw_name
+            except KeyError:
+                pass
+
+    return(__user, __uid, __pid, __comm)
+
 
 def pid_to_proc_summ(targetpid):
     """Return basic process info associated with the given PID"""
