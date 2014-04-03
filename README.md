@@ -121,7 +121,7 @@ lookups for process specific information as well.
 #### alt-conn-mon-proc.py, conn-mon-proc-ipv6.py, conn-mon-proc.py
 
 Very similar to **watch-tcp-connections** but they only monitor one dataset.
-The "ipv6" veriant monitoring "/proc/net/tcp6" for new IPv6 connections.  The
+The "ipv6" variant monitoring "/proc/net/tcp6" for new IPv6 connections.  The
 other two monitor "/proc/net/tcp" so they only check for IPv4 connections.
 
 The difference between **conn-mon-proc.py** and the "alt-" version of the
