@@ -1,0 +1,9 @@
+{
+    "0": {
+        "source": "TEST/data/ps/fd/0"
+    },
+    "1": {
+        "filepath": "TEST/data/ps/fd/0",
+        "symlink-target": "/dev/tty"
+    }
+}

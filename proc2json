@@ -11,25 +11,15 @@ if sys.platform == "darwin":
 
 QUALIFY = ""
 
-DEV_SNMP6 = "dev_snmp6"
 
 if len(sys.argv) > 1:
     TARGET = sys.argv[1]
-    if len(sys.argv) > 2:
-        QUALIFY = sys.argv[2]
 else:
-    TARGET = "tcp"
+    TARGET = "/proc/net/tcp"
 
 HANDLER = ProcHandlers.GET_HANDLER(TARGET)
 
-if QUALIFY != "":
-    TARGET = '{path}/{file}'.format(path=TARGET, file=QUALIFY)
-    ACTIVE = HANDLER(TARGET)
-else:
-    if TARGET == DEV_SNMP6:
-        ACTIVE = HANDLER()
-    else:
-        ACTIVE = HANDLER(TARGET)
+ACTIVE = HANDLER(TARGET)
 
 REC = 0
 FIELD_LIST = dict()

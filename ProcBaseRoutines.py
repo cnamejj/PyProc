@@ -347,7 +347,17 @@ def get_handler(proc_file):
     if __handler == 0:
         __matchlen = 0
         for __patt in PARTIAL_HANDLER_REGISTRY:
-            if len(__patt) > __matchlen and proc_file.endswith(__patt):
+            if len(__patt) <= __matchlen:
+                pass
+
+            elif __patt.endswith("/"):
+                __parts = proc_file.split(__patt)
+                if(len(__parts) > 1):
+                    if __parts[-1:][0].find("/") == -1:
+                        __matchlen = len(__patt)
+                        __handler = PARTIAL_HANDLER_REGISTRY[__patt]
+
+            elif proc_file.endswith(__patt):
                 __matchlen = len(__patt)
                 __handler = PARTIAL_HANDLER_REGISTRY[__patt]
 

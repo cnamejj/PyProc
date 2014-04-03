@@ -1349,8 +1349,8 @@ class ProcSelfFD(PBR.SymLinkFile):
         return
 
 #
-REGISTER_FILE("/proc/self/fd", ProcSelfFD)
-REGISTER_PARTIAL_FILE("fd", ProcSelfFD)
+REGISTER_FILE("/proc/self/fd/0", ProcSelfFD)
+REGISTER_PARTIAL_FILE("fd/", ProcSelfFD)
 
 
 

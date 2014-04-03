@@ -2925,8 +2925,8 @@ class ProcNetDEVSNMP6(PBR.SingleNameValueList):
 # Ip6InDelivers                   	44
 #
 #
-REGISTER_FILE("/proc/net/dev_snmp6", ProcNetDEVSNMP6)
-REGISTER_PARTIAL_FILE("dev_snmp6", ProcNetDEVSNMP6)
+REGISTER_FILE("/proc/net/dev_snmp6/lo", ProcNetDEVSNMP6)
+REGISTER_PARTIAL_FILE("dev_snmp6/", ProcNetDEVSNMP6)
 
 
 

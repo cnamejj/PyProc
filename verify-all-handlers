@@ -13,12 +13,6 @@ seq=1
 
 # ---
 
-echo ""
-echo "Note: This tool currently can't use be used to verify the output of either"
-echo "Note: the ProcNetDEVSNMP6 and ProcSelfFD classes.  All others should show"
-echo "Note: a 'Pass' result if the code it working properly."
-echo ""
-
 for handler in ${codelist[@]}
 do
 	echo "[${seq}/${total}] $(./verify-handler ${handler})"
