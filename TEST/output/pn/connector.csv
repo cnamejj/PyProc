@@ -1,2 +1,2 @@
-TEST/data/pn/connector|id_val|name|id_idx
-1|6|cn_proc|1
+TEST/data/pn/connector|id-val|id-idx|name
+1|6|1|cn_proc

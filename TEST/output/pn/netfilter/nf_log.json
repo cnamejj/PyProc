@@ -4,67 +4,67 @@
     },
     "1": {
         "index": 0,
-        "logger_list": "",
+        "logger-list": "",
         "name": "NONE"
     },
     "2": {
         "index": 1,
-        "logger_list": "",
+        "logger-list": "",
         "name": "NONE"
     },
     "3": {
         "index": 2,
-        "logger_list": "ipt_LOG",
+        "logger-list": "ipt_LOG",
         "name": "ipt_LOG"
     },
     "4": {
         "index": 3,
-        "logger_list": "",
+        "logger-list": "",
         "name": "NONE"
     },
     "5": {
         "index": 4,
-        "logger_list": "",
+        "logger-list": "",
         "name": "NONE"
     },
     "6": {
         "index": 5,
-        "logger_list": "",
+        "logger-list": "",
         "name": "NONE"
     },
     "7": {
         "index": 6,
-        "logger_list": "",
+        "logger-list": "",
         "name": "NONE"
     },
     "8": {
         "index": 7,
-        "logger_list": "",
+        "logger-list": "",
         "name": "NONE"
     },
     "9": {
         "index": 8,
-        "logger_list": "",
+        "logger-list": "",
         "name": "NONE"
     },
     "10": {
         "index": 9,
-        "logger_list": "",
+        "logger-list": "",
         "name": "NONE"
     },
     "11": {
         "index": 10,
-        "logger_list": "ip6t_LOG",
+        "logger-list": "ip6t_LOG",
         "name": "ip6t_LOG"
     },
     "12": {
         "index": 11,
-        "logger_list": "",
+        "logger-list": "",
         "name": "NONE"
     },
     "13": {
         "index": 12,
-        "logger_list": "",
+        "logger-list": "",
         "name": "NONE"
     }
 }

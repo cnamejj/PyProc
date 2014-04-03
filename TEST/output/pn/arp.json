@@ -5,17 +5,17 @@
     "1": {
         "device": "eth0",
         "flags": 2,
-        "hw_address": "70:56:81:96:ba:a7",
-        "hw_type": 1,
-        "ip_address": "192.168.1.252",
+        "hw-address": "70:56:81:96:ba:a7",
+        "hw-type": 1,
+        "ip-address": "192.168.1.252",
         "mask": "*"
     },
     "2": {
         "device": "eth0",
         "flags": 2,
-        "hw_address": "c8:60:00:e8:b9:28",
-        "hw_type": 1,
-        "ip_address": "192.168.1.1",
+        "hw-address": "c8:60:00:e8:b9:28",
+        "hw-type": 1,
+        "ip-address": "192.168.1.1",
         "mask": "*"
     }
 }

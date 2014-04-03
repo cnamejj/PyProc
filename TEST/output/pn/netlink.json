@@ -10,9 +10,9 @@
         "locks": 2,
         "pid": 1450,
         "protocol": 0,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166158947328,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166158947328,
+        "wmem-alloc": 0
     },
     "2": {
         "drops": 0,
@@ -22,9 +22,9 @@
         "locks": 2,
         "pid": 0,
         "protocol": 0,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166606202880,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166606202880,
+        "wmem-alloc": 0
     },
     "3": {
         "drops": 0,
@@ -34,9 +34,9 @@
         "locks": 2,
         "pid": 4911,
         "protocol": 0,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166442225664,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166442225664,
+        "wmem-alloc": 0
     },
     "4": {
         "drops": 0,
@@ -46,9 +46,9 @@
         "locks": 2,
         "pid": 4195528,
         "protocol": 0,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166526876672,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166526876672,
+        "wmem-alloc": 0
     },
     "5": {
         "drops": 0,
@@ -58,9 +58,9 @@
         "locks": 2,
         "pid": 1224,
         "protocol": 0,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166526875648,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166526875648,
+        "wmem-alloc": 0
     },
     "6": {
         "drops": 0,
@@ -70,9 +70,9 @@
         "locks": 2,
         "pid": 0,
         "protocol": 7,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166599057408,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166599057408,
+        "wmem-alloc": 0
     },
     "7": {
         "drops": 0,
@@ -82,9 +82,9 @@
         "locks": 2,
         "pid": 0,
         "protocol": 9,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166570829824,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166570829824,
+        "wmem-alloc": 0
     },
     "8": {
         "drops": 0,
@@ -94,9 +94,9 @@
         "locks": 2,
         "pid": 0,
         "protocol": 10,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166570821632,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166570821632,
+        "wmem-alloc": 0
     },
     "9": {
         "drops": 0,
@@ -106,9 +106,9 @@
         "locks": 2,
         "pid": 0,
         "protocol": 11,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166578541568,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166578541568,
+        "wmem-alloc": 0
     },
     "10": {
         "drops": 0,
@@ -118,9 +118,9 @@
         "locks": 2,
         "pid": -4203,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441543680,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441543680,
+        "wmem-alloc": 0
     },
     "11": {
         "drops": 0,
@@ -130,9 +130,9 @@
         "locks": 2,
         "pid": -4200,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441538560,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441538560,
+        "wmem-alloc": 0
     },
     "12": {
         "drops": 0,
@@ -142,9 +142,9 @@
         "locks": 2,
         "pid": -4205,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441547776,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441547776,
+        "wmem-alloc": 0
     },
     "13": {
         "drops": 0,
@@ -154,9 +154,9 @@
         "locks": 2,
         "pid": 3811,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166161332224,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166161332224,
+        "wmem-alloc": 0
     },
     "14": {
         "drops": 0,
@@ -166,9 +166,9 @@
         "locks": 2,
         "pid": -4214,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166526865408,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166526865408,
+        "wmem-alloc": 0
     },
     "15": {
         "drops": 0,
@@ -178,9 +178,9 @@
         "locks": 2,
         "pid": 3025,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166158928896,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166158928896,
+        "wmem-alloc": 0
     },
     "16": {
         "drops": 0,
@@ -190,9 +190,9 @@
         "locks": 2,
         "pid": 686,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166510967808,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166510967808,
+        "wmem-alloc": 0
     },
     "17": {
         "drops": 0,
@@ -202,9 +202,9 @@
         "locks": 2,
         "pid": -4202,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441541632,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441541632,
+        "wmem-alloc": 0
     },
     "18": {
         "drops": 0,
@@ -214,9 +214,9 @@
         "locks": 2,
         "pid": -4197,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441535488,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441535488,
+        "wmem-alloc": 0
     },
     "19": {
         "drops": 0,
@@ -226,9 +226,9 @@
         "locks": 2,
         "pid": -4207,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441555968,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441555968,
+        "wmem-alloc": 0
     },
     "20": {
         "drops": 0,
@@ -238,9 +238,9 @@
         "locks": 2,
         "pid": -4216,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166526873600,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166526873600,
+        "wmem-alloc": 0
     },
     "21": {
         "drops": 0,
@@ -250,9 +250,9 @@
         "locks": 2,
         "pid": -4208,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441550848,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441550848,
+        "wmem-alloc": 0
     },
     "22": {
         "drops": 0,
@@ -262,9 +262,9 @@
         "locks": 2,
         "pid": 676,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441861120,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441861120,
+        "wmem-alloc": 0
     },
     "23": {
         "drops": 0,
@@ -274,9 +274,9 @@
         "locks": 2,
         "pid": -4222,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166532249600,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166532249600,
+        "wmem-alloc": 0
     },
     "24": {
         "drops": 0,
@@ -286,9 +286,9 @@
         "locks": 2,
         "pid": -4195,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441549824,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441549824,
+        "wmem-alloc": 0
     },
     "25": {
         "drops": 0,
@@ -298,9 +298,9 @@
         "locks": 2,
         "pid": 1224,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166526887936,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166526887936,
+        "wmem-alloc": 0
     },
     "26": {
         "drops": 0,
@@ -310,9 +310,9 @@
         "locks": 2,
         "pid": 4475,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166526863360,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166526863360,
+        "wmem-alloc": 0
     },
     "27": {
         "drops": 0,
@@ -322,9 +322,9 @@
         "locks": 2,
         "pid": -4209,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441565184,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441565184,
+        "wmem-alloc": 0
     },
     "28": {
         "drops": 0,
@@ -334,9 +334,9 @@
         "locks": 2,
         "pid": 2046,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166519937024,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166519937024,
+        "wmem-alloc": 0
     },
     "29": {
         "drops": 0,
@@ -346,9 +346,9 @@
         "locks": 2,
         "pid": 3875,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166519759872,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166519759872,
+        "wmem-alloc": 0
     },
     "30": {
         "drops": 0,
@@ -358,9 +358,9 @@
         "locks": 2,
         "pid": -4199,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441548800,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441548800,
+        "wmem-alloc": 0
     },
     "31": {
         "drops": 0,
@@ -370,9 +370,9 @@
         "locks": 2,
         "pid": -4210,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441561088,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441561088,
+        "wmem-alloc": 0
     },
     "32": {
         "drops": 0,
@@ -382,9 +382,9 @@
         "locks": 2,
         "pid": 0,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166606203904,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166606203904,
+        "wmem-alloc": 0
     },
     "33": {
         "drops": 0,
@@ -394,9 +394,9 @@
         "locks": 2,
         "pid": 3078,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166519970816,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166519970816,
+        "wmem-alloc": 0
     },
     "34": {
         "drops": 0,
@@ -406,9 +406,9 @@
         "locks": 2,
         "pid": -4651,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166147068928,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166147068928,
+        "wmem-alloc": 0
     },
     "35": {
         "drops": 0,
@@ -418,9 +418,9 @@
         "locks": 2,
         "pid": 1869,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166526892032,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166526892032,
+        "wmem-alloc": 0
     },
     "36": {
         "drops": 0,
@@ -430,9 +430,9 @@
         "locks": 2,
         "pid": -4201,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441536512,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441536512,
+        "wmem-alloc": 0
     },
     "37": {
         "drops": 0,
@@ -442,9 +442,9 @@
         "locks": 2,
         "pid": -4204,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441546752,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441546752,
+        "wmem-alloc": 0
     },
     "38": {
         "drops": 0,
@@ -454,9 +454,9 @@
         "locks": 2,
         "pid": -4206,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441552896,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441552896,
+        "wmem-alloc": 0
     },
     "39": {
         "drops": 0,
@@ -466,9 +466,9 @@
         "locks": 2,
         "pid": -4212,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441563136,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441563136,
+        "wmem-alloc": 0
     },
     "40": {
         "drops": 0,
@@ -478,9 +478,9 @@
         "locks": 2,
         "pid": -4196,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441533440,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441533440,
+        "wmem-alloc": 0
     },
     "41": {
         "drops": 0,
@@ -490,9 +490,9 @@
         "locks": 2,
         "pid": 1215,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441556992,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441556992,
+        "wmem-alloc": 0
     },
     "42": {
         "drops": 0,
@@ -502,9 +502,9 @@
         "locks": 2,
         "pid": -4198,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441559040,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441559040,
+        "wmem-alloc": 0
     },
     "43": {
         "drops": 0,
@@ -514,9 +514,9 @@
         "locks": 2,
         "pid": -4217,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166519941120,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166519941120,
+        "wmem-alloc": 0
     },
     "44": {
         "drops": 0,
@@ -526,9 +526,9 @@
         "locks": 2,
         "pid": 3440,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612165831718912,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612165831718912,
+        "wmem-alloc": 0
     },
     "45": {
         "drops": 0,
@@ -538,9 +538,9 @@
         "locks": 2,
         "pid": -4652,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166147077120,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166147077120,
+        "wmem-alloc": 0
     },
     "46": {
         "drops": 0,
@@ -550,9 +550,9 @@
         "locks": 2,
         "pid": -4211,
         "protocol": 15,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166441534464,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166441534464,
+        "wmem-alloc": 0
     },
     "47": {
         "drops": 0,
@@ -562,9 +562,9 @@
         "locks": 2,
         "pid": 0,
         "protocol": 16,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166578545664,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166578545664,
+        "wmem-alloc": 0
     },
     "48": {
         "drops": 0,
@@ -574,8 +574,8 @@
         "locks": 2,
         "pid": 0,
         "protocol": 18,
-        "rmem_alloc": 0,
-        "socket_pointer": 18446612166578544640,
-        "wmem_alloc": 0
+        "rmem-alloc": 0,
+        "socket-pointer": 18446612166578544640,
+        "wmem-alloc": 0
     }
 }

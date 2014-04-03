@@ -1,2 +1,2 @@
-TEST/data/pr/consoles|dev_name|flags|device-number|io-type
-1|tty0|EC p|4:7|-WU
+TEST/data/pr/consoles|flags|device-number|io-type|dev-name
+1|EC p|4:7|-WU|tty0

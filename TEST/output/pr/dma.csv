@@ -1,2 +1,2 @@
-TEST/data/pr/dma|dev_name|channel
-1|cascade|4
+TEST/data/pr/dma|channel|dev-name
+1|4|cascade

@@ -756,7 +756,7 @@ REGISTER_PARTIAL_FILE("dev", ProcNetDEV)
 
 
 # ---
-class ProcNetIPINET6(PBR.FixedWhitespaceDelimRecs):
+class ProcNetIFINET6(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/if_inet6"""
 # source: net/ipv6/addrconf.c
 #        seq_printf(seq, "%pi6 %02x %02x %02x %02x %8s\n",
@@ -824,8 +824,8 @@ class ProcNetIPINET6(PBR.FixedWhitespaceDelimRecs):
 
         return(self.ipv6, self.ipv6_hex, self.scope, self.device)
 #
-REGISTER_FILE("/proc/net/if_inet6", ProcNetIPINET6)
-REGISTER_PARTIAL_FILE("if_inet6", ProcNetIPINET6)
+REGISTER_FILE("/proc/net/if_inet6", ProcNetIFINET6)
+REGISTER_PARTIAL_FILE("if_inet6", ProcNetIFINET6)
 
 
 

@@ -3,6 +3,6 @@
         "source": "TEST/data/pr/cmdline"
     },
     "1": {
-        "command-line": "BOOT_IMAGE=/vmlinuz-3.2.0-24-generic root=UUID=a959862a-84b7-4373-b7d6-954ac9005249 ro quiet splash vt.handoff=7"
+        "command": "BOOT_IMAGE=/vmlinuz-3.2.0-24-generic root=UUID=a959862a-84b7-4373-b7d6-954ac9005249 ro quiet splash vt.handoff=7\n"
     }
 }

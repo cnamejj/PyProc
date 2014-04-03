@@ -91,6 +91,6 @@ fi
 
 [ "$(./proc2csv ${inp} | sum)" = "$(sum ${csv})" -a \
   "$(./proc2json ${inp} | sum)" = "$(sum ${json})" ] \
-|| compare="Fail" && compare="Pass"
+&& compare="Pass" || compare="Fail"
 
 echo "${compare} ${code}"

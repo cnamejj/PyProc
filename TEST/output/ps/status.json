@@ -24,6 +24,7 @@
         "mem-allow-list": "0",
         "mem-allow-mask": "00000000,00000001",
         "nonvol-ctx-switch": 1,
+        "pid": 7044,
         "ppid": 6883,
         "prog-name": "cat",
         "run-status": "R (running)",

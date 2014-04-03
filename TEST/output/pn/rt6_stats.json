@@ -3,12 +3,12 @@
         "source": "TEST/data/pn/rt6_stats"
     },
     "1": {
-        "dest_ops": 2,
-        "fib_discarded_routes": 874,
-        "fib_nodes": 0,
-        "fib_route_alloc": 1,
-        "fib_route_cache": 6,
-        "fib_route_entries": 5,
-        "fib_route_nodes": 4
+        "dest-ops": 2,
+        "fib-discarded-routes": 874,
+        "fib-nodes": 0,
+        "fib-route-alloc": 1,
+        "fib-route-cache": 6,
+        "fib-route-entries": 5,
+        "fib-route-nodes": 4
     }
 }

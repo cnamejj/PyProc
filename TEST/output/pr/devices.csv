@@ -1,4 +1,4 @@
-TEST/data/pr/devices|dev_type|dev_name|major-dev-num
+TEST/data/pr/devices|dev-type|dev-name|major-dev-num
 1|character|mem|1
 2|character|/dev/vc/0|4
 3|character|tty|4

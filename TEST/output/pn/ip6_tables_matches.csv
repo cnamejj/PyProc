@@ -1,2 +1,2 @@
-TEST/data/pn/ip6_tables_matches|list_of_terms
+TEST/data/pn/ip6_tables_matches|list-of-terms
 1|['limit', 'addrtype', 'state', 'hl', 'rt', 'udplite', 'udp', 'tcp', 'icmp6']

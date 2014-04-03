@@ -1,2 +1,2 @@
-TEST/data/pn/ip_tables_targets|list_of_terms
+TEST/data/pn/ip_tables_targets|list-of-terms
 1|['REJECT', 'LOG', 'ERROR']

@@ -1377,7 +1377,7 @@ class ProcSelfSTATUS(PBR.TaggedMultiLineFile):
                 NAME: PFC.F_RUNSTATUS } )
         PBR.add_parse_rule(self, { PREFIX: "Tgid:\t", NAME: PFC.F_THREAD_GID,
                 CONV: long } )
-        PBR.add_parse_rule(self, { PREFIX: "Pid:\t", NAME: PFC.F_GID,
+        PBR.add_parse_rule(self, { PREFIX: "Pid:\t", NAME: PFC.F_PID,
                 CONV: long } )
         PBR.add_parse_rule(self, { PREFIX: "PPid:\t", NAME: PFC.F_PPID,
                 CONV: long } )

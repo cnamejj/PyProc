@@ -3,7 +3,7 @@
         "source": "TEST/data/pn/ip_tables_matches"
     },
     "1": {
-        "list_of_terms": [
+        "list-of-terms": [
             "limit",
             "addrtype",
             "state",

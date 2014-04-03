@@ -1,4 +1,4 @@
-TEST/data/pn/netfilter/nf_log|index|logger_list|name
+TEST/data/pn/netfilter/nf_log|index|logger-list|name
 1|0||NONE
 2|1||NONE
 3|2|ipt_LOG|ipt_LOG

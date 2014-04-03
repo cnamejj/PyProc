@@ -3,9 +3,9 @@
         "source": "TEST/data/pn/psched"
     },
     "1": {
-        "nsec_per_hrtimer_unit": 1000000000,
-        "nsec_per_usec": 1000,
-        "psched_ticks_per_nsec": 64,
-        "unknown_field": 1000000
+        "nsec-per-hrtimer-unit": 1000000000,
+        "nsec-per-usec": 1000,
+        "psched-ticks-per-nsec": 64,
+        "unknown-field": 1000000
     }
 }

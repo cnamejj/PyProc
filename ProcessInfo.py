@@ -3,6 +3,9 @@
     
 from subprocess import Popen, PIPE
 
+import ProcHandlers
+PH = ProcHandlers
+
 ANY_IPV6_ADDR = "::"
 ANY_IP_ADDR = "0.0.0.0"
 PRESENT_ANY_IPV6_ADDR = "::0"
@@ -10,7 +13,9 @@ PRESENT_ANY_IP_ADDR = "0.0.0.0"
 NO_PROCESS_SUMMARY = "n/a"
 NO_CONN_PID = -1
 NO_RETURNCODE = None
-
+NO_UID = -1
+NO_COMMAND = "unknown"
+NO_USER = "unknown"
 
 def pid_to_proc_summ(targetpid):
     """Return basic process info associated with the given PID"""

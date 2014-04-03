@@ -1,2 +1,2 @@
-TEST/data/pn/psched|nsec_per_usec|nsec_per_hrtimer_unit|unknown_field|psched_ticks_per_nsec
-1|1000|1000000000|1000000|64
+TEST/data/pn/psched|unknown-field|nsec-per-usec|nsec-per-hrtimer-unit|psched-ticks-per-nsec
+1|1000000|1000|1000000000|64

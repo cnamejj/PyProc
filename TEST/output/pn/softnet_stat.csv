@@ -1,4 +1,4 @@
-TEST/data/pn/softnet_stat|received_rps|time_squeeze|cpu_collision|dropped|zero5|zero4|zero3|zero2|zero1|processed
+TEST/data/pn/softnet_stat|dropped|cpu-collision|zero5|zero4|zero3|zero2|zero1|time-squeeze|received-rps|processed
 1|0|0|0|0|0|0|0|0|0|5963626
 2|0|0|0|0|0|0|0|0|0|67740
 3|0|0|0|0|0|0|0|0|0|53448

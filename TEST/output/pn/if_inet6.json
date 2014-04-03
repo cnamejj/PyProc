@@ -5,27 +5,27 @@
     "1": {
         "device": "eth0",
         "flags": 128,
-        "flags_hex": "80",
-        "int_index": 2,
-        "int_index_hex": "02",
+        "flags-hex": "80",
+        "int-index": 2,
+        "int-index-hex": "02",
         "ipv6": "0:80fe::ff00:60ca:86e4:1fe",
-        "ipv6_hex": "fe80000000000000ca6000fffe01e486",
-        "prefix_len": 64,
-        "prefix_len_hex": "40",
+        "ipv6-hex": "fe80000000000000ca6000fffe01e486",
+        "prefix-len": 64,
+        "prefix-len-hex": "40",
         "scope": 32,
-        "scope_hex": "20"
+        "scope-hex": "20"
     },
     "2": {
         "device": "lo",
         "flags": 128,
-        "flags_hex": "80",
-        "int_index": 1,
-        "int_index_hex": "01",
+        "flags-hex": "80",
+        "int-index": 1,
+        "int-index-hex": "01",
         "ipv6": "::1.0.0.0",
-        "ipv6_hex": "00000000000000000000000000000001",
-        "prefix_len": 128,
-        "prefix_len_hex": "80",
+        "ipv6-hex": "00000000000000000000000000000001",
+        "prefix-len": 128,
+        "prefix-len-hex": "80",
         "scope": 16,
-        "scope_hex": "10"
+        "scope-hex": "10"
     }
 }
