@@ -5,8 +5,10 @@ from subprocess import Popen, PIPE
 import pwd
 
 import ProcHandlers
+import ProcFieldConstants
+
 PH = ProcHandlers
-PFC = PH.ProcFieldConstants
+PFC = ProcFieldConstants
 
 ANY_IPV6_ADDR = "::"
 ANY_IP_ADDR = "0.0.0.0"
