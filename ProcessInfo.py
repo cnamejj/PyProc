@@ -21,7 +21,7 @@ NO_UID = -1
 NO_COMMAND = "unknown"
 NO_USER = "unknown"
 
-def pid_to_process_summ(targetpid = "self"):
+def pid_to_proc_summ_pieces(targetpid = "self"):
     """Lookup username, uid, pid and comm of the indicated process"""
 
     __uid = NO_UID
@@ -42,43 +42,26 @@ def pid_to_process_summ(targetpid = "self"):
                 __uinfo = pwd.getpwuid(__uid)
                 __user = __uinfo.pw_name
             except KeyError:
-                pass
+                __user = str(__uid)
 
     return(__user, __uid, __pid, __comm)
-
 
 def pid_to_proc_summ(targetpid):
     """Return basic process info associated with the given PID"""
 
-    __ps_summ = NO_PROCESS_SUMMARY
-    __ps_returncode = None
+    __user, __uid, __pid, __comm = pid_to_proc_summ_pieces(targetpid)
 
-    try:
-        __ps_arg = '{pid:d}'.format(pid=targetpid)
-    except ValueError:
-        __ps_arg = NO_CONN_PID
+    if __uid == NO_UID:
+        __ps_summ = NO_PROCESS_SUMMARY
+        __ps_rc = -1
 
-    if __ps_arg != NO_CONN_PID:
-        try:
-            __ps_comm = ["ps", "--no-headers", "-o", "user,pid,cmd", \
-                    "-p", __ps_arg]
-            __ps_fd = Popen(__ps_comm, stdout=PIPE, stderr=PIPE)
+    else:
+        __ps_summ = "{user} {pid} {comm}".format(user=__user, pid=__pid,
+            comm=__comm)
+        __ps_rc = 0
 
-            __sout_buff, __serr_buff = __ps_fd.communicate()
-            if __sout_buff != "":
-                __ps_summ = __sout_buff[:-1]
-            __ps_returncode = __ps_fd.returncode
+    return(__ps_summ, __ps_rc)
 
-        except ValueError:
-            __ps_summ = NO_PROCESS_SUMMARY
-            __ps_returncode = -999
-
-        except OSError:
-            __ps_summ = NO_PROCESS_SUMMARY
-            __ps_returncode = -999
-
-    return __ps_summ, __ps_returncode
- 
 
 def connection_to_pid(loc_port, rem_ip, rem_port, net_protocol):
     """Return the PID that has the given socket connections open."""

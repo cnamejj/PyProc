@@ -1,0 +1,89 @@
+#!/usr/bin/env python
+"""List all the active timers currently on any CPU
+"""
+
+import sys
+import time
+import ProcHandlers
+import ProcFieldConstants
+
+if sys.platform == "darwin":
+    print "MacOS doesn't have a '/proc' filesystem, quitting."
+    sys.exit(0)
+    
+PFC = ProcFieldConstants
+
+HANDLER = ProcHandlers.GET_HANDLER("meminfo")
+
+PAUSE_LEN = 5
+DIFF_THRESHOLD = 10.0
+
+IS_UP = "UP"
+IS_DOWN = "DO"
+
+DATA_FORMAT = "{seq}. {now} {key} {dir} {pc:.2f}% {delta} {val} {units}"
+
+# ---
+
+def get_meminfo_counts(handler):
+    """Run through /proc/meminfo and collect all the counters"""
+
+    __counters = dict()
+    __units = dict()
+
+    __active = handler()
+    for __hilit in __active:
+        __key = __active.field[PFC.F_CATEGORY]
+        __counters[__key] = __active.field[PFC.F_SIZE]
+        __units[__key] = __active.field[PFC.F_UNITS]
+
+    return(__counters, __units)
+
+# ---
+
+def calc_meminfo_diffs(before, curr):
+    """Compute the change in counters between two sets"""
+
+    __diffs = dict()
+
+    for __key in curr:
+        try:
+            __diffs[__key] = curr[__key] - before[__key]
+        except KeyError:
+            __diffs[__key] = curr[__key]
+
+    return __diffs
+
+# ---
+
+PREV = dict()
+DONE = False
+SEQ = 0
+
+try:
+    while not DONE:
+        SEQ += 1
+        NOW = time.strftime("%y-%m-%d %H:%M:%S")
+        SEEN, UNITS = get_meminfo_counts(HANDLER)
+        DELTA = calc_meminfo_diffs(PREV, SEEN)
+
+        for key in SEEN:
+            try:
+                pc_diff = (DELTA[key] * 100.0) / SEEN[key]
+            except ZeroDivisionError:
+                pc_diff = 0.0
+            if abs(pc_diff) > DIFF_THRESHOLD:
+                if pc_diff < 0:
+                    DIRECTION = IS_DOWN
+                else:
+                    DIRECTION = IS_UP
+                print DATA_FORMAT.format(seq=SEQ, key=key, val=SEEN[key],
+                        units=UNITS[key], delta=DELTA[key], pc=pc_diff,
+                        now=NOW, dir=DIRECTION)
+
+        PREV = SEEN
+
+        time.sleep(PAUSE_LEN)
+
+except KeyboardInterrupt:
+    print "Stopping..."

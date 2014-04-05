@@ -19,14 +19,14 @@ if len(sys.argv) > 1:
 else:
     HANDLER = "ProcNetTCP"
 
-primary = NOT_FOUND
+PRIMARY = NOT_FOUND
 
 REG = PBR.get_file_registry()
 
 for datafile in REG:
-    if primary == NOT_FOUND:
+    if PRIMARY == NOT_FOUND:
         if REG[datafile].__name__ == HANDLER:
-            primary = datafile
+            PRIMARY = datafile
 
-print "Handler {code} parses {file}".format(code=HANDLER, file=primary)
+print "Handler {code} parses {file}".format(code=HANDLER, file=PRIMARY)
 
