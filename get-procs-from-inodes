@@ -1,0 +1,79 @@
+#!/usr/bin/env python
+"""List all the active timers currently on any CPU
+"""
+
+import sys
+#import time
+import ProcHandlers
+import ProcFieldConstants
+
+if sys.platform == "darwin":
+    print "MacOS doesn't have a '/proc' filesystem, quitting."
+    sys.exit(0)
+    
+PFC = ProcFieldConstants
+
+HLIST = (ProcHandlers.GET_HANDLER("tcp"),
+        ProcHandlers.GET_HANDLER("tcp6"),
+        ProcHandlers.GET_HANDLER("udp"),
+        ProcHandlers.GET_HANDLER("udp6"))
+
+SEQ = 0
+socklist = dict()
+
+# ---
+
+def socket_inodes_to_procs(socklist):
+    """Look for inodes associated with open file descriptors."""
+
+    __pidlist= dict()
+    __open_inodes = dict()
+    SOCKET_PREFIX = "socket:["
+
+    __handler = ProcHandlers.GET_HANDLER("/proc/self/fd")
+
+    for __pid_dir in ???:
+        __pid = ???
+        for __open_fd in ???:
+            __active = __handler(__open_fd)
+            for __hilit in __active:
+                __target = __active.field[PFC.F_SYMLINK]
+                if __target.startswith(SOCKET_PREFIX):
+                   __inode = __target.partition(SOCKET_PREFIX)[2]
+                   __inode = __inode.partition("]")
+                   __open_inodes[__inode] = __pid
+
+    for __inode in socklist:
+        try:
+            __pid = __open_inodes[__inode]
+            __pidlist[__inode] = __pid
+            
+        except KeyError:
+            pass
+                    
+    return __pidlist
+
+# ---
+
+for handler in HLIST:
+    active = handler()
+
+    for hilit in active:
+        inode = active.field[PFC.F_INODE]
+        curr = dict()
+        curr[PFC.F_ORIG_IP] = active.field[PFC.F_ORIG_IP]
+        curr[PFC.F_ORIG_PORT] = active.field[PFC.F_ORIG_PORT]
+        curr[PFC.F_DEST_IP] = active.field[PFC.F_DEST_IP]
+        curr[PFC.F_DEST_PORT] = active.field[PFC.F_DEST_PORT]
+        curr[PFC.F_STATE] = active.field[PFC.F_STATE]
+        socklist[inode] = curr
+
+PIDLIST = socket_inodes_to_procs(socklist)
+
+for inode in socklist:
+    SEQ += 1
+    curr = socklist[inode]
+    print "{seq}. {rip}:{rport} -> {lip}:{lport} ({state}) // {pid}".format(
+            seq=SEQ, rip=curr[PFC.F_ORIG_IP], rport=curr[PFC.F_ORIG_PORT],
+            lip=curr[PFC.F_DEST_IP], lport=curr[PFC.F_DEST_PORT],
+            state=curr[PFC.F_STATE], PIDLIST[inode])

@@ -3,6 +3,7 @@
     
 from subprocess import Popen, PIPE
 import pwd
+import os
 
 import ProcHandlers
 import ProcFieldConstants
@@ -20,6 +21,50 @@ NO_RETURNCODE = None
 NO_UID = -1
 NO_COMMAND = "unknown"
 NO_USER = "unknown"
+
+# ---
+
+def socket_inode_to_pid_map():
+    """
+    Create a dictionary mapping inodes to the PID that has them open.
+    """
+
+    __handler = ProcHandlers.GET_HANDLER("/proc/self/fd/")
+    __proc_base = "/proc/"
+    __fd_template = "/proc/{pid}/fd/"
+    __sock_pref = "socket:["
+    __trailer = "]"
+
+    __inode_map = dict()
+
+    try:
+        __base, __top_dirs, __top_files = os.walk(__proc_base).next()
+
+        for __dirname in __top_dirs:
+            if __dirname.isdigit():
+                __pid = __dirname
+                __fdpath = __fd_template.format(pid=__pid)
+
+                for __fb, __fd, __fd_list in os.walk(__fdpath):
+
+                    for __fn in __fd_list:
+                        __path = "{dir}{fn}".format(dir=__fdpath, fn=__fn)
+                        __act = __handler(__path)
+
+                        for __hilit in __act:
+                            __sym = __act.field[PFC.F_SYMLINK]
+                            if __sym.startswith(__sock_pref):
+                                __inode = __sym.partition(__sock_pref)[2]
+                                __inode = __inode.partition(__trailer)[0]
+                                __inode_map[__inode] = __pid
+                                __inode_map[long(__inode)] = __pid
+                    break
+
+    except StopIteration:
+        pass
+
+    return __inode_map
+
 
 def pid_to_proc_summ_pieces(targetpid = "self"):
     """Lookup username, uid, pid and comm of the indicated process"""

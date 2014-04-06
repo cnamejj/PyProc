@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+"""
+Show a the sockets currently on the system with summary
+info on the associated process id.
+"""
+
+import sys
+import ProcHandlers
+import ProcFieldConstants
+import ProcessInfo
+
+if sys.platform == "darwin":
+    print "MacOS doesn't have a '/proc' filesystem, quitting."
+    sys.exit(0)
+    
+PFC = ProcFieldConstants
+
+PROT_LIST = ("tcp", "tcp6", "udp", "udp6")
+SEQ = 0
+
+# ---
+
+INODE2PID = ProcessInfo.socket_inode_to_pid_map()
+
+# ---
+
+for __prot in PROT_LIST:
+
+    ACTIVE = ProcHandlers.GET_HANDLER(__prot)()
+
+    for hilit in ACTIVE:
+        SEQ += 1
+
+        __inod = ACTIVE.field[PFC.F_INODE]
+        __orig = "{ip}:{port}".format(ip=ACTIVE.field[PFC.F_ORIG_IP],
+                port=ACTIVE.field[PFC.F_ORIG_PORT])
+        __dest = "{ip}:{port}".format(ip=ACTIVE.field[PFC.F_DEST_IP],
+                port=ACTIVE.field[PFC.F_DEST_PORT])
+        __state = ACTIVE.field[PFC.F_STATE]
+
+        try:
+            __pnum = INODE2PID[__inod]
+            __ps_summ, __ps_rc = ProcessInfo.pid_to_proc_summ(__pnum)
+        except KeyError:
+            __pnum = "N/A"
+            __ps_summ = "N/A"
+
+        print "{seq}. {orig} -> {dest} {pr} {st} {ps}".format(seq=SEQ,
+                orig=__orig, dest=__dest, ps=__ps_summ, st=__state, pr=__prot)
+
