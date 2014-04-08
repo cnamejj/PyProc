@@ -16,7 +16,7 @@ PFC = ProcFieldConstants
 HANDLER = ProcHandlers.GET_HANDLER("meminfo")
 
 PAUSE_LEN = 5
-DIFF_THRESHOLD = 10.0
+DIFF_THRESHOLD = 20.0
 
 IS_UP = "UP"
 IS_DOWN = "DO"

@@ -1,0 +1,82 @@
+#!/usr/bin/env python
+"""Show all the open files on all processes on the system.
+"""
+
+import sys
+import os
+import ProcHandlers
+import ProcFieldConstants
+import ProcessInfo
+
+if sys.platform == "darwin":
+    print "MacOS doesn't have a '/proc' filesystem, quitting."
+    sys.exit(0)
+    
+PFC = ProcFieldConstants
+PSI = ProcessInfo
+
+HANDLER = ProcHandlers.GET_HANDLER("/proc/self/fd/")
+
+BASE = "/proc/"
+FD_TEMPLATE = "/proc/{pid}/fd/"
+OPF_TEMPLATE = "/proc/{pid}/fd/{fn}"
+OPEN_FORMAT = "{psi} #{fd} {fn} {sock}"
+SOCK_FORMAT = "{prot} {st} {dip}:{dpo} {oip}:{opo}"
+DOM_FORMAT = "{prot} {st} {path}"
+SOCKET_PREF = "socket:["
+SOCKET_SUFF = "]"
+
+# ---
+
+def socket_inode_desc(path, inode_map):
+    """Extract inode from path and generate description"""
+
+    __inode = path.partition(SOCKET_PREF)[2]
+    __inode = __inode.partition(SOCKET_SUFF)[0]
+    __inum = long(__inode)
+
+    __info = ""
+
+    try:
+        __sock = inode_map[__inum]
+        if __sock[PFC.F_PROTOCOL] == PSI.DOM_SOCK:
+            __info = DOM_FORMAT.format(prot=PSI.DOM_SOCK,
+                    path=__sock[PFC.F_PATH], st=__sock[PFC.F_STATE])
+        else:
+            __info = SOCK_FORMAT.format(prot=__sock[PFC.F_PROTOCOL],
+                    dip=__sock[PFC.F_DEST_IP], dpo=__sock[PFC.F_DEST_PORT],
+                    oip=__sock[PFC.F_ORIG_IP], opo=__sock[PFC.F_ORIG_PORT],
+                    st=__sock[PFC.F_STATE])
+
+    except KeyError:
+        __info = ProcessInfo.NO_PATH
+
+    return __info
+
+# ---
+
+INODE2SOCK = ProcessInfo.inode_to_socket_map()
+
+for base, dlist, flist in os.walk(BASE):
+    for dirname in dlist:
+        if dirname.isdigit():
+            pid = dirname
+            psi, ps_rc = ProcessInfo.pid_to_proc_summ(pid)
+
+            fd_dir = FD_TEMPLATE.format(pid=pid)
+
+            for fd_base, fd_dlist, fd_flist in os.walk(fd_dir):
+                for fn in fd_flist:
+                    op_fd = OPF_TEMPLATE.format(pid=pid, fn=fn)
+                    ACT = HANDLER(op_fd)
+
+                    for fdinfo in ACT:
+                        sym = ACT.field[PFC.F_SYMLINK]
+                        if sym.startswith(SOCKET_PREF):
+                            sockinfo = socket_inode_desc(sym, INODE2SOCK)
+                        else:
+                            sockinfo = ""
+
+                        print OPEN_FORMAT.format(fd=fn, fn=sym, psi=psi,
+                                sock=sockinfo)
+    break

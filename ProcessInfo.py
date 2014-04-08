@@ -21,6 +21,53 @@ NO_RETURNCODE = None
 NO_UID = -1
 NO_COMMAND = "unknown"
 NO_USER = "unknown"
+NO_PATH = "[blank]"
+SOCKET_PROT_LIST = ("tcp6", "tcp", "udp6", "udp")
+DOM_SOCK = "unix"
+DOM_SOCK_STATE = ("FREE", "UNCONNECTED", "CONNECTING", "CONNECTED",
+        "DISCONNECTING")
+
+# ---
+
+def inode_to_socket_map():
+    """Create a lookup table mapping inodes to sockets"""
+
+    __inode2sock = dict()
+
+    for __prot in SOCKET_PROT_LIST:
+
+        __act = ProcHandlers.GET_HANDLER(__prot)()
+        for __hilit in __act:
+            __curr = __act.field
+            __inode = __curr[PFC.F_INODE]
+
+            __sock = dict()
+            __sock[PFC.F_DEST_IP] = __curr[PFC.F_DEST_IP]
+            __sock[PFC.F_DEST_PORT] = __curr[PFC.F_DEST_PORT]
+            __sock[PFC.F_ORIG_IP] = __curr[PFC.F_ORIG_IP]
+            __sock[PFC.F_ORIG_PORT] = __curr[PFC.F_ORIG_PORT]
+            __sock[PFC.F_STATE] = __curr[PFC.F_STATE]
+            __sock[PFC.F_PROTOCOL] = __prot
+
+            __inode2sock[__inode] = __sock
+
+    __act = ProcHandlers.GET_HANDLER(DOM_SOCK)()
+    for __hilit in __act:
+        __curr = __act.field
+        __inode = __curr[PFC.F_INODE]
+
+        __sock = dict()
+        __sock[PFC.F_PROTOCOL] = DOM_SOCK
+        __sock[PFC.F_STATE] = DOM_SOCK_STATE[__curr[PFC.F_STATE]]
+        __sock[PFC.F_PATH] = __curr[PFC.F_PATH].encode("string-escape")
+        if __sock[PFC.F_PATH] == "":
+            __sock[PFC.F_PATH] = NO_PATH
+
+        __inode2sock[__inode] = __sock
+
+    return __inode2sock
+
+
 
 # ---
 
