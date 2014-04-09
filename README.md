@@ -153,7 +153,7 @@ script logs before/after values.
 
 Just what it sounds like...  The script walks through the directory describing
 open file descriptors for every process running on the system.  It displays
-summary information for each open file descriptor.  In other words, it show
+summary information for each open file descriptor.  In other words, it shows
 what each of the /proc/#PID#/fd/* symlinks reference.  For any that point to a
 socket instead of a file, basic socket information is included.  And unlike
 other PyProc sample scripts that check socket related info, this script
