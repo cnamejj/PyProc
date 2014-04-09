@@ -135,6 +135,37 @@ Similar to scripts whose names they resemble.  The difference is that these
 scripts show summary information about IPv4 socket connections on the system
 when the script is run only.  They don't iterate and check for new connections.
 
+#### show-active-timers
+
+Runs through the data in /proc/timer_list and extracts information about
+timers waiting to expire on any CPU in the system.  The cmdline of the process
+that owns the timer is displayed as well as basic info including the CPU that
+owns the timeer and the time left before it expires.
+
+#### show-current-sockets
+
+Yet another sample script to run through sockets currently tracked by the
+kernel.  It demonstrates that the handler for tcp, tcp6, udp, and udp6
+datasets return the same parsed fields.  The local/remote ip and port are
+displayed as well as info about the the process that owns the socket.
+
+#### show-memory-delta
+
+An example of a simple monitoring script.  It tracks the change in system
+level memory utilization metrics, pulled from /proc/meminfo, from iteration to
+iteration.  If any measurement increases or decreases by at least 20% the
+script logs before/after values.
+
+#### show-open-files
+
+Just what it sounds like...  The script walks through all the open file
+descriptor directories to for all running processes and displays summary
+information for each one.  In other words, it show what each of the
+/proc/#PID#/fd/* symlinks reference.  And for any that are sockets, basic
+socket information is included.  Unlike other sample scripts that check socket
+related info, this script handles unix domain sockets as well as tcp, tcp6,
+udp and udp6 sockets.
+
 ----------
 
 ## Files Currently Supported
