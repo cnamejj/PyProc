@@ -1,0 +1,295 @@
+#!/usr/bin/env python
+"""
+Display memory use changes over time for a specific process.
+"""
+
+import sys
+import time
+import ProcHandlers
+import ProcFieldConstants
+
+PFC = ProcFieldConstants
+
+if sys.platform == "darwin":
+    print "MacOS doesn't have a '/proc' filesystem, quitting."
+    sys.exit(0)
+
+# ---
+
+NO_PATH = "[no-path]"
+TOTALS = "[totals]"
+IS_UP = "UP"
+IS_DOWN = "DO"
+OPT_ALL = "all"
+OPT_NONE = "none"
+
+ST_SCAN = 0
+ST_IGN_LIST = 1
+ST_SHOW_LIST = 2
+ST_GET_PC = 3
+ST_GET_ABS = 4
+ST_GET_PAUSE = 5
+
+SMAP_FILE_TEMPLATE = "/proc/{pid}/smaps"
+KEY_TEMPLATE = "{low:x}-{high:x} {path}"
+DISP_FORMAT = "{header} {name:14} {curr:12} {dir} {diff:12} {pc:6.1f}%"
+HEAD1_FORMAT = "pid: #{pid}, pause: {plen} secs, thresholds: absolute\
+ {minabs}, percentage {pc}%"
+HEAD2_FORMAT = "display:{show}"
+HEAD3_FORMAT = "watch:{output}"
+
+OP_TOTALS = "-totals"
+OP_NO_TOTALS = "+totals"
+OP_BREAKOUT = "-details"
+OP_NO_BREAKOUT = "+details"
+OP_IGNORE_SEGS = "-ignore"
+OP_NO_IGNORE_SEGS = "+ignore"
+OP_SHOW_SEGS = "-show"
+OP_NO_SHOW_SEGS = "+show"
+OP_PC_CHANGE = "-percent"
+OP_ABS_CHANGE = "-change"
+OP_PAUSE_LEN = "-pause"
+
+# ---
+
+HANDLER = ProcHandlers.GET_HANDLER("/proc/self/smaps")
+
+PAUSE_LEN = 5
+PC_THRESH = 10.0
+ABS_THRESH = 1
+DO_SHOW_DETAILS = True
+DO_SHOW_TOTALS = True
+DONE = False
+SEQ = 0
+
+# ---
+
+COUNTER_LIST = (PFC.F_ANON_HUGE_PAGES, PFC.F_ANONYMOUS, PFC.F_LOCKED,
+        PFC.F_PR_CLEAN, PFC.F_PR_DIRTY, PFC.F_PSS, PFC.F_REFERENCED,
+        PFC.F_RSS_SIZE, PFC.F_SH_CLEAN, PFC.F_SH_DIRTY, PFC.F_SIZE,
+        PFC.F_SWAP)
+
+DISP_LIST = dict()
+
+for __cn in COUNTER_LIST:
+    DISP_LIST[__cn] = True
+
+# ---
+
+def get_current_smaps_counts(smap_path):
+    """Pull memory segments counters for the indicated process"""
+
+    __act = HANDLER(smap_path)
+    __current = dict()
+
+    __total = dict()
+
+    for __hilit in __act:
+        __fields = __act.field
+
+        if __fields[PFC.F_PATH] == "":
+            __path = NO_PATH
+        else:
+            __path = __fields[PFC.F_PATH]
+
+        __key = KEY_TEMPLATE.format(low=__fields[PFC.F_START],
+                high=__fields[PFC.F_END], path=__path)
+        __counters = dict()
+        
+        for __cname in COUNTER_LIST:
+            __counters[__cname] = __fields[__cname]
+            try:
+                __total[__cname] += __fields[__cname]
+            except KeyError:
+                __total[__cname] = __fields[__cname]
+
+        __current[__key] = __counters
+
+    if len(__current) > 0:
+        __current[TOTALS] = __total
+
+    return __current
+
+# ---
+
+def calc_smaps_count_diffs(current, previous):
+    """Compute before/after deltas for a set of counters"""
+
+    __diffs = dict()
+
+    for __seg in current:
+        __counters = dict()
+
+        __cs = current[__seg]
+        try:
+            __ps = previous[__seg]
+        except KeyError:
+            __ps = dict()
+
+        for __key in current[__seg]:
+            try:
+                __counters[__key] = __cs[__key] - __ps[__key]
+            except KeyError:
+                __counters[__key] = __cs[__key]
+
+        __diffs[__seg] = __counters
+
+    return __diffs
+
+# ---
+
+if len(sys.argv) > 1:
+    PID = sys.argv[1]
+
+    STAT = ST_SCAN
+
+    for __opt in sys.argv[2:]:
+        if __opt.startswith("-"):
+            STAT = ST_SCAN
+
+        if __opt == OP_TOTALS:
+            DO_SHOW_TOTALS = True
+            STAT = ST_SCAN
+
+        elif __opt == OP_NO_TOTALS:
+            DO_SHOW_TOTALS = False
+            STAT = ST_SCAN
+
+        elif __opt == OP_BREAKOUT:
+            DO_SHOW_DETAILS = True
+            STAT = ST_SCAN
+
+        elif __opt == OP_NO_BREAKOUT:
+            DO_SHOW_DETAILS = False
+            STAT = ST_SCAN
+
+        elif __opt == OP_PC_CHANGE:
+            STAT = ST_GET_PC
+
+        elif __opt == OP_ABS_CHANGE:
+            STAT = ST_GET_ABS
+
+        elif __opt == OP_PAUSE_LEN:
+            STAT = ST_GET_PAUSE
+
+        elif __opt == OP_IGNORE_SEGS or __opt == OP_NO_SHOW_SEGS:
+            STAT = ST_IGN_LIST
+
+        elif __opt == OP_SHOW_SEGS or __opt == OP_NO_IGNORE_SEGS:
+            STAT = ST_SHOW_LIST
+
+        elif STAT == ST_GET_PC:
+            STAT = ST_SCAN
+            PC_THRESH = float(__opt)
+
+        elif STAT == ST_GET_ABS:
+            STAT = ST_SCAN
+            ABS_THRESH = abs(long(__opt))
+            if ABS_THRESH < 1:
+                ABS_THRESH = 1
+
+        elif STAT == ST_GET_PAUSE:
+            STAT = ST_SCAN
+            PAUSE_LEN = abs(long(__opt))
+            if PAUSE_LEN < 1:
+                PAUSE_LEN = 1
+
+        elif STAT == ST_IGN_LIST:
+            if __opt == OPT_ALL:
+                for __cn in DISP_LIST:
+                    DISP_LIST[__cn] = False
+            elif __opt == OPT_NONE:
+                for __cn in DISP_LIST:
+                    DISP_LIST[__cn] = True
+            else:
+                DISP_LIST[__opt] = False
+
+        elif STAT == ST_SHOW_LIST:
+            if __opt == OPT_ALL:
+                for __cn in DISP_LIST:
+                    DISP_LIST[__cn] = True
+            elif __opt == OPT_NONE:
+                for __cn in DISP_LIST:
+                    DISP_LIST[__cn] = False
+            else:
+                DISP_LIST[__opt] = True
+
+        else:
+            print "Warn: Ignoring unrecognized option '{opt}'".format(opt=__opt)
+
+    OUTLIST = ""
+    for __cn in DISP_LIST:
+        if DISP_LIST[__cn]:
+            OUTLIST = "{curr} {next}".format(curr=OUTLIST, next=__cn)
+
+    if OUTLIST == "":
+        DONE = True
+        print "Err: No fields selected for display."
+    elif not DO_SHOW_TOTALS and not DO_SHOW_DETAILS:
+        DONE = True
+        print "Err: Display of details info and summary totals both disabled."
+    else:
+        print HEAD1_FORMAT.format(pid=PID, minabs=ABS_THRESH, pc=PC_THRESH,
+                plen=PAUSE_LEN)
+        if DO_SHOW_TOTALS:
+            SHOW = " totals"
+        if DO_SHOW_DETAILS:
+            SHOW = "{show} details".format(show=SHOW)
+        print HEAD2_FORMAT.format(show=SHOW)
+        print HEAD3_FORMAT.format(output=OUTLIST)
+
+    PATH = SMAP_FILE_TEMPLATE.format(pid=PID)
+
+    try:
+        CURR = get_current_smaps_counts(PATH)
+
+        while not DONE:
+            SEQ += 1
+            NOW = time.strftime("%y-%m-%d %H:%M:%S")
+            PREV = CURR
+            CURR = get_current_smaps_counts(PATH)
+
+            if len(CURR) == 0:
+                print "Process {pid} not running".format(pid=PID)
+                DONE = True
+                continue
+
+            DELTA = calc_smaps_count_diffs(CURR, PREV)
+            for mseg in DELTA:
+
+                if mseg == TOTALS and not DO_SHOW_TOTALS:
+                    continue
+                if mseg != TOTALS and not DO_SHOW_DETAILS:
+                    continue
+
+                header = "{now} {seg}".format(seg=mseg, now=NOW)
+                delta = DELTA[mseg]
+                cset = CURR[mseg]
+                for key in delta:
+                    if not DISP_LIST[key] or abs(delta[key]) < ABS_THRESH:
+                        continue
+
+                    try:
+                        DPC = (delta[key] * 100.0) / cset[key]
+                    except ZeroDivisionError:
+                        if delta[key] > 0:
+                            DPC = 100.0
+                        else:
+                            DPC = -100.0
+ 
+                    if delta[key] > 0:
+                        desc = IS_UP
+                    else:
+                        desc = IS_DOWN
+
+                    if abs(DPC) >= PC_THRESH:
+                        print DISP_FORMAT.format(header=header, curr=cset[key],
+                                name=key, diff=delta[key], dir=desc, pc=DPC)
+
+            time.sleep(PAUSE_LEN)
+
+    except KeyboardInterrupt:
+        print "Stopping..."
+
+else:
+    print "No process id specified on the command line."

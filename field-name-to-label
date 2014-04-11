@@ -1,0 +1,31 @@
+#!/usr/bin/env python
+"""List all the active timers currently on any CPU
+"""
+
+import sys
+import ProcFieldConstants
+
+# ---
+
+NO_SUCH_FIELD = "N/A"
+FIELD_REF_TEMPLATE = "ProcFieldConstants.{name}"
+
+# ---
+
+if len(sys.argv) > 1:
+
+    for FIELD_NAME in sys.argv[1:]:
+        try:
+            __ref = FIELD_REF_TEMPLATE.format(name=FIELD_NAME)
+            FIELD_VAL = eval(__ref)
+
+        except AttributeError:
+            FIELD_VAL = NO_SUCH_FIELD
+	    
+        except SyntaxError:
+            FIELD_VAL = NO_SUCH_FIELD
+
+        print "{name} = '{val}'".format(name=FIELD_NAME, val=FIELD_VAL)
+
+else:
+    print "At least one field name must be given on the command line."

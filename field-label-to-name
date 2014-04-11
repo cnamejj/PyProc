@@ -1,0 +1,44 @@
+#!/usr/bin/env python
+"""List all the active timers currently on any CPU
+"""
+
+import sys
+import ProcFieldConstants
+
+# ---
+
+NO_SUCH_FIELD = "N/A"
+FIELD_NAME_PREF = "F_"
+FIELD_REF_TEMPLATE = "ProcFieldConstants.{name}"
+
+# ---
+
+def get_field_name_map():
+    """Create a lookup map to find field names from their associated label"""
+
+    __l2n = dict()
+
+    for __sym in dir(ProcFieldConstants):
+        if __sym.startswith(FIELD_NAME_PREF):
+            __ref = FIELD_REF_TEMPLATE.format(name=__sym)
+            __val = eval(__ref)
+            __l2n[__val] = __sym
+
+    return __l2n
+
+# ---
+
+LAB2NAME = get_field_name_map()
+
+if len(sys.argv) > 1:
+
+    for FIELD_VAL in sys.argv[1:]:
+        try:
+            FIELD_NAME = LAB2NAME[FIELD_VAL]
+        except KeyError:
+            FIELD_NAME = NO_SUCH_FIELD
+
+        print "'{val}' = {name}".format(name=FIELD_NAME, val=FIELD_VAL)
+
+else:
+    print "At least one field label must be given on the command line."
