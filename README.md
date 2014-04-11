@@ -161,15 +161,16 @@ handles unix domain sockets as well as tcp, tcp6, udp and udp6 sockets.
 
 #### watch-process-smaps
 
-Similar to "show-memory-delta" but for a specific process id.  However the
-dataser it reads, the "/proc/#PID#/smaps" file for the PID in question, breaks
-out memory usage counters by segments of the processes address space.  So the
-script shows deltas between iterations in more detail, as well as an
-aggregated "total".  It supports CLI options to control which fields to
-monitor, whether or not to display totals, breakdowns or both.  And the
-minimum thresholds before a change is displayed can be set, both the absolute
-number and the percentage change.  Finally, the amount of time the script
-waits between checks can also be specificied via CLI options.
+Similar to "show-memory-delta" but for a specific process id, which must be
+given as the first command line argument.  The dataset this script uses, from
+the "/proc/#PID#/smaps" file for the PID in question, includes usage counters
+by memory segments within process address space.  So the script shows deltas
+between iterations in more detail, as well as an aggregated "total".  It
+supports CLI options to control which fields to monitor, whether or not to
+display totals, breakdowns or both.  The minimum thresholds before a change is
+displayed can be set, both as an absolute number and as a percentage change.
+Finally, the amount of time the script waits between checks can also be
+specificied via CLI options.
 
 ----------
 
