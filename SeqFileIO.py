@@ -73,7 +73,12 @@ class SeqFileIO:
             raise StopIteration
 
         else:
-            self.buff = self.pnt_fd.readline()
+            try:
+                self.buff = self.pnt_fd.readline()
+            except IOError as err:
+                self.pnt_fd.close()
+                self.is_open = False
+                raise StopIteration
 
             try:
                 __min_words = self.min_words
