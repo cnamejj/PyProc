@@ -32,7 +32,8 @@ ST_GET_PAUSE = 5
 
 SMAP_FILE_TEMPLATE = "/proc/{pid}/smaps"
 KEY_TEMPLATE = "{low:x}-{high:x} {path}"
-DISP_FORMAT = "{header} {name:14} {curr:12} {dir} {diff:12} {pc:6.1f}%"
+DISP_FORMAT = "{header} {name:14} {curr:7} {dir} {diff:7} {pc:6.1f}%\
+ {low:7} {hi:7}"
 HEAD1_FORMAT = "pid: #{pid}, pause: {plen} secs, thresholds: absolute\
  {minabs}, percentage {pc}%"
 HEAD2_FORMAT = "display:{show}"
@@ -50,6 +51,14 @@ OP_PC_CHANGE = "-percent"
 OP_ABS_CHANGE = "-change"
 OP_PAUSE_LEN = "-pause"
 
+OPT_STATE_MAP = {
+        OP_IGNORE_SEGS: ST_IGN_LIST,
+        OP_NO_IGNORE_SEGS: ST_SHOW_LIST,
+        OP_SHOW_SEGS: ST_SHOW_LIST,
+        OP_NO_SHOW_SEGS:  ST_IGN_LIST,
+        OP_PC_CHANGE: ST_GET_PC,
+        OP_ABS_CHANGE: ST_GET_ABS,
+        OP_PAUSE_LEN: ST_GET_PAUSE }
 # ---
 
 HANDLER = ProcHandlers.GET_HANDLER("/proc/self/smaps")
@@ -144,6 +153,7 @@ if len(sys.argv) > 1:
     STAT = ST_SCAN
 
     for __opt in sys.argv[2:]:
+
         if __opt.startswith("-"):
             STAT = ST_SCAN
 
@@ -162,21 +172,6 @@ if len(sys.argv) > 1:
         elif __opt == OP_NO_BREAKOUT:
             DO_SHOW_DETAILS = False
             STAT = ST_SCAN
-
-        elif __opt == OP_PC_CHANGE:
-            STAT = ST_GET_PC
-
-        elif __opt == OP_ABS_CHANGE:
-            STAT = ST_GET_ABS
-
-        elif __opt == OP_PAUSE_LEN:
-            STAT = ST_GET_PAUSE
-
-        elif __opt == OP_IGNORE_SEGS or __opt == OP_NO_SHOW_SEGS:
-            STAT = ST_IGN_LIST
-
-        elif __opt == OP_SHOW_SEGS or __opt == OP_NO_IGNORE_SEGS:
-            STAT = ST_SHOW_LIST
 
         elif STAT == ST_GET_PC:
             STAT = ST_SCAN
@@ -215,7 +210,12 @@ if len(sys.argv) > 1:
                 DISP_LIST[__opt] = True
 
         else:
-            print "Warn: Ignoring unrecognized option '{opt}'".format(opt=__opt)
+            try:
+                STAT = OPT_STATE_MAP[__opt]
+            except KeyError:
+                STAT = ST_SCAN
+                print "Warn: Ignoring unrecognized option '{opt}'".format(
+                        opt=__opt)
 
     OUTLIST = ""
     for __cn in DISP_LIST:
@@ -239,9 +239,11 @@ if len(sys.argv) > 1:
         print HEAD3_FORMAT.format(output=OUTLIST)
 
     PATH = SMAP_FILE_TEMPLATE.format(pid=PID)
+    CURR = get_current_smaps_counts(PATH)
+    MINVAL = dict()
+    MAXVAL = dict()
 
     try:
-        CURR = get_current_smaps_counts(PATH)
 
         while not DONE:
             SEQ += 1
@@ -255,6 +257,7 @@ if len(sys.argv) > 1:
                 continue
 
             DELTA = calc_smaps_count_diffs(CURR, PREV)
+
             for mseg in DELTA:
 
                 if mseg == TOTALS and not DO_SHOW_TOTALS:
@@ -265,17 +268,45 @@ if len(sys.argv) > 1:
                 header = "{now} {seg}".format(seg=mseg, now=NOW)
                 delta = DELTA[mseg]
                 cset = CURR[mseg]
+
+                try:
+                    minset = MINVAL[mseg]
+                    maxset = MAXVAL[mseg]
+                except KeyError:
+                    MINVAL[mseg] = dict()
+                    MAXVAL[mseg] = dict()
+                    minset = MINVAL[mseg]
+                    maxset = MAXVAL[mseg]
+
                 for key in delta:
+
+                    try:
+                        if cset[key] < minset[key]:
+                            min_seen = cset[key]
+                            minset[key] = cset[key]
+                        else:
+                            min_seen = minset[key]
+                    except KeyError:
+                        min_seen = cset[key]
+                        minset[key] = cset[key]
+
+                    try:
+                        if cset[key] > maxset[key]:
+                            max_seen = cset[key]
+                            maxset[key] = cset[key]
+                        else:
+                            max_seen = maxset[key]
+                    except KeyError:
+                        max_seen = cset[key]
+                        maxset[key] = cset[key]
+
                     if not DISP_LIST[key] or abs(delta[key]) < ABS_THRESH:
                         continue
 
                     try:
                         DPC = (delta[key] * 100.0) / cset[key]
                     except ZeroDivisionError:
-                        if delta[key] > 0:
-                            DPC = 100.0
-                        else:
-                            DPC = -100.0
+                        DPC = 100.0
  
                     if delta[key] > 0:
                         desc = IS_UP
@@ -284,7 +315,8 @@ if len(sys.argv) > 1:
 
                     if abs(DPC) >= PC_THRESH:
                         print DISP_FORMAT.format(header=header, curr=cset[key],
-                                name=key, diff=delta[key], dir=desc, pc=DPC)
+                                name=key, diff=delta[key], dir=desc, pc=DPC,
+                                low=min_seen, hi=max_seen)
 
             time.sleep(PAUSE_LEN)
 
