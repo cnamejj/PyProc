@@ -7,8 +7,10 @@ import sys
 import time
 import ProcHandlers
 import ProcFieldConstants
+import ProcessInfo
 
 PFC = ProcFieldConstants
+PIN = ProcessInfo
 
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
@@ -29,16 +31,35 @@ ST_SHOW_LIST = 2
 ST_GET_PC = 3
 ST_GET_ABS = 4
 ST_GET_PAUSE = 5
+ST_GET_PID = 6
 
 SMAP_FILE_TEMPLATE = "/proc/{pid}/smaps"
 KEY_TEMPLATE = "{low:x}-{high:x} {path}"
-DISP_FORMAT = "{header} {name:14} {curr:7} {dir} {diff:7} {pc:6.1f}%\
- {low:7} {hi:7}"
-HEAD1_FORMAT = "pid: #{pid}, pause: {plen} secs, thresholds: absolute\
- {minabs}, percentage {pc}%"
-HEAD2_FORMAT = "display:{show}"
-HEAD3_FORMAT = "watch:{output}"
+DISP_FORMAT = "{tstamp} {curr:7} {dir} {diff:7} {pc:6.1f}%\
+ {low:7} {hi:7} {cat} {name:14}"
 
+MSEG_HEADER = { True: " Memory-Segment", False: "" }
+
+HEADER_FORMAT = "pid: #{pid}, cmd: {cmdline}\n\
+pause: {plen} secs, thresholds: absolute {minabs}, percentage {pc}%\n\
+display:{show}\n\
+watch:{output}\n\
+\n\
+Date     Time     Current DR   Delta %-Delta Minimum Maximum{mseg} Path Type\n\
+-------- -------- ------- -- ------- ------- ------- ------- - - -"
+
+SHOW_SYNTAX = "Syntax: {comm} -pid ### options...\n\
+Options:\n\
+    <+/-details>\n\
+    <+/-totals>\n\
+    <+/-ignore cat1 cat2 cat3 ...> | <+/-ignore all>\n\
+    <+/-show cat1 cat2 cat3 ...> | <+/-show all>\n\
+    <+/-percent threshold>\n\
+    <+/-change threshold>\n\
+    <+/-pause seconds>\n\
+    <+/-memory-segments> | <+/-mseg>"
+
+OP_PID = "-pid"
 OP_TOTALS = "-totals"
 OP_NO_TOTALS = "+totals"
 OP_BREAKOUT = "-details"
@@ -50,6 +71,10 @@ OP_NO_SHOW_SEGS = "+show"
 OP_PC_CHANGE = "-percent"
 OP_ABS_CHANGE = "-change"
 OP_PAUSE_LEN = "-pause"
+OP_SPLIT_MSEG = "-memory-segments"
+OP_NO_SPLIT_MSEG = "+memory-segments"
+OP_SPLIT_MSEG2 = "-mseg"
+OP_NO_SPLIT_MSEG2 = "+mseg"
 
 OPT_STATE_MAP = {
         OP_IGNORE_SEGS: ST_IGN_LIST,
@@ -58,6 +83,7 @@ OPT_STATE_MAP = {
         OP_NO_SHOW_SEGS:  ST_IGN_LIST,
         OP_PC_CHANGE: ST_GET_PC,
         OP_ABS_CHANGE: ST_GET_ABS,
+        OP_ABS_CHANGE: ST_GET_PID,
         OP_PAUSE_LEN: ST_GET_PAUSE }
 # ---
 
@@ -70,6 +96,8 @@ DO_SHOW_DETAILS = True
 DO_SHOW_TOTALS = True
 DONE = False
 SEQ = 0
+PID = "self"
+DO_SPLIT_MSEG = True
 
 # ---
 
@@ -101,8 +129,6 @@ def get_current_smaps_counts(smap_path):
         else:
             __path = __fields[PFC.F_PATH]
 
-        __key = KEY_TEMPLATE.format(low=__fields[PFC.F_START],
-                high=__fields[PFC.F_END], path=__path)
         __counters = dict()
         
         for __cname in COUNTER_LIST:
@@ -111,6 +137,17 @@ def get_current_smaps_counts(smap_path):
                 __total[__cname] += __fields[__cname]
             except KeyError:
                 __total[__cname] = __fields[__cname]
+
+        if not DO_SPLIT_MSEG:
+            __key = __path
+            for __cname in __counters:
+                try:
+                    __counters[__cname] += __current[__key][__cname]
+                except KeyError:
+                    pass
+        else:
+            __key = KEY_TEMPLATE.format(low=__fields[PFC.F_START],
+                    high=__fields[PFC.F_END], path=__path)
 
         __current[__key] = __counters
 
@@ -147,10 +184,13 @@ def calc_smaps_count_diffs(current, previous):
 
 # ---
 
-if len(sys.argv) > 1:
-    PID = sys.argv[1]
+if len(sys.argv) <= 1:
+    print SHOW_SYNTAX.format(comm=sys.argv[0])
 
-    STAT = ST_SCAN
+else:
+#    PID = sys.argv[1]
+
+    STAT = ST_GET_PID
 
     for __opt in sys.argv[2:]:
 
@@ -172,6 +212,18 @@ if len(sys.argv) > 1:
         elif __opt == OP_NO_BREAKOUT:
             DO_SHOW_DETAILS = False
             STAT = ST_SCAN
+
+        elif __opt == OP_SPLIT_MSEG or __opt == OP_SPLIT_MSEG2:
+            DO_SPLIT_MSEG = True
+            STAT = ST_SCAN
+
+        elif __opt == OP_NO_SPLIT_MSEG or __opt == OP_NO_SPLIT_MSEG2:
+            DO_SPLIT_MSEG = False
+            STAT = ST_SCAN
+
+        elif STAT == ST_GET_PID:
+            STAT = ST_SCAN
+            PID = __opt
 
         elif STAT == ST_GET_PC:
             STAT = ST_SCAN
@@ -229,14 +281,16 @@ if len(sys.argv) > 1:
         DONE = True
         print "Err: Display of details info and summary totals both disabled."
     else:
-        print HEAD1_FORMAT.format(pid=PID, minabs=ABS_THRESH, pc=PC_THRESH,
-                plen=PAUSE_LEN)
         if DO_SHOW_TOTALS:
             SHOW = " totals"
+        else:
+            SHOW = ""
         if DO_SHOW_DETAILS:
             SHOW = "{show} details".format(show=SHOW)
-        print HEAD2_FORMAT.format(show=SHOW)
-        print HEAD3_FORMAT.format(output=OUTLIST)
+
+        print HEADER_FORMAT.format(pid=PID, plen=PAUSE_LEN, minabs=ABS_THRESH,
+            cmdline=PIN.pid_to_cmdline(PID), pc=PC_THRESH, show=SHOW,
+            output=OUTLIST, mseg=MSEG_HEADER[DO_SPLIT_MSEG])
 
     PATH = SMAP_FILE_TEMPLATE.format(pid=PID)
     CURR = get_current_smaps_counts(PATH)
@@ -258,25 +312,25 @@ if len(sys.argv) > 1:
 
             DELTA = calc_smaps_count_diffs(CURR, PREV)
 
-            for mseg in DELTA:
+            for dcat in DELTA:
 
-                if mseg == TOTALS and not DO_SHOW_TOTALS:
+                if dcat == TOTALS and not DO_SHOW_TOTALS:
                     continue
-                if mseg != TOTALS and not DO_SHOW_DETAILS:
+                if dcat != TOTALS and not DO_SHOW_DETAILS:
                     continue
 
-                header = "{now} {seg}".format(seg=mseg, now=NOW)
-                delta = DELTA[mseg]
-                cset = CURR[mseg]
+#                header = "{now} {cat}".format(cat=dcat, now=NOW)
+                delta = DELTA[dcat]
+                cset = CURR[dcat]
 
                 try:
-                    minset = MINVAL[mseg]
-                    maxset = MAXVAL[mseg]
+                    minset = MINVAL[dcat]
+                    maxset = MAXVAL[dcat]
                 except KeyError:
-                    MINVAL[mseg] = dict()
-                    MAXVAL[mseg] = dict()
-                    minset = MINVAL[mseg]
-                    maxset = MAXVAL[mseg]
+                    MINVAL[dcat] = dict()
+                    MAXVAL[dcat] = dict()
+                    minset = MINVAL[dcat]
+                    maxset = MAXVAL[dcat]
 
                 for key in delta:
 
@@ -314,14 +368,11 @@ if len(sys.argv) > 1:
                         desc = IS_DOWN
 
                     if abs(DPC) >= PC_THRESH:
-                        print DISP_FORMAT.format(header=header, curr=cset[key],
+                        print DISP_FORMAT.format(tstamp=NOW, curr=cset[key],
                                 name=key, diff=delta[key], dir=desc, pc=DPC,
-                                low=min_seen, hi=max_seen)
+                                low=min_seen, hi=max_seen, cat=dcat)
 
             time.sleep(PAUSE_LEN)
 
     except KeyboardInterrupt:
         print "Stopping..."
-
-else:
-    print "No process id specified on the command line."

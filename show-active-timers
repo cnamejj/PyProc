@@ -5,12 +5,14 @@
 import sys
 import ProcHandlers
 import ProcFieldConstants
+import ProcessInfo
 
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
     
 PFC = ProcFieldConstants
+PIN = ProcessInfo
 
 TRECS = ProcHandlers.GET_HANDLER("timer_list")()
 
@@ -23,21 +25,6 @@ print HEAD.format(cpu="CPU", clock="Clk", seq="Num", pid="PID",
         exp="Expires", comm="Program", cmd="Command Line")
 print HEAD.format(cpu="---", clock="---", seq="---", pid="------",
         exp="----------", comm="---------------", cmd="------------")
-
-# ---
-
-def pid_to_cmdline(target = "self"):
-    """Find the command line associated with the given process"""
-
-    __cmd = ""
-    __from = "/proc/{pid}/cmdline".format(pid=target)
-
-    __handler = ProcHandlers.GET_HANDLER("/proc/self/cmdline")
-    __act = __handler(__from)
-    for __res in __act:
-        if __cmd == "":
-            __cmd = __res
-    return __cmd
 
 # ---
 
@@ -58,4 +45,4 @@ for dlist in TRECS:
             pid = act[PFC.F_START_PID]
             delta = (act[PFC.F_EXP_DIFF] - clock_offset) / 1000000000.0
             print DATA.format(cpu=cpu_id, clock=clock_id, seq=num,
-                pid=pid, exp=delta, comm=comm, cmd=pid_to_cmdline(pid))
+                pid=pid, exp=delta, comm=comm, cmd=PIN.pid_to_cmdline(pid))
