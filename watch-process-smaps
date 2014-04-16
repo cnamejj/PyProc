@@ -39,10 +39,11 @@ DISP_FORMAT = "{tstamp} {curr:7} {dir} {diff:7} {pc:6.1f}%\
  {low:7} {hi:7} {cat} {name:14}"
 
 MSEG_HEADER = { True: " Memory-Segment", False: "" }
+MSEG_BREAKOUT = { True: "w/ mem-segment breakouts", False: "" }
 
 HEADER_FORMAT = "pid: #{pid}, cmd: {cmdline}\n\
 pause: {plen} secs, thresholds: absolute {minabs}, percentage {pc}%\n\
-display:{show}\n\
+display:{show} {breakout}\n\
 watch:{output}\n\
 \n\
 Date     Time     Current DR   Delta %-Delta Minimum Maximum{mseg} Path Type\n\
@@ -98,6 +99,7 @@ DONE = False
 SEQ = 0
 PID = "self"
 DO_SPLIT_MSEG = True
+STAT = ST_GET_PID
 
 # ---
 
@@ -188,9 +190,6 @@ if len(sys.argv) <= 1:
     print SHOW_SYNTAX.format(comm=sys.argv[0])
 
 else:
-#    PID = sys.argv[1]
-
-    STAT = ST_GET_PID
 
     for __opt in sys.argv[2:]:
 
@@ -290,7 +289,8 @@ else:
 
         print HEADER_FORMAT.format(pid=PID, plen=PAUSE_LEN, minabs=ABS_THRESH,
             cmdline=PIN.pid_to_cmdline(PID), pc=PC_THRESH, show=SHOW,
-            output=OUTLIST, mseg=MSEG_HEADER[DO_SPLIT_MSEG])
+            output=OUTLIST, mseg=MSEG_HEADER[DO_SPLIT_MSEG],
+            breakout=MSEG_BREAKOUT[DO_SPLIT_MSEG])
 
     PATH = SMAP_FILE_TEMPLATE.format(pid=PID)
     CURR = get_current_smaps_counts(PATH)
@@ -319,7 +319,6 @@ else:
                 if dcat != TOTALS and not DO_SHOW_DETAILS:
                     continue
 
-#                header = "{now} {cat}".format(cat=dcat, now=NOW)
                 delta = DELTA[dcat]
                 cset = CURR[dcat]
 
