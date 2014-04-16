@@ -193,7 +193,7 @@ else:
 
     for __opt in sys.argv[2:]:
 
-        if __opt.startswith("-"):
+        if __opt.startswith("-") or __opt.startswith("+"):
             STAT = ST_SCAN
 
         if __opt == OP_TOTALS:
