@@ -35,19 +35,19 @@ ST_GET_PID = 6
 
 SMAP_FILE_TEMPLATE = "/proc/{pid}/smaps"
 KEY_TEMPLATE = "{low:x}-{high:x} {path}"
-DISP_FORMAT = "{tstamp} {curr:7} {dir} {diff:7} {pc:6.1f}%\
+DISP_FORMAT = "{tstamp} {pid:5} {curr:7} {dir} {diff:7} {pc:6.1f}%\
  {low:7} {hi:7} {cat} {name:14}"
 
 MSEG_HEADER = { True: " Memory-Segment", False: "" }
 MSEG_BREAKOUT = { True: "w/ mem-segment breakouts", False: "" }
 
-HEADER_FORMAT = "pid: #{pid}, cmd: {cmdline}\n\
-pause: {plen} secs, thresholds: absolute {minabs}, percentage {pc}%\n\
+HEADER_PID = "pid: #{pid}, cmd: {cmdline}"
+HEADER_FORMAT = "pause: {plen} secs, thresholds: abs {minabs}, pc {pc}%\n\
 display:{show} {breakout}\n\
 watch:{output}\n\
 \n\
-Date     Time     Current DR   Delta %-Delta Minimum Maximum{mseg} Path Type\n\
--------- -------- ------- -- ------- ------- ------- ------- - - -"
+Date     Time     PID   Current DR   Delta %-Delta Minimum Maximum{mseg} Path Type\n\
+-------- -------- ----- ------- -- ------- ------- ------- ------- - - -"
 
 SHOW_SYNTAX = "Syntax: {comm} -pid ### options...\n\
 Options:\n\
@@ -84,7 +84,7 @@ OPT_STATE_MAP = {
         OP_NO_SHOW_SEGS:  ST_IGN_LIST,
         OP_PC_CHANGE: ST_GET_PC,
         OP_ABS_CHANGE: ST_GET_ABS,
-        OP_ABS_CHANGE: ST_GET_PID,
+        OP_PID: ST_GET_PID,
         OP_PAUSE_LEN: ST_GET_PAUSE }
 # ---
 
@@ -97,7 +97,7 @@ DO_SHOW_DETAILS = True
 DO_SHOW_TOTALS = True
 DONE = False
 SEQ = 0
-PID = "self"
+PID_LIST = dict()
 DO_SPLIT_MSEG = True
 STAT = ST_GET_PID
 
@@ -222,7 +222,8 @@ else:
 
         elif STAT == ST_GET_PID:
             STAT = ST_SCAN
-            PID = __opt
+            for __pid in __opt.split(","):
+                PID_LIST[__pid] = True
 
         elif STAT == ST_GET_PC:
             STAT = ST_SCAN
@@ -287,89 +288,110 @@ else:
         if DO_SHOW_DETAILS:
             SHOW = "{show} details".format(show=SHOW)
 
-        print HEADER_FORMAT.format(pid=PID, plen=PAUSE_LEN, minabs=ABS_THRESH,
-            cmdline=PIN.pid_to_cmdline(PID), pc=PC_THRESH, show=SHOW,
-            output=OUTLIST, mseg=MSEG_HEADER[DO_SPLIT_MSEG],
-            breakout=MSEG_BREAKOUT[DO_SPLIT_MSEG])
+        for cpid in PID_LIST:
+            print HEADER_PID.format(pid=cpid, cmdline=PIN.pid_to_cmdline(cpid))
 
-    PATH = SMAP_FILE_TEMPLATE.format(pid=PID)
-    CURR = get_current_smaps_counts(PATH)
+        print HEADER_FORMAT.format(plen=PAUSE_LEN, minabs=ABS_THRESH,
+            pc=PC_THRESH, show=SHOW, mseg=MSEG_HEADER[DO_SPLIT_MSEG],
+            output=OUTLIST, breakout=MSEG_BREAKOUT[DO_SPLIT_MSEG])
+
+    PATH = dict()
+    CURR = dict()
+    PREV = dict()
+    DELTA = dict()
     MINVAL = dict()
     MAXVAL = dict()
 
-    try:
+    for curr_pid in PID_LIST:
+        PATH[curr_pid] = SMAP_FILE_TEMPLATE.format(pid=curr_pid)
+        CURR[curr_pid] = get_current_smaps_counts(PATH[curr_pid])
+        MINVAL[curr_pid] = dict()
+        MAXVAL[curr_pid] = dict()
 
+    try:
         while not DONE:
             SEQ += 1
             NOW = time.strftime("%y-%m-%d %H:%M:%S")
-            PREV = CURR
-            CURR = get_current_smaps_counts(PATH)
 
-            if len(CURR) == 0:
-                print "Process {pid} not running".format(pid=PID)
-                DONE = True
+            DONE = True
+            PID_POST = dict()
+            for curr_pid in PID_LIST:
+                PREV[curr_pid] = CURR[curr_pid]
+                CURR[curr_pid] = get_current_smaps_counts(PATH[curr_pid])
+
+                if len(CURR[curr_pid]) == 0:
+                    print "Process {pid} not running".format(pid=curr_pid)
+                else:
+                    PID_POST[curr_pid] = PID_LIST[curr_pid]
+                    DONE = False
+
+            PID_LIST = PID_POST
+
+            if DONE:
                 continue
 
-            DELTA = calc_smaps_count_diffs(CURR, PREV)
+            for curr_pid in PID_LIST:
+                DELTA[curr_pid] = calc_smaps_count_diffs(CURR[curr_pid],
+                        PREV[curr_pid])
+                for dcat in DELTA[curr_pid]:
 
-            for dcat in DELTA:
-
-                if dcat == TOTALS and not DO_SHOW_TOTALS:
-                    continue
-                if dcat != TOTALS and not DO_SHOW_DETAILS:
-                    continue
-
-                delta = DELTA[dcat]
-                cset = CURR[dcat]
-
-                try:
-                    minset = MINVAL[dcat]
-                    maxset = MAXVAL[dcat]
-                except KeyError:
-                    MINVAL[dcat] = dict()
-                    MAXVAL[dcat] = dict()
-                    minset = MINVAL[dcat]
-                    maxset = MAXVAL[dcat]
-
-                for key in delta:
-
-                    try:
-                        if cset[key] < minset[key]:
-                            min_seen = cset[key]
-                            minset[key] = cset[key]
-                        else:
-                            min_seen = minset[key]
-                    except KeyError:
-                        min_seen = cset[key]
-                        minset[key] = cset[key]
-
-                    try:
-                        if cset[key] > maxset[key]:
-                            max_seen = cset[key]
-                            maxset[key] = cset[key]
-                        else:
-                            max_seen = maxset[key]
-                    except KeyError:
-                        max_seen = cset[key]
-                        maxset[key] = cset[key]
-
-                    if not DISP_LIST[key] or abs(delta[key]) < ABS_THRESH:
+                    if dcat == TOTALS and not DO_SHOW_TOTALS:
+                        continue
+                    if dcat != TOTALS and not DO_SHOW_DETAILS:
                         continue
 
-                    try:
-                        DPC = (delta[key] * 100.0) / cset[key]
-                    except ZeroDivisionError:
-                        DPC = 100.0
- 
-                    if delta[key] > 0:
-                        desc = IS_UP
-                    else:
-                        desc = IS_DOWN
+                    delta = DELTA[curr_pid][dcat]
+                    cset = CURR[curr_pid][dcat]
 
-                    if abs(DPC) >= PC_THRESH:
-                        print DISP_FORMAT.format(tstamp=NOW, curr=cset[key],
-                                name=key, diff=delta[key], dir=desc, pc=DPC,
-                                low=min_seen, hi=max_seen, cat=dcat)
+                    try:
+                        minset = MINVAL[curr_pid][dcat]
+                        maxset = MAXVAL[curr_pid][dcat]
+                    except KeyError:
+                        MINVAL[curr_pid][dcat] = dict()
+                        MAXVAL[curr_pid][dcat] = dict()
+                        minset = MINVAL[curr_pid][dcat]
+                        maxset = MAXVAL[curr_pid][dcat]
+
+                    for key in delta:
+
+                        try:
+                            if cset[key] < minset[key]:
+                                min_seen = cset[key]
+                                minset[key] = cset[key]
+                            else:
+                                min_seen = minset[key]
+                        except KeyError:
+                            min_seen = cset[key]
+                            minset[key] = cset[key]
+
+                        try:
+                            if cset[key] > maxset[key]:
+                                max_seen = cset[key]
+                                maxset[key] = cset[key]
+                            else:
+                                max_seen = maxset[key]
+                        except KeyError:
+                            max_seen = cset[key]
+                            maxset[key] = cset[key]
+
+                        if not DISP_LIST[key] or abs(delta[key]) < ABS_THRESH:
+                            continue
+
+                        try:
+                            DPC = (delta[key] * 100.0) / cset[key]
+                        except ZeroDivisionError:
+                            DPC = 100.0
+ 
+                        if delta[key] > 0:
+                            desc = IS_UP
+                        else:
+                            desc = IS_DOWN
+
+                        if abs(DPC) >= PC_THRESH:
+                            print DISP_FORMAT.format(tstamp=NOW, name=key,
+                                    curr=cset[key], diff=delta[key], dir=desc,
+                                    pc=DPC, low=min_seen, hi=max_seen,
+                                    cat=dcat, pid=curr_pid)
 
             time.sleep(PAUSE_LEN)
 
