@@ -134,11 +134,12 @@ def get_current_smaps_counts(smap_path):
         __counters = dict()
         
         for __cname in COUNTER_LIST:
-            __counters[__cname] = __fields[__cname]
-            try:
-                __total[__cname] += __fields[__cname]
-            except KeyError:
-                __total[__cname] = __fields[__cname]
+            if DISP_LIST[__cname]:
+                __counters[__cname] = __fields[__cname]
+                try:
+                    __total[__cname] += __fields[__cname]
+                except KeyError:
+                    __total[__cname] = __fields[__cname]
 
         if not DO_SPLIT_MSEG:
             __key = __path
