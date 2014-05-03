@@ -192,7 +192,7 @@ if len(sys.argv) <= 1:
 
 else:
 
-    for __opt in sys.argv[2:]:
+    for __opt in sys.argv[1:]:
 
         if __opt.startswith("-") or __opt.startswith("+"):
             STAT = ST_SCAN
