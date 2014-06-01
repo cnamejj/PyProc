@@ -1,0 +1,113 @@
+#!/usr/bin/env python
+"""Display socket connections as they area created.
+
+Check the contents of /proc/net files tcp and tcp6 for active TCP connections
+and print new ones as they are found.  When the user ends the program by
+entering ^C the code will print a summary of the sockets that were found as it
+was written and the number of times each was seen.  
+"""
+
+import time
+import sys
+import operator
+
+import ProcHandlers
+import ProcFieldConstants
+import CachedDNS
+import ProcessInfo
+
+GET_HANDLER = ProcHandlers.GET_HANDLER
+
+if sys.platform == "darwin":
+    print "MacOS doesn't have a '/proc' filesystem, quitting."
+    sys.exit(0)
+    
+PFC = ProcFieldConstants
+
+IPLOOKUP = CachedDNS.LookupIP()
+PSI = ProcessInfo
+
+NO_SESSION_PID = PSI.NO_CONN_PID
+NO_PROCESS_SUMMARY = PSI.NO_PROCESS_SUMMARY
+
+SESSION_PAIR = set()
+SEEN_FREQ = dict()
+
+DONE = False
+
+HLIST = ( ("tcp6", GET_HANDLER("/proc/net/tcp6")),
+          ("tcp", GET_HANDLER("/proc/net/tcp")),
+          ("udp6", GET_HANDLER("/proc/net/udp6")),
+          ("udp", GET_HANDLER("/proc/net/udp")) )
+
+try:
+    while not DONE:
+
+        NEW_SESSION = set()
+
+        INODE2PID = ProcessInfo.socket_inode_to_pid_map()
+
+        for pname, handler in HLIST:
+            SOCKLIST = handler()
+
+            for proc_rec in SOCKLIST:
+                orig_ip = SOCKLIST.field[PFC.F_ORIG_IP]
+                orig_hexip = SOCKLIST.field[PFC.F_ORIG_HEXIP]
+                orig_port = SOCKLIST.field[PFC.F_ORIG_PORT]
+                dest_ip = SOCKLIST.field[PFC.F_DEST_IP]
+                dest_hexip = SOCKLIST.field[PFC.F_DEST_HEXIP]
+                dest_port = SOCKLIST.field[PFC.F_DEST_PORT]
+                sock_stat = SOCKLIST.field[PFC.F_STATE]
+                inode = SOCKLIST.field[PFC.F_INODE]
+
+#                print "--> ", dest_ip, dest_port, sock_stat
+                if orig_hexip != "" and dest_hexip != "" and \
+                        sock_stat != "LISTEN":
+                    key = "{pn},{oip}:{opr:d}:{dip}:{dpr:d}".format( pn=pname,
+                            oip=orig_ip, opr=orig_port, dip=dest_ip,
+                            dpr=dest_port)
+                    if key not in SESSION_PAIR:
+                        SESSION_PAIR.add(key)
+                        NEW_SESSION.add((orig_ip, orig_port, dest_ip, dest_port,
+                                inode, pname))
+                        if not SEEN_FREQ.has_key(dest_ip):
+                            SEEN_FREQ[dest_ip] = 1
+                        else:
+                            SEEN_FREQ[dest_ip] += 1
+
+            del SOCKLIST
+
+        for orig_ip, orig_port, dest_ip, dest_port, inode, pname in NEW_SESSION:
+
+            ip2host = IPLOOKUP.get_cached_hostname(dest_ip)
+
+            try:
+                session_pid = INODE2PID[inode]
+                proc_summary, proc_rc = PSI.pid_to_proc_summ(session_pid)
+            except KeyError:
+                session_pid = "N/A"
+                proc_summary = "N/A"
+
+            print "{oip}:{opr:d} {dip}:{dpr:d} {pn} host: {host} cmd: {cmd}". \
+                    format( dip=dest_ip, dpr=dest_port, host=ip2host,
+                    cmd=proc_summary, pn=pname, oip=orig_ip, opr=orig_port)
+
+        if len( NEW_SESSION) > 0:
+            print "{time} : Found {new}".format(time=time.ctime(),
+                    new=len(NEW_SESSION))
+        time.sleep(5)
+
+except KeyboardInterrupt:
+    print "Stopping..."
+
+
+ORDERED_FREQ = sorted(SEEN_FREQ.items(), key=operator.itemgetter(1))
+
+for ip, freq in ORDERED_FREQ:
+
+    ip2host = IPLOOKUP.get_cache_entry(ip)
+
+    print "{freq:d} {ip} host: {host}".format( freq=freq, ip=ip, host=ip2host)
+
+sys.stderr.flush()
+sys.stdout.flush()
