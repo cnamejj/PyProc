@@ -17,7 +17,12 @@ if len(sys.argv) > 1:
 else:
     TARGET = "/proc/net/tcp"
 
-HANDLER = ProcHandlers.GET_HANDLER(TARGET)
+if len(sys.argv) > 2:
+    CNAME = sys.argv[2]
+else:
+    CNAME = TARGET
+
+HANDLER = ProcHandlers.GET_HANDLER(CNAME)
 
 ACTIVE = HANDLER(TARGET)
 
