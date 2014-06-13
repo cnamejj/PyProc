@@ -1,2 +1,2 @@
 TEST/data/ps/stat|tty-pgrp|sig-pending|signal-catch|cmaj-flt|gtime|tty-nr|pgid|rss-limit|cu-gtime|start-code|rss-size|end-code|rt-priority|exit-signal|priority|state|cu-user-time|sid|policy|cu-sys-time|min-flt|ppid|nice|cmin-flt|wchan|sig-blocked|flags|threads|maj-flt|sys-time|start-time|user-time|eip|task|signal-ignore|start-stack|esp|io-ticks|command|vsize|pid-nr
-1|10781|0|0|0|0|34829|10781|18446744073709551615|0|4194304|88|4237340|0|17|20|R|0|4289|0|0|275|4289|0|0|0|0|4202496|1|0|0|458272052|0|139810376376288|5|0|140736019148816|140733968681160|0||7356416|10781
+1|10781|139810376376288|0|0|0|34829|10781|88|0|18446744073709551615|7356416|4194304|5|0|20|R|0|4289|0|0|275|4289|0|0|0|0|4202496|1|0|0|0|0|140733968681160|17|0|4237340|140736019148816|0|cat|458272052|10781
