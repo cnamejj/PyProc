@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""List all the active timers currently on any CPU
+"""Get the Python field name associated with a descriptive label
 """
 
 import sys

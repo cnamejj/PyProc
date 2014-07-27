@@ -1,17 +1,19 @@
 #!/usr/bin/env python
-"""List all the active timers currently on any CPU
+"""Monitor classes of memory use and note significant changes
 """
 
 import sys
 import time
 import ProcHandlers
 import ProcFieldConstants
+import ProcDataConstants
 
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
     
 PFC = ProcFieldConstants
+PDC = ProcDataConstants
 
 HANDLER = ProcHandlers.GET_HANDLER("meminfo")
 
@@ -21,7 +23,7 @@ DIFF_THRESHOLD = 20.0
 IS_UP = "UP"
 IS_DOWN = "DO"
 
-DATA_FORMAT = "{seq}. {now} {key} {dir} {pc:.2f}% {delta} {val} {units}"
+DATA_FORMAT = "{seq}. {now} {key} {dir} {delta} {pc:.2f}% {prev} {units} -> {curr} {units}"
 
 # ---
 
@@ -69,20 +71,29 @@ try:
 
         for key in SEEN:
             try:
-                pc_diff = (DELTA[key] * 100.0) / SEEN[key]
-            except ZeroDivisionError:
-                pc_diff = 0.0
+                if PREV[key] == 0 and SEEN[key] == 0:
+                    pc_diff = 0
+                elif PREV[key] == 0:
+                    pc_diff = PDC.INF
+                else:
+                    pc_diff = (DELTA[key] * 100.0) / PREV[key]
+            except KeyError:
+                PREV[key] = 0
+                if SEEN[key] == 0:
+                    pc_diff = 0
+                else:
+                    pc_diff = PDC.INF
+
             if abs(pc_diff) > DIFF_THRESHOLD:
                 if pc_diff < 0:
                     DIRECTION = IS_DOWN
                 else:
                     DIRECTION = IS_UP
-                print DATA_FORMAT.format(seq=SEQ, key=key, val=SEEN[key],
-                        units=UNITS[key], delta=DELTA[key], pc=pc_diff,
-                        now=NOW, dir=DIRECTION)
+                print DATA_FORMAT.format(seq=SEQ, key=key, pc=pc_diff,
+                        dir=DIRECTION, delta=DELTA[key], now=NOW,
+                        units=UNITS[key], prev=PREV[key], curr=SEEN[key])
 
         PREV = SEEN
-
         time.sleep(PAUSE_LEN)
 
 except KeyboardInterrupt:
