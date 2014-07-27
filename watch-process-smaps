@@ -8,9 +8,11 @@ import time
 import ProcHandlers
 import ProcFieldConstants
 import ProcessInfo
+import ProcDataConstants
 
 PFC = ProcFieldConstants
 PIN = ProcessInfo
+PDC = ProcDataConstants
 
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
@@ -343,6 +345,12 @@ else:
 
                     delta = DELTA[curr_pid][dcat]
                     cset = CURR[curr_pid][dcat]
+                    try:
+                        pset = PREV[curr_pid][dcat]
+                        if len(pset) == 0:
+                            pset = cset
+                    except KeyError:
+                        pset = CURR[curr_pid][dcat]
 
                     try:
                         minset = MINVAL[curr_pid][dcat]
@@ -379,9 +387,9 @@ else:
                             continue
 
                         try:
-                            DPC = (delta[key] * 100.0) / cset[key]
+                            DPC = (delta[key] * 100.0) / pset[key]
                         except ZeroDivisionError:
-                            DPC = 100.0
+                            DPC = PDC.INF
  
                         if delta[key] > 0:
                             desc = IS_UP

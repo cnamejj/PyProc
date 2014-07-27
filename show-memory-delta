@@ -23,7 +23,8 @@ DIFF_THRESHOLD = 20.0
 IS_UP = "UP"
 IS_DOWN = "DO"
 
-DATA_FORMAT = "{seq}. {now} {key} {dir} {delta} {pc:.2f}% {prev} {units} -> {curr} {units}"
+DATA_FORMAT = "{seq}. {now} {key} {dir} {delta} {pc:.2f}% {prev} {units}\
+ -> {curr} {units}"
 
 # ---
 
