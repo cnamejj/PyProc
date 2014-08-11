@@ -240,8 +240,8 @@ Code to parse the following file format are included in this package.
 |fib_trie | parsed data represented as a tree, dictionaries within dictionaries
 |fib_triestat|one field in logical record returned is a dictionary of inodes, the rest are simple values
 |if_inet6|The IPv6 addresses in each logical record is provided as 32 character string (as listed in the file), and as converted to typical semicolon delimited display format
-|igmp DONE 
-|igmp6 DONE|The IPv6 field in the record is provided as-is, meaning a 32 character string, and in semicolon delimited display format
+|igmp
+|igmp6|The IPv6 field in the record is provided as-is, meaning a 32 character string, and in semicolon delimited display format
 |ip6_tables_matches | only root can read the file, other UID's get an empty dataset
 |ip6_tables_names | only root can read the file, other UID's get an empty dataset
 |ip6_tables_targets | only root can read the file, other UID's get an empty dataset
