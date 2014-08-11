@@ -109,6 +109,11 @@ When the program is interrupted with a '^c' the code will display summary
 stats showing the number of connections each IP address seen was associated
 with.
 
+#### watch-net-connections
+
+Minor variation on the previous script.  This one shows both UDP and TCP
+connections as well as a bit more information about each socket.
+
 #### show-active-timers
 
 The **show-active-timers** script pulls information from the
