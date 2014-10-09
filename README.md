@@ -64,10 +64,17 @@ how to parse a specific dataset), if you save a copy of a file from the
 original.
 
 For instance, if you wanted to copy "/proc/net/tcp6" and wanted to extra data
-from it later, copying it to "/tmp/copy-of-tcp6" would work.  But copying it
-to "/tmp/tcp6-from-thursday" would not be recognized by the format conversion
+from it later, copying it to "/tmp/copy/tcp6" would work.  But copying it to
+"/tmp/tcp6-from-thursday" would not be recognized by the format conversion
 scripts.  The underlying library routines would happily parse any file you
-gave it, but the driver scripts are smart enough to connect the dots...
+gave it, but the driver scripts aren't smart enough to connect the dots
+without a little help...
+
+You can try specifying the archetypal filename as the first command line
+option and the copy you want parsed as the second name.  The code will try to
+determine which handler to use by looking up the first argument in a registry
+of handlers.  Then it will direct the matching handler to read the file listed
+in the second command line argument.
 
 Here's a list of the scripts included to re-format "/proc" datasets:
 
@@ -375,8 +382,8 @@ primarily used for setting/unsetting system parameters.
 |clear_refs|Skipping, it's "write only" and not a normal data file
 |pagemap| Skipping, it's a binary file
 |attr/current|TBD, files in the "attr" subdir need to be researched
-|attr/prev NEED|TBD, files in the "attr" subdir need to be researched
-|attr/exec NEED|TBD, files in the "attr" subdir need to be researched
+|attr/prev|TBD, files in the "attr" subdir need to be researched
+|attr/exec|TBD, files in the "attr" subdir need to be researched
 |attr/fscreate| TBD, files in the "attr" subdir need to be researched
 |attr/keycreate|TBD, files in the "attr" subdir need to be researched
 |attr/sockcreate| TBD, files in the "attr" subdir need to be researched
