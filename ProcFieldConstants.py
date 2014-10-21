@@ -2,6 +2,7 @@
 """Field name constants shared by several modules, no code here"""
 
 # -- fields used for tcp, tcp6, udp and udp6 
+F_BUCKET = "bucket"
 F_ORIG_HEXIP = "orig-hexip"
 F_DEST_HEXIP = "dest-hexip"
 F_ORIG_HEXPORT = "orig-hexport"

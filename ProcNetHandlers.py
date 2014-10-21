@@ -2260,6 +2260,7 @@ class ProcNetTCP6(PBR.FixedWhitespaceDelimRecs):
         self.skipped = "sl"
         self.ipconv = IPAddressConv
 
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_BUCKET, CONV: long, BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXIP,
                 BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXPORT,
@@ -2317,6 +2318,7 @@ class ProcNetTCP6(PBR.FixedWhitespaceDelimRecs):
 #   1: 00000000000000000000000000000000:0016 00000000000000000000000000000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 1892 1 0000000000000000 100 0 0 2 -1
 
         if sio.buff == "":
+	    self.field[PFC.F_BUCKET] = 0
             self.field[PFC.F_ORIG_HEXIP] = "00000000000000000000000000000000"
             self.field[PFC.F_DEST_HEXIP] = "00000000000000000000000000000000"
             self.field[PFC.F_ORIG_HEXPORT] = "0000"
@@ -2409,6 +2411,7 @@ class ProcNetTCP(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 12
         self.skipped = "sl"
 
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_BUCKET, CONV: long, BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXIP,
                 BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXPORT,
@@ -2468,6 +2471,7 @@ class ProcNetTCP(PBR.FixedWhitespaceDelimRecs):
 #   3: 0E01A8C0:0035 00000000:0000 0A 00000000:00000000 00:00000000 00000000   118        0 15488 1 0000000000000000 100 0 0 10 -1                    
 
         if sio.buff == "":
+            self.field[PFC.F_BUCKET] = 0
             self.field[PFC.F_ORIG_HEXIP] = "00000000"
             self.field[PFC.F_DEST_HEXIP] = "00000000"
             self.field[PFC.F_ORIG_HEXPORT] = "0000"
@@ -2552,6 +2556,7 @@ class ProcNetUDP6(PBR.FixedWhitespaceDelimRecs):
         self.skipped = "sl"
         self.ipconv = IPAddressConv
 
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_BUCKET, CONV: long, BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXIP,
                 BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXPORT,
@@ -2601,6 +2606,7 @@ class ProcNetUDP6(PBR.FixedWhitespaceDelimRecs):
 # 2777: 00000000000000000000000000000000:0202 00000000000000000000000000000000:0000 07 00000000:00000000 00:00000000 00000000     0        0 1899 2 0000000000000000 0
 
         if sio.buff == "":
+            self.field[PFC.F_BUCKET] = 0
             self.field[PFC.F_ORIG_HEXIP] = "00000000000000000000000000000000"
             self.field[PFC.F_DEST_HEXIP] = "00000000000000000000000000000000"
             self.field[PFC.F_ORIG_HEXPORT] = "0000"
@@ -2670,6 +2676,7 @@ class ProcNetUDP(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 12
         self.skipped = "sl"
 
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_BUCKET, CONV: long, BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXIP,
                 BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXPORT,
@@ -2720,6 +2727,7 @@ class ProcNetUDP(PBR.FixedWhitespaceDelimRecs):
 # 2777: 00000000:0202 00000000:0000 07 00000000:00000000 00:00000000 00000000     0        0 1898 2 0000000000000000 0
 
         if sio.buff == "":
+            self.field[PFC.F_BUCKET] = 0
             self.field[PFC.F_ORIG_HEXIP] = "00000000"
             self.field[PFC.F_DEST_HEXIP] = "00000000"
             self.field[PFC.F_ORIG_HEXPORT] = "0000"
