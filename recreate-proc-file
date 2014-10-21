@@ -56,23 +56,27 @@ fi
 
 if [ ! -d "${TEMPDIR}" ]
 then
-	err_exit "Temporary directory '${TEMPDIR}' doesn't exist"
+	mkdir "${TEMPDIR}"
+	rc=$?
+	if [ ${rc} -ne 0 ]
+	then
+		err_exit "Can't create temporary directory '${TEMPDIR}', rc=${rc}"
+	fi
 fi
-
 
 inp_base="$(basename "${inp}")"
 inpcopy="${TEMPDIR}${inp_base}.copy"
 regen="${TEMPDIR}${inp_base}.regen"
 
-cp --no-preserve=all "${inp}" "${inpcopy}"
+chmod 644 "${inpcopy}" >/dev/null 2>&1
+
+cat "${inp}" >"${inpcopy}"
 rc=$?
 
 if [ ${rc} -ne 0 ]
 then
 	err_exit "Can't copy '${inp}' to '${inpcopy}', rc=${rc}"
 fi
-
-chmod 644 "${inpcopy}" >/dev/null 2>&1
 
 # ---
 
@@ -92,8 +96,12 @@ rc=$?
 if [ ${rc} -eq 0 ]
 then
 	echo "Pass"
+
+	rm "${inpcopy}" "${regen}"
 else
 	echo "Fail"
 fi
+
+# ---
 
 exit ${rc}
