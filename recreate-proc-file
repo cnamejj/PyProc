@@ -1,0 +1,99 @@
+#!/bin/bash
+
+TEMPDIR="/var/tmp/pyproc-regentest/"
+
+PREF1="/proc/"
+PREF2="/proc/net/"
+PREF3="/proc/self/"
+PREF4="/proc/sysvipc/"
+
+# ---
+
+err_exit() \
+{
+    echo "Err: $*"
+    exit 1
+}
+
+# ---
+
+typeset -i rc
+
+inp="$1"
+
+if [ "${inp}" = "" ]
+then
+	echo "Syntax: $0 /proc/file/name"
+	exit 0
+fi
+
+# ---
+
+if [ ! -f "${inp}" ]
+then
+	if [ -f "${PREF1}${inp}" ]
+	then
+		inp="${PREF1}${inp}"
+
+	elif [ -f "${PREF2}${inp}" ]
+	then
+		inp="${PREF2}${inp}"
+
+	elif [ -f "${PREF3}${inp}" ]
+	then
+		inp="${PREF3}${inp}"
+
+	elif [ -f "${PREF4}${inp}" ]
+	then
+		inp="${PREF4}${inp}"
+
+	else
+		err_exit "Can't find file '${inp}' in common /proc directories"
+	fi
+fi
+
+# ---
+
+if [ ! -d "${TEMPDIR}" ]
+then
+	err_exit "Temporary directory '${TEMPDIR}' doesn't exist"
+fi
+
+
+inp_base="$(basename "${inp}")"
+inpcopy="${TEMPDIR}${inp_base}.copy"
+regen="${TEMPDIR}${inp_base}.regen"
+
+cp --no-preserve=all "${inp}" "${inpcopy}"
+rc=$?
+
+if [ ${rc} -ne 0 ]
+then
+	err_exit "Can't copy '${inp}' to '${inpcopy}', rc=${rc}"
+fi
+
+chmod 644 "${inpcopy}" >/dev/null 2>&1
+
+# ---
+
+./reproc.py "${inpcopy}" "${inp}" >"${regen}"
+rc=$?
+
+if [ ${rc} -ne 0 ]
+then
+	err_exit "Recreating file '${inp}' failed, rc=${rc}"
+fi
+
+# ---
+
+diff -q "${inpcopy}" "${regen}" >/dev/null 2>&1
+rc=$?
+
+if [ ${rc} -eq 0 ]
+then
+	echo "Pass"
+else
+	echo "Fail"
+fi
+
+exit ${rc}
