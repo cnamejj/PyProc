@@ -7,6 +7,8 @@ import ProcHandlers as PH
 
 PFC = PH.ProcFieldConstants
 
+TIME_WAIT = "06"
+
 # ---
 
 def re_net_tcp(inprecs):
@@ -20,8 +22,9 @@ tm->when retrnsmt   uid  timeout inode"
 
     __template = "{seq:4d}: {lip}:{lport:04X} {rip}:{rport:04X} \
 {state} {txq:08X}:{rxq:08X} {tr:02X}:{when:08X} {retrans:08X} \
-{uid:5d} {tout:8d} {inode:d} {refcount:d} {ptr:016X} {ret_tout:d} \
-{ack_tout:d} {qop:d} {cong:d} {sstart:}"
+{uid:5d} {tout:8d} {inode:d} {refcount:d} {ptr:016X}"
+
+    __extras = "{line} {ret_tout:d} {ack_tout:d} {qop:d} {cong:d} {sstart:}"
 
     print __fixedline.format(line=__head)
 
@@ -35,13 +38,17 @@ tm->when retrnsmt   uid  timeout inode"
                 tr=__ff[PFC.F_TIMER], when=__ff[PFC.F_TIMER_WHEN],
                 retrans=__ff[PFC.F_RETRANS], uid=__ff[PFC.F_UID],
                 tout=__ff[PFC.F_TIMEOUT], inode=__ff[PFC.F_INODE],
-                refcount=__ff[PFC.F_REFCOUNT], ptr=__ff[PFC.F_POINTER],
-                ret_tout=__ff[PFC.F_RETRY_TIMEOUT], 
-                ack_tout=__ff[PFC.F_ACK_TIMEOUT],
-                qop=__ff[PFC.F_QUICK_OR_PPONG],
-                cong=__ff[PFC.F_CONGEST_WINDOW],
-                sstart=__ff[PFC.F_SSTART_THRESH]
+                refcount=__ff[PFC.F_REFCOUNT], ptr=__ff[PFC.F_POINTER]
                 )
+
+        if __ff[PFC.F_HEXSTATE] != TIME_WAIT:
+            __out = __extras.format(line=__out, 
+                    ret_tout=__ff[PFC.F_RETRY_TIMEOUT], 
+                    ack_tout=__ff[PFC.F_ACK_TIMEOUT],
+                    qop=__ff[PFC.F_QUICK_OR_PPONG],
+                    cong=__ff[PFC.F_CONGEST_WINDOW],
+                    sstart=__ff[PFC.F_SSTART_THRESH]
+                    )
         print __fixedline.format(line=__out)
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/net/tcp")] = re_net_tcp
