@@ -15,6 +15,8 @@ PFC = PH.ProcFieldConstants
 
 if __name__ == "__main__":
 
+    NOFUNC = 0
+
     if len(sys.argv) > 1:
         TARGET = sys.argv[1]
     else:
@@ -25,9 +27,17 @@ if __name__ == "__main__":
     else:
         CNAME = TARGET
 
-    handler = PH.GET_HANDLER(CNAME)
-    recreate = RG.RECREATOR[handler]
-    active = handler(TARGET)
+    HANDLER = PH.GET_HANDLER(CNAME)
+    try:
+        RECREATE = RG.RECREATOR[HANDLER]
+    except KeyError:
+        RECREATE = NOFUNC
 
-    recreate(active)
+    if type(NOFUNC) == type(RECREATE):
+        print "There's no recreator code available for file '{inp}' yet".\
+format(inp=TARGET)
+
+    else:
+        ACTIVE = HANDLER(TARGET)
+        RECREATE(ACTIVE)
 
