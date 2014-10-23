@@ -11,4 +11,4 @@ RECREATOR = dict()
 __all__ = ["net_tcp", "net_udp", "net_tcp6", "net_udp6", "net_unix",
     "net_connector", "net_netlink", "net_protocols", "net_dev",
     "net_softnet_stat", "net_ptype", "net_dev_mcast", "net_psched", "net_arp",
-    "net_route", "net_rt_cache", "net_igmp", "net_sockstat"]
+    "net_route", "net_rt_cache", "net_igmp", "net_sockstat", "net_igmp6"]

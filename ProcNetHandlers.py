@@ -851,8 +851,10 @@ class ProcNetIGMP6(PBR.FixedWhitespaceDelimRecs):
         PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_MCAST_ADDR_HEX } )
         PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_MCAST_USERS,
                 CONV: long } )
-        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_MCAST_FLAGS } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_MCAST_FLAGS } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_MCAST_FLAGS,
+                CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_TIMER_EXPIRE,
+                CONV: long } )
 
         self.device = PDC.ANY_DEVICE
         self.mcast_addr = PDC.PRESENT_ANY_IPV6_ADDR
