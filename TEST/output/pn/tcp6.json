@@ -4,6 +4,7 @@
     },
     "1": {
         "ack-timeout": 0,
+        "bucket": 0,
         "congest-window": 2,
         "dest-hexip": "00000000000000000000000000000000",
         "dest-hexport": "0000",
@@ -31,6 +32,7 @@
     },
     "2": {
         "ack-timeout": 0,
+        "bucket": 1,
         "congest-window": 2,
         "dest-hexip": "00000000000000000000000000000000",
         "dest-hexport": "0000",
@@ -58,6 +60,7 @@
     },
     "3": {
         "ack-timeout": 0,
+        "bucket": 2,
         "congest-window": 2,
         "dest-hexip": "00000000000000000000000000000000",
         "dest-hexport": "0000",
@@ -85,6 +88,7 @@
     },
     "4": {
         "ack-timeout": 0,
+        "bucket": 3,
         "congest-window": 2,
         "dest-hexip": "00000000000000000000000000000000",
         "dest-hexport": "0000",
@@ -112,6 +116,7 @@
     },
     "5": {
         "ack-timeout": 0,
+        "bucket": 4,
         "congest-window": 2,
         "dest-hexip": "00000000000000000000000000000000",
         "dest-hexport": "0000",
@@ -139,6 +144,7 @@
     },
     "6": {
         "ack-timeout": 0,
+        "bucket": 5,
         "congest-window": 2,
         "dest-hexip": "00000000000000000000000000000000",
         "dest-hexport": "0000",
@@ -166,6 +172,7 @@
     },
     "7": {
         "ack-timeout": 0,
+        "bucket": 6,
         "congest-window": 2,
         "dest-hexip": "00000000000000000000000000000000",
         "dest-hexport": "0000",
@@ -193,6 +200,7 @@
     },
     "8": {
         "ack-timeout": 0,
+        "bucket": 7,
         "congest-window": 2,
         "dest-hexip": "00000000000000000000000000000000",
         "dest-hexport": "0000",
@@ -220,6 +228,7 @@
     },
     "9": {
         "ack-timeout": 0,
+        "bucket": 8,
         "congest-window": 2,
         "dest-hexip": "00000000000000000000000000000000",
         "dest-hexport": "0000",
