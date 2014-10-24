@@ -3677,12 +3677,18 @@ class ProcNetFIBTRIESTAT(PBR.FixedWhitespaceDelimRecs):
                         self.field[PFC.F_NODE_NAME] = __node
 
             elif sio.buff.startswith(self.__intnode_pref):
-                __line = sio.buff.rstrip("\n")
-                __key = PBR.conv_by_rules(__line,
-                        { CONV: long, BEFORE: ":" } )
-                __val = PBR.conv_by_rules(__line,
-                        { CONV: long, AFTER: ":" } )
-                self.field[PFC.F_INT_NODE_LIST][__key] = __val
+#                __line = sio.buff.rstrip("\n")
+#                __key = PBR.conv_by_rules(__line,
+#                        { CONV: long, BEFORE: ":" } )
+#                __val = PBR.conv_by_rules(__line,
+#                        { CONV: long, AFTER: ":" } )
+#                self.field[PFC.F_INT_NODE_LIST][__key] = __val
+                __off = 0
+                for __nw in range(1, sio.linewords, 2):
+                    __key = sio.get_word(__nw - 1).rstrip(":")
+                    __val = sio.get_word(__nw)
+                    self.field[PFC.F_INT_NODE_LIST][__off] = (__key, __val)
+                    __off += 1
 
             else:
                 self.apply_matching_rules()
