@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Handler records from /proc/buddyinfo data files"""
+"""Handle records from /proc/buddyinfo data files"""
 
 import regentest as RG
 import ProcHandlers as PH

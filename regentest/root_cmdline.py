@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Handler records from /proc/cmdline data files"""
+"""Handle records from /proc/cmdline data files"""
 
 import regentest as RG
 import ProcHandlers as PH

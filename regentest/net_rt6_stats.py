@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Handler records from /proc/net/rt6_stats data files"""
+"""Handle records from /proc/net/rt6_stats data files"""
 
 import regentest as RG
 import ProcHandlers as PH
