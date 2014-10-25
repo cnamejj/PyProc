@@ -150,7 +150,7 @@ class ProcRootCGROUPS(PBR.FixedWhitespaceDelimRecs):
         self.subsys = self.field[PFC.F_SUBSYSTEM]
         self.hierachy = self.field[PFC.F_HIERARCHY]
         self.cgroups = self.field[PFC.F_NUM_CGROUPS]
-        self.enabled = self.field[PFC.F_ENABLED] = 0
+        self.enabled = self.field[PFC.F_ENABLED]
 
         return(self.subsys, self.hierachy, self.cgroups, self.enabled)
 #
@@ -1167,15 +1167,21 @@ class ProcRootCONSOLES(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_DEVICE_NUMBER] = ""
 
         else:
-            __subrec = " ".join(sio.lineparts[2:-1])
-            if __subrec[:1] == "(":
-                __subrec = __subrec[1:]
-            if __subrec[-1:] == ")":
-                __subrec = __subrec[:-1]
-            if __subrec[-1:] == " ":
-                __subrec = __subrec[:-1]
-            self.field[PFC.F_FLAGS] = __subrec
-            self.field[PFC.F_DEVICE_NUMBER] = sio.get_word(-1)
+#            __subrec = " ".join(sio.lineparts[2:-1])
+#            if __subrec[:1] == "(":
+#                __subrec = __subrec[1:]
+#            if __subrec[-1:] == ")":
+#                __subrec = __subrec[:-1]
+#            if __subrec[-1:] == " ":
+#                __subrec = __subrec[:-1]
+#            self.field[PFC.F_FLAGS] = __subrec
+#            self.field[PFC.F_DEVICE_NUMBER] = sio.get_word(-1)
+            __subrec = sio.buff[21:].rstrip("\n")
+            __sp = __subrec.partition("(")
+            self.field[PFC.F_IO_TYPE] = __sp[0].rstrip(" ")
+            __sp = __sp[2].partition(")")
+            self.field[PFC.F_FLAGS] = __sp[0]
+            self.field[PFC.F_DEVICE_NUMBER] = __sp[2].lstrip(" ")
 
         self.device_name = self.field[PFC.F_DEVICE_NAME]
         self.io_type = self.field[PFC.F_IO_TYPE]
