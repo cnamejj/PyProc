@@ -191,8 +191,10 @@ class ProcRootMTRR(PBR.FixedWhitespaceDelimRecs):
 
         PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_INDEX, PREFIX: "reg",
                 SUFFIX: ":", CONV: long } )
+#        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_BASE_MEMORY,
+#                PREFIX: "base=0x", SUFFIX: "00000", CONV: long, BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_BASE_MEMORY,
-                PREFIX: "base=0x", SUFFIX: "00000", CONV: long, BASE: 16 } )
+                PREFIX: "base=0x", CONV: long, BASE: 16 } )
         PBR.add_parse_rule(self, { NAME: PFC.F_COUNT, PREFIX: "count=",
                 SUFFIX: ":", CONV: long } )
 
@@ -229,9 +231,17 @@ class ProcRootMTRR(PBR.FixedWhitespaceDelimRecs):
                 __offset += 1
                 if sio.get_word(__offset) == self.__size_pref:
                     __offset += 1
-            self.field[PFC.F_SIZE] = PBR.conv_by_rules(
-                    sio.get_word(__offset)[-8:], { CONV: long,
-                    SUFFIX: "MB," } )
+#            self.field[PFC.F_SIZE] = PBR.conv_by_rules(
+#                    sio.get_word(__offset)[-8:], { CONV: long,
+#                    SUFFIX: "MB," } )
+            __size = sio.get_word(__offset).lstrip(self.__size_pref)
+
+            if __size[-3:] == "MB,":
+                __scale = 1024 * 1024
+            else:
+                __scale = 1024
+
+            self.field[PFC.F_SIZE] = int(__size[:-3]) * __scale
 
             __offset += 2
             self.field[PFC.F_TYPE] = sio.get_word(__offset)
