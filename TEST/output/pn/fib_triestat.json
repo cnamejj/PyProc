@@ -7,7 +7,10 @@
         "backtracks": 0,
         "get-counts": 1043566,
         "int-node-list": {
-            "2": 1
+            "0": [
+                "2",
+                "1"
+            ]
         },
         "internal-nodes": 1,
         "leaf-size": 40,
@@ -29,7 +32,10 @@
         "backtracks": 1456034,
         "get-counts": 1722427,
         "int-node-list": {
-            "1": 5
+            "0": [
+                "1",
+                "5"
+            ]
         },
         "internal-nodes": 5,
         "leaf-size": 40,

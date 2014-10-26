@@ -7,23 +7,26 @@
         "int-index": 1,
         "mcast-addr": "0:2ff::100:0",
         "mcast-addr-hex": "ff020000000000000000000000000001",
-        "mcast-flags": "0",
-        "mcast-users": 1
+        "mcast-flags": 12,
+        "mcast-users": 1,
+        "timer-expiration": 0
     },
     "2": {
         "device": "eth0",
         "int-index": 2,
         "mcast-addr": "0:2ff::100:0:86e4:1ff",
         "mcast-addr-hex": "ff0200000000000000000001ff01e486",
-        "mcast-flags": "0",
-        "mcast-users": 1
+        "mcast-flags": 4,
+        "mcast-users": 1,
+        "timer-expiration": 0
     },
     "3": {
         "device": "eth0",
         "int-index": 2,
         "mcast-addr": "0:2ff::100:0",
         "mcast-addr-hex": "ff020000000000000000000000000001",
-        "mcast-flags": "0",
-        "mcast-users": 1
+        "mcast-flags": 12,
+        "mcast-users": 1,
+        "timer-expiration": 0
     }
 }

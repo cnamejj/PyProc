@@ -1,4 +1,4 @@
-TEST/data/pn/igmp6|mcast-addr|mcast-users|mcast-flags|mcast-addr-hex|device|int-index
-1|0:2ff::100:0|1|0|ff020000000000000000000000000001|lo|1
-2|0:2ff::100:0:86e4:1ff|1|0|ff0200000000000000000001ff01e486|eth0|2
-3|0:2ff::100:0|1|0|ff020000000000000000000000000001|eth0|2
+TEST/data/pn/igmp6|mcast-addr|mcast-users|mcast-flags|timer-expiration|mcast-addr-hex|device|int-index
+1|0:2ff::100:0|1|12|0|ff020000000000000000000000000001|lo|1
+2|0:2ff::100:0:86e4:1ff|1|4|0|ff0200000000000000000001ff01e486|eth0|2
+3|0:2ff::100:0|1|12|0|ff020000000000000000000000000001|eth0|2

@@ -5,7 +5,7 @@
     "1": {
         "dev-name": "tty0",
         "device-number": "4:7",
-        "flags": "EC p",
+        "flags": "EC p  ",
         "io-type": "-WU"
     }
 }
