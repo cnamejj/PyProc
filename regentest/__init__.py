@@ -15,4 +15,5 @@ __all__ = ["net_tcp", "net_udp", "net_tcp6", "net_udp6", "net_unix",
     "net_sockstat6", "net_packet", "net_ipv6_route", "net_rt6_stats",
     "net_if_inet6", "net_fib_triestat", "root_buddyinfo", "root_cgroups",
     "root_cmdline", "root_consoles", "root_devices", "root_diskstats",
-    "root_dma", "root_execdomains"]
+    "root_dma", "root_execdomains", "root_fb", "root_filesystems",
+    "root_iomem", "root_ioports"]
