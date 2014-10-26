@@ -6,63 +6,63 @@
         "base-memory-address": 0,
         "count": 1,
         "index": 0,
-        "size": 2048,
+        "size": 2147483648,
         "type": "write-back"
     },
     "2": {
-        "base-memory-address": 2048,
+        "base-memory-address": 2147483648,
         "count": 1,
         "index": 1,
-        "size": 1024,
+        "size": 1073741824,
         "type": "write-back"
     },
     "3": {
-        "base-memory-address": 3072,
+        "base-memory-address": 3221225472,
         "count": 1,
         "index": 2,
-        "size": 256,
+        "size": 268435456,
         "type": "write-back"
     },
     "4": {
-        "base-memory-address": 3320,
+        "base-memory-address": 3481272320,
         "count": 1,
         "index": 3,
-        "size": 8,
+        "size": 8388608,
         "type": "uncachable"
     },
     "5": {
-        "base-memory-address": 4096,
+        "base-memory-address": 4294967296,
         "count": 1,
         "index": 4,
-        "size": 4096,
+        "size": 4294967296,
         "type": "write-back"
     },
     "6": {
-        "base-memory-address": 8192,
+        "base-memory-address": 8589934592,
         "count": 1,
         "index": 5,
-        "size": 8192,
+        "size": 8589934592,
         "type": "write-back"
     },
     "7": {
-        "base-memory-address": 16384,
+        "base-memory-address": 17179869184,
         "count": 1,
         "index": 6,
-        "size": 16384,
+        "size": 17179869184,
         "type": "write-back"
     },
     "8": {
-        "base-memory-address": 32768,
+        "base-memory-address": 34359738368,
         "count": 1,
         "index": 7,
-        "size": 512,
+        "size": 536870912,
         "type": "write-back"
     },
     "9": {
-        "base-memory-address": 33280,
+        "base-memory-address": 34896609280,
         "count": 1,
         "index": 8,
-        "size": 256,
+        "size": 268435456,
         "type": "write-back"
     }
 }
