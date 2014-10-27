@@ -102,6 +102,28 @@
             "CPU5": 55723984,
             "CPU6": 55191735,
             "CPU7": 45327958
+        },
+        "cpu-order": {
+            "0": "CPU0",
+            "1": "CPU1",
+            "2": "CPU2",
+            "3": "CPU3",
+            "4": "CPU4",
+            "5": "CPU5",
+            "6": "CPU6",
+            "7": "CPU7"
+        },
+        "irq-order": {
+            "0": "HI",
+            "1": "TIMER",
+            "2": "NET_TX",
+            "3": "NET_RX",
+            "4": "BLOCK",
+            "5": "BLOCK_IOPOLL",
+            "6": "TASKLET",
+            "7": "SCHED",
+            "8": "HRTIMER",
+            "9": "RCU"
         }
     }
 }
