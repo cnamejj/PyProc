@@ -2341,13 +2341,19 @@ class ProcRootSOFTIRQS(PBR.FixedWhitespaceDelimRecs):
 #NET_TX:       4142        158     520084         98
 
         if sio.buff != "":
+            __irq_order = dict()
+            __cpu_order = dict()
             __cpus = dict()
+            __seq = 0
             for __col in range(0, sio.linewords):
                 __cpus[__col+1] = sio.get_word(__col)
+                __cpu_order[str(__col)] = sio.get_word(__col)
 
             try:
                 while sio.read_line():
                     __irq = sio.get_word(0)[:-1]
+                    __irq_order[str(__seq)] = __irq
+                    __seq += 1
                     __clist = dict()
                     for __col in range(1, sio.linewords):
                         __clist[__cpus[__col]] = PBR.conv_by_rules(
@@ -2356,6 +2362,9 @@ class ProcRootSOFTIRQS(PBR.FixedWhitespaceDelimRecs):
 
             except StopIteration:
                 pass
+
+            self.field[PFC.F_CPU_ORDER] = __cpu_order
+            self.field[PFC.F_IRQ_ORDER] = __irq_order
 
         return(self.field)
 

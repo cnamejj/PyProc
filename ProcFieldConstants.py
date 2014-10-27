@@ -1069,3 +1069,7 @@ F_SEND_PID = "sender-pid"
 F_RECV_PID = "receiver-pid"
 F_SEND_TIME = "sender-time"
 F_RECV_TIME = "receiver-time"
+
+# -- added for /proc/softirqs
+F_IRQ_ORDER = "irq-order"
+F_CPU_ORDER = "cpu-order"
