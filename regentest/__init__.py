@@ -21,4 +21,5 @@ __all__ = ["net_tcp", "net_udp", "net_tcp6", "net_udp6", "net_unix",
     "root_mounts", "root_mtrr", "root_partitions", "root_softirqs",
     "root_swaps", "root_uptime", "root_version_sig", "root_vmstat",
     "self_autogroup", "self_comm", "self_core_filter", "self_cpuset",
-    "self_limits", "self_maps"]
+    "self_limits", "self_maps", "self_oom_adj", "self_oom_score_adj",
+    "self_oom_score", "self_personality", "self_schedstat"]
