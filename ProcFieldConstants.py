@@ -1073,3 +1073,6 @@ F_RECV_TIME = "receiver-time"
 # -- added for /proc/softirqs
 F_IRQ_ORDER = "irq-order"
 F_CPU_ORDER = "cpu-order"
+
+# -- added for /proc/self/cmdline
+F_COMM_ARGS = "command-args"

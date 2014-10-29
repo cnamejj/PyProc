@@ -1744,6 +1744,7 @@ class ProcSelfCMDLINE(PBR.SingleTextField):
     def extra_next(self, sio):
         __split = sio.buff.split("\0")
         self.field[PFC.F_COMM] = " ".join(__split)
+        self.field[PFC.F_COMM_ARGS] = __split
         return(self.field[PFC.F_COMM])
 
 REGISTER_FILE("/proc/self/cmdline", ProcSelfCMDLINE)

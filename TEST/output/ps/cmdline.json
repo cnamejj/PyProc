@@ -3,6 +3,11 @@
         "source": "TEST/data/ps/cmdline"
     },
     "1": {
-        "command": "cat /proc/self/cmdline "
+        "command": "cat /proc/self/cmdline ",
+        "command-args": [
+            "cat",
+            "/proc/self/cmdline",
+            ""
+        ]
     }
 }

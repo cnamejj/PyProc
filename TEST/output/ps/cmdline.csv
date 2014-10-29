@@ -1,2 +1,2 @@
-TEST/data/ps/cmdline|command
-1|cat /proc/self/cmdline 
+TEST/data/ps/cmdline|command|command-args
+1|cat /proc/self/cmdline |['cat', '/proc/self/cmdline', '']
