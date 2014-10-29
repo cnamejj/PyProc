@@ -24,7 +24,7 @@ data from any "/proc" dataset.
 import ProcHandlers
 
 # -- Find the "handler" class for the dataset we want
-handler = ProcHandler.GET_HANDLER("/proc/net/arp")
+handler = ProcHandlers.GET_HANDLER("/proc/net/arp")
 
 # -- get an active instance of that handler, open the file
 # -- passed or the canonical path for that handler if no
