@@ -23,4 +23,5 @@ __all__ = ["net_tcp", "net_udp", "net_tcp6", "net_udp6", "net_unix",
     "self_autogroup", "self_comm", "self_core_filter", "self_cpuset",
     "self_limits", "self_maps", "self_oom_adj", "self_oom_score_adj",
     "self_oom_score", "self_personality", "self_schedstat", "self_statm",
-    "self_smaps", "self_stack", "self_stat", "self_syscall"]
+    "self_smaps", "self_stack", "self_stat", "self_syscall", "self_wchan",
+    "self_cmdline", "self_loginuid", "self_sessionid"]
