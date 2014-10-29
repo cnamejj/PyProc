@@ -1984,40 +1984,40 @@ class ProcSelfSTAT(PBR.FixedWhitespaceDelimRecs):
                 NAME: PFC.F_PRIORITY } )
         PBR.add_parse_rule(self, { POS: 18, CONV: long, NAME: PFC.F_NICE } )
         PBR.add_parse_rule(self, { POS: 19, CONV: long, NAME: PFC.F_THREADS } )
-        PBR.add_parse_rule(self, { POS: 20, CONV: long,
+        PBR.add_parse_rule(self, { POS: 21, CONV: long,
                 NAME: PFC.F_START_TIME } )
-        PBR.add_parse_rule(self, { POS: 21, CONV: long, NAME: PFC.F_VSIZE } )
-        PBR.add_parse_rule(self, { POS: 22, CONV: long,
+        PBR.add_parse_rule(self, { POS: 22, CONV: long, NAME: PFC.F_VSIZE } )
+        PBR.add_parse_rule(self, { POS: 23, CONV: long,
                 NAME: PFC.F_RSS_SIZE } )
-        PBR.add_parse_rule(self, { POS: 23, CONV: long, NAME: PFC.F_RSS_LIM } )
+        PBR.add_parse_rule(self, { POS: 24, CONV: long, NAME: PFC.F_RSS_LIM } )
                 
-        PBR.add_parse_rule(self, { POS: 24, CONV: long,
-                NAME: PFC.F_START_CODE } )
         PBR.add_parse_rule(self, { POS: 25, CONV: long,
-                NAME: PFC.F_END_CODE } )
+                NAME: PFC.F_START_CODE } )
         PBR.add_parse_rule(self, { POS: 26, CONV: long,
+                NAME: PFC.F_END_CODE } )
+        PBR.add_parse_rule(self, { POS: 27, CONV: long,
                 NAME: PFC.F_START_STACK } )
-        PBR.add_parse_rule(self, { POS: 27, CONV: long, NAME: PFC.F_ESP } )
-        PBR.add_parse_rule(self, { POS: 28, CONV: long, NAME: PFC.F_EIP } )
-        PBR.add_parse_rule(self, { POS: 29, CONV: long,
-                NAME: PFC.F_SIG_PEND } )
+        PBR.add_parse_rule(self, { POS: 28, CONV: long, NAME: PFC.F_ESP } )
+        PBR.add_parse_rule(self, { POS: 29, CONV: long, NAME: PFC.F_EIP } )
         PBR.add_parse_rule(self, { POS: 30, CONV: long,
-                NAME: PFC.F_SIG_BLOCK } )
+                NAME: PFC.F_SIG_PEND } )
         PBR.add_parse_rule(self, { POS: 31, CONV: long,
-                NAME: PFC.F_SIG_IGNORE } )
+                NAME: PFC.F_SIG_BLOCK } )
         PBR.add_parse_rule(self, { POS: 32, CONV: long,
+                NAME: PFC.F_SIG_IGNORE } )
+        PBR.add_parse_rule(self, { POS: 33, CONV: long,
                 NAME: PFC.F_SIG_CATCH } )
-        PBR.add_parse_rule(self, { POS: 33, CONV: long, NAME: PFC.F_WCHAN } )
-        PBR.add_parse_rule(self, { POS: 36, CONV: long,
+        PBR.add_parse_rule(self, { POS: 34, CONV: long, NAME: PFC.F_WCHAN } )
+        PBR.add_parse_rule(self, { POS: 37, CONV: long,
                 NAME: PFC.F_EXIT_SIG } )
-        PBR.add_parse_rule(self, { POS: 37, CONV: long, NAME: PFC.F_TASK } )
-        PBR.add_parse_rule(self, { POS: 38, CONV: long,
+        PBR.add_parse_rule(self, { POS: 38, CONV: long, NAME: PFC.F_TASK } )
+        PBR.add_parse_rule(self, { POS: 39, CONV: long,
                 NAME: PFC.F_RT_PRIORITY } )
-        PBR.add_parse_rule(self, { POS: 39, CONV: long, NAME: PFC.F_POLICY } )
-        PBR.add_parse_rule(self, { POS: 40, CONV: long,
+        PBR.add_parse_rule(self, { POS: 40, CONV: long, NAME: PFC.F_POLICY } )
+        PBR.add_parse_rule(self, { POS: 41, CONV: long,
                 NAME: PFC.F_IO_TICKS } )
-        PBR.add_parse_rule(self, { POS: 41, CONV: long, NAME: PFC.F_GTIME } )
-        PBR.add_parse_rule(self, { POS: 42, CONV: long, NAME: PFC.F_CGTIME } )
+        PBR.add_parse_rule(self, { POS: 42, CONV: long, NAME: PFC.F_GTIME } )
+        PBR.add_parse_rule(self, { POS: 43, CONV: long, NAME: PFC.F_CGTIME } )
         return
                  
 
