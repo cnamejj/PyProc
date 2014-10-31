@@ -1,3 +1,3 @@
-TEST/data/pr/cmdline|command
+TEST/data/pr/cmdline|command|command-args
 1|BOOT_IMAGE=/vmlinuz-3.2.0-24-generic root=UUID=a959862a-84b7-4373-b7d6-954ac9005249 ro quiet splash vt.handoff=7
-
+|['BOOT_IMAGE=/vmlinuz-3.2.0-24-generic root=UUID=a959862a-84b7-4373-b7d6-954ac9005249 ro quiet splash vt.handoff=7\n']
