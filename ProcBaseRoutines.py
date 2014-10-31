@@ -970,6 +970,7 @@ class TaggedMultiLineFile(object):
         self.parse_rule = dict()
         self.floating_rule = dict()
         self.lines_read = 0
+        self.hit_order = dict()
 
         self.extra_init(*opts)
 
@@ -1015,6 +1016,8 @@ class TaggedMultiLineFile(object):
         self.unused_recs = dict()
         __subrec = 0
         sio = self.curr_sio
+        self.hit_order = dict()
+        __hit = 0
 
         for __rulenum in self.parse_rule:
             __rinfo = self.parse_rule[__rulenum]
@@ -1046,6 +1049,8 @@ class TaggedMultiLineFile(object):
                             __parsed = conv_by_rules(__line, __cr, __ord)
                             self.field[__cr[FIELD_NAME]] = __parsed
                             __matches += 1
+                            self.hit_order[__hit] = __cr[FIELD_NAME]
+                            __hit += 1
 #                            print "dbg:: Tagged: pr.. hit v({conv})".format(conv=__parsed)
 #                        else:
 #                            print "dbg:: Tagged: pr.. mis r({rule})".format(rule=str(__cr))
