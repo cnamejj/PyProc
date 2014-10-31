@@ -520,6 +520,7 @@ F_SWAPCACHE = "swapcache"
 F_ACTIVE_PAGES = "active-pages"
 F_WRITEBACK = "writeback"
 F_NODE_LIST = "node-list"
+F_NODE_ORDER = "node-order"
 
 # -- added for "/proc/self/mountinfo"
 F_MOUNT_ID = "mount-id"

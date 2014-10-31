@@ -434,6 +434,8 @@ class ProcSelfNUMAMAPS(PBR.FixedWhitespaceDelimRecs):
         self.field[PFC.F_STACK] = 0
         self.field[PFC.F_HUGE] = 0
         self.field[PFC.F_NODE_LIST] = dict()
+        self.field[PFC.F_NODE_ORDER] = dict()
+        __nseq = 0
 
         if sio.buff != "":
 
@@ -455,6 +457,9 @@ class ProcSelfNUMAMAPS(PBR.FixedWhitespaceDelimRecs):
                         if __split[0][:1] == self.__prefix_node:
                             self.field[PFC.F_NODE_LIST][__split[0][1:]] = \
                                     __split[2]
+                            self.field[PFC.F_NODE_ORDER][str(__nseq)] = \
+                                    __split[0][1:]
+                            __nseq += 1
             
         self.start = self.field[PFC.F_START]
         self.buffname = self.field[PFC.F_BUFFNAME]

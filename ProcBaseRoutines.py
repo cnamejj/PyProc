@@ -481,6 +481,8 @@ class FixedWhitespaceDelimRecs(object):
         self.skipped = ""
         self.parse_rule = dict()
         self.floating_rule = dict()
+        self.fixpos_hits = dict()
+        self.floating_hits = dict()
 
         self.extra_init(*opts)
 
@@ -507,6 +509,10 @@ class FixedWhitespaceDelimRecs(object):
         sio.read_line()
 
         __hit_rule = dict()
+        self.fixpos_hits = dict()
+        self.floating_hits = dict()
+        __fix_seq = 0
+        __flo_seq = 0
 
         # -- for each word, see if a floating (pos independent) rule applies
         for __off in range(0, sio.linewords):
@@ -532,6 +538,8 @@ class FixedWhitespaceDelimRecs(object):
                     if __match:
                         self.field[__name] = conv_by_rules(__val, __cr, __ord)
                         __hit_rule[__rulenum] = 1
+                        self.floating_hits[__flo_seq] = __name
+                        __flo_seq += 1
 
         # -- run through the rules and convert fixed columns as directed, this
         # -- has to be done separately to make sure error values are set for
@@ -547,6 +555,8 @@ class FixedWhitespaceDelimRecs(object):
                 __hit_rule[__rulenum] = 1
                 __off = __cr[FIELD_NUMBER]
                 __name = __cr[FIELD_NAME]
+                self.fixpos_hits[__fix_seq] = __name
+                __fix_seq += 1
 
                 if __off >= sio.linewords:
                     self.field[__name] = error_by_rule(__cr)
