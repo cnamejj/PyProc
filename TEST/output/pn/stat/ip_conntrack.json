@@ -15,10 +15,10 @@
         "icmp-err": 0,
         "ignore": 36282,
         "insert": 27830,
-        "insert-failed": "00000000",
+        "insert-failed": 0,
         "invalid": 225,
         "new": 436578,
-        "search-restart": "00000000",
+        "search-restart": 0,
         "searched": 36011
     },
     "2": {
@@ -34,10 +34,10 @@
         "icmp-err": 0,
         "ignore": 70140,
         "insert": 50981,
-        "insert-failed": "00000000",
+        "insert-failed": 0,
         "invalid": 115,
         "new": 50981,
-        "search-restart": "00000000",
+        "search-restart": 0,
         "searched": 1248
     },
     "3": {
@@ -53,10 +53,10 @@
         "icmp-err": 0,
         "ignore": 55291,
         "insert": 38783,
-        "insert-failed": "00000000",
+        "insert-failed": 0,
         "invalid": 42,
         "new": 38783,
-        "search-restart": "00000000",
+        "search-restart": 0,
         "searched": 717
     },
     "4": {
@@ -72,10 +72,10 @@
         "icmp-err": 0,
         "ignore": 59962,
         "insert": 42030,
-        "insert-failed": "00000000",
+        "insert-failed": 0,
         "invalid": 53,
         "new": 42029,
-        "search-restart": "00000000",
+        "search-restart": 0,
         "searched": 698
     },
     "5": {
@@ -91,10 +91,10 @@
         "icmp-err": 0,
         "ignore": 24236,
         "insert": 9890,
-        "insert-failed": "00000000",
+        "insert-failed": 0,
         "invalid": 8,
         "new": 9890,
-        "search-restart": "00000000",
+        "search-restart": 0,
         "searched": 193
     },
     "6": {
@@ -110,10 +110,10 @@
         "icmp-err": 0,
         "ignore": 28888,
         "insert": 11008,
-        "insert-failed": "00000000",
+        "insert-failed": 0,
         "invalid": 8,
         "new": 11008,
-        "search-restart": "00000000",
+        "search-restart": 0,
         "searched": 154
     },
     "7": {
@@ -129,10 +129,10 @@
         "icmp-err": 0,
         "ignore": 21396,
         "insert": 9260,
-        "insert-failed": "00000000",
+        "insert-failed": 0,
         "invalid": 0,
         "new": 9260,
-        "search-restart": "00000000",
+        "search-restart": 0,
         "searched": 163
     },
     "8": {
@@ -148,10 +148,10 @@
         "icmp-err": 0,
         "ignore": 33983,
         "insert": 12546,
-        "insert-failed": "00000000",
+        "insert-failed": 0,
         "invalid": 0,
         "new": 12546,
-        "search-restart": "00000000",
+        "search-restart": 0,
         "searched": 178
     }
 }

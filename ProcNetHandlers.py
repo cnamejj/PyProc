@@ -1825,10 +1825,10 @@ class ProcNetStatIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
         PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_INSERT, CONV: long,
                 BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_INSERT_FAILED,
-                BASE: 16 } )
+                CONV: long, BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_DROP, CONV: long,
                 BASE: 16 } )
-        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_DROP_EARLY, CONV: long,
+        PBR.add_parse_rule(self, { POS: 11, NAME: PFC.F_DROP_EARLY, CONV: long,
                 BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 12, NAME: PFC.F_ICMP_ERROR, CONV: long,
                 BASE: 16 } )
@@ -1839,7 +1839,7 @@ class ProcNetStatIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
         PBR.add_parse_rule(self, { POS: 15, NAME: PFC.F_EXP_DELETE, CONV: long,
                 BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 16, NAME: PFC.F_SEARCH_RESTART,
-                BASE: 16 } )
+                CONV: long, BASE: 16 } )
 
         self.insert = 0
         self.drop = 0
