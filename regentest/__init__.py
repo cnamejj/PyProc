@@ -25,4 +25,5 @@ __all__ = ["net_tcp", "net_udp", "net_tcp6", "net_udp6", "net_unix",
     "self_oom_score", "self_personality", "self_schedstat", "self_statm",
     "self_smaps", "self_stack", "self_stat", "self_syscall", "self_wchan",
     "self_cmdline", "self_loginuid", "self_sessionid", "self_numa_maps",
-    "self_status"]
+    "self_status", "net_netfilter_nf_log", "net_netfilter_nf_queue",
+    "net_stat_arp_cache", "net_stat_ip_conntrack"]
