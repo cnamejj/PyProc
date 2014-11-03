@@ -1,53 +1,53 @@
-TEST/data/pr/interrupts|interrupt|count|interrupt-decription|total-count
-1|0|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 59L, 'CPU1': 9178L}|IO-APIC-edge timer|9237
-2|1|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 1L, 'CPU1': 2L}|IO-APIC-edge i8042|3
-3|4|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 1L, 'CPU1': 3L}|IO-APIC-edge|4
-4|8|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 1L}|IO-APIC-edge rtc0|1
-5|9|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|IO-APIC-fasteoi acpi|0
-6|12|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 4L}|IO-APIC-edge i8042|4
-7|17|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 42988L, 'CPU2': 25L, 'CPU3': 0L, 'CPU0': 1L, 'CPU1': 0L}|IO-APIC-fasteoi firewire_ohci|43014
-8|23|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 19539606L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 515L, 'CPU0': 2249L, 'CPU1': 0L}|IO-APIC-fasteoi ehci_hcd:usb1, ehci_hcd:usb2|19542370
-9|64|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge PCIe PME|0
-10|65|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge PCIe PME|0
-11|66|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge PCIe PME|0
-12|67|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge PCIe PME|0
-13|68|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge PCIe PME|0
-14|69|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge PCIe PME|0
-15|70|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge PCIe PME|0
-16|71|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge PCIe PME|0
-17|72|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge PCIe PME|0
-18|73|{'CPU6': 14467L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 65117139L, 'CPU1': 0L}|PCI-MSI-edge ahci|65131606
-19|74|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge ahci|0
-20|75|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 7851L, 'CPU1': 10402964L}|PCI-MSI-edge xhci_hcd|10410815
-21|76|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge xhci_hcd|0
-22|77|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge xhci_hcd|0
-23|78|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge xhci_hcd|0
-24|79|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge xhci_hcd|0
-25|80|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge xhci_hcd|0
-26|81|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge xhci_hcd|0
-27|82|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge xhci_hcd|0
-28|83|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge xhci_hcd|0
-29|84|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge xhci_hcd|0
-30|85|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge xhci_hcd|0
-31|86|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge xhci_hcd|0
-32|87|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge xhci_hcd|0
-33|88|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge xhci_hcd|0
-34|89|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge xhci_hcd|0
-35|90|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge xhci_hcd|0
-36|91|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 121L, 'CPU3': 0L, 'CPU0': 27224743L, 'CPU1': 0L}|PCI-MSI-edge eth0|27224864
-37|92|{'CPU6': 9L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|PCI-MSI-edge mei|9
-38|93|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 11474L, 'CPU1': 501L}|PCI-MSI-edge snd_hda_intel|11975
-39|NMI|{'CPU6': 14042L, 'CPU7': 13452L, 'CPU4': 16346L, 'CPU5': 16268L, 'CPU2': 41238L, 'CPU3': 36610L, 'CPU0': 40981L, 'CPU1': 40581L}|Non-maskable interrupts|219518
-40|LOC|{'CPU6': 64302726L, 'CPU7': 54898862L, 'CPU4': 71658442L, 'CPU5': 64214219L, 'CPU2': 87101397L, 'CPU3': 89900542L, 'CPU0': 85880438L, 'CPU1': 88651505L}|Local timer interrupts|606608131
-41|SPU|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|Spurious interrupts|0
-42|PMI|{'CPU6': 14042L, 'CPU7': 13452L, 'CPU4': 16346L, 'CPU5': 16268L, 'CPU2': 41238L, 'CPU3': 36610L, 'CPU0': 40981L, 'CPU1': 40581L}|Performance monitoring interrupts|219518
-43|IWI|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|IRQ work interrupts|0
-44|RES|{'CPU6': 23079211L, 'CPU7': 22350064L, 'CPU4': 22645974L, 'CPU5': 22238015L, 'CPU2': 146721312L, 'CPU3': 134225605L, 'CPU0': 168642893L, 'CPU1': 151284677L}|Rescheduling interrupts|691187751
-45|CAL|{'CPU6': 3370L, 'CPU7': 2191L, 'CPU4': 3904L, 'CPU5': 3919L, 'CPU2': 3790L, 'CPU3': 3228L, 'CPU0': 3830L, 'CPU1': 3799L}|Function call interrupts|28031
-46|TLB|{'CPU6': 373508L, 'CPU7': 404430L, 'CPU4': 390541L, 'CPU5': 510088L, 'CPU2': 1048865L, 'CPU3': 975781L, 'CPU0': 907919L, 'CPU1': 948255L}|TLB shootdowns|5559387
-47|TRM|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|Thermal event interrupts|0
-48|THR|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|Threshold APIC interrupts|0
-49|MCE|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}|Machine check exceptions|0
-50|MCP|{'CPU6': 9178L, 'CPU7': 9178L, 'CPU4': 9178L, 'CPU5': 9178L, 'CPU2': 9178L, 'CPU3': 9178L, 'CPU0': 9178L, 'CPU1': 9178L}|Machine check polls|73424
-51|ERR|{'CPU6': 0, 'CPU7': 0, 'CPU4': 0, 'CPU5': 0, 'CPU2': 0, 'CPU3': 0, 'CPU0': 0, 'CPU1': 0}|N/A|123
-52|MIS|{'CPU6': 0, 'CPU7': 0, 'CPU4': 0, 'CPU5': 0, 'CPU2': 0, 'CPU3': 0, 'CPU0': 0, 'CPU1': 0}|N/A|8778
+TEST/data/pr/interrupts|interrupt|count|interrupt-decription|column1-precision|total-count
+1|0|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 59L, 'CPU1': 9178L}| IO-APIC-edge      timer|4|9237
+2|1|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 1L, 'CPU1': 2L}| IO-APIC-edge      i8042|4|3
+3|4|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 1L, 'CPU1': 3L}| IO-APIC-edge    |4|4
+4|8|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 1L}| IO-APIC-edge      rtc0|4|1
+5|9|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| IO-APIC-fasteoi   acpi|4|0
+6|12|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 4L}| IO-APIC-edge      i8042|4|4
+7|17|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 42988L, 'CPU2': 25L, 'CPU3': 0L, 'CPU0': 1L, 'CPU1': 0L}| IO-APIC-fasteoi   firewire_ohci|4|43014
+8|23|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 19539606L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 515L, 'CPU0': 2249L, 'CPU1': 0L}| IO-APIC-fasteoi   ehci_hcd:usb1, ehci_hcd:usb2|4|19542370
+9|64|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      PCIe PME|4|0
+10|65|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      PCIe PME|4|0
+11|66|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      PCIe PME|4|0
+12|67|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      PCIe PME|4|0
+13|68|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      PCIe PME|4|0
+14|69|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      PCIe PME|4|0
+15|70|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      PCIe PME|4|0
+16|71|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      PCIe PME|4|0
+17|72|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      PCIe PME|4|0
+18|73|{'CPU6': 14467L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 65117139L, 'CPU1': 0L}| PCI-MSI-edge      ahci|4|65131606
+19|74|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      ahci|4|0
+20|75|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 7851L, 'CPU1': 10402964L}| PCI-MSI-edge      xhci_hcd|4|10410815
+21|76|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      xhci_hcd|4|0
+22|77|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      xhci_hcd|4|0
+23|78|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      xhci_hcd|4|0
+24|79|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      xhci_hcd|4|0
+25|80|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      xhci_hcd|4|0
+26|81|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      xhci_hcd|4|0
+27|82|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      xhci_hcd|4|0
+28|83|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      xhci_hcd|4|0
+29|84|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      xhci_hcd|4|0
+30|85|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      xhci_hcd|4|0
+31|86|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      xhci_hcd|4|0
+32|87|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      xhci_hcd|4|0
+33|88|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      xhci_hcd|4|0
+34|89|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      xhci_hcd|4|0
+35|90|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      xhci_hcd|4|0
+36|91|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 121L, 'CPU3': 0L, 'CPU0': 27224743L, 'CPU1': 0L}| PCI-MSI-edge      eth0|4|27224864
+37|92|{'CPU6': 9L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| PCI-MSI-edge      mei|4|9
+38|93|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 11474L, 'CPU1': 501L}| PCI-MSI-edge      snd_hda_intel|4|11975
+39|NMI|{'CPU6': 14042L, 'CPU7': 13452L, 'CPU4': 16346L, 'CPU5': 16268L, 'CPU2': 41238L, 'CPU3': 36610L, 'CPU0': 40981L, 'CPU1': 40581L}| Non-maskable interrupts|4|219518
+40|LOC|{'CPU6': 64302726L, 'CPU7': 54898862L, 'CPU4': 71658442L, 'CPU5': 64214219L, 'CPU2': 87101397L, 'CPU3': 89900542L, 'CPU0': 85880438L, 'CPU1': 88651505L}| Local timer interrupts|4|606608131
+41|SPU|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| Spurious interrupts|4|0
+42|PMI|{'CPU6': 14042L, 'CPU7': 13452L, 'CPU4': 16346L, 'CPU5': 16268L, 'CPU2': 41238L, 'CPU3': 36610L, 'CPU0': 40981L, 'CPU1': 40581L}| Performance monitoring interrupts|4|219518
+43|IWI|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| IRQ work interrupts|4|0
+44|RES|{'CPU6': 23079211L, 'CPU7': 22350064L, 'CPU4': 22645974L, 'CPU5': 22238015L, 'CPU2': 146721312L, 'CPU3': 134225605L, 'CPU0': 168642893L, 'CPU1': 151284677L}| Rescheduling interrupts|4|691187751
+45|CAL|{'CPU6': 3370L, 'CPU7': 2191L, 'CPU4': 3904L, 'CPU5': 3919L, 'CPU2': 3790L, 'CPU3': 3228L, 'CPU0': 3830L, 'CPU1': 3799L}| Function call interrupts|4|28031
+46|TLB|{'CPU6': 373508L, 'CPU7': 404430L, 'CPU4': 390541L, 'CPU5': 510088L, 'CPU2': 1048865L, 'CPU3': 975781L, 'CPU0': 907919L, 'CPU1': 948255L}| TLB shootdowns|4|5559387
+47|TRM|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| Thermal event interrupts|4|0
+48|THR|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| Threshold APIC interrupts|4|0
+49|MCE|{'CPU6': 0L, 'CPU7': 0L, 'CPU4': 0L, 'CPU5': 0L, 'CPU2': 0L, 'CPU3': 0L, 'CPU0': 0L, 'CPU1': 0L}| Machine check exceptions|4|0
+50|MCP|{'CPU6': 9178L, 'CPU7': 9178L, 'CPU4': 9178L, 'CPU5': 9178L, 'CPU2': 9178L, 'CPU3': 9178L, 'CPU0': 9178L, 'CPU1': 9178L}| Machine check polls|4|73424
+51|ERR|{'CPU6': 0, 'CPU7': 0, 'CPU4': 0, 'CPU5': 0, 'CPU2': 0, 'CPU3': 0, 'CPU0': 0, 'CPU1': 0}|N/A|4|123
+52|MIS|{'CPU6': 0, 'CPU7': 0, 'CPU4': 0, 'CPU5': 0, 'CPU2': 0, 'CPU3': 0, 'CPU0': 0, 'CPU1': 0}|N/A|4|8778

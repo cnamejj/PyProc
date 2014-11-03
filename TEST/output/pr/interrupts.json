@@ -3,6 +3,7 @@
         "source": "TEST/data/pr/interrupts"
     },
     "1": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 59,
             "CPU1": 9178,
@@ -14,10 +15,11 @@
             "CPU7": 0
         },
         "interrupt": "0",
-        "interrupt-decription": "IO-APIC-edge timer",
+        "interrupt-decription": " IO-APIC-edge      timer",
         "total-count": 9237
     },
     "2": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 1,
             "CPU1": 2,
@@ -29,10 +31,11 @@
             "CPU7": 0
         },
         "interrupt": "1",
-        "interrupt-decription": "IO-APIC-edge i8042",
+        "interrupt-decription": " IO-APIC-edge      i8042",
         "total-count": 3
     },
     "3": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 1,
             "CPU1": 3,
@@ -44,10 +47,11 @@
             "CPU7": 0
         },
         "interrupt": "4",
-        "interrupt-decription": "IO-APIC-edge",
+        "interrupt-decription": " IO-APIC-edge    ",
         "total-count": 4
     },
     "4": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 1,
@@ -59,10 +63,11 @@
             "CPU7": 0
         },
         "interrupt": "8",
-        "interrupt-decription": "IO-APIC-edge rtc0",
+        "interrupt-decription": " IO-APIC-edge      rtc0",
         "total-count": 1
     },
     "5": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -74,10 +79,11 @@
             "CPU7": 0
         },
         "interrupt": "9",
-        "interrupt-decription": "IO-APIC-fasteoi acpi",
+        "interrupt-decription": " IO-APIC-fasteoi   acpi",
         "total-count": 0
     },
     "6": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 4,
@@ -89,10 +95,11 @@
             "CPU7": 0
         },
         "interrupt": "12",
-        "interrupt-decription": "IO-APIC-edge i8042",
+        "interrupt-decription": " IO-APIC-edge      i8042",
         "total-count": 4
     },
     "7": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 1,
             "CPU1": 0,
@@ -104,10 +111,11 @@
             "CPU7": 0
         },
         "interrupt": "17",
-        "interrupt-decription": "IO-APIC-fasteoi firewire_ohci",
+        "interrupt-decription": " IO-APIC-fasteoi   firewire_ohci",
         "total-count": 43014
     },
     "8": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 2249,
             "CPU1": 0,
@@ -119,10 +127,11 @@
             "CPU7": 0
         },
         "interrupt": "23",
-        "interrupt-decription": "IO-APIC-fasteoi ehci_hcd:usb1, ehci_hcd:usb2",
+        "interrupt-decription": " IO-APIC-fasteoi   ehci_hcd:usb1, ehci_hcd:usb2",
         "total-count": 19542370
     },
     "9": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -134,10 +143,11 @@
             "CPU7": 0
         },
         "interrupt": "64",
-        "interrupt-decription": "PCI-MSI-edge PCIe PME",
+        "interrupt-decription": " PCI-MSI-edge      PCIe PME",
         "total-count": 0
     },
     "10": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -149,10 +159,11 @@
             "CPU7": 0
         },
         "interrupt": "65",
-        "interrupt-decription": "PCI-MSI-edge PCIe PME",
+        "interrupt-decription": " PCI-MSI-edge      PCIe PME",
         "total-count": 0
     },
     "11": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -164,10 +175,11 @@
             "CPU7": 0
         },
         "interrupt": "66",
-        "interrupt-decription": "PCI-MSI-edge PCIe PME",
+        "interrupt-decription": " PCI-MSI-edge      PCIe PME",
         "total-count": 0
     },
     "12": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -179,10 +191,11 @@
             "CPU7": 0
         },
         "interrupt": "67",
-        "interrupt-decription": "PCI-MSI-edge PCIe PME",
+        "interrupt-decription": " PCI-MSI-edge      PCIe PME",
         "total-count": 0
     },
     "13": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -194,10 +207,11 @@
             "CPU7": 0
         },
         "interrupt": "68",
-        "interrupt-decription": "PCI-MSI-edge PCIe PME",
+        "interrupt-decription": " PCI-MSI-edge      PCIe PME",
         "total-count": 0
     },
     "14": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -209,10 +223,11 @@
             "CPU7": 0
         },
         "interrupt": "69",
-        "interrupt-decription": "PCI-MSI-edge PCIe PME",
+        "interrupt-decription": " PCI-MSI-edge      PCIe PME",
         "total-count": 0
     },
     "15": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -224,10 +239,11 @@
             "CPU7": 0
         },
         "interrupt": "70",
-        "interrupt-decription": "PCI-MSI-edge PCIe PME",
+        "interrupt-decription": " PCI-MSI-edge      PCIe PME",
         "total-count": 0
     },
     "16": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -239,10 +255,11 @@
             "CPU7": 0
         },
         "interrupt": "71",
-        "interrupt-decription": "PCI-MSI-edge PCIe PME",
+        "interrupt-decription": " PCI-MSI-edge      PCIe PME",
         "total-count": 0
     },
     "17": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -254,10 +271,11 @@
             "CPU7": 0
         },
         "interrupt": "72",
-        "interrupt-decription": "PCI-MSI-edge PCIe PME",
+        "interrupt-decription": " PCI-MSI-edge      PCIe PME",
         "total-count": 0
     },
     "18": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 65117139,
             "CPU1": 0,
@@ -269,10 +287,11 @@
             "CPU7": 0
         },
         "interrupt": "73",
-        "interrupt-decription": "PCI-MSI-edge ahci",
+        "interrupt-decription": " PCI-MSI-edge      ahci",
         "total-count": 65131606
     },
     "19": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -284,10 +303,11 @@
             "CPU7": 0
         },
         "interrupt": "74",
-        "interrupt-decription": "PCI-MSI-edge ahci",
+        "interrupt-decription": " PCI-MSI-edge      ahci",
         "total-count": 0
     },
     "20": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 7851,
             "CPU1": 10402964,
@@ -299,10 +319,11 @@
             "CPU7": 0
         },
         "interrupt": "75",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 10410815
     },
     "21": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -314,10 +335,11 @@
             "CPU7": 0
         },
         "interrupt": "76",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 0
     },
     "22": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -329,10 +351,11 @@
             "CPU7": 0
         },
         "interrupt": "77",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 0
     },
     "23": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -344,10 +367,11 @@
             "CPU7": 0
         },
         "interrupt": "78",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 0
     },
     "24": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -359,10 +383,11 @@
             "CPU7": 0
         },
         "interrupt": "79",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 0
     },
     "25": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -374,10 +399,11 @@
             "CPU7": 0
         },
         "interrupt": "80",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 0
     },
     "26": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -389,10 +415,11 @@
             "CPU7": 0
         },
         "interrupt": "81",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 0
     },
     "27": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -404,10 +431,11 @@
             "CPU7": 0
         },
         "interrupt": "82",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 0
     },
     "28": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -419,10 +447,11 @@
             "CPU7": 0
         },
         "interrupt": "83",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 0
     },
     "29": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -434,10 +463,11 @@
             "CPU7": 0
         },
         "interrupt": "84",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 0
     },
     "30": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -449,10 +479,11 @@
             "CPU7": 0
         },
         "interrupt": "85",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 0
     },
     "31": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -464,10 +495,11 @@
             "CPU7": 0
         },
         "interrupt": "86",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 0
     },
     "32": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -479,10 +511,11 @@
             "CPU7": 0
         },
         "interrupt": "87",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 0
     },
     "33": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -494,10 +527,11 @@
             "CPU7": 0
         },
         "interrupt": "88",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 0
     },
     "34": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -509,10 +543,11 @@
             "CPU7": 0
         },
         "interrupt": "89",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 0
     },
     "35": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -524,10 +559,11 @@
             "CPU7": 0
         },
         "interrupt": "90",
-        "interrupt-decription": "PCI-MSI-edge xhci_hcd",
+        "interrupt-decription": " PCI-MSI-edge      xhci_hcd",
         "total-count": 0
     },
     "36": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 27224743,
             "CPU1": 0,
@@ -539,10 +575,11 @@
             "CPU7": 0
         },
         "interrupt": "91",
-        "interrupt-decription": "PCI-MSI-edge eth0",
+        "interrupt-decription": " PCI-MSI-edge      eth0",
         "total-count": 27224864
     },
     "37": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -554,10 +591,11 @@
             "CPU7": 0
         },
         "interrupt": "92",
-        "interrupt-decription": "PCI-MSI-edge mei",
+        "interrupt-decription": " PCI-MSI-edge      mei",
         "total-count": 9
     },
     "38": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 11474,
             "CPU1": 501,
@@ -569,10 +607,11 @@
             "CPU7": 0
         },
         "interrupt": "93",
-        "interrupt-decription": "PCI-MSI-edge snd_hda_intel",
+        "interrupt-decription": " PCI-MSI-edge      snd_hda_intel",
         "total-count": 11975
     },
     "39": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 40981,
             "CPU1": 40581,
@@ -584,10 +623,11 @@
             "CPU7": 13452
         },
         "interrupt": "NMI",
-        "interrupt-decription": "Non-maskable interrupts",
+        "interrupt-decription": " Non-maskable interrupts",
         "total-count": 219518
     },
     "40": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 85880438,
             "CPU1": 88651505,
@@ -599,10 +639,11 @@
             "CPU7": 54898862
         },
         "interrupt": "LOC",
-        "interrupt-decription": "Local timer interrupts",
+        "interrupt-decription": " Local timer interrupts",
         "total-count": 606608131
     },
     "41": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -614,10 +655,11 @@
             "CPU7": 0
         },
         "interrupt": "SPU",
-        "interrupt-decription": "Spurious interrupts",
+        "interrupt-decription": " Spurious interrupts",
         "total-count": 0
     },
     "42": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 40981,
             "CPU1": 40581,
@@ -629,10 +671,11 @@
             "CPU7": 13452
         },
         "interrupt": "PMI",
-        "interrupt-decription": "Performance monitoring interrupts",
+        "interrupt-decription": " Performance monitoring interrupts",
         "total-count": 219518
     },
     "43": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -644,10 +687,11 @@
             "CPU7": 0
         },
         "interrupt": "IWI",
-        "interrupt-decription": "IRQ work interrupts",
+        "interrupt-decription": " IRQ work interrupts",
         "total-count": 0
     },
     "44": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 168642893,
             "CPU1": 151284677,
@@ -659,10 +703,11 @@
             "CPU7": 22350064
         },
         "interrupt": "RES",
-        "interrupt-decription": "Rescheduling interrupts",
+        "interrupt-decription": " Rescheduling interrupts",
         "total-count": 691187751
     },
     "45": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 3830,
             "CPU1": 3799,
@@ -674,10 +719,11 @@
             "CPU7": 2191
         },
         "interrupt": "CAL",
-        "interrupt-decription": "Function call interrupts",
+        "interrupt-decription": " Function call interrupts",
         "total-count": 28031
     },
     "46": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 907919,
             "CPU1": 948255,
@@ -689,10 +735,11 @@
             "CPU7": 404430
         },
         "interrupt": "TLB",
-        "interrupt-decription": "TLB shootdowns",
+        "interrupt-decription": " TLB shootdowns",
         "total-count": 5559387
     },
     "47": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -704,10 +751,11 @@
             "CPU7": 0
         },
         "interrupt": "TRM",
-        "interrupt-decription": "Thermal event interrupts",
+        "interrupt-decription": " Thermal event interrupts",
         "total-count": 0
     },
     "48": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -719,10 +767,11 @@
             "CPU7": 0
         },
         "interrupt": "THR",
-        "interrupt-decription": "Threshold APIC interrupts",
+        "interrupt-decription": " Threshold APIC interrupts",
         "total-count": 0
     },
     "49": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -734,10 +783,11 @@
             "CPU7": 0
         },
         "interrupt": "MCE",
-        "interrupt-decription": "Machine check exceptions",
+        "interrupt-decription": " Machine check exceptions",
         "total-count": 0
     },
     "50": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 9178,
             "CPU1": 9178,
@@ -749,10 +799,11 @@
             "CPU7": 9178
         },
         "interrupt": "MCP",
-        "interrupt-decription": "Machine check polls",
+        "interrupt-decription": " Machine check polls",
         "total-count": 73424
     },
     "51": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,
@@ -768,6 +819,7 @@
         "total-count": 123
     },
     "52": {
+        "column1-precision": 4,
         "count": {
             "CPU0": 0,
             "CPU1": 0,

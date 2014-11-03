@@ -2516,6 +2516,11 @@ class ProcRootINTERRUPTS(PBR.FixedWhitespaceDelimRecs):
         self.__no_desc = "N/A"
         self.__cpu_list = dict()
         self.__num_cpus = 0
+        self.__cpu_wid = 11
+        self.__padding = 3
+        self.__col1_wid = 0
+        self.__col1_delim = ":"
+
         return
 
 
@@ -2537,6 +2542,9 @@ class ProcRootINTERRUPTS(PBR.FixedWhitespaceDelimRecs):
             self.next()
 
         else:
+            if self.__col1_wid == 0:
+                self.__col1_wid = sio.buff.index(self.__col1_delim)
+
             if self.field[PFC.F_INTERRUPT] in self.__summ_only:
                 try:
                     __total = long(sio.get_word(1))
@@ -2550,6 +2558,7 @@ class ProcRootINTERRUPTS(PBR.FixedWhitespaceDelimRecs):
                 self.field[PFC.F_TOT_COUNT] = __total
                 self.field[PFC.F_COUNT] = __pci
                 self.field[PFC.F_INTERRUPT_DESC] = self.__no_desc
+                self.field[PFC.F_COL1_WIDTH] = self.__col1_wid
 
             else:
                 __cl = self.__cpu_list
@@ -2566,8 +2575,13 @@ class ProcRootINTERRUPTS(PBR.FixedWhitespaceDelimRecs):
 
                 self.field[PFC.F_COUNT] = __pci
                 self.field[PFC.F_TOT_COUNT] = __total
-                __rest = sio.lineparts[self.__num_cpus+1:]
-                self.field[PFC.F_INTERRUPT_DESC] = " ".join(__rest)
+                self.field[PFC.F_COL1_WIDTH] = self.__col1_wid
+#                __rest = sio.lineparts[self.__num_cpus+1:]
+#                self.field[PFC.F_INTERRUPT_DESC] = " ".join(__rest)
+                __rest = self.__col1_wid + (self.__num_cpus * self.__cpu_wid) \
+                        + self.__padding
+                self.field[PFC.F_INTERRUPT_DESC] = \
+                        sio.buff[__rest:].rstrip("\n")
 
         return(self.field)
 

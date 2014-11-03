@@ -738,6 +738,7 @@ F_SS_SOFTIRQ = "softirq-stats"
 F_INTERRUPT = "interrupt"
 F_INTERRUPT_DESC = "interrupt-decription"
 F_TOT_COUNT = "total-count"
+F_COL1_WIDTH = "column1-precision"
 
 # -- added for /proc/zoneinfo
 F_NR_FREE_PAGES = "nr-free-pages"
