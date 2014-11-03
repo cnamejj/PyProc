@@ -2411,14 +2411,16 @@ class ProcRootSTAT(PBR.TaggedMultiLineFile):
 
         PBR.add_parse_rule(self, { PREFIX: "cpu ", NAME: PFC.F_SS_CPU } )
         PBR.add_parse_rule(self, { PREFIX: "intr ", NAME: PFC.F_SS_INTR } )
-        PBR.add_parse_rule(self, { PREFIX: "ctxt ", NAME: PFC.F_SS_CTXT } )
-        PBR.add_parse_rule(self, { PREFIX: "btime ", NAME: PFC.F_SS_BTIME } )
+        PBR.add_parse_rule(self, { PREFIX: "ctxt ", NAME: PFC.F_SS_CTXT,
+                CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "btime ", NAME: PFC.F_SS_BTIME,
+                CONV: long } )
         PBR.add_parse_rule(self, { PREFIX: "processes ",
-                NAME: PFC.F_SS_PROCS_TOT } )
+                NAME: PFC.F_SS_PROCS_TOT, CONV: long } )
         PBR.add_parse_rule(self, { PREFIX: "procs_running ",
-                NAME: PFC.F_SS_PROCS_RUN } )
+                NAME: PFC.F_SS_PROCS_RUN, CONV: long } )
         PBR.add_parse_rule(self, { PREFIX: "procs_blocked ",
-                NAME: PFC.F_SS_PROCS_BLOCK } )
+                NAME: PFC.F_SS_PROCS_BLOCK, CONV: long } )
         PBR.add_parse_rule(self, { PREFIX: "softirq ",
                 NAME: PFC.F_SS_SOFTIRQ } )
 

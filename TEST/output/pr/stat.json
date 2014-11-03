@@ -3,8 +3,8 @@
         "source": "TEST/data/pr/stat"
     },
     "1": {
-        "blocked-stats": "0",
-        "btime-stats": "1390806357",
+        "blocked-stats": 0,
+        "btime-stats": 1390806357,
         "cpu-summ-stats": {
             "guest": 8,
             "guest-nice": 9,
@@ -113,8 +113,8 @@
             "sys": 601927,
             "user": 659543
         },
-        "cswitch-stats": "2418647143",
-        "fork-stats": "4128591",
+        "cswitch-stats": 2418647143,
+        "fork-stats": 4128591,
         "interrupt-stats": {
             "0": 9215,
             "1": 3,
@@ -1270,7 +1270,7 @@
             "1151": 9999,
             "total": 1419624060
         },
-        "running-stats": "2",
+        "running-stats": 2,
         "softirq-stats": {
             "0": 911730395,
             "1": 0,
