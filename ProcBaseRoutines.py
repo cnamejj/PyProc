@@ -629,6 +629,8 @@ class SingleNameValueList(object):
         if len(__lines) == 0:
             raise StopIteration
         else:
+            __hits = dict()
+            __seq = 0
             for __keyval in __lines:
                 if len(__keyval) > 0:
                     __words = __keyval.split()
@@ -638,7 +640,10 @@ class SingleNameValueList(object):
                             __name = __name[:-1]
                         if len(__name) > 0:
                             self.field[__name] = __words[1]
+                            __hits[__seq] = __name
+                            __seq += 1
 
+            self.field[PFC.F_HITS] = __hits
         return(self.field)
 
 
