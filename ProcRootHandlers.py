@@ -2597,8 +2597,6 @@ class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
     Parse /proc/zoneinfo file
     """
 
-#!!!!broken, fix this...
-
 # source: mm/vmstat.c
 #
 # The kernel source snippets that generate this file are stored in
