@@ -27,6 +27,13 @@ then
 	exit 0
 fi
 
+if [ "$2" = "" ]
+then
+	cname="${inp}"
+else
+	cname="$2"
+fi
+
 # ---
 
 if [ ! -f "${inp}" ]
@@ -80,7 +87,7 @@ fi
 
 # ---
 
-./reproc.py "${inpcopy}" "${inp}" >"${regen}"
+./reproc.py "${inpcopy}" "${cname}" >"${regen}"
 rc=$?
 
 if [ ${rc} -ne 0 ]
