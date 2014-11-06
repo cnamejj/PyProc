@@ -3544,6 +3544,9 @@ class ProcRootTIMERLIST(PBR.TaggedMultiLineFile):
         __rs = __rs + [ (PFC.F_TIMER_ADDR, { HAS: ", S:",
                 CONV: long, BASE: 16, PSUB: 1, AFTER: "<", BEFORE: ">" },
                 __rpl) ]
+        __rs = __rs + [ (PFC.F_TIMER_ADDR_TEXT, { HAS: ", S:",
+                BEFORE: ",", PSUB: 1 },
+                __rpl) ]
         __rs = __rs + [ (PFC.F_TIMER_FUNC, { HAS: ", S:",
                 CONV: str, PSUB: 2, BEFORE: "," }, __rpl) ]
         __rs = __rs + [ (PFC.F_TIMER_STATE, { HAS: ", S:",
