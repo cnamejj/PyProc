@@ -15,11 +15,15 @@ def recreate_tickdev_info(recs):
     __devtypetemp = "Per CPU device: {cpu:d}"
     __bcastmasktemp = "tick_broadcast_mask: {mask:s}"
     __oneshotmasktemp = "tick_broadcast_oneshot_mask: {mask:s}\n"
+    __nulldev = "<NULL>"
+
+# ... Need to check for a "Clock Event Device: <NULL>" case and handle it ...
 
     __template = "Tick Device: mode:     {tdm:d}\n\
 {devtype:s}\n\
-Clock Event Device: {devname:s}\n\
- max_delta_ns:   {maxdn:d}\n\
+Clock Event Device: {devname:s}"
+
+    __detailtemp = " max_delta_ns:   {maxdn:d}\n\
  min_delta_ns:   {mindn:d}\n\
  mult:           {mult:d}\n\
  shift:          {shift:d}\n\
@@ -30,19 +34,24 @@ Clock Event Device: {devname:s}\n\
  event_handler:  {handler:s}\n\
  retries:        {retries:d}"
 
-    if recs[PFC.F_BCAST_DEVICE]:
-        __devtype = "Broadcast device"
-    else:
-        __devtype = __devtypetemp.format(cpu=recs[PFC.F_PER_CPU_DEV])
+    if recs[PFC.F_CLOCK_EV_DEV] != "":
+        if recs[PFC.F_BCAST_DEVICE]:
+            __devtype = "Broadcast device"
+        else:
+            __devtype = __devtypetemp.format(cpu=recs[PFC.F_PER_CPU_DEV])
 
-    print __template.format(tdm=recs[PFC.F_TICK_DEV], devtype=__devtype,
-            devname=recs[PFC.F_CLOCK_EV_DEV], maxdn=recs[PFC.F_MAX_DELTA],
-            mindn=recs[PFC.F_MIN_DELTA], mult=recs[PFC.F_MULT],
-            shift=recs[PFC.F_SHIFT], modenum=recs[PFC.F_MODE],
-            nextsecs=recs[PFC.F_NEXT_EVENT], 
-            nextevent=recs[PFC.F_SET_NEXT_EVENT],
-            modename=recs[PFC.F_SET_MODE], handler=recs[PFC.F_EVENT_HANDLER],
-            retries=recs[PFC.F_RETRIES])
+        print __template.format(tdm=recs[PFC.F_TICK_DEV], devtype=__devtype,
+                devname=recs[PFC.F_CLOCK_EV_DEV])
+
+        if recs[PFC.F_CLOCK_EV_DEV] != __nulldev:
+            print __detailtemp.format(maxdn=recs[PFC.F_MAX_DELTA],
+                    mindn=recs[PFC.F_MIN_DELTA], mult=recs[PFC.F_MULT],
+                    shift=recs[PFC.F_SHIFT], modenum=recs[PFC.F_MODE],
+                    nextsecs=recs[PFC.F_NEXT_EVENT], 
+                    nextevent=recs[PFC.F_SET_NEXT_EVENT],
+                    modename=recs[PFC.F_SET_MODE],
+                    handler=recs[PFC.F_EVENT_HANDLER],
+                    retries=recs[PFC.F_RETRIES])
 
     if len(recs[PFC.F_TICK_BCAST_MASK]) > 0:
         print __bcastmasktemp.format(mask=recs[PFC.F_TICK_BCAST_MASK])
@@ -50,23 +59,26 @@ Clock Event Device: {devname:s}\n\
     if len(recs[PFC.F_TICK_BCAST_ONESHOT]) > 0:
         print __oneshotmasktemp.format(mask=recs[PFC.F_TICK_BCAST_ONESHOT])
 
-    print ""
+    if recs[PFC.F_CLOCK_EV_DEV] != "":
+        print ""
 
 # ---
 
 def show_timer_details(active):
     """Generate detailed info about one timer"""
 
-    __tstattemp = ", {stsite:s}, {comm:s}/{pid:d}"
+    __tstattemp = " {stsite:s}, {comm:s}/{pid:d}"
 
     __taddrtemp = "<{addr:016x}>"
 
-    __template = " #{idx:d}: {addr:s}, {name:s}, S:{state:02x}{tstat:s}\n\
+    __template = " #{idx:d}: {addr:s}, {name:s}, S:{state:2s}{tstat:s}\n\
  # expires at {exp1:d}-{exp2:d} nsecs [in {left1:d} to {left2:d} nsecs]"
 
-#    ...optional part...
-    __tstat = __tstattemp.format(stsite=active[PFC.F_START_SITE],
-            comm=active[PFC.F_START_COMM], pid=active[PFC.F_START_PID])
+    if active[PFC.F_START_COMM] == "":
+        __tstat = ""
+    else:
+        __tstat = __tstattemp.format(stsite=active[PFC.F_START_SITE],
+                comm=active[PFC.F_START_COMM], pid=active[PFC.F_START_PID])
 
     try:
         __taddr = __taddrtemp.format(addr=active[PFC.F_TIMER_ADDR])
@@ -81,7 +93,7 @@ def show_timer_details(active):
 
 # ---
 
-def recreate_cpu_info(recs):
+def recreate_cpu_info(recs, hits):
     """Generate output describing a CPU, it's clocks and timers"""
 
     __cputemp = "\ncpu: {cpu:d}"
@@ -92,7 +104,6 @@ def recreate_cpu_info(recs):
   .resolution: {secs:d} nsecs\n\
   .get_time:   {name:s}"
 
-#...optional part...
     __hrtimetemp = "  .offset:     {hrsecs:d} nsecs"
 
     __activetemp = "active timers:"
@@ -101,13 +112,20 @@ def recreate_cpu_info(recs):
     __stnstemp = "  .{label:<15s}: {val:d} nsecs"
     __stjifftemp = "{label:s}: {val:d}"
 
-    __stlist = [ (PFC.F_NEXT_EXPIRE, "expires_next", __stnstemp),
+    # ---
+
+    __hi_res = recs.has_key(PFC.F_HRES_ACTIVE)
+    __tick_oneshot = recs.has_key(PFC.F_NOHZ_MODE)
+
+    __hi_res_list = [ (PFC.F_NEXT_EXPIRE, "expires_next", __stnstemp),
             (PFC.F_HRES_ACTIVE, "hres_active", __strawtemp),
             (PFC.F_NR_EVENTS, "nr_events", __strawtemp),
             (PFC.F_NR_RETRIES, "nr_retries", __strawtemp),
             (PFC.F_NR_HANGS, "nr_hangs", __strawtemp),
-            (PFC.F_MAX_HANG_TIME, "max_hang_time", __stnstemp),
-            (PFC.F_NOHZ_MODE, "nohz_mode", __strawtemp),
+            (PFC.F_MAX_HANG_TIME, "max_hang_time", __stnstemp) ]
+
+    __tick_oneshot_list = [ (PFC.F_NOHZ_MODE, "nohz_mode", __strawtemp),
+            (PFC.F_LAST_TICK, "last_tick", __stnstemp),
             (PFC.F_IDLE_TICK, "idle_tick", __stnstemp),
             (PFC.F_TICK_STOP, "tick_stopped", __strawtemp),
             (PFC.F_IDLE_JIFFIES, "idle_jiffies", __strawtemp),
@@ -123,6 +141,8 @@ def recreate_cpu_info(recs):
             (PFC.F_IDLE_EXPIRES, "idle_expires", __stnstemp),
             (PFC.F_JIFFIES, "jiffies", __stjifftemp) ]
 
+    # ---
+
     print __cputemp.format(cpu=recs[PFC.F_CPU])
 
     for __seq in range(0, len(recs[PFC.F_CLOCK_LIST])):
@@ -133,7 +153,8 @@ def recreate_cpu_info(recs):
                 secs=__clinfo[PFC.F_CLOCK_RES],
                 name=__clinfo[PFC.F_CLOCK_GETTIME])
 
-        print __hrtimetemp.format(hrsecs=__clinfo[PFC.F_CLOCK_OFFSET])
+        if __hi_res:
+            print __hrtimetemp.format(hrsecs=__clinfo[PFC.F_CLOCK_OFFSET])
 
         print __activetemp
 
@@ -141,9 +162,33 @@ def recreate_cpu_info(recs):
         for __tnum in range(0, len(__tset)):
             show_timer_details(__tset[__tnum])
 
-    for __off in range(0, len(__stlist)):
-        __key, __pref, __temp = __stlist[__off]
-        print __temp.format(label=__pref, val=recs[__key])
+    if __hi_res:
+        for __off in range(0, len(__hi_res_list)):
+            __key, __pref, __temp = __hi_res_list[__off]
+            print __temp.format(label=__pref, val=recs[__key])
+
+    if __tick_oneshot:
+        __idle_tick = False
+        __last_tick = False
+
+        for __off in range(0, len(hits)):
+            if hits[__off] == PFC.F_IDLE_TICK:
+                __idle_tick = True
+            if hits[__off] == PFC.F_LAST_TICK:
+                __last_tick = True
+
+        for __off in range(0, len(__tick_oneshot_list)):
+            __key, __pref, __temp = __tick_oneshot_list[__off]
+
+            if __key == PFC.F_IDLE_TICK:
+                __show = __idle_tick
+            elif __key == PFC.F_LAST_TICK:
+                __show = __last_tick
+            else:
+                __show = True
+
+            if __show:
+                print __temp.format(label=__pref, val=recs[__key])
 
 # ---
 
@@ -156,6 +201,7 @@ HRTIMER_MAX_CLOCK_BASES: {maxcb:d}\n\
 now at {secs:d} nsecs"
 
     __ticksectionpref = "\n"
+    __nulldev = "<NULL>"
 
     __first = True
     __first_tick = True
@@ -170,12 +216,15 @@ now at {secs:d} nsecs"
             __first = False
 
         if len(__ff[PFC.F_CLOCK_LIST]) > 0:
-            recreate_cpu_info(__ff)
+            recreate_cpu_info(__ff, inprecs.hit_order)
 
         else:
             if __first_tick:
-                print __ticksectionpref
+                print ""
                 __first_tick = False
+                if __ff[PFC.F_CLOCK_EV_DEV] == __nulldev:
+                    print ""
+
             recreate_tickdev_info(__ff)
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8

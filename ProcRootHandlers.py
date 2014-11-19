@@ -3452,6 +3452,9 @@ class ProcRootTIMERLIST(PBR.TaggedMultiLineFile):
                 __rpl )
         PBR.add_parse_rule(self, { PREFIX: "  .nohz_mode", AFTER: ":",
                 NAME: PFC.F_NOHZ_MODE, CONV: long }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "  .last_tick", AFTER: ":",
+                NAME: PFC.F_LAST_TICK, CONV: long, SUFFIX: "nsecs" },
+                __rpl )
         PBR.add_parse_rule(self, { PREFIX: "  .idle_tick", AFTER: ":",
                 NAME: PFC.F_IDLE_TICK, CONV: long, SUFFIX: "nsecs" },
                 __rpl )
@@ -3549,8 +3552,11 @@ class ProcRootTIMERLIST(PBR.TaggedMultiLineFile):
                 __rpl) ]
         __rs = __rs + [ (PFC.F_TIMER_FUNC, { HAS: ", S:",
                 CONV: str, PSUB: 2, BEFORE: "," }, __rpl) ]
-        __rs = __rs + [ (PFC.F_TIMER_STATE, { HAS: ", S:",
-                CONV: long, BASE: 16, PSUB: 3, AFTER: "S:", BEFORE: "," },
+#        __rs = __rs + [ (PFC.F_TIMER_STATE, { HAS: ", S:",
+#                CONV: long, BASE: 16, PSUB: 3, AFTER: "S:", BEFORE: "," },
+#                __rpl) ]
+        __rs = __rs + [ (PFC.F_TIMER_STATE, { HAS: ", S:",  PSUB: 3,
+                AFTER: "S:" },
                 __rpl) ]
         __rs = __rs + [ (PFC.F_START_SITE, { HAS: ", S:",
                 CONV: str, PSUB: 4, BEFORE: "," }, __rpl) ]
