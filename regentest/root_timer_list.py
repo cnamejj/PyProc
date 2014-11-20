@@ -58,6 +58,8 @@ Clock Event Device: {devname:s}"
 
     if len(recs[PFC.F_TICK_BCAST_ONESHOT]) > 0:
         print __oneshotmasktemp.format(mask=recs[PFC.F_TICK_BCAST_ONESHOT])
+    elif len(recs[PFC.F_TICK_BCAST_MASK]) > 0:
+        print ""
 
     if recs[PFC.F_CLOCK_EV_DEV] != "":
         print ""
