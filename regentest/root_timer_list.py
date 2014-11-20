@@ -114,8 +114,17 @@ def recreate_cpu_info(recs, hits):
 
     # ---
 
-    __hi_res = recs.has_key(PFC.F_HRES_ACTIVE)
-    __tick_oneshot = recs.has_key(PFC.F_NOHZ_MODE)
+    __hi_res = False
+
+    for __off in range(0, len(hits)):
+        if hits[__off] == PFC.F_HRES_ACTIVE:
+            __hi_res = True
+
+    __tick_oneshot = False
+
+    for __off in range(0, len(hits)):
+        if hits[__off] == PFC.F_NOHZ_MODE:
+            __tick_oneshot = True
 
     __hi_res_list = [ (PFC.F_NEXT_EXPIRE, "expires_next", __stnstemp),
             (PFC.F_HRES_ACTIVE, "hres_active", __strawtemp),
@@ -153,7 +162,7 @@ def recreate_cpu_info(recs, hits):
                 secs=__clinfo[PFC.F_CLOCK_RES],
                 name=__clinfo[PFC.F_CLOCK_GETTIME])
 
-        if __hi_res:
+        if __hi_res and __clinfo.has_key(PFC.F_CLOCK_OFFSET):
             print __hrtimetemp.format(hrsecs=__clinfo[PFC.F_CLOCK_OFFSET])
 
         print __activetemp
