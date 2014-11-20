@@ -1,2 +1,2 @@
-TEST/data/ps/io|write_bytes|read_bytes|cancelled_write_bytes|syscr|wchar|rchar|syscw
-1|0|0|0|7|0|2012|0
+TEST/data/ps/io|write_bytes|hits|read_bytes|cancelled_write_bytes|syscr|wchar|rchar|syscw
+1|0|{0: 'rchar', 1: 'wchar', 2: 'syscr', 3: 'syscw', 4: 'read_bytes', 5: 'write_bytes', 6: 'cancelled_write_bytes'}|0|0|7|0|2012|0

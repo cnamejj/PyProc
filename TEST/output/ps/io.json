@@ -4,6 +4,15 @@
     },
     "1": {
         "cancelled_write_bytes": "0",
+        "hits": {
+            "0": "rchar",
+            "1": "wchar",
+            "2": "syscr",
+            "3": "syscw",
+            "4": "read_bytes",
+            "5": "write_bytes",
+            "6": "cancelled_write_bytes"
+        },
         "rchar": "2012",
         "read_bytes": "0",
         "syscr": "7",
