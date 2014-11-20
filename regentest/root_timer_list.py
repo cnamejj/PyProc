@@ -17,8 +17,6 @@ def recreate_tickdev_info(recs):
     __oneshotmasktemp = "tick_broadcast_oneshot_mask: {mask:s}\n"
     __nulldev = "<NULL>"
 
-# ... Need to check for a "Clock Event Device: <NULL>" case and handle it ...
-
     __template = "Tick Device: mode:     {tdm:d}\n\
 {devtype:s}\n\
 Clock Event Device: {devname:s}"
