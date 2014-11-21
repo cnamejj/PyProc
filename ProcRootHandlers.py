@@ -3210,6 +3210,7 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
 
         if __first == self.__sample_tag:
             __val = PBR.conv_by_rules(sio.get_word(2), { CONV: float } )
+            self.__hold[PFC.F_SAMPLE_PERIOD] = __val
             self.next()
 
         if __sec == self.__total_tag:
