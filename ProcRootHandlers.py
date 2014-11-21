@@ -3163,20 +3163,24 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
         self.__timer_tag = "Timer"
         self.__sample_tag = "Sample"
         self.__total_tag = "total"
+        self.__overflow_tag = "Overflow:"
 
         self.__hold = dict()
         self.__hold[PFC.F_VERSION] = ""
         self.__hold[PFC.F_SAMPLE_PERIOD] = 0.0
         self.__hold[PFC.F_EVENT_TOTAL] = 0
         self.__hold[PFC.F_EVENT_RATE] = 0.0
+        self.__hold[PFC.F_OVERFLOW] = PDC.NAN
 
         PBR.add_parse_rule(self, { POS: 0, BEFORE: ",",
                 NAME: PFC.F_DEFERRABLE } )
         PBR.add_parse_rule(self, { POS: 1, CONV: long, NAME: PFC.F_PID } )
         PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_PROC_NAME } )
-        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_INIT_ROUT } )
-        PBR.add_parse_rule(self, { POS: 4, AFTER: "(", BEFORE: ")",
-                NAME: PFC.F_CBACK_ROUT } )
+#        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_INIT_ROUT } )
+#        PBR.add_parse_rule(self, { POS: 4, AFTER: "(", BEFORE: ")",
+#                NAME: PFC.F_CBACK_ROUT } )
+        PBR.add_parse_rule(self, { POS: 99, NAME: PFC.F_INIT_ROUT } )
+        PBR.add_parse_rule(self, { POS: 99, NAME: PFC.F_CBACK_ROUT } )
         PBR.add_parse_rule(self, { POS: 99, CONV: long, NAME: PFC.F_COUNT } )
         PBR.add_parse_rule(self, { POS: 99, CONV: str, NAME: PFC.F_VERSION } )
         PBR.add_parse_rule(self, { POS: 99, CONV: float,
@@ -3185,6 +3189,8 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
                 NAME: PFC.F_EVENT_TOTAL } )
         PBR.add_parse_rule(self, { POS: 99, CONV: float,
                 NAME: PFC.F_EVENT_RATE } )
+        PBR.add_parse_rule(self, { POS: 99, CONV: long,
+                NAME: PFC.F_OVERFLOW } )
         return
 
     def extra_next(self, sio):
@@ -3206,12 +3212,17 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
 
         if __first == self.__timer_tag:
             self.__hold[PFC.F_VERSION] = sio.get_word(3)
-            self.next()
+            return(self.next())
 
         if __first == self.__sample_tag:
             __val = PBR.conv_by_rules(sio.get_word(2), { CONV: float } )
             self.__hold[PFC.F_SAMPLE_PERIOD] = __val
-            self.next()
+            return(self.next())
+
+        if __first == self.__overflow_tag:
+            __val = PBR.conv_by_rules(sio.get_word(1), { CONV: long } )
+            self.__hold[PFC.F_OVERFLOW] = __val
+            return(self.next())
 
         if __sec == self.__total_tag:
             self.field[PFC.F_DEFERRABLE] = ""
@@ -3222,12 +3233,13 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
 
             __val = PBR.conv_by_rules(sio.get_word(0), { CONV: long } )
             self.field[PFC.F_EVENT_TOTAL] = __val
-            __val = PBR.conv_by_rules(sio.get_word(3), { CONV: float } )
+            __val = PBR.conv_by_rules(sio.get_word(3), { CONV: float,
+                    ERRVAL: PDC.NAN } )
             self.field[PFC.F_EVENT_RATE] = __val
 
         else:
             __first = self.field[PFC.F_DEFERRABLE]
-            if __first[:-1] == "D":
+            if __first[-1:] == "D":
                 __first = __first[:-1]
                 __val = "D"
             else:
@@ -3236,8 +3248,17 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_COUNT] = PBR.conv_by_rules(__first,
                     { CONV: long } )
 
+            __proc = self.field[PFC.F_PROC_NAME]
+            __split = sio.buff.partition(__proc)
+            __tail = "{proc:s}{rest:s}".format(proc=__proc, rest=__split[2])
+            self.field[PFC.F_PROC_NAME] = __tail[:16].rstrip()
+            __tail = __tail[17:]
+            self.field[PFC.F_INIT_ROUT] = PBR.conv_by_rules(__tail, { BEFORE: " " } )
+            self.field[PFC.F_CBACK_ROUT] = PBR.conv_by_rules(__tail, { AFTER: "(", BEFORE: ")" } )
+
         self.field[PFC.F_VERSION] = self.__hold[PFC.F_VERSION]
         self.field[PFC.F_SAMPLE_PERIOD] = self.__hold[PFC.F_SAMPLE_PERIOD]
+        self.field[PFC.F_OVERFLOW] = self.__hold[PFC.F_OVERFLOW]
 
         return(self.field)
 

@@ -951,6 +951,7 @@ F_EVENT_TOTAL = "total-events"
 F_INIT_ROUT = "initial-routine"
 F_PROC_NAME = "process-name"
 F_SAMPLE_PERIOD = "sample-period"
+F_OVERFLOW = "overflow"
 
 # -- added for /proc/pagetypeinfo
 F_BLOCK_ORDER = "block-order"
