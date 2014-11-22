@@ -24,7 +24,7 @@ def re_net_ip_conntrack(inprecs):
     __unreptemp = "[UNREPLIED] "
     __assuretemp = "[ASSURED] "
     __marktemp = "mark={mark:d} "
-    __secctxtemp = "secctx={sec:s} "
+    __secctxtemp = "secctx={sec:d} "
     __usetemp = "use={use:d}"
 
     for __hilit in inprecs:
