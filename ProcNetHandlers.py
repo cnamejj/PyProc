@@ -953,21 +953,21 @@ class ProcNetIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
         self.field[PFC.F_STATE] = PDC.UNKNOWN_STATE
         self.field[PFC.F_OR_SRC_IP] = PDC.ANY_IP_ADDR
         self.field[PFC.F_OR_DST_IP] = PDC.ANY_IP_ADDR
-        self.field[PFC.F_OR_SRC_PORT] = 0
-        self.field[PFC.F_OR_DST_PORT] = 0
+        self.field[PFC.F_OR_SRC_PORT] = PDC.NAN
+        self.field[PFC.F_OR_DST_PORT] = PDC.NAN
         self.field[PFC.F_UNREPLIED] = ""
-        self.field[PFC.F_OR_PACKETS] = 0
-        self.field[PFC.F_OR_BYTES] = 0
+        self.field[PFC.F_OR_PACKETS] = PDC.NAN
+        self.field[PFC.F_OR_BYTES] = PDC.NAN
         self.field[PFC.F_RE_SRC_IP] = PDC.ANY_IP_ADDR
         self.field[PFC.F_RE_DST_IP] = PDC.ANY_IP_ADDR
-        self.field[PFC.F_RE_SRC_PORT] = 0
-        self.field[PFC.F_RE_DST_PORT] = 0
-        self.field[PFC.F_RE_PACKETS] = 0
-        self.field[PFC.F_RE_BYTES] = 0
+        self.field[PFC.F_RE_SRC_PORT] = PDC.NAN
+        self.field[PFC.F_RE_DST_PORT] = PDC.NAN
+        self.field[PFC.F_RE_PACKETS] = PDC.NAN
+        self.field[PFC.F_RE_BYTES] = PDC.NAN
         self.field[PFC.F_ASSURED] = ""
-        self.field[PFC.F_MARK] = 0
-        self.field[PFC.F_SECCTX] = 0
-        self.field[PFC.F_USE] = 0
+        self.field[PFC.F_MARK] = PDC.NAN
+        self.field[PFC.F_SECCTX] = PDC.NAN
+        self.field[PFC.F_USE] = PDC.NAN
 
         if sio.buff == "":
             self.field[PFC.F_PROTOCOL] = ""
