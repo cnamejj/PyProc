@@ -97,7 +97,7 @@ class ProcSysvipcSHM(PBR.FixedWhitespaceDelimRecs):
 
         PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_KEY, CONV: long } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ID, CONV: long } )
-        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_MODE, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_MODE, CONV: long, BASE: 8 } )
         PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_SIZE, CONV: long } )
         PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_CPID, CONV: long } )
         PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_LPID, CONV: long } )
