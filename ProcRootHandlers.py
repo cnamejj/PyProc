@@ -3293,8 +3293,8 @@ class ProcRootPAGETYPEINFO(PBR.FixedWhitespaceDelimRecs):
         self.__start_agg_num = 4
         self.__order_colname = "order-"
 
-        self.__order_list = []
-        self.__migtype_list = []
+        self.order_list = []
+        self.migtype_list = []
 
         self.__hold = dict()
         self.__hold[PFC.F_BLOCK_ORDER] = 0
@@ -3329,7 +3329,7 @@ class ProcRootPAGETYPEINFO(PBR.FixedWhitespaceDelimRecs):
                 __ord[__num] = "{pref}{num}".format(pref=self.__order_colname,
                         num=sio.get_word(__off))
                 __off += 1
-            self.__order_list = __ord
+            self.order_list = __ord
             self.next()
             __first = sio.get_word(0)
 
@@ -3340,7 +3340,7 @@ class ProcRootPAGETYPEINFO(PBR.FixedWhitespaceDelimRecs):
             for __num in range(0, len(__mig)):
                 __mig[__num] = sio.get_word(__off)
                 __off += 1
-            self.__migtype_list = __mig
+            self.migtype_list = __mig
             self.next()
             __first = sio.get_word(0)
 
@@ -3349,7 +3349,7 @@ class ProcRootPAGETYPEINFO(PBR.FixedWhitespaceDelimRecs):
 
         if self.__in_numbers:
             self.field[PFC.F_TYPE] = ""
-            __mig = self.__migtype_list
+            __mig = self.migtype_list
             __off = self.__start_agg_num
             for __num in range(0, len(__mig)):
                 __name = __mig[__num]
@@ -3357,7 +3357,7 @@ class ProcRootPAGETYPEINFO(PBR.FixedWhitespaceDelimRecs):
                         sio.get_word(__off), { CONV: long } )
                 __off += 1
         else:
-            __ord = self.__order_list
+            __ord = self.order_list
             __off = 0
             for __num in range(self.__start_ord_num, sio.linewords):
                 __name = __ord[__off]
