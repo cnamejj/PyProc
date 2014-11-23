@@ -6,8 +6,6 @@
 
 RECREATOR = dict()
 
-#...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
-
 __all__ = ["net_tcp", "net_udp", "net_tcp6", "net_udp6", "net_unix",
     "net_connector", "net_netlink", "net_protocols", "net_dev",
     "net_softnet_stat", "net_ptype", "net_dev_mcast", "net_psched", "net_arp",
@@ -29,4 +27,6 @@ __all__ = ["net_tcp", "net_udp", "net_tcp6", "net_udp6", "net_unix",
     "net_stat_arp_cache", "net_stat_ip_conntrack", "net_stat_nf_conntrack",
     "net_stat_rt_cache", "net_stat_ndisc_cache", "root_stat", "root_interrupts",
     "root_zoneinfo", "net_dev_snmp6", "root_timer_list", "root_timer_stats",
-    "root_vmallocinfo", "net_ip_conntrack", "net_nf_conntrack"]
+    "root_vmallocinfo", "net_ip_conntrack", "net_nf_conntrack", "sysvipc_shm"]
+
+#...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
