@@ -23,7 +23,7 @@ def re_sysvipc_shm(inprecs):
         __numtemp = "{num:10d}"
         __coltemp = "{label:>10s}"
 
-    __head = "       key      shmid perms \
+    __headtemp = "       key      shmid perms \
 {size:s}  cpid  lpid nattch   uid   gid  cuid  cgid      atime      dtime      ctime \
 {rss:s} {swap:s}"
 
@@ -37,7 +37,7 @@ def re_sysvipc_shm(inprecs):
     __rss = __coltemp.format(label="rss")
     __swap = __coltemp.format(label="swap")
 
-    print __head.format(size=__size, rss=__rss, swap=__swap)
+    print __headtemp.format(size=__size, rss=__rss, swap=__swap)
 
     for __hilit in inprecs:
         __ff = inprecs.field
