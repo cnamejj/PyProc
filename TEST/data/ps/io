@@ -1,8 +1,7 @@
-rchar: 2012
-wchar: 0
-syscr: 7
-syscw: 0
-read_bytes: 0
-write_bytes: 0
-cancelled_write_bytes: 0
-: 0
+rchar: 2686544394
+wchar: 381603772
+syscr: 758582
+syscw: 1232856
+read_bytes: 150740992
+write_bytes: 142274560
+cancelled_write_bytes: 14303232
