@@ -4,6 +4,12 @@
 
 # ---
 
+import ProcHandlers as PH
+
+PFC = PH.ProcFieldConstants
+
+# ---
+
 RECREATOR = dict()
 
 __all__ = ["net_tcp", "net_udp", "net_tcp6", "net_udp6", "net_unix",
@@ -29,6 +35,22 @@ __all__ = ["net_tcp", "net_udp", "net_tcp6", "net_udp6", "net_unix",
     "root_zoneinfo", "net_dev_snmp6", "root_timer_list", "root_timer_stats",
     "root_vmallocinfo", "net_ip_conntrack", "net_nf_conntrack", "sysvipc_shm",
     "sysvipc_msg", "sysvipc_sem", "root_pagetypeinfo", "root_schedstat",
-    "self_io"]
+    "self_io", "net_ip6_tables_targets", "net_ip6_tables_matches",
+    "net_ip6_tables_names", "net_ip_tables_targets", "net_ip_tables_matches",
+    "net_ip_tables_names"]
+
+# ---
+
+def list_of_terms(inprecs):
+
+    """
+    General purpose routine for handling parsed data from handlers that inherit
+    from the 'ListOfTerms' base class.
+    """
+
+    for __hilit in inprecs:
+        print "\n".join(inprecs.field[PFC.F_TERM_LIST])
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
+
+
