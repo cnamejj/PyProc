@@ -2776,6 +2776,8 @@ class ProcRootSCHEDSTAT(PBR.TaggedMultiLineFile):
         self.__cpu_pref = "cpu"
         self.__dom_pref = "domain"
         self.all_parsed = dict()
+        self.cpu_order = dict()
+        self.__cpu_seq = 0
 
         PBR.add_parse_rule(self, { PREFIX: "version", CONV: long,
                 NAME: PFC.F_VERSION } )
@@ -2852,6 +2854,7 @@ class ProcRootSCHEDSTAT(PBR.TaggedMultiLineFile):
     def next(self):
         if len(self.all_parsed) == 0:
             self.all_parsed = super(ProcRootSCHEDSTAT, self).next()
+            self.__cpu_seq = 0
 
         if len(self.all_parsed) == 0:
             raise StopIteration
@@ -2861,7 +2864,9 @@ class ProcRootSCHEDSTAT(PBR.TaggedMultiLineFile):
         __pthru[PFC.F_TIMESTAMP] = self.field[PFC.F_TIMESTAMP]
         self.field = __pthru
 
-        __cpu, __vals = self.all_parsed.popitem()
+        __cpu = self.cpu_order[self.__cpu_seq]
+        self.__cpu_seq += 1
+        __vals = self.all_parsed.pop(__cpu, ("cpuX", {}) )
         self.field[PFC.F_CPU_ID] = __cpu
         for __key in __vals:
             self.field[__key] = __vals[__key]
@@ -2878,11 +2883,17 @@ class ProcRootSCHEDSTAT(PBR.TaggedMultiLineFile):
             __tag = __line[0]
 
             if __tag.startswith(self.__cpu_pref):
+                self.cpu_order[self.__cpu_seq] = __tag
+                self.__cpu_seq += 1
                 __per_cpu[__tag] = self.parse_cpu_line(__line)
+                __per_cpu[__tag][PFC.F_DOM_ORDER] = dict()
+                __dom_seq = 0
                 __cpu = __tag
             elif __cpu != self.__no_cpu and __tag.startswith(self.__dom_pref):
                 __dinfo = self.parse_domain_line(__line)
                 __per_cpu[__cpu][__tag] = __dinfo
+                __per_cpu[__cpu][PFC.F_DOM_ORDER][__dom_seq] = __tag
+                __dom_seq += 1
 
         return(__per_cpu)
 

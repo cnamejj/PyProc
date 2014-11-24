@@ -836,6 +836,7 @@ F_SBF_PUSHED = "sch-bal-fork-pushed"
 F_TRWUP_AWOKE_DIFF_CPU = "try-wake-diff-cpu"
 F_TRWUP_MOVE_CACHE_COLD = "try-wake-cache-cold"
 F_TRWUP_PASSIVE_BAL = "try-wake-pass-bal"
+F_DOM_ORDER = "domain-order"
 
 # -- added for /proc/crypto
 F_DRIVER = "driver"
