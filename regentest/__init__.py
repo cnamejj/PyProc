@@ -28,6 +28,6 @@ __all__ = ["net_tcp", "net_udp", "net_tcp6", "net_udp6", "net_unix",
     "net_stat_rt_cache", "net_stat_ndisc_cache", "root_stat", "root_interrupts",
     "root_zoneinfo", "net_dev_snmp6", "root_timer_list", "root_timer_stats",
     "root_vmallocinfo", "net_ip_conntrack", "net_nf_conntrack", "sysvipc_shm",
-    "sysvipc_msg", "sysvipc_sem", "root_pagetypeinfo"]
+    "sysvipc_msg", "sysvipc_sem", "root_pagetypeinfo", "root_schedstat"]
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
