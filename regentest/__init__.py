@@ -37,7 +37,9 @@ __all__ = ["net_tcp", "net_udp", "net_tcp6", "net_udp6", "net_unix",
     "sysvipc_msg", "sysvipc_sem", "root_pagetypeinfo", "root_schedstat",
     "self_io", "net_ip6_tables_targets", "net_ip6_tables_matches",
     "net_ip6_tables_names", "net_ip_tables_targets", "net_ip_tables_matches",
-    "net_ip_tables_names", "self_sched"]
+    "net_ip_tables_names", "self_sched", "net_snmp", "net_netstat"]
+
+#...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 
 # ---
 
@@ -51,6 +53,31 @@ def list_of_terms(inprecs):
     for __hilit in inprecs:
         print "\n".join(inprecs.field[PFC.F_TERM_LIST])
 
-#...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
+# ---
 
+def twoline_data_format(inprecs):
 
+    """
+    Iterate through parsed records and re-generate data file
+    """
+
+    __template = "{acc:s} {val:s}"
+
+    for __hilit in inprecs:
+        __ff = inprecs.field
+        __hits = inprecs.hit_order
+
+        if len(__ff) == 0:
+            continue
+
+        __label = __hits[0]
+        __count = __ff[__label]
+
+        for __seq in range(1, len(__hits)):
+            __key = __hits[__seq]
+
+            __label = __template.format(acc=__label, val=__key)
+            __count = __template.format(acc=__count, val=__ff[__key])
+
+        print __label
+        print __count
