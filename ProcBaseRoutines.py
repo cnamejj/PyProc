@@ -94,26 +94,26 @@ def apply_string_check(rawdata, check, val):
     if check is WORDS_VAL:
         __hit = val == len(__trans.split())
 
-    if check is HAS_VAL:
+    elif check is HAS_VAL:
         __hit = __trans.find(val) != -1
 
-    if check is SUBWORD:
+    elif check is SUBWORD:
         __split = __trans.split()
         __hit = val < len(__split)
         if __hit:
             __trans = __split[val]
 
-    if check is PREFIX_VAL:
+    elif check is PREFIX_VAL:
         __hit = __trans.startswith(val)
         if __hit:
             __trans = __trans[len(val):]
 
-    if check is SUFFIX_VAL:
+    elif check is SUFFIX_VAL:
         __hit = __trans.endswith(val)
         if __hit:
             __trans = __trans[:-len(val)]
 
-    if check is BEFORE_VAL:
+    elif check is BEFORE_VAL:
         __split = __trans.partition(val)
         if len(__split) == 3:
             if len(__split[1]) > 0:
@@ -123,7 +123,7 @@ def apply_string_check(rawdata, check, val):
         else:
             __hit = False
 
-    if check is AFTER_VAL:
+    elif check is AFTER_VAL:
         __split = __trans.partition(val)
         if len(__split) != 3:
             __hit = False
