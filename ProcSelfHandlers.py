@@ -1521,7 +1521,7 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
     def extra_init(self, *opts):
         self.minfields = 2
         
-        self.__two_longs = ( PFC.F_EXEC_START, PFC.F_RUNTIME,
+        self.two_longs = ( PFC.F_EXEC_START, PFC.F_RUNTIME,
                 PFC.F_EXEC_RUNTIME, PFC.F_ST_WAIT_START, PFC.F_ST_SLEEP_START,
                 PFC.F_ST_BLOCK_START, PFC.F_ST_SLEEP_MAX, PFC.F_ST_BLOCK_MAX,
                 PFC.F_ST_EXEC_MAX, PFC.F_ST_SLICE_MAX, PFC.F_ST_WAIT_MAX,
@@ -1575,8 +1575,9 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
         PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_FORCED_MIGR,
                 PREFIX: "se.statistics.nr_forced_migrations", AFTER: ":",
                 CONV: long } )
+        # --- Need the trailing " " on the next one to disambiguate
         PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_WAKE, CONV: long,
-                PREFIX: "se.statistics.nr_wakeups", AFTER: ":"  } )
+                PREFIX: "se.statistics.nr_wakeups ", AFTER: ":"  } )
         PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_WAKE_SYNC, CONV: long,
                 PREFIX: "se.statistics.nr_wakeups_sync", AFTER: ":" } )
         PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_WAKE_MIGR, CONV: long,
@@ -1585,8 +1586,9 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
                 PREFIX: "se.statistics.nr_wakeups_local", AFTER: ":" } )
         PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_WAKE_REM, CONV: long,
                 PREFIX: "se.statistics.nr_wakeups_remote", AFTER: ":" } )
+        # --- Need the trailing " " on the next one to disambiguate
         PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_WAKE_AFF, CONV: long,
-                PREFIX: "se.statistics.nr_wakeups_affine", AFTER: ":" } )
+                PREFIX: "se.statistics.nr_wakeups_affine ", AFTER: ":" } )
         PBR.add_parse_rule(self, { NAME: PFC.F_ST_NR_WAKE_AFF_ATT,
                 PREFIX: "se.statistics.nr_wakeups_affine_attempts",
                 AFTER: ":", CONV: long } )
@@ -1623,12 +1625,12 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
         self.field[PFC.F_PID] = PBR.conv_by_rules(__mix, { NAME: PFC.F_PID,
                 AFTER: "(", BEFORE: ",", CONV: long } )
         self.field[PFC.F_THREADS] = PBR.conv_by_rules(__mix, {
-                NAME: PFC.F_PID, AFTER: "#threads: ", BEFORE: ")",
+                NAME: PFC.F_THREADS, AFTER: "#threads: ", BEFORE: ")",
                 CONV: long } )
         self.field[PFC.F_PROGRAM] = PBR.conv_by_rules(__mix, { 
-                NAME: PFC.F_PID, BEFORE: " (" } )
+                NAME: PFC.F_PROGRAM, BEFORE: " (" } )
 
-        for __key in self.__two_longs:
+        for __key in self.two_longs:
             self.field[__key] = PBR.hilo_pair_from_str(self.field[__key])
 
         return self.field
