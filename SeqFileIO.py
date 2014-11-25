@@ -193,10 +193,12 @@ class SeqFileIO:
                 raise StopIteration
             else:
                 handler.field[prot_field] = self.lineparts[0][0:-1]
+                handler.hit_order = dict()
 
                 for __varnum in range(0, self.linewords, 1):
                     __field_name = __pss_varlist[__varnum] 
                     handler.field[__field_name] = self.lineparts[__varnum]
+                    handler.hit_order[__varnum] = __field_name
 
         except StopIteration:
             self.lineparts = dict()
