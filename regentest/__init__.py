@@ -37,7 +37,7 @@ __all__ = ["net_tcp", "net_udp", "net_tcp6", "net_udp6", "net_unix",
     "sysvipc_msg", "sysvipc_sem", "root_pagetypeinfo", "root_schedstat",
     "self_io", "net_ip6_tables_targets", "net_ip6_tables_matches",
     "net_ip6_tables_names", "net_ip_tables_targets", "net_ip_tables_matches",
-    "net_ip_tables_names"]
+    "net_ip_tables_names", "self_sched"]
 
 # ---
 
