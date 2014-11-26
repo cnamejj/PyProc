@@ -17,6 +17,7 @@
         "name": "cbc(aes)",
         "priority": 100,
         "ref-count": 1,
+        "seedsize": 0,
         "selftest": "passed",
         "type": "blkcipher"
     },
@@ -35,6 +36,7 @@
         "name": "hmac(sha256)",
         "priority": 0,
         "ref-count": 2,
+        "seedsize": 0,
         "selftest": "passed",
         "type": "shash"
     },
@@ -53,6 +55,7 @@
         "name": "hmac(sha1)",
         "priority": 0,
         "ref-count": 2,
+        "seedsize": 0,
         "selftest": "passed",
         "type": "shash"
     },
@@ -71,6 +74,7 @@
         "name": "stdrng",
         "priority": 200,
         "ref-count": 1,
+        "seedsize": 0,
         "selftest": "passed",
         "type": "rng"
     },
@@ -89,6 +93,7 @@
         "name": "crc32c",
         "priority": 100,
         "ref-count": 1,
+        "seedsize": 0,
         "selftest": "passed",
         "type": "shash"
     },
@@ -107,6 +112,7 @@
         "name": "aes",
         "priority": 100,
         "ref-count": 1,
+        "seedsize": 0,
         "selftest": "passed",
         "type": "cipher"
     },
@@ -125,6 +131,7 @@
         "name": "sha256",
         "priority": 0,
         "ref-count": 3,
+        "seedsize": 0,
         "selftest": "passed",
         "type": "shash"
     },
@@ -143,6 +150,7 @@
         "name": "sha224",
         "priority": 0,
         "ref-count": 1,
+        "seedsize": 0,
         "selftest": "passed",
         "type": "shash"
     },
@@ -161,6 +169,7 @@
         "name": "sha1",
         "priority": 0,
         "ref-count": 3,
+        "seedsize": 0,
         "selftest": "passed",
         "type": "shash"
     },
@@ -179,6 +188,7 @@
         "name": "md5",
         "priority": 0,
         "ref-count": 1,
+        "seedsize": 0,
         "selftest": "passed",
         "type": "shash"
     },
@@ -197,6 +207,7 @@
         "name": "crc32c",
         "priority": 200,
         "ref-count": 1,
+        "seedsize": 0,
         "selftest": "passed",
         "type": "shash"
     }

@@ -1714,3 +1714,203 @@ Excerpts from that code:
 #                 (long long)(ktime_to_ns(hrtimer_get_softexpires(timer)) - now),
 #                 (long long)(ktime_to_ns(hrtimer_get_expires(timer)) - now));
 # }
+
+
+--- File: /proc/crypto
+
+source: crypto/proc.c
+--and--
+source: crypto/ablkcipher.c
+--and--
+source: crypto/aead.c
+--and--
+source: crypto/ahash.c
+--and--
+source: crypto/blkcipher.c
+--and--
+source: crypto/pcompress.c
+--and--
+source: crypto/rng.c
+--and--
+source: crypto/shash.c
+
+Excerpts from that code:
+
+# from: crypto/proc.c
+# ---
+# 
+# 
+# - - - from snippet-proc.c
+# 
+# static int c_show(struct seq_file *m, void *p)
+# {
+# 	struct crypto_alg *alg = list_entry(p, struct crypto_alg, cra_list);
+# 	
+# 	seq_printf(m, "name         : %s\n", alg->cra_name);
+# 	seq_printf(m, "driver       : %s\n", alg->cra_driver_name);
+# 	seq_printf(m, "module       : %s\n", module_name(alg->cra_module));
+# 	seq_printf(m, "priority     : %d\n", alg->cra_priority);
+# 	seq_printf(m, "refcnt       : %d\n", atomic_read(&alg->cra_refcnt));
+# 	seq_printf(m, "selftest     : %s\n",
+# 		   (alg->cra_flags & CRYPTO_ALG_TESTED) ?
+# 		   "passed" : "unknown");
+# 
+# 	if (alg->cra_flags & CRYPTO_ALG_LARVAL) {
+# 		seq_printf(m, "type         : larval\n");
+# 		seq_printf(m, "flags        : 0x%x\n", alg->cra_flags);
+# 		goto out;
+# 	}
+# 
+# 	if (alg->cra_type && alg->cra_type->show) {
+# 		alg->cra_type->show(m, alg);
+# 		goto out;
+# 	}
+# 	
+# 	switch (alg->cra_flags & (CRYPTO_ALG_TYPE_MASK | CRYPTO_ALG_LARVAL)) {
+# 	case CRYPTO_ALG_TYPE_CIPHER:
+# 		seq_printf(m, "type         : cipher\n");
+# 		seq_printf(m, "blocksize    : %u\n", alg->cra_blocksize);
+# 		seq_printf(m, "min keysize  : %u\n",
+# 					alg->cra_cipher.cia_min_keysize);
+# 		seq_printf(m, "max keysize  : %u\n",
+# 					alg->cra_cipher.cia_max_keysize);
+# 		break;
+# 	case CRYPTO_ALG_TYPE_COMPRESS:
+# 		seq_printf(m, "type         : compression\n");
+# 		break;
+# 	default:
+# 		seq_printf(m, "type         : unknown\n");
+# 		break;
+# 	}
+# 
+# out:
+# 	seq_putc(m, '\n');
+# 	return 0;
+# }
+#
+#
+# from: crypto/ablkcipher.c
+# ---
+# 
+# static void crypto_ablkcipher_show(struct seq_file *m, struct crypto_alg *alg)
+# {
+# 	struct ablkcipher_alg *ablkcipher = &alg->cra_ablkcipher;
+# 
+# 	seq_printf(m, "type         : ablkcipher\n");
+# 	seq_printf(m, "async        : %s\n", alg->cra_flags & CRYPTO_ALG_ASYNC ?
+# 					     "yes" : "no");
+# 	seq_printf(m, "blocksize    : %u\n", alg->cra_blocksize);
+# 	seq_printf(m, "min keysize  : %u\n", ablkcipher->min_keysize);
+# 	seq_printf(m, "max keysize  : %u\n", ablkcipher->max_keysize);
+# 	seq_printf(m, "ivsize       : %u\n", ablkcipher->ivsize);
+# 	seq_printf(m, "geniv        : %s\n", ablkcipher->geniv ?: "<default>");
+# }
+# 
+# ...later...
+# 
+# static void crypto_givcipher_show(struct seq_file *m, struct crypto_alg *alg)
+# {
+# 	struct ablkcipher_alg *ablkcipher = &alg->cra_ablkcipher;
+# 
+# 	seq_printf(m, "type         : givcipher\n");
+# 	seq_printf(m, "async        : %s\n", alg->cra_flags & CRYPTO_ALG_ASYNC ?
+# 					     "yes" : "no");
+# 	seq_printf(m, "blocksize    : %u\n", alg->cra_blocksize);
+# 	seq_printf(m, "min keysize  : %u\n", ablkcipher->min_keysize);
+# 	seq_printf(m, "max keysize  : %u\n", ablkcipher->max_keysize);
+# 	seq_printf(m, "ivsize       : %u\n", ablkcipher->ivsize);
+# 	seq_printf(m, "geniv        : %s\n", ablkcipher->geniv ?: "<built-in>");
+# }
+# 
+#
+# from: crypto/aead.c
+# ---
+# 
+# static void crypto_aead_show(struct seq_file *m, struct crypto_alg *alg)
+# {
+# 	struct aead_alg *aead = &alg->cra_aead;
+# 
+# 	seq_printf(m, "type         : aead\n");
+# 	seq_printf(m, "async        : %s\n", alg->cra_flags & CRYPTO_ALG_ASYNC ?
+# 					     "yes" : "no");
+# 	seq_printf(m, "blocksize    : %u\n", alg->cra_blocksize);
+# 	seq_printf(m, "ivsize       : %u\n", aead->ivsize);
+# 	seq_printf(m, "maxauthsize  : %u\n", aead->maxauthsize);
+# 	seq_printf(m, "geniv        : %s\n", aead->geniv ?: "<built-in>");
+# }
+# 
+# ...later...
+# 
+# static void crypto_nivaead_show(struct seq_file *m, struct crypto_alg *alg)
+# {
+# 	struct aead_alg *aead = &alg->cra_aead;
+# 
+# 	seq_printf(m, "type         : nivaead\n");
+# 	seq_printf(m, "async        : %s\n", alg->cra_flags & CRYPTO_ALG_ASYNC ?
+# 					     "yes" : "no");
+# 	seq_printf(m, "blocksize    : %u\n", alg->cra_blocksize);
+# 	seq_printf(m, "ivsize       : %u\n", aead->ivsize);
+# 	seq_printf(m, "maxauthsize  : %u\n", aead->maxauthsize);
+# 	seq_printf(m, "geniv        : %s\n", aead->geniv);
+# }
+#
+#
+# from: crypto/ahash.c
+# ---
+# 
+# static void crypto_ahash_show(struct seq_file *m, struct crypto_alg *alg)
+# {
+# 	seq_printf(m, "type         : ahash\n");
+# 	seq_printf(m, "async        : %s\n", alg->cra_flags & CRYPTO_ALG_ASYNC ?
+# 					     "yes" : "no");
+# 	seq_printf(m, "blocksize    : %u\n", alg->cra_blocksize);
+# 	seq_printf(m, "digestsize   : %u\n",
+# 		   __crypto_hash_alg_common(alg)->digestsize);
+# }
+#
+#
+# from: crypto/blkcipher.c
+# ---
+# 
+# static void crypto_blkcipher_show(struct seq_file *m, struct crypto_alg *alg)
+# {
+# 	seq_printf(m, "type         : blkcipher\n");
+# 	seq_printf(m, "blocksize    : %u\n", alg->cra_blocksize);
+# 	seq_printf(m, "min keysize  : %u\n", alg->cra_blkcipher.min_keysize);
+# 	seq_printf(m, "max keysize  : %u\n", alg->cra_blkcipher.max_keysize);
+# 	seq_printf(m, "ivsize       : %u\n", alg->cra_blkcipher.ivsize);
+# 	seq_printf(m, "geniv        : %s\n", alg->cra_blkcipher.geniv ?:
+# 					     "<default>");
+# }
+#
+#
+# from: crypto/pcompress.c
+# ---
+# 
+# static void crypto_pcomp_show(struct seq_file *m, struct crypto_alg *alg)
+# {
+# 	seq_printf(m, "type         : pcomp\n");
+# }
+#
+#
+# from: crypto/rng.c
+# ---
+# 
+# static void crypto_rng_show(struct seq_file *m, struct crypto_alg *alg)
+# {
+# 	seq_printf(m, "type         : rng\n");
+# 	seq_printf(m, "seedsize     : %u\n", alg->cra_rng.seedsize);
+# }
+#
+#
+# from: crypto/shash.c
+# ---
+#
+# static void crypto_shash_show(struct seq_file *m, struct crypto_alg *alg)
+# {
+# 	struct shash_alg *salg = __crypto_shash_alg(alg);
+# 
+# 	seq_printf(m, "type         : shash\n");
+# 	seq_printf(m, "blocksize    : %u\n", alg->cra_blocksize);
+# 	seq_printf(m, "digestsize   : %u\n", salg->digestsize);
+# }

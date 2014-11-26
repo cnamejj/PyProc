@@ -2953,6 +2953,8 @@ class ProcRootCRYPTO(PBR.TaggedMultiLineFile):
                 NAME: PFC.F_BLOCKSIZE, CONV: long }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "type", AFTER: ": ",
                 NAME: PFC.F_TYPE }, __rpl )
+        PBR.add_parse_rule(self, { PREFIX: "seedsize", AFTER: ": ",
+                NAME: PFC.F_SEEDSIZE, CONV: long }, __rpl )
 
         self.add_eor_rule( "", { WORDS: 0, CONV: str, ERRVAL: "continue" } )
         return

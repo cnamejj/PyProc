@@ -850,6 +850,7 @@ F_ASYNC = "async"
 F_GENIV = "geniv"
 F_IVSIZE = "ivsize"
 F_BLOCKSIZE = "blocksize"
+F_SEEDSIZE = "seedsize"
 
 # -- added for /proc/self/autogroup
 F_ID = "id"
