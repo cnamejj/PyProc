@@ -16,8 +16,8 @@ def re_root_crypto(inprecs):
 
     """Iterate through parsed records and re-generate data file"""
 
-    __strtemp = "{pad:<12s} : {val:s}"
-    __longtemp = "{pad:<12s} : {val:d}"
+    __strtemp = "{parm:<12s} : {val:s}"
+    __longtemp = "{parm:<12s} : {val:d}"
 
     __template = { str: __strtemp, long: __longtemp }
 
@@ -45,7 +45,8 @@ def re_root_crypto(inprecs):
             __name = __hitlist[__seq]
             __vt = __conv[__name]
 
-            print __template[__vt].format(pad=__prefix[__name], val=__ff[__name])
+            print __template[__vt].format(parm=__prefix[__name],
+                    val=__ff[__name])
 
         print ""
 
