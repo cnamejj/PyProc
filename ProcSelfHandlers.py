@@ -2227,10 +2227,15 @@ class ProcSelfENVIRON(PBR.SingleTextField):
 
     def extra_next(self, sio):
 
+        self.hit_order = dict()
+        __seq = 0
+
         __nvps = sio.buff.split("\0")
         for __ref in __nvps:
             __key = __ref.partition("=")[0]
             if __key != __ref:
+                self.hit_order[__seq] = __key
+                __seq += 1
                 __val = __ref.partition("=")[2]
                 self.field[__key] = __val
 
