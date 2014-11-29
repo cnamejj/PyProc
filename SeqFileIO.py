@@ -24,6 +24,7 @@ class SeqFileIO:
         self.is_open = False
         self.min_words = 0
         self.skip_line = ""
+        self.raw_lines_read = 0
 
         # For pylint only...
         self.pnt_fd = file("/dev/null", "r")
@@ -75,6 +76,7 @@ class SeqFileIO:
         else:
             try:
                 self.buff = self.pnt_fd.readline()
+                self.raw_lines_read += 1
             except IOError as err:
                 self.pnt_fd.close()
                 self.is_open = False
