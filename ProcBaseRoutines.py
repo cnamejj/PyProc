@@ -555,14 +555,14 @@ class FixedWhitespaceDelimRecs(object):
                 __hit_rule[__rulenum] = 1
                 __off = __cr[FIELD_NUMBER]
                 __name = __cr[FIELD_NAME]
-                self.fixpos_hits[__fix_seq] = __name
-                __fix_seq += 1
 
                 if __off >= sio.linewords:
                     self.field[__name] = error_by_rule(__cr)
                 else:
 #                    print "dbg:: nx/fixed: v({val}) r({rule})".format(
 #                            val=sio.lineparts[__off], rule=str(__cr))
+                    self.fixpos_hits[__fix_seq] = __name
+                    __fix_seq += 1
                     self.field[__name] = conv_by_rules(sio.lineparts[__off],
                                              __cr, __ord)
 
