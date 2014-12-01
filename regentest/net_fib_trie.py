@@ -39,21 +39,40 @@ def print_node_and_dive(lev, node):
     handle them before returning.
     """
 
+    __node_and_leaf = (PFC.F_NODE, PFC.F_FIB_LEAF)
+
     __pad = " " * (lev*3)
     print __NODETEMP.format(pad=__pad[1:], net=node[PFC.F_NETWORK],
        mask=node[PFC.F_NETMASK], bits=node[PFC.F_FIB_BITS],
        full=node[PFC.F_FULL_CHILDREN], empty=node[PFC.F_EMPTY_CHILDREN])
  
     lev += 1
+    __pick = ""
+    __ceil = "255.255.255.256"
+    __done = False
 
-    if node.has_key(PFC.F_NODE):
-        for __seq in range(0, len(node[PFC.F_NODE])):
+    while not __done:
+        __floor = __pick
+        __pick = __ceil
+        __pick_ref = ("", 0)
+
+        for __sub in __node_and_leaf:
+            if node.has_key(__sub):
+                for __seq in node[__sub]:
+                    __net = node[__sub][__seq][PFC.F_NETWORK]
+                    if __floor < __net and __net < __pick:
+                        __pick = __net
+                        __pick_ref = (__sub, __seq)
+
+        __sub, __seq = __pick_ref
+
+        if __sub == PFC.F_NODE:
             print_node_and_dive(lev, node[PFC.F_NODE][__seq])
-
-    if node.has_key(PFC.F_FIB_LEAF):
-        for __seq in range(0, len(node[PFC.F_FIB_LEAF])):
+        elif __sub == PFC.F_FIB_LEAF:
             print_leaf(lev, node[PFC.F_FIB_LEAF][__seq])
-    
+        else:
+            __done = True
+
 # ---
 
 def re_net_fib_trie(inprecs):
