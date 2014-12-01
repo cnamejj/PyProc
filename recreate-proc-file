@@ -7,6 +7,9 @@ PREF2="/proc/net/"
 PREF3="/proc/self/"
 PREF4="/proc/sysvipc/"
 
+PROBLEM_FILE1="/proc/self/io"
+PROBLEM_FILE2="/proc/$$/io"
+
 # ---
 
 err_exit() \
@@ -77,8 +80,20 @@ regen="${TEMPDIR}${inp_base}.regen"
 
 chmod 644 "${inpcopy}" >/dev/null 2>&1
 
-cat "${inp}" >"${inpcopy}"
-rc=$?
+if [ "${inp}" = "${PROBLEM_FILE1}" -o  "${inp}" = "${PROBLEM_FILE2}" ]
+then
+#	echo "**Warning** Trying to copy '${inp}' without getting trailing garbage..."
+	inp_data="$(cat "${inp}")"
+	rc=$?
+	if [ ${rc} -eq 0 ]
+	then
+		echo "${inp_data}" >"${inpcopy}"
+		rc=$?
+	fi
+else
+	cat "${inp}" >"${inpcopy}"
+	rc=$?
+fi
 
 if [ ${rc} -ne 0 ]
 then
