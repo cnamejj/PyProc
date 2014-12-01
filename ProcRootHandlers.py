@@ -1331,9 +1331,12 @@ class ProcRootVERSION(PBR.FixedWhitespaceDelimRecs):
 
     def extra_init(self, *opts):
         self.minfields = 3
-        self.__fixed_banner_prefix = "Linux"
-        self.__field_delim = ") "
 
+#        PBR.add_parse_rule(self, { NAME: PFC.F_SYSNAME, BEFORE: " version " } )
+#        PBR.add_parse_rule(self, { NAME: PFC.F_RELEASE, AFTER: " version ", BEFORE: " (" } )
+#        PBR.add_parse_rule(self, { NAME: PFC.F_COMP_BY, AFTER: " (", BEFORE: "@" } )
+#        PBR.add_parse_rule(self, { NAME: PFC.F_COMP_HOST, AFTER: "@", BEFORE: ") " } )
+#
         self.full_string = ""
         self.sysname = ""
         self.release = ""
@@ -1350,20 +1353,29 @@ class ProcRootVERSION(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_VERSION_STRING] = ""
             self.field[PFC.F_SYSNAME] = ""
             self.field[PFC.F_RELEASE] = ""
+            self.field[PFC.F_COMP_BY] = ""
+            self.field[PFC.F_COMP_HOST] = ""
+            self.field[PFC.F_COMPILER] = ""
             self.field[PFC.F_VERSION] = ""
 
         else:
             self.field[PFC.F_VERSION_STRING] = " ".join(sio.lineparts)
-            if sio.linewords < 6 or \
-                    sio.get_word(0) != self.__fixed_banner_prefix:
+            if sio.linewords < 6:
                 self.field[PFC.F_SYSNAME] = ""
                 self.field[PFC.F_RELEASE] = ""
+                self.field[PFC.F_COMP_BY] = ""
+                self.field[PFC.F_COMP_HOST] = ""
+                self.field[PFC.F_COMPILER] = ""
                 self.field[PFC.F_VERSION] = ""
             else:
-                self.field[PFC.F_SYSNAME] = sio.get_word(0)
-                self.field[PFC.F_RELEASE] = sio.get_word(2)
-                __split = " ".join(sio.lineparts).split(self.__field_delim)
-                self.field[PFC.F_VERSION] = __split[-1:][0]
+                __line = sio.buff.rstrip("\n")
+                self.field[PFC.F_SYSNAME] = PBR.conv_by_rules(__line, { BEFORE: " version " } )
+                self.field[PFC.F_RELEASE] = PBR.conv_by_rules(__line, { AFTER: " version ", BEFORE: " (" } )
+                self.field[PFC.F_COMP_BY] = PBR.conv_by_rules(__line, { AFTER: " (", BEFORE: "@" } )
+                self.field[PFC.F_COMP_HOST] = PBR.conv_by_rules(__line, { AFTER: "@", BEFORE: ") " } )
+                __dbsp = "(".join(__line.split("(")[2:]).split(")")
+                self.field[PFC.F_COMPILER] = ")".join(__dbsp[:-1])
+                self.field[PFC.F_VERSION] = __dbsp[-1].lstrip(" ")
 
         self.full_string = self.field[PFC.F_VERSION_STRING]
         self.sysname = self.field[PFC.F_SYSNAME]

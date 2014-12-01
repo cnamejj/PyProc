@@ -3,6 +3,9 @@
         "source": "TEST/data/pr/version"
     },
     "1": {
+        "compile-by": "buildd",
+        "compile-host": "crested",
+        "compiler": "gcc version 4.6.3 (Ubuntu/Linaro 4.6.3-1ubuntu5) ",
         "release": "3.2.0-24-generic",
         "sysname": "Linux",
         "version": "#39-Ubuntu SMP Mon May 21 16:52:17 UTC 2012",
