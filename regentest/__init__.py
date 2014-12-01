@@ -39,7 +39,7 @@ __all__ = ["net_tcp", "net_udp", "net_tcp6", "net_udp6", "net_unix",
     "net_ip6_tables_names", "net_ip_tables_targets", "net_ip_tables_matches",
     "net_ip_tables_names", "self_sched", "net_snmp", "net_netstat",
     "net_fib_trie", "root_crypto", "self_environ", "root_slabinfo",
-    "root_version"]
+    "root_version", "root_latency_stats"]
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 
