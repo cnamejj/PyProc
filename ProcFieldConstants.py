@@ -499,6 +499,7 @@ F_PAGES_TOTAL = "total-pages"
 F_PAGES_NOMISS_KB = "non-miss-pages-kb"
 F_BITMAP_CHUNK = "bitmap-chunksize"
 F_FILEPATH = "filepath"
+F_BITMAP_CHUNK_TUNITS = "bitmap-chunk-text-units"
 
 # -- added for "/proc/self/limits"
 F_SOFT_LIMIT = "soft-limit"

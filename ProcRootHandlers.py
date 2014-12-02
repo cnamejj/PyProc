@@ -1369,10 +1369,14 @@ class ProcRootVERSION(PBR.FixedWhitespaceDelimRecs):
                 self.field[PFC.F_VERSION] = ""
             else:
                 __line = sio.buff.rstrip("\n")
-                self.field[PFC.F_SYSNAME] = PBR.conv_by_rules(__line, { BEFORE: " version " } )
-                self.field[PFC.F_RELEASE] = PBR.conv_by_rules(__line, { AFTER: " version ", BEFORE: " (" } )
-                self.field[PFC.F_COMP_BY] = PBR.conv_by_rules(__line, { AFTER: " (", BEFORE: "@" } )
-                self.field[PFC.F_COMP_HOST] = PBR.conv_by_rules(__line, { AFTER: "@", BEFORE: ") " } )
+                self.field[PFC.F_SYSNAME] = PBR.conv_by_rules(__line,
+                        { BEFORE: " version " } )
+                self.field[PFC.F_RELEASE] = PBR.conv_by_rules(__line,
+                        { AFTER: " version ", BEFORE: " (" } )
+                self.field[PFC.F_COMP_BY] = PBR.conv_by_rules(__line,
+                        { AFTER: " (", BEFORE: "@" } )
+                self.field[PFC.F_COMP_HOST] = PBR.conv_by_rules(__line,
+                        { AFTER: "@", BEFORE: ") " } )
                 __dbsp = "(".join(__line.split("(")[2:]).split(")")
                 self.field[PFC.F_COMPILER] = ")".join(__dbsp[:-1])
                 self.field[PFC.F_VERSION] = __dbsp[-1].lstrip(" ")
@@ -1903,6 +1907,10 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
         self.nomiss_pages_kb = 0
         self.bitmap_chunk = 0
         self.bitmap_file = ""
+        self.parse_map = dict()
+        self.parse_order = dict()
+        self.parse_seq = 0
+        self.partition_order = []
 
         self.__rec_personality = "Personalities"
         self.__rec_unused = "unused"
@@ -1941,9 +1949,20 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
         self.__k_suff = "K"
         return
 
+    def append_parse_res(self, name):
+        """Record order in which fields are parsed"""
+
+        if not self.parse_map.has_key(name):
+            self.parse_map[name] = self.parse_seq
+            self.parse_order[self.parse_seq] = name
+            self.parse_seq += 1
+
+        return
+
     def parse_personality_record(self, sio):
         """Parse list of disk personalities on the system"""
 
+        self.append_parse_res(PFC.F_PERSONALITIES)
         if sio.linewords > 1:
             self.field[PFC.F_PERSONALITIES] = sio.lineparts[2:]
         else:
@@ -1953,6 +1972,7 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
     def parse_unused_record(self, sio):
         """Parse unused device records"""
 
+        self.append_parse_res(PFC.F_DEVICE_LIST)
         if sio.linewords > 1:
             self.field[PFC.F_DEVICE_LIST] = sio.lineparts[2:]
         else:
@@ -1963,23 +1983,30 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
     def parse_bitmap_subrec(self, sio):
         """Parse bitmap subrecord"""
 
+        self.append_parse_res(PFC.F_PAGES_NOMISS)
         self.field[PFC.F_PAGES_NOMISS] = PBR.conv_by_rules(sio.get_word(1),
                 { CONV: long, BEFORE: self.__num_split } )
+        self.append_parse_res(PFC.F_PAGES_TOTAL)
         self.field[PFC.F_PAGES_TOTAL] = PBR.conv_by_rules(sio.get_word(1),
                 { CONV: long, AFTER: self.__num_split } )
 
+        self.append_parse_res(PFC.F_PAGES_NOMISS_KB)
         self.field[PFC.F_PAGES_NOMISS_KB] = PBR.conv_by_rules(
                 sio.get_word(3), { CONV: long, SUFFIX: self.__pages_suff,
                 PREFIX: self.__pages_pref } )
 
+        self.append_parse_res(PFC.F_BITMAP_CHUNK)
+        self.append_parse_res(PFC.F_BITMAP_CHUNK_TUNITS)
         __curr = sio.get_word(4)
         if __curr.endswith(self.__kb_suff):
             self.field[PFC.F_BITMAP_CHUNK] = PBR.conv_by_rules(__curr,
                     { CONV: long, SUFFIX: self.__kb_suff } )
             self.field[PFC.F_BITMAP_CHUNK] *= 1024
+            self.field[PFC.F_BITMAP_CHUNK_TUNITS] = self.__kb_suff
         else:
             self.field[PFC.F_BITMAP_CHUNK] = PBR.conv_by_rules(__curr,
                     { CONV: long, SUFFIX: self.__b_suff } )
+            self.field[PFC.F_BITMAP_CHUNK_TUNITS] = self.__b_suff
 
         if sio.linewords >= 7:
             __curr = " ".join(sio.lineparts[6:])
@@ -1988,94 +2015,117 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
 
             if __curr[:1] == " ":
                 __curr = __curr[1:]
+            self.append_parse_res(PFC.F_FILEPATH)
             self.field[PFC.F_FILEPATH] = __curr
 
         return
+
+# Ex: resync=DELAYED
+    def parse_resync_subrec(self, sio):
+        """Parse a summary subrec with just a resync status"""
+
+        __curr = sio.get_word(0)
+
+        self.append_parse_res(PFC.F_RESYNC_STAT)
+        self.field[PFC.F_RESYNC_STAT] = __curr.partition(self.__resync_delim)[2]
 
 # Ex: [===>.................]  recovery = 19.1% (299892800/1564531200) finish=84.0min speed=250770K/sec
     def parse_rebuild_subrec(self, sio):
         """Parse rebuild status indicator info"""
 
         __curr = sio.get_word(0)
-        if __curr.startswith(self.__resync_flag):
-            self.field[PFC.F_RESYNC_STAT] = \
-                    __curr.partition(self.__resync_delim)[2]
+ 
+        self.append_parse_res(PFC.F_REBUILD_PROG)
+        self.field[PFC.F_REBUILD_PROG] = sio.get_word(0)
+        self.append_parse_res(PFC.F_REBUILD_ACTION)
+        self.field[PFC.F_REBUILD_ACTION] = sio.get_word(1)
+
+        __off = 2
+        if sio.get_word(__off) == self.__value_pref:
+            __off += 1
+            __curr = sio.get_word(__off)
         else:
-            self.field[PFC.F_REBUILD_PROG] = sio.get_word(0)
-            self.field[PFC.F_REBUILD_ACTION] = sio.get_word(1)
+            __curr = sio.get_word(__off)[1:]
+        self.append_parse_res(PFC.F_PERCENT)
+        self.field[PFC.F_PERCENT] = PBR.conv_by_rules(__curr,
+                { CONV: float, SUFFIX: self.__pc_end } )
 
-            __off = 2
-            if sio.get_word(__off) == self.__value_pref:
-                __off += 1
-                __curr = sio.get_word(__off)
-            else:
-                __curr = sio.get_word(__off)[1:]
-            self.field[PFC.F_PERCENT] = PBR.conv_by_rules(__curr,
-                    { CONV: float, SUFFIX: self.__pc_end } )
+        self.append_parse_res(PFC.F_REBUILD_DONE)
+        __off += 1
+        self.field[PFC.F_REBUILD_DONE] = PBR.conv_by_rules(
+                sio.get_word(__off),
+                { CONV: long, PREFIX: self.__open_npair,
+                  BEFORE: self.__num_split } )
+        self.append_parse_res(PFC.F_REBUILD_TOTAL)
+        self.field[PFC.F_REBUILD_TOTAL] = PBR.conv_by_rules(
+                sio.get_word(__off),
+                { CONV: long, SUFFIX: self.__close_npair,
+                  AFTER: self.__num_split } )
 
-            __off += 1
-            self.field[PFC.F_REBUILD_DONE] = PBR.conv_by_rules(
-                    sio.get_word(__off),
-                    { CONV: long, PREFIX: self.__open_npair,
-                      BEFORE: self.__num_split } )
-            self.field[PFC.F_REBUILD_TOTAL] = PBR.conv_by_rules(
-                    sio.get_word(__off),
-                    { CONV: long, SUFFIX: self.__close_npair,
-                      AFTER: self.__num_split } )
+        self.append_parse_res(PFC.F_FIN_TIME)
+        __off += 1
+        self.field[PFC.F_FIN_TIME] = PBR.conv_by_rules(
+                sio.get_word(__off), { CONV: float,
+                AFTER: self.__value_pref,
+                SUFFIX: self.__finish_suff } )
 
-            __off += 1
-            self.field[PFC.F_FIN_TIME] = PBR.conv_by_rules(
-                    sio.get_word(__off), { CONV: float,
-                    AFTER: self.__value_pref,
-                    SUFFIX: self.__finish_suff } )
-
-            __off += 1
-            self.field[PFC.F_SPEED] = PBR.conv_by_rules(sio.get_word(__off),
-                    { CONV: long, AFTER: self.__value_pref,
-                    SUFFIX: self.__speed_suff } )
+        self.append_parse_res(PFC.F_SPEED)
+        __off += 1
+        self.field[PFC.F_SPEED] = PBR.conv_by_rules(sio.get_word(__off),
+                { CONV: long, AFTER: self.__value_pref,
+                SUFFIX: self.__speed_suff } )
         return
 
 # Ex:   1564531200 blocks super 1.1 2 near-copies [2/1] [_U]
     def parse_blocks_subrec(self, sio):
         """Parse device specific subrecord with block level info"""
 
+        self.append_parse_res(PFC.F_BLOCKS)
         self.field[PFC.F_BLOCKS] = PBR.conv_by_rules(sio.get_word(0),
                 { CONV: long } )
         __off = 2
 
         if sio.get_word(__off) == self.__super_flag:
+            self.append_parse_res(PFC.F_SUPER)
             self.field[PFC.F_SUPER] = sio.get_word(__off + 1)
             __off += 2
 
         if sio.get_word(__off + 1) == self.__chunk_flag:
+            self.append_parse_res(PFC.F_CHUNK)
             self.field[PFC.F_CHUNK] = PBR.conv_by_rules(sio.get_word(__off),
                     { CONV: long, SUFFIX: self.__k_suff } )
             __off += 2
 
         if sio.get_word(__off + 1) == self.__near_copy_flag:
+            self.append_parse_res(PFC.F_NEAR_COPY)
             self.field[PFC.F_NEAR_COPY] = PBR.conv_by_rules(
                     sio.get_word(__off), { CONV: long } )
             __off += 2
 
         if sio.get_word(__off + 1) == self.__offset_copy_flag:
+            self.append_parse_res(PFC.F_OFFSET_COPY)
             self.field[PFC.F_OFFSET_COPY] = PBR.conv_by_rules(
                     sio.get_word(__off), { CONV: long } )
             __off += 2
 
         if sio.get_word(__off + 1) == self.__far_copy_flag:
+            self.append_parse_res(PFC.F_FAR_COPY)
             self.field[PFC.F_FAR_COPY] = PBR.conv_by_rules(
                     sio.get_word(__off), { CONV: long } )
             __off += 2
 
+        self.append_parse_res(PFC.F_TOTAL_PARTS)
         __curr = sio.get_word(__off)
         self.field[PFC.F_TOTAL_PARTS] = PBR.conv_by_rules(__curr,
                 { CONV: long, PREFIX: self.__open_list,
                   SUFFIX: self.__close_list,
                   BEFORE: self.__num_split } )
+        self.append_parse_res(PFC.F_ACTIVE_PARTS)
         self.field[PFC.F_ACTIVE_PARTS] = PBR.conv_by_rules(__curr,
                 { CONV: long, PREFIX: self.__open_list,
                   SUFFIX: self.__close_list, AFTER: self.__num_split } )
 
+        self.append_parse_res(PFC.F_PART_USEMAP)
         __off += 1
         __curr = sio.get_word(__off)
         if __curr[1:2] == self.__used_y or __curr[1:2] == self.__used_n:
@@ -2093,12 +2143,14 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
         __wrmostly = dict()
         __faulty = dict()
         __spare = dict()
+        __order = []
 
         for __devinfo in __dplist:
             __bits = __devinfo.split(self.__info_delim)
             __split = __bits[0].partition(self.__dev_delim)
             __pnum = long(__split[2][:-1])
 
+            __order.append(__pnum)
             __partmap[__pnum] = __split[0]
             __wrmostly[__pnum] = 0
             __faulty[__pnum] = 0
@@ -2113,23 +2165,32 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
                 elif __flag == self.__spare_flag:
                     __spare[__pnum] = 1
 
+        self.partition_order = __order
+        self.append_parse_res(PFC.F_PARTITION_LIST)
         self.field[PFC.F_PARTITION_LIST] = __partmap
+        self.append_parse_res(PFC.F_WRMOSTLY_LIST)
         self.field[PFC.F_WRMOSTLY_LIST] = __wrmostly
+        self.append_parse_res(PFC.F_FAULTY_LIST)
         self.field[PFC.F_FAULTY_LIST] = __faulty
+        self.append_parse_res(PFC.F_SPARE_LIST)
         self.field[PFC.F_SPARE_LIST] = __spare
         return
 
     def parse_mddev_record(self, sio):
         """Parse device specific record"""
 
+        self.append_parse_res(PFC.F_ACTIVE_STAT)
         self.field[PFC.F_ACTIVE_STAT] = sio.get_word(2)
         __off = 3
         if sio.get_word(__off) == self.__readonly_flag:
+            self.append_parse_res(PFC.F_READONLY)
             self.field[PFC.F_READONLY] = 1
             __off += 1
         if sio.get_word(__off) == self.__autoreadonly_flag:
+            self.append_parse_res(PFC.F_READONLY)
             self.field[PFC.F_READONLY] = 2
             __off += 1
+        self.append_parse_res(PFC.F_PERS_NAME)
         self.field[PFC.F_PERS_NAME] = sio.get_word(__off)
         __off += 1
         self.parse_partition_list(" ".join(sio.lineparts[__off:]))
@@ -2143,6 +2204,8 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
                     self.parse_blocks_subrec(sio)
                 elif __keyfield[:1] == self.__open_list:
                     self.parse_rebuild_subrec(sio)
+                elif __keyfield.startswith(self.__resync_flag):
+                    self.parse_resync_subrec(sio)
                 elif __keyfield == self.__bitmap_flag:
                     self.parse_bitmap_subrec(sio)
                 sio.read_line()
@@ -2204,9 +2267,14 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
         self.field[PFC.F_BITMAP_CHUNK] = 0
         self.field[PFC.F_FILEPATH] = ""
 
+        self.parse_order = dict()
+        self.parse_map = dict()
+        self.parse_seq = 0
+
         if sio.buff != "":
             __rec = sio.get_word(0)
             self.field[PFC.F_REC_TYPE] = __rec
+            self.append_parse_res(PFC.F_REC_TYPE)
 
             if __rec == self.__rec_personality:
                 self.parse_personality_record(sio)
@@ -3278,8 +3346,10 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
             __tail = "{proc:s}{rest:s}".format(proc=__proc, rest=__split[2])
             self.field[PFC.F_PROC_NAME] = __tail[:16].rstrip()
             __tail = __tail[17:]
-            self.field[PFC.F_INIT_ROUT] = PBR.conv_by_rules(__tail, { BEFORE: " " } )
-            self.field[PFC.F_CBACK_ROUT] = PBR.conv_by_rules(__tail, { AFTER: "(", BEFORE: ")" } )
+            self.field[PFC.F_INIT_ROUT] = PBR.conv_by_rules(__tail, 
+                    { BEFORE: " " } )
+            self.field[PFC.F_CBACK_ROUT] = PBR.conv_by_rules(__tail,
+                    { AFTER: "(", BEFORE: ")" } )
 
         self.field[PFC.F_VERSION] = self.__hold[PFC.F_VERSION]
         self.field[PFC.F_SAMPLE_PERIOD] = self.__hold[PFC.F_SAMPLE_PERIOD]
