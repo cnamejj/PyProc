@@ -2262,7 +2262,8 @@ class ProcNetTCP6(PBR.FixedWhitespaceDelimRecs):
         self.skipped = "sl"
         self.ipconv = IPAddressConv
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_BUCKET, CONV: long, BEFORE: ":" } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_BUCKET, CONV: long,
+                BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXIP,
                 BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXPORT,
@@ -2413,7 +2414,8 @@ class ProcNetTCP(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 12
         self.skipped = "sl"
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_BUCKET, CONV: long, BEFORE: ":" } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_BUCKET, CONV: long,
+                BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXIP,
                 BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXPORT,
@@ -2558,7 +2560,8 @@ class ProcNetUDP6(PBR.FixedWhitespaceDelimRecs):
         self.skipped = "sl"
         self.ipconv = IPAddressConv
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_BUCKET, CONV: long, BEFORE: ":" } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_BUCKET, CONV: long,
+                BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXIP,
                 BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXPORT,
@@ -2678,7 +2681,8 @@ class ProcNetUDP(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 12
         self.skipped = "sl"
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_BUCKET, CONV: long, BEFORE: ":" } )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_BUCKET, CONV: long,
+                BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXIP,
                 BEFORE: ":" } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ORIG_HEXPORT,

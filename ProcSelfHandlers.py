@@ -2225,6 +2225,9 @@ class ProcSelfENVIRON(PBR.SingleTextField):
 # no LF ('\n') on the end.
 #
 
+    def extra_init(self, *opts):
+        self.hit_order = dict()
+
     def extra_next(self, sio):
 
         self.hit_order = dict()
