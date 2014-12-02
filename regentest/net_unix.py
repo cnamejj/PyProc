@@ -15,7 +15,7 @@ def re_net_unix(inprecs):
 
     __head = "Num       RefCount Protocol Flags    Type St Inode Path"
 
-    __template = "{num:016X}: {refct:08X} {prot:08X} {flags:08x} {typ:04X} \
+    __template = "{num:016x}: {refct:08X} {prot:08X} {flags:08x} {typ:04X} \
 {state:02X} {inode:5d}{path}"
 
     print __head

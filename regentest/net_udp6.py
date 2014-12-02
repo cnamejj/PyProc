@@ -19,7 +19,7 @@ drops"
 
     __template = "{seq:5d}: {lip}:{lport:04X} {rip}:{rport:04X} \
 {state} {txq:08X}:{rxq:08X} {tr:02X}:{when:08X} {retrans:08X} \
-{uid:5d} {tout:8d} {inode:d} {refcount:d} {ptr:016X} {drops:d}"
+{uid:5d} {tout:8d} {inode:d} {refcount:d} {ptr:016x} {drops:d}"
 
     print __head
 

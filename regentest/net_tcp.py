@@ -22,7 +22,7 @@ tm->when retrnsmt   uid  timeout inode"
 
     __template = "{seq:4d}: {lip}:{lport:04X} {rip}:{rport:04X} \
 {state} {txq:08X}:{rxq:08X} {tr:02X}:{when:08X} {retrans:08X} \
-{uid:5d} {tout:8d} {inode:d} {refcount:d} {ptr:016X}"
+{uid:5d} {tout:8d} {inode:d} {refcount:d} {ptr:016x}"
 
     __extras = "{line} {ret_tout:d} {ack_tout:d} {qop:d} {cong:d} {sstart:}"
 

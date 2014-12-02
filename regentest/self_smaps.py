@@ -41,6 +41,8 @@ def re_self_smaps(inprecs):
 
     __detailtemp = "{label:<15s} {val:8d} kB"
 
+    __vmflagstemp = "VmFlags: {flags:s}"
+
     for __hilit in inprecs:
         __ff = inprecs.field
 
@@ -57,6 +59,9 @@ def re_self_smaps(inprecs):
 
         for __key in __detailorder:
             print __detailtemp.format(label=__lab[__key], val=__ff[__key])
+
+        if __ff[PFC.F_VMFLAGS] != "":
+            print __vmflagstemp.format(flags=__ff[PFC.F_VMFLAGS])
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
     

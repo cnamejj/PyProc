@@ -24,8 +24,8 @@ def re_root_dma(inprecs):
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         print __template.format(chan=__ff[PFC.F_CHANNEL],
-                devname=__ff[PFC.F_DEVICE_NAME]
-                )
+                devname=__ff[PFC.F_DEVICE_NAME])
+        __nrecs += 1
 
     if __nrecs == 0:
         print __norectemp

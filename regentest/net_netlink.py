@@ -16,7 +16,7 @@ def re_net_netlink(inprecs):
     __head = "sk       Eth Pid    Groups   Rmem     Wmem     Dump     \
 Locks     Drops     Inode"
 
-    __template = "{sk:016X} {prot:<3d} {pid:<6d} {gr:08x} {rmem:<8d} \
+    __template = "{sk:016x} {prot:<3d} {pid:<6d} {gr:08x} {rmem:<8d} \
 {wmem:<8d} {dump:016X} {lock:<8d} {drop:<8d} {inode:<8d}"
 
     print __head

@@ -30,6 +30,6 @@ cgid      otime      ctime"
                 mode=__ff[PFC.F_MODE], sems=__ff[PFC.F_SEMS], 
                 ow_uid=__ff[PFC.F_OW_UID], ow_gid=__ff[PFC.F_OW_GID],
                 cr_uid=__ff[PFC.F_CR_UID], cr_gid=__ff[PFC.F_CR_GID], 
-                rtime=__ff[PFC.F_UPD_TIME], ctime=__ff[PFC.F_CHAN_TIME])
+                otime=__ff[PFC.F_UPD_TIME], ctime=__ff[PFC.F_CHAN_TIME])
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/sysvipc/sem")] = re_sysvipc_sem

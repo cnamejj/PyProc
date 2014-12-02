@@ -15,7 +15,7 @@ def re_net_packet(inprecs):
 
     __head = "sk       RefCnt Type Proto  Iface R Rmem   User   Inode"
 
-    __template = "{sp:016X} {refc:<6d} {typ:<4d} {prot:04x}   {iidx:<5d} \
+    __template = "{sp:016x} {refc:<6d} {typ:<4d} {prot:04x}   {iidx:<5d} \
 {run:1d} {rmem:<6d} {uid:<6d} {inode:<6d}"
 
     print __head
