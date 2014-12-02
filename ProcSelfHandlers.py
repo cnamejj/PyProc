@@ -1198,7 +1198,7 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
         PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_MINOR_DEV, AFTER: ":",
                 CONV: long, BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_INODE, CONV: long } )
-        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_PATH } )
+#        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_PATH } )
 
         p2n = dict()
         p2n["Size:"] = PFC.F_SIZE
@@ -1218,6 +1218,8 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
         self.__pref2field = p2n
 
         self.__eor_pref = "Locked:"
+        self.__trail_pref = "VmFlags:"
+        self.__path_start = 5
 
         self.st_addr = 0
         self.en_addr = 0
@@ -1249,6 +1251,7 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
 # KernelPageSize:        4 kB
 # MMUPageSize:           4 kB
 # Locked:                0 kB
+# VmFlags: rd ex mr mw me dw
 
         if sio.buff == "":
             self.field[PFC.F_START] = 0
@@ -1277,23 +1280,50 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_KERNEL_PGSZ] = 0
             self.field[PFC.F_MMU_PGSZ] = 0
             self.field[PFC.F_LOCKED] = 0
+            self.field[PFC.F_VMFLAGS] = ""
 
         for __pref in self.__pref2field:
             self.field[self.__pref2field[__pref]] = 0
 
         __pref = ""
 
-        while __pref != self.__eor_pref and sio.buff != "":
-            sio.read_line()
+        if sio.linewords >= self.__path_start:
+            self.field[PFC.F_PATH] = " ".join(sio.lineparts[self.__path_start:])
+        else:
+            self.field[PFC.F_PATH] = ""
+
+        self.field[PFC.F_VMFLAGS] = ""
+        __complete = False
+        __hold_pref = ""
+        while not __complete:
+            try:
+                sio.read_line()
+            except StopIteration:
+                __complete = True
+                continue
+
+            if sio.buff == "":
+                __complete = True
+                continue
+
             __pref = sio.get_word(0)
 
-            try:
+            if self.__pref2field.has_key(__pref):
                 __field = self.__pref2field[__pref]
                 self.field[__field] = PBR.conv_by_rules(sio.get_word(1),
                         { CONV: long } )
-            except KeyError:
-                pass
 
+            if __pref == self.__trail_pref:
+                __flags = " ".join(sio.lineparts[1:])
+                self.field[PFC.F_VMFLAGS] = " {fl:s}".format(fl=__flags)
+                __complete = True
+
+            elif __hold_pref == self.__eor_pref:
+                __complete = True
+                sio.queue_line(sio.buff)
+
+            __hold_pref = __pref
+                
         self.field[PFC.F_FL_READ] = self.field[PFC.F_FLAGS][:1]
         self.field[PFC.F_FL_WRITE] = self.field[PFC.F_FLAGS][1:2]
         self.field[PFC.F_FL_EXEC] = self.field[PFC.F_FLAGS][2:3]

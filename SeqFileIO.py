@@ -25,9 +25,15 @@ class SeqFileIO:
         self.min_words = 0
         self.skip_line = ""
         self.raw_lines_read = 0
+        self.queued_lines = []
 
         # For pylint only...
         self.pnt_fd = file("/dev/null", "r")
+	
+    def queue_line(self, line):
+        """Remember a line of data to be used for the next 'read'"""
+
+        self.queued_lines.append(line)
 
     def open_file(self, procfile, *options):
         """Open the specified file and stash away basic status info"""
@@ -74,13 +80,16 @@ class SeqFileIO:
             raise StopIteration
 
         else:
-            try:
-                self.buff = self.pnt_fd.readline()
-                self.raw_lines_read += 1
-            except IOError as err:
-                self.pnt_fd.close()
-                self.is_open = False
-                raise StopIteration
+            if len(self.queued_lines) > 0:
+                self.buff = self.queued_lines.pop(0)
+            else:
+                try:
+                    self.buff = self.pnt_fd.readline()
+                    self.raw_lines_read += 1
+                except IOError as err:
+                    self.pnt_fd.close()
+                    self.is_open = False
+                    raise StopIteration
 
             try:
                 __min_words = self.min_words
