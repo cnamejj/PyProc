@@ -550,7 +550,6 @@ active timers:
   .idle_expires   : 4210990688000000 nsecs
 jiffies: 5347635580
 
-
 Tick Device: mode:     1
 Broadcast device
 Clock Event Device: hpet
