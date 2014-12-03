@@ -4,6 +4,8 @@
 
 import regentest as RG
 import ProcHandlers as PH
+import socket
+import struct
 
 PFC = PH.PFC 
 
@@ -31,6 +33,13 @@ def print_leaf(lev, leaf):
 
 # ---
 
+def dip2long(display_ip):
+    """Convert a dotted-decimal 'display format' IP address to a long"""
+
+    return struct.unpack("!L", socket.inet_aton(display_ip))[0]
+
+# ---
+
 def print_node_and_dive(lev, node):
 
     """
@@ -47,8 +56,8 @@ def print_node_and_dive(lev, node):
        full=node[PFC.F_FULL_CHILDREN], empty=node[PFC.F_EMPTY_CHILDREN])
  
     lev += 1
-    __pick = ""
-    __ceil = "255.255.255.256"
+    __pick = -1
+    __ceil = dip2long("255.255.255.255") + 1
     __done = False
 
     while not __done:
@@ -59,7 +68,7 @@ def print_node_and_dive(lev, node):
         for __sub in __node_and_leaf:
             if node.has_key(__sub):
                 for __seq in node[__sub]:
-                    __net = node[__sub][__seq][PFC.F_NETWORK]
+                    __net = dip2long(node[__sub][__seq][PFC.F_NETWORK])
                     if __floor < __net and __net < __pick:
                         __pick = __net
                         __pick_ref = (__sub, __seq)
