@@ -1315,7 +1315,7 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
 
             if __pref == self.__trail_pref:
                 __flags = " ".join(sio.lineparts[1:])
-                self.field[PFC.F_VMFLAGS] = " {fl:s}".format(fl=__flags)
+                self.field[PFC.F_VMFLAGS] = "{fl:s} ".format(fl=__flags)
                 __complete = True
 
             elif __hold_pref == self.__eor_pref:
@@ -1638,6 +1638,16 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
                 PREFIX: "nr_involuntary_switches", AFTER: ":", CONV: long } )
         PBR.add_parse_rule(self, { NAME: PFC.F_LOAD_WEIGHT,
                 PREFIX: "se.load.weight", AFTER: ":", CONV: long } )
+
+        PBR.add_parse_rule(self, { NAME: PFC.F_RUN_AV_SUM,
+                PREFIX: "se.avg.runnable_avg_sum", AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_RUN_AV_PERIOD,
+                PREFIX: "se.avg.runnable_avg_period", AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_LOAD_AV_CONTR,
+                PREFIX: "se.avg.load_avg_contrib", AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_AV_DECAY_COUNT,
+                PREFIX: "se.avg.decay_count", AFTER: ":", CONV: long } )
+
         PBR.add_parse_rule(self, { NAME: PFC.F_POLICY, PREFIX: "policy",
                 AFTER: ":", CONV: long } )
         PBR.add_parse_rule(self, { NAME: PFC.F_PRIORITY, PREFIX: "prio",

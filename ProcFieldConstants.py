@@ -725,6 +725,10 @@ F_NR_INVOL_SWITCH = "nr-involutary-switches"
 F_LOAD_WEIGHT = "load-weight"
 F_POLICY = "policy"
 F_CLOCK_DELTA = "clock-delta"
+F_RUN_AV_SUM = "runnable-avg-sum"
+F_RUN_AV_PERIOD = "runnable-avg-period"
+F_LOAD_AV_CONTR = "load-avg-contrib"
+F_AV_DECAY_COUNT = "avg-decay-count"
 
 # -- added to support /proc/self/personality
 F_PERSONALITY = "personality"
