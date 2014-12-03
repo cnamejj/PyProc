@@ -20,6 +20,10 @@ Sample period: {samper:.3f} s"
     __fulltotaltemp = "{tot:d} total events, {evrate:.3f} events/sec"
     __shorttotaltemp = "{tot:d} total events"
 
+    __emptytemp = "Timer Stats Version: v0.2\n\
+Sample period: 0.000 s\n\
+0 total events"
+
     __defertemp = "{count:4d}D,"
     __normtemp = " {count:4d},"
 
@@ -59,5 +63,8 @@ Sample period: {samper:.3f} s"
                     exfunc=__ff[PFC.F_CBACK_ROUT])
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
+
+    if __first:
+        print __emptytemp
     
 RG.RECREATOR[PH.GET_HANDLER("/proc/timer_stats")] = re_root_timer_stats
