@@ -729,6 +729,7 @@ F_RUN_AV_SUM = "runnable-avg-sum"
 F_RUN_AV_PERIOD = "runnable-avg-period"
 F_LOAD_AV_CONTR = "load-avg-contrib"
 F_AV_DECAY_COUNT = "avg-decay-count"
+F_HRULE = "horizontal-line"
 
 # -- added to support /proc/self/personality
 F_PERSONALITY = "personality"

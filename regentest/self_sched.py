@@ -15,17 +15,26 @@ def re_self_sched(inprecs):
     """Iterate through parsed records and re-generate data file"""
 
     __headtemp = "{prog:s} ({pid:d}, #threads: {threads:d})\n\
--------------------------------------------------------------------"
+{hrule:s}"
 
-    __strtemp = "{desc:<45s}:{count:>21s}"
-    __longtemp = "{desc:<45s}:{count:21d}"
-    __floattemp = "{desc:<45s}:{count:21.6f}"
+    __strtemptemp = "{{desc:<{dlen:d}s}}:{{count:>21s}}"
+    __longtemptemp = "{{desc:<{dlen:d}s}}:{{count:21d}}"
+    __floattemptemp = "{{desc:<{dlen:d}s}}:{{count:21.6f}}"
 
-    __template = { str: __strtemp, long: __longtemp, float: __floattemp }
+    __template = ()
 
     for __hilit in inprecs:
         __ff = inprecs.field
         __hits = inprecs.hit_order
+
+        if len(__template) == 0:
+            __dlen = len(__ff[PFC.F_HRULE]) - 22
+            __strtemp = __strtemptemp.format(dlen=__dlen)
+            __longtemp = __longtemptemp.format(dlen=__dlen)
+            __floattemp = __floattemptemp.format(dlen=__dlen)
+
+            __template = { str: __strtemp, long: __longtemp,
+                    float: __floattemp }
 
         __keydesc = dict()
         __keyconv = dict()
@@ -51,7 +60,7 @@ def re_self_sched(inprecs):
                 pass
 
         print __headtemp.format(prog=__ff[PFC.F_PROGRAM], pid=__ff[PFC.F_PID],
-                threads=__ff[PFC.F_THREADS])
+                threads=__ff[PFC.F_THREADS], hrule=__ff[PFC.F_HRULE])
 
         for __seq in range(0, len(__hits)):
             __key = __hits[__seq]

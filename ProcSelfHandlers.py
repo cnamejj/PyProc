@@ -1549,7 +1549,8 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
 # "README.ProcSelfHandlers" to reduce the size of this module.
 
     def extra_init(self, *opts):
-        self.minfields = 2
+#        self.minfields = 2
+        self.minfields = 1
         
         self.two_longs = ( PFC.F_EXEC_START, PFC.F_RUNTIME,
                 PFC.F_EXEC_RUNTIME, PFC.F_ST_WAIT_START, PFC.F_ST_SLEEP_START,
@@ -1558,6 +1559,7 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
                 PFC.F_ST_WAIT_SUM, PFC.F_ST_IOWAIT_SUM, PFC.F_AVG_ATOM,
                 PFC.F_AVG_PER_CPU )
 
+        PBR.add_parse_rule(self, { NAME: PFC.F_HRULE, HAS: "--------", } )
         PBR.add_parse_rule(self, { NAME: PFC.F_PROGRAM, HAS: "#threads:", } )
         PBR.add_parse_rule(self, { NAME: PFC.F_EXEC_START,
                 PREFIX: "se.exec_start", AFTER: ":" } )
