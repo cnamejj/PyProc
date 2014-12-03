@@ -15,11 +15,11 @@ def re_self_sched(inprecs):
     """Iterate through parsed records and re-generate data file"""
 
     __headtemp = "{prog:s} ({pid:d}, #threads: {threads:d})\n\
----------------------------------------------------------"
+-------------------------------------------------------------------"
 
-    __strtemp = "{desc:<35s}:{count:>21s}"
-    __longtemp = "{desc:<35s}:{count:21d}"
-    __floattemp = "{desc:<35s}:{count:21.6f}"
+    __strtemp = "{desc:<45s}:{count:>21s}"
+    __longtemp = "{desc:<45s}:{count:21d}"
+    __floattemp = "{desc:<45s}:{count:21.6f}"
 
     __template = { str: __strtemp, long: __longtemp, float: __floattemp }
 
