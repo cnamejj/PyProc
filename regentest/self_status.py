@@ -19,6 +19,7 @@ def re_self_status(inprecs):
 
     __tasktemp = "State:\t{st:s}\n\
 Tgid:\t{tgid:d}\n\
+{ngid:s}\
 Pid:\t{pid:d}\n\
 PPid:\t{ppid:d}\n\
 TracerPid:\t{trpid:d}\n\
@@ -55,6 +56,8 @@ CapBnd:\t{bset:s}"
 
     __seccomptemp = "Seccomp:\t{sec:d}"
 
+    __ngidtemp = "Ngid:\t{ngid:d}\n"
+
     __cpustemp = "Cpus_allowed:\t{cpus:s}\n\
 Cpus_allowed_list:\t{cpus_list:s}\n\
 Mems_allowed:\t{mems:s}\n\
@@ -65,6 +68,9 @@ nonvoluntary_ctxt_switches:\t{nonvol:d}"
 
     __first = True
     __has_seccomp = False
+    __has_ngid = False
+
+    __ngid = ""
 
     for __hilit in inprecs:
         __ff = inprecs.field
@@ -76,7 +82,8 @@ nonvoluntary_ctxt_switches:\t{nonvol:d}"
             for __seq in __hits:
                 if __hits[__seq] == PFC.F_SEC_COMP:
                     __has_seccomp = True
-                    break
+                elif __hits[__seq] == PFC.F_NUMA_GID:
+                    __has_ngid = True
 
         print __nametemp.format(prog=__ff[PFC.F_PROG_NAME])
 
@@ -85,10 +92,13 @@ nonvoluntary_ctxt_switches:\t{nonvol:d}"
         for __off in range(0, len(__grs)):
             __grlist = __grlisttemp.format(acc=__grlist, gr=__grs[__off])
 
-        print __tasktemp.format(st=__ff[PFC.F_RUNSTATUS], 
-                tgid=__ff[PFC.F_THREAD_GID], pid=__ff[PFC.F_PID],
+        if __has_ngid:
+            __ngid = __ngidtemp.format(ngid=__ff[PFC.F_NUMA_GID])
+
+        print __tasktemp.format(st=__ff[PFC.F_RUNSTATUS],
+                tgid=__ff[PFC.F_THREAD_GID], ngid=__ngid, pid=__ff[PFC.F_PID],
                 ppid=__ff[PFC.F_PPID], trpid=__ff[PFC.F_TRACER_PID],
-                uid=__ff[PFC.F_UID], euid=__ff[PFC.F_EUID], 
+                uid=__ff[PFC.F_UID], euid=__ff[PFC.F_EUID],
                 suid=__ff[PFC.F_SUID], fsuid=__ff[PFC.F_FSUID],
                 gid=__ff[PFC.F_GID], egid=__ff[PFC.F_EGID],
                 sgid=__ff[PFC.F_SGID], fsgid=__ff[PFC.F_FSGID],
@@ -101,7 +111,7 @@ nonvoluntary_ctxt_switches:\t{nonvol:d}"
                 exe=__ff[PFC.F_VM_EXE], lib=__ff[PFC.F_VM_LIB],
                 pte=__ff[PFC.F_VM_PTE], swap=__ff[PFC.F_VM_SWAP])
 
-        print __sigtemp.format(thr=__ff[PFC.F_THREADS], 
+        print __sigtemp.format(thr=__ff[PFC.F_THREADS],
                 squeue=__ff[PFC.F_SIG_QUEUE], pend=__ff[PFC.F_SIG_PEND],
                 shpend=__ff[PFC.F_SIG_PEND], block=__ff[PFC.F_SIG_BLOCK],
                 ign=__ff[PFC.F_SIG_IGN], caught=__ff[PFC.F_SIG_CAUGHT])
@@ -124,6 +134,4 @@ nonvoluntary_ctxt_switches:\t{nonvol:d}"
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/status")] = re_self_status
-
-    
 
