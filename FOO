@@ -3115,16 +3115,7 @@ class ProcNetIGMP(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 4
         self.skipped = "Idx"
-        self.__first_mark = "  :   "
-
-        PBR.add_parse_rule(self, { HAS: self.__first_mark, SUBWORD: 0,
-                NAME: PFC.F_INDEX, CONV: long }, { HAS } )
-        PBR.add_parse_rule(self, { HAS: self.__first_mark, SUBWORD: 1,
-                NAME: PFC.F_DEVICE }, { HAS } )
-        PBR.add_parse_rule(self, { HAS: self.__first_mark, SUBWORD: 3,
-                NAME: PFC.F_COUNT, CONV: long }, { HAS } )
-        PBR.add_parse_rule(self, { HAS: self.__first_mark, SUBWORD: 4,
-                NAME: PFC.F_QUERIER }, { HAS } )
+        self.__label_rec_words = 5
 
         self.count = 0
         self.index = 0
@@ -3157,8 +3148,16 @@ class ProcNetIGMP(PBR.FixedWhitespaceDelimRecs):
 
         else:
 
+            if sio.linewords == self.__label_rec_words:
+                self.field[PFC.F_INDEX] = PBR.conv_by_rules( sio.get_word(0),
+                        { CONV: long } )
+                self.field[PFC.F_DEVICE] = sio.get_word(1)
+                self.field[PFC.F_COUNT] = PBR.conv_by_rules( sio.get_word(3),
+                        { CONV: long } )
+                self.field[PFC.F_QUERIER] = sio.get_word(4)
+
 # ... need to read the next line for the rest.
-            sio.read_line()
+                sio.read_line()
 
             if sio.buff == "":
                 self.field[PFC.F_INDEX] = 0
