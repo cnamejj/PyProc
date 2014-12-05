@@ -4,7 +4,7 @@
 import sys
 import ProcHandlers
 import json
-    
+
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)

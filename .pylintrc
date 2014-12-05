@@ -38,7 +38,9 @@ load-plugins=
 # R0903: Too few public methods
 # R0912: Too many branches
 # R0915: Too many statements
-disable=R0201,R0903,R0912,R0915
+# C0326: ...ugh...
+# I0011: Locally disabling ????
+disable=R0201,R0903,R0912,R0915,C0326,I0011
 
 
 [REPORTS]
@@ -49,6 +51,10 @@ output-format=text
 
 # Include message's id in output
 include-ids=yes
+
+# The "new/improved" way to say 'include-ids=yes'  *BOGGE*
+#msg-template={path}:{line}: [{msg_id}({symbol}), {obj}] {msg}
+msg-template={msg_id}:{line}:{obj}: ({symbol}) {msg}
 
 # Put messages in a separate file for each module / package specified on the
 # command line instead of printing them on stdout. Reports (if any) will be
