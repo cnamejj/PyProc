@@ -90,7 +90,7 @@ class ProcNetNETLINK(PBR.FixedWhitespaceDelimRecs):
         PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_LOCKS, CONV: long } )
         PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_DROPS, CONV: long } )
         PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_INODE, CONV: long } )
-               
+
 
         self.protocol = 0
         self.pid = 0
@@ -107,9 +107,9 @@ class ProcNetNETLINK(PBR.FixedWhitespaceDelimRecs):
 # pylint: disable=C0301
 #
 # sk       Eth Pid    Groups   Rmem     Wmem     Dump     Locks     Drops     Inode
-# 0000000000000000 0   4196011 00000000 0        0        0000000000000000 2        0        11034   
-# 0000000000000000 0   0      00000000 0        0        0000000000000000 2        0        8       
-# 0000000000000000 0   1707   000a0501 0        0        0000000000000000 2        0        11033   
+# 0000000000000000 0   4196011 00000000 0        0        0000000000000000 2        0        11034
+# 0000000000000000 0   0      00000000 0        0        0000000000000000 2        0        8
+# 0000000000000000 0   1707   000a0501 0        0        0000000000000000 2        0        11033
 #
 # pylint: enable=C0301
 
@@ -155,7 +155,7 @@ class ProcNetCONNECTOR(PBR.FixedWhitespaceDelimRecs):
 
         PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_NAME } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ID_IDX, BEFORE: ":",
-                CONV: long }) 
+                CONV: long })
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_ID_VAL, AFTER: ":",
                 CONV: long } )
 
@@ -377,10 +377,10 @@ class ProcNetROUTE(PBR.FixedWhitespaceDelimRecs):
 #
 # pylint: disable=C0301
 #
-# Iface	Destination	Gateway 	Flags	RefCnt	Use	Metric	Mask		MTU	Window	IRTT                                                       
-# eth0	00000000	0101A8C0	0003	0	0	0	00000000	0	0	0                                                                               
-# eth0	0000FEA9	00000000	0001	0	0	1000	0000FFFF	0	0	0                                                                            
-# eth0	0001A8C0	00000000	0001	0	0	1	00FFFFFF	0	0	0                                                                               
+# Iface	Destination	Gateway 	Flags	RefCnt	Use	Metric	Mask		MTU	Window	IRTT
+# eth0	00000000	0101A8C0	0003	0	0	0	00000000	0	0	0
+# eth0	0000FEA9	00000000	0001	0	0	1000	0000FFFF	0	0	0
+# eth0	0001A8C0	00000000	0001	0	0	1	00FFFFFF	0	0	0
 #
 # pylint: enable=C0301
 
@@ -399,7 +399,7 @@ class ProcNetROUTE(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_DEST_IP] = PDC.ANY_IP_ADDR
             self.field[PFC.F_GATEWAY] = PDC.ANY_IP_ADDR
             self.field[PFC.F_NETMASK] = PDC.ANY_IP_ADDR
-    
+
         else:
             __lip = PBR.conv_by_rules(self.field[PFC.F_DEST_HEXIP],
                     { CONV: long, BASE: 16 } )
@@ -470,7 +470,7 @@ class ProcNetPACKET(PBR.FixedWhitespaceDelimRecs):
     def extra_next(self, sio):
 # -- Sample records
 # sk       RefCnt Type Proto  Iface R Rmem   User   Inode
-# 0000000000000000 3      3    0003   2     1 0      0      36995 
+# 0000000000000000 3      3    0003   2     1 0      0      36995
 
         if sio.buff == "":
             self.field[PFC.F_SOCKET_POINTER] = 0
@@ -677,7 +677,7 @@ class ProcNetDEVMCAST(PBR.FixedWhitespaceDelimRecs):
     def extra_next(self, sio):
 # -- Sample entries, note the header is for informational purposes and
 # -- there's no header line in the file itself
-# IFaceIndex Device RefCount GlobalUse DeviceAddress 
+# IFaceIndex Device RefCount GlobalUse DeviceAddress
 # 2    eth0            1     0     01005e000001
 # 2    eth0            1     0     333300000001
 # 2    eth0            1     0     3333ff01e486
@@ -928,7 +928,7 @@ class ProcNetIGMP6(PBR.FixedWhitespaceDelimRecs):
 #
 # pylint: disable=C0301
 #
-# IntFaceIndex DeviceName MCastAddress             MCastUsers MCastFlags TimerExp 
+# IntFaceIndex DeviceName MCastAddress             MCastUsers MCastFlags TimerExp
 # 1    lo              ff020000000000000000000000000001     1 0000000C 0
 # 2    eth0            ff0200000000000000000001ff01e486     1 00000004 0
 # 2    eth0            ff020000000000000000000000000001     1 0000000C 0
@@ -1113,7 +1113,7 @@ class ProcNetIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
 
             if __word.startswith(self.__assured_pref):
                 self.field[PFC.F_ASSURED] = __word
-                        
+
                 __off += 1
                 __word = sio.get_word(__off)
 
@@ -1132,7 +1132,7 @@ class ProcNetIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
             if __word.startswith(self.__use_pref):
                 self.field[PFC.F_USE] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__use_pref } )
-           
+
         self.protocol = self.field[PFC.F_PROTOCOL]
         self.timeout = self.field[PFC.F_TIMEOUT]
         self.state = self.field[PFC.F_STATE]
@@ -1155,7 +1155,7 @@ class ProcNetIPV6ROUTE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/ipv6_route"""
 # source: net/ipv6/route.c
 #         seq_printf(m, "%pi6 %02x ", &rt->rt6i_dst.addr, rt->rt6i_dst.plen);
-# 
+#
 # #ifdef CONFIG_IPV6_SUBTREES
 #         seq_printf(m, "%pi6 %02x ", &rt->rt6i_src.addr, rt->rt6i_src.plen);
 # #else
@@ -1243,7 +1243,7 @@ class ProcNetIPV6ROUTE(PBR.FixedWhitespaceDelimRecs):
                     self.ipconv.ipv6_hexstring_to_presentation(
                     self.field[PFC.F_SRCE_HEXIP])
 
-        self.dest_ip = self.field[PFC.F_DEST_IP] 
+        self.dest_ip = self.field[PFC.F_DEST_IP]
         self.dest_pref_len = self.field[PFC.F_DEST_PREFIX_LEN]
         self.src_ip = self.field[PFC.F_SOURCE]
         self.src_pref_len = self.field[PFC.F_SRCE_PREFIX_LEN]
@@ -1449,7 +1449,7 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
             if __word.startswith(self.__use_pref):
                 self.field[PFC.F_USE] = PBR.conv_by_rules(__word,
                         { CONV: long, PREFIX: self.__use_pref } )
-           
+
         self.l3_protocol = self.field[PFC.F_L3_PROTOCOL]
         self.protocol = self.field[PFC.F_PROTOCOL]
         self.timeout = self.field[PFC.F_TIMEOUT]
@@ -1507,8 +1507,8 @@ class ProcNetPSCHED(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_UNKNOWN_FIELD] = 0
             self.field[PFC.F_NSEC_PER_HRTIME] = 0
 
-        self.nsec_per_usec = self.field[PFC.F_NSEC_PER_USEC] 
-        self.psched_ticks = self.field[PFC.F_PSCHED_TICKS] 
+        self.nsec_per_usec = self.field[PFC.F_NSEC_PER_USEC]
+        self.psched_ticks = self.field[PFC.F_PSCHED_TICKS]
         self.nsec_per_hrtime = self.field[PFC.F_NSEC_PER_HRTIME]
 
         return(self.nsec_per_usec, self.psched_ticks, self.nsec_per_hrtime)
@@ -1638,11 +1638,11 @@ class ProcNetRT6STATS(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_FIB_DEST_OPS] = 0
             self.field[PFC.F_FIB_DISC_ROUTES] = 0
 
-        self.nodes = self.field[PFC.F_FIB_NODES] 
-        self.route_nodes = self.field[PFC.F_FIB_ROUTE_NODES] 
-        self.route_entries = self.field[PFC.F_FIB_ROUTE_ENTRIES] 
-        self.route_cache = self.field[PFC.F_FIB_ROUTE_CACHE] 
-        self.discarded = self.field[PFC.F_FIB_DISC_ROUTES] 
+        self.nodes = self.field[PFC.F_FIB_NODES]
+        self.route_nodes = self.field[PFC.F_FIB_ROUTE_NODES]
+        self.route_entries = self.field[PFC.F_FIB_ROUTE_ENTRIES]
+        self.route_cache = self.field[PFC.F_FIB_ROUTE_CACHE]
+        self.discarded = self.field[PFC.F_FIB_DISC_ROUTES]
 
         return(self.nodes, self.route_nodes, self.route_entries,
                 self.route_cache, self.discarded)
@@ -2070,7 +2070,7 @@ class ProcNetStatNDISCCACHE(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_GC_PERIODIC] = 0
             self.field[PFC.F_GC_FORCED] = 0
             self.field[PFC.F_UNRES_DISCARD] = 0
-    
+
         self.entries = self.field[PFC.F_ARP_ENTRIES]
         self.lookups = self.field[PFC.F_LOOKUP]
         self.hits = self.field[PFC.F_HIT]
@@ -2286,8 +2286,8 @@ class ProcNetStatRTCACHE(PBR.FixedWhitespaceDelimRecs):
 # pylint: disable=C0301
 #
 # entries  in_hit in_slow_tot in_slow_mc in_no_route in_brd in_martian_dst in_martian_src  out_hit out_slow_tot out_slow_mc  gc_total gc_ignored gc_goal_miss gc_dst_overflow in_hlist_search out_hlist_search
-# 000000a4  00579509 0002044f 00000000 00000000 00001e53 00000000 00000018  0006f8ff 00002620 00000001 00000000 00000000 00000000 00000000 0000ba0b 00000092 
-# 000000a4  00000000 00000002 00000000 00000000 00000001 00000000 00000000  0006f479 000027b4 00000000 00000000 00000000 00000000 00000000 00000000 00000008 
+# 000000a4  00579509 0002044f 00000000 00000000 00001e53 00000000 00000018  0006f8ff 00002620 00000001 00000000 00000000 00000000 00000000 0000ba0b 00000092
+# 000000a4  00000000 00000002 00000000 00000000 00000001 00000000 00000000  0006f479 000027b4 00000000 00000000 00000000 00000000 00000000 00000000 00000008
 #
 # pylint: enable=C0301
 
@@ -2309,7 +2309,7 @@ class ProcNetStatRTCACHE(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_GC_DST_OVERFLOW] = 0
             self.field[PFC.F_IN_HL_SEARCH] = 0
             self.field[PFC.F_OUT_HL_SEARCH] = 0
-    
+
         self.entries = self.field[PFC.F_ENTRIES]
         self.in_hit = self.field[PFC.F_IN_HIT]
         self.in_slow = self.field[PFC.F_IN_SLOW_TOT]
@@ -2590,11 +2590,11 @@ class ProcNetTCP(PBR.FixedWhitespaceDelimRecs):
 #
 # pylint: disable=C0301
 #
-#  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode                                                     
-#   0: 0100007F:0CEA 00000000:0000 0A 00000000:00000000 00:00000000 00000000   120        0 8633 1 0000000000000000 100 0 0 10 -1                     
-#   1: 0100007F:0050 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 24865 1 0000000000000000 100 0 0 10 -1                    
-#   2: 00000000:4E70 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 69682 1 0000000000000000 100 0 0 10 -1                    
-#   3: 0E01A8C0:0035 00000000:0000 0A 00000000:00000000 00:00000000 00000000   118        0 15488 1 0000000000000000 100 0 0 10 -1                    
+#  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode
+#   0: 0100007F:0CEA 00000000:0000 0A 00000000:00000000 00:00000000 00000000   120        0 8633 1 0000000000000000 100 0 0 10 -1
+#   1: 0100007F:0050 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 24865 1 0000000000000000 100 0 0 10 -1
+#   2: 00000000:4E70 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 69682 1 0000000000000000 100 0 0 10 -1
+#   3: 0E01A8C0:0035 00000000:0000 0A 00000000:00000000 00:00000000 00000000   118        0 15488 1 0000000000000000 100 0 0 10 -1
 #
 # pylint: enable=C0301
 
@@ -2858,7 +2858,7 @@ class ProcNetUDP(PBR.FixedWhitespaceDelimRecs):
 #
 # pylint: disable=C0301
 #
-#  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode ref pointer drops        
+#  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode ref pointer drops
 # %5d : %08X:%04X     %08X:%04X    %02X %08X:%08X        %02X:%08lX  %08X       %5d      %8d %lu  %d %pK              %d
 # 2316: 0E01A8C0:0035 00000000:0000 07 00000000:00000000 00:00000000 00000000   118        0 15487 2 0000000000000000 0
 # 2316: 0100007F:0035 00000000:0000 07 00000000:00000000 00:00000000 00000000   118        0 1999 2 0000000000000000 0
@@ -3219,7 +3219,7 @@ class ProcNetSNMP(PBR.TwoLineLogicalRecs):
 # -- Sample lines for reference...
 # pylint: disable=C0301
 #
-#       
+#
 # Tcp: RtoAlgorithm RtoMin RtoMax MaxConn ActiveOpens PassiveOpens AttemptFails EstabResets CurrEstab InSegs OutSegs RetransSegs InErrs OutRsts
 # Tcp: 1 200 120000 -1 160318 5208 5105 523 17 21554159 12995200 11248 0 16685
 # Udp: InDatagrams NoPorts InErrors OutDatagrams RcvbufErrors SndbufErrors
@@ -3658,7 +3658,7 @@ class ProcNetFIBTRIE(PBR.FixedWhitespaceDelimRecs):
         return
 
 # Sample records:
-# 
+#
 # Main:
 #   +-- 0.0.0.0/0 2 0 1
 #      |-- 0.0.0.0
@@ -3725,7 +3725,7 @@ class ProcNetFIBTRIE(PBR.FixedWhitespaceDelimRecs):
 
         self.field[PFC.F_FIB_TRIE] = __fib
 
-        return(self.field)
+        return self.field
 
 REGISTER_FILE("/proc/net/fib_trie", ProcNetFIBTRIE)
 REGISTER_PARTIAL_FILE("fib_trie", ProcNetFIBTRIE)
@@ -3862,11 +3862,11 @@ class ProcNetFIBTRIESTAT(PBR.FixedWhitespaceDelimRecs):
                     sio.read_line()
                 except StopIteration:
                     __is_done = True
-                
+
         self.field[PFC.F_LEAF_SIZE] = self.__glinfo[0]
         self.field[PFC.F_TNODE_SIZE] = self.__glinfo[1]
 
-        return(self.field)
+        return self.field
 
 REGISTER_FILE("/proc/net/fib_triestat", ProcNetFIBTRIESTAT)
 REGISTER_PARTIAL_FILE("fib_triestat", ProcNetFIBTRIESTAT)
