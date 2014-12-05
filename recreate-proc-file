@@ -62,6 +62,11 @@ then
 	fi
 fi
 
+if [ ! -r "${inp}" ]
+then
+	err_exit "Read permission denied for '${inp}'"
+fi
+
 # ---
 
 if [ ! -d "${TEMPDIR}" ]
