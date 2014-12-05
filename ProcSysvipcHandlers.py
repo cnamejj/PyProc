@@ -59,15 +59,15 @@ class ProcSysvipcSHM(PBR.FixedWhitespaceDelimRecs):
 # {
 #     struct shmid_kernel *shp = it;
 #     unsigned long rss = 0, swp = 0;
-# 
+#
 #     shm_add_rss_swap(shp, &rss, &swp);
-# 
+#
 # #if BITS_PER_LONG <= 32
 # #define SIZE_SPEC "%10lu"
 # #else
 # #define SIZE_SPEC "%21lu"
 # #endif
-# 
+#
 #     return seq_printf(s,
 #            "%10d %10d  %4o " SIZE_SPEC " %5u %5u  "
 #            "%5lu %5u %5u %5u %5u %10lu %10lu %10lu "
@@ -152,10 +152,12 @@ class ProcSysvipcSEM(PBR.FixedWhitespaceDelimRecs):
 
 # source: ipc/sem.c
 #
+# pylint: disable=C0301
+#
 # static int sysvipc_sem_proc_show(struct seq_file *s, void *it)
 # {
 #    struct sem_array *sma = it;
-# 
+#
 #    return seq_printf(s,
 #         "%10d %10d  %4o %10u %5u %5u %5u %5u %10lu %10lu\n",
 #         sma->sem_perm.key,
@@ -170,6 +172,7 @@ class ProcSysvipcSEM(PBR.FixedWhitespaceDelimRecs):
 #         sma->sem_ctime);
 # }
 #
+# pylint: enable=C0301
 
     def extra_init(self, *opts):
         self.minfields = 10
@@ -193,11 +196,14 @@ class ProcSysvipcSEM(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records
 #
+# pylint: disable=C0301
+#
 #      key      semid perms      nsems   uid   gid  cuid  cgid      otime      ctime
 #  3121959      32768   666          2     0     0     0     0 1396450035 1395779560
 #        0     131073   600          1    33    33     0     0 1396474718 1396190194
 # 59918130      98306   600          1   501   501   501   501 1396390845 1395797851
 #
+# pylint: enable=C0301
 
         __id = self.field[PFC.F_ID]
         __key = self.field[PFC.F_KEY]
@@ -225,6 +231,8 @@ class ProcSysvipcMSG(PBR.FixedWhitespaceDelimRecs):
 
 # source: ipc/msg.c
 #
+# pylint: disable=C0301
+#
 # static int sysvipc_msg_proc_show(struct seq_file *s, void *it)
 # {
 #    struct msg_queue *msq = it;
@@ -247,6 +255,7 @@ class ProcSysvipcMSG(PBR.FixedWhitespaceDelimRecs):
 #       msq->q_ctime);
 # }
 #
+# pylint: enable=C0301
 
     def extra_init(self, *opts):
         self.minfields = 14
