@@ -69,6 +69,15 @@ fi
 
 # ---
 
+recode=$(./show-recreator-for-file "${cname}" | gawk '{ print $1 }')
+
+if [ "${recode}" = "N/A" ]
+then
+	err_exit "No recreator script available for '${inp}'"
+fi
+
+# ---
+
 if [ ! -d "${TEMPDIR}" ]
 then
 	mkdir "${TEMPDIR}"
