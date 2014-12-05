@@ -14,7 +14,7 @@ def pair_list_to_dictionary(line, start_pos):
     return __pairs
 
 
-class SeqFileIO:
+class SeqFileIO(object):
     """Utility routines to handle I/O to proc file system files"""
 
     def __init__(self):
@@ -29,7 +29,7 @@ class SeqFileIO:
 
         # For pylint only...
         self.pnt_fd = file("/dev/null", "r")
-	
+
     def queue_line(self, line):
         """Remember a line of data to be used for the next 'read'"""
 
@@ -67,7 +67,7 @@ class SeqFileIO:
             self.is_open = False
             self.pnt_fd.close()
         return
-        
+
 
     def read_line(self):
         """Read/Parse the next line in the open file."""
@@ -86,7 +86,8 @@ class SeqFileIO:
                 try:
                     self.buff = self.pnt_fd.readline()
                     self.raw_lines_read += 1
-                except IOError as err:
+#                except IOError as err:
+                except IOError:
                     self.pnt_fd.close()
                     self.is_open = False
                     raise StopIteration
@@ -97,7 +98,7 @@ class SeqFileIO:
                 __min_words = 0
 
             try:
-                __skip_line = self.skip_line 
+                __skip_line = self.skip_line
             except AttributeError:
                 __skip_line = ""
 
@@ -115,7 +116,7 @@ class SeqFileIO:
                     if self.lineparts[0] == __skip_line:
                         self.read_line()
 
-        return(self.is_open)
+        return self.is_open
 
 
     def read_all_lines(self):
@@ -130,7 +131,7 @@ class SeqFileIO:
             __lines = self.pnt_fd.readlines()
 
             try:
-                __skip_pref = self.skip_line 
+                __skip_pref = self.skip_line
             except AttributeError:
                 __skip_pref = ""
 
@@ -207,7 +208,7 @@ class SeqFileIO:
                 handler.hit_order = dict()
 
                 for __varnum in range(0, self.linewords, 1):
-                    __field_name = __pss_varlist[__varnum] 
+                    __field_name = __pss_varlist[__varnum]
                     handler.field[__field_name] = self.lineparts[__varnum]
                     handler.hit_order[__varnum] = __field_name
 
