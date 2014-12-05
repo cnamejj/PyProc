@@ -18,10 +18,38 @@ def re_self_stat(inprecs):
 {stime:d} {cutime:d} {cstime:d} {pri:d} {nice:d} {thr:d} 0 {stt:d} {vsz:d} \
 {rss:d} {rssl:d} {stcode:d} {encode:d} {ststack:d} {esp:d} {eip:d} {sigpn:d} \
 {sigbl:d} {sigig:d} {sigca:d} {wch:d} 0 0 {exsig:d} {task:d} {rtpri:d} \
-{pol:d} {iotic:d} {gtime:d} {cgtime:d}"
+{pol:d} {iotic:d} {gtime:d} {cgtime:d}{extra:s}"
+
+    __extratemp = " {stdata:d} {endata:d} {stbrk:d} {argst:d} {argend:d} \
+{envst:d} {envend:d} {excode:d}"
+
+    __has_extra = False
+    __first = True
 
     for __hilit in inprecs:
         __ff = inprecs.field
+        __hits = inprecs.fixpos_hits
+
+        if __first:
+            __first = False
+            for __seq in __hits:
+                if __hits[__seq] == PFC.F_START_DATA:
+                    __has_extra = True
+                    break
+
+        if not __has_extra:
+            __extra = ""
+        else:
+            try:
+                __excode = __ff[PFC.F_EXIT_CODE]
+            except KeyError:
+                __excode = 0
+
+            __extra = __extratemp.format(stdata=__ff[PFC.F_START_DATA],
+                    endata=__ff[PFC.F_END_DATA], stbrk=__ff[PFC.F_START_BRK],
+                    argst=__ff[PFC.F_ARG_START], argend=__ff[PFC.F_ARG_END],
+                    envst=__ff[PFC.F_ENV_START], envend=__ff[PFC.F_ENV_END],
+                    excode=__excode)
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         print __template.format(pnr=__ff[PFC.F_PID_NR], comm=__ff[PFC.F_COMM],
@@ -44,8 +72,7 @@ def re_self_stat(inprecs):
                 exsig=__ff[PFC.F_EXIT_SIG], task=__ff[PFC.F_TASK],
                 rtpri=__ff[PFC.F_RT_PRIORITY], pol=__ff[PFC.F_POLICY],
                 iotic=__ff[PFC.F_IO_TICKS], gtime=__ff[PFC.F_GTIME],
-                cgtime=__ff[PFC.F_CGTIME]
-                )
+                cgtime=__ff[PFC.F_CGTIME], extra=__extra)
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/stat")] = re_self_stat
 
