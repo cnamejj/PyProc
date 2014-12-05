@@ -191,7 +191,7 @@ class ProcSelfMAPS(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records
 #
-# pylint: disable=line-too-long
+# pylint: disable=C0301
 #
 # 00400000-0041e000 r-xp 00000000 09:01 149422083                          /bin/cp
 # 0061d000-0061e000 r--p 0001d000 09:01 149422083                          /bin/cp
@@ -201,7 +201,7 @@ class ProcSelfMAPS(PBR.FixedWhitespaceDelimRecs):
 # 7facddd03000-7facddd1b000 r-xp 00000000 09:01 75238943                   /lib/x86_64-linux-gnu/libpthread-2.15.so
 # 7facddd1b000-7facddf1a000 ---p 00018000 09:01 75238943                   /lib/x86_64-linux-gnu/libpthread-2.15.so
 #
-# pylint: enable=line-too-long
+# pylint: enable=C0301
 
         if sio.buff == "":
             self.field[PFC.F_START] = 0
@@ -427,7 +427,7 @@ class ProcSelfNUMAMAPS(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records
 #
-# pylint: disable=line-too-long
+# pylint: disable=C0301
 #
 # 00400000 default file=/bin/cat mapped=7 mapmax=2 N0=7
 # 0060a000 default file=/bin/cat anon=1 dirty=1 N0=1
@@ -436,7 +436,7 @@ class ProcSelfNUMAMAPS(PBR.FixedWhitespaceDelimRecs):
 # 7f5935a28000 default file=/usr/lib/locale/locale-archive mapped=11 mapmax=88 N0=11
 # 7f5935cf1000 default file=/lib/x86_64-linux-gnu/libc-2.15.so mapped=82 mapmax=167 N0=82
 #
-# pylint: enable=line-too-long
+# pylint: enable=C0301
 
         self.field[PFC.F_HEAP] = 0
         self.field[PFC.F_STACK] = 0
@@ -571,7 +571,7 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records
 #
-# pylint: disable=line-too-long
+# pylint: disable=C0301
 #
 # 15 20 0:14 / /sys rw,nosuid,nodev,noexec,relatime - sysfs sysfs rw
 # 17 20 0:5 / /dev rw,relatime - devtmpfs udev rw,size=16454700k,nr_inodes=4113675,mode=755
@@ -579,7 +579,7 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
 # 21 15 0:16 / /sys/fs/fuse/connections rw,relatime - fusectl none rw
 # 27 20 9:0 / /boot rw,relatime - ext4 /dev/md0 rw,user_xattr,barrier=1,stripe=128,data=ordered
 #
-# pylint: enable=line-too-long
+# pylint: enable=C0301
 
         self.field[PFC.F_EXTRA_OPTS] = ""
         self.field[PFC.F_FS_TYPE] = ""
@@ -645,7 +645,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 # --and--
 # source: net/sunrpc/xprtsock.c
 #
-# pylint: disable=line-too-long
+# pylint: disable=C0301
 #
 # The kernel source snippets that generate this file are stored in
 # "README.ProcSelfHandlers" to reduce the size of this module.
@@ -678,7 +678,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 #     (15) local|udp
 # (N) \txprt: tcp !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT!
 #
-# pylint: enable=line-too-long
+# pylint: enable=C0301
 
     def extra_init(self, *opts):
         """Custom processing for the record just read"""
@@ -791,7 +791,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         Driver for parsing options subrecords
         """
 
-# pylint: disable=line-too-long
+# pylint: disable=C0301
 #
 # (B) \topts: (2){,sync}{,noatime}{,nodiratime}(3)(4)(5)(6)(7)(8)(9)
 #     (2) ro|rw
@@ -805,7 +805,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 #         (11) !PROTOCOL!|auto
 #     (9) {,fsc}{,lookupcache={none|pos}}{,local_lock={none|all|flock|posix}}
 #
-# pylint: enable=line-too-long
+# pylint: enable=C0301
 
 
         __opt = PBR.breakout_option_list(sio.get_word(1))
@@ -888,9 +888,9 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         Parse a subrecord with NFS v4 info
         """
 
-# pylint: disable=line-too-long
+# pylint: disable=C0301
 # (E) \tnfsv4: bm0=0x!HEX!,bm1=0x!HEX!,acl=0x!HEX!{,sessions}{,pnfs={!NAME!|not configured}}
-# pylint: enable=line-too-long
+# pylint: enable=C0301
         __opts = PBR.breakout_option_list(sio.get_word(1))
 
         self.field[PFC.F_NFSV4_BM0] = PBR.conv_by_rules(
@@ -1148,7 +1148,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records (NFS mounts add all the complex sub-records, no sample
 #    available yet)
-# pylint: disable=line-too-long
+# pylint: disable=C0301
 #
 # device udev mounted on /dev with fstype devtmpfs
 # device devpts mounted on /dev/pts with fstype devpts
@@ -1156,7 +1156,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 # device /dev/disk/by-uuid/a959862a-84b7-4373-b7d6-954ac9005249 mounted on / with fstype ext4
 # device none mounted on /sys/fs/fuse/connections with fstype fusectl
 #
-# pylint: enable=line-too-long
+# pylint: enable=C0301
 
 #        print "dbg:: readline: '{line}'".format(line=sio.buff[:-1])
         self.__is_per_op = False
@@ -1260,7 +1260,7 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
     def extra_next(self, sio):
 
 # -- Sample records
-# pylint: disable=line-too-long
+# pylint: disable=C0301
 #
 # 00400000-00420000 r-xp 00000000 09:01 149422156                          /bin/less
 # Size:                128 kB
@@ -1279,7 +1279,7 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
 # Locked:                0 kB
 # VmFlags: rd ex mr mw me dw
 #
-# pylint: enable=line-too-long
+# pylint: enable=C0301
 
         if sio.buff == "":
             self.field[PFC.F_START] = 0
