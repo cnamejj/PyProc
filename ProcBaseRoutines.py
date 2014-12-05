@@ -136,7 +136,7 @@ def apply_string_check(rawdata, check, val):
 
 def matches_all_crit(rawdata, rule, order = ""):
     """
-    Test to see if 'rawdata' passes all selection tests in the given 
+    Test to see if 'rawdata' passes all selection tests in the given
     parse rule.
     """
 
@@ -156,24 +156,27 @@ def matches_all_crit(rawdata, rule, order = ""):
         if __result and rule.has_key(__check):
             __val = rule[__check]
             __result, __raw = apply_string_check(__raw, __check, __val)
-#            print "dbg:: MAC: L1: rc({rc}) ch({ch}) v({val}) buf({raw})".format(ch=__check, rc=__result, raw=__raw, val=__val)
+#            print "dbg:: MAC: L1: rc({rc}) ch({ch}) v({val}) \
+#buf({raw})".format(ch=__check, rc=__result, raw=__raw, val=__val)
 
 #    print "dbg:: MAC: break: crit({crit})".format(crit=str(__crit))
 
     for __check in rule:
-#        print "dbg:: MAC: L2.1: rc({rc}) ch({ch}) has({has})".format(ch=__check, rc=__result, has=__crit.has_key(__check))
- 
+#        print "dbg:: MAC: L2.1: rc({rc}) ch({ch}) has({has})".\
+#format(ch=__check, rc=__result, has=__crit.has_key(__check))
+
         if not __result:
             __need = False
-        elif __crit.has_key(__check): 
+        elif __crit.has_key(__check):
             __need = not __crit[__check]
         else:
             __need = True
-      
+
         if __need:
             __val = rule[__check]
             __result, __raw = apply_string_check(__raw, __check, __val)
-#            print "dbg:: MAC: L2.2: rc({rc}) ch({ch}) v({val}) buf({raw})".format(ch=__check, rc=__result, raw=__raw, val=__val)
+#            print "dbg:: MAC: L2.2: rc({rc}) ch({ch}) v({val}) \
+#buf({raw})".format(ch=__check, rc=__result, raw=__raw, val=__val)
 
     return __result
 
@@ -209,7 +212,8 @@ def conv_by_rules(rawdata, rule, order=""):
             __hit, __val = apply_string_check(__val, __cr, rule[__cr])
 
     for __cr in rule:
-#        print "dbg:: CBR: L2.1: rc({rc}) ch({ch}) has({has})".format(ch=__cr, rc=__hit, has=__used.has_key(__cr))
+#        print "dbg:: CBR: L2.1: rc({rc}) ch({ch}) has({has})".format(
+#ch=__cr, rc=__hit, has=__used.has_key(__cr))
         if not __hit:
             __need = False
         elif __used.has_key(__cr):
@@ -219,7 +223,8 @@ def conv_by_rules(rawdata, rule, order=""):
 
         if __need:
             __hit, __val = apply_string_check(__val, __cr, rule[__cr])
-#            print "dbg:: CBR: L2.2: rc({rc}) ch({ch}) v({val}) buf({raw})".format(ch=__cr, rc=__hit, raw=__val, val=rule[__cr])
+#            print "dbg:: CBR: L2.2: rc({rc}) ch({ch}) v({val}) buf({raw})".\
+#format(ch=__cr, rc=__hit, raw=__val, val=rule[__cr])
 
     try:
         if not __hit:
@@ -260,7 +265,7 @@ def array_of_longs(wordlist):
     for __off in range(0, len(wordlist)):
         __nums[__off] = long(wordlist[__off])
 
-    return(__nums)
+    return __nums
 
 
 def breakout_option_list(combined, delim = ",", assign = "="):
@@ -275,7 +280,7 @@ def breakout_option_list(combined, delim = ",", assign = "="):
             __optlist[__part[0]] = __part[2]
         else:
             __optlist[__entries[__off]] = ""
-    return(__optlist)
+    return __optlist
 
 # ---
 
@@ -283,12 +288,12 @@ def breakout_option_list(combined, delim = ",", assign = "="):
 def get_file_registry():
     """Return the file handler registry"""
 
-    return(FILE_HANDLER_REGISTRY)
+    return FILE_HANDLER_REGISTRY
 
 def get_partial_file_registry():
     """Return the file handler registry for partial file path matches"""
 
-    return(PARTIAL_HANDLER_REGISTRY)
+    return PARTIAL_HANDLER_REGISTRY
 
 def proc_file_to_path(proc_file):
     """
@@ -352,7 +357,7 @@ def get_handler(proc_file):
 
             elif __patt.endswith("/"):
                 __parts = proc_file.split(__patt)
-                if(len(__parts) > 1):
+                if len(__parts) > 1:
                     if __parts[-1:][0].find("/") == -1:
                         __matchlen = len(__patt)
                         __handler = PARTIAL_HANDLER_REGISTRY[__patt]
@@ -435,16 +440,18 @@ class ProcNetNULL(object):
     handler for unrecognized files.
     """
 
+# pylint: disable=W0613
     def __init__(self, *opts):
         """For the dummy handler, just need to make an empty results field."""
         self.field = dict()
+# pylint: enable=W0613
 
     def __iter__(self):
         """Standard component of an iterator class"""
-        return(self)
+        return self
 
     def next(self):
-        """The dummy iterator signals EOF when a record is requested."""    
+        """The dummy iterator signals EOF when a record is requested."""
         raise StopIteration
 #
 register_file(F_NULL_HANDLER, ProcNetNULL)
@@ -458,17 +465,19 @@ class FixedWhitespaceDelimRecs(object):
     consistent record format
     """
 
+# pylint: disable=W0613
     def extra_init(self, *opts):
         """No-op version of optional call-out from '__init__' method"""
 
 #        print "base:extra_init: {this}".format(this=str(self))
         return
+# pylint: enable=W0613
 
     def extra_next(self, sio):
         """No-op version of optional call-out from 'next' method"""
 
 #        print "base:extra_next: {this}".format(this=str(self))
-        return(sio.buff)
+        return sio.buff
 
     def __init__(self, *opts):
 #        print "base:__init__: this{this} file{file}".format(this=str(self),
@@ -493,9 +502,9 @@ class FixedWhitespaceDelimRecs(object):
         return
 
     def __iter__(self):
-        return(self)
+        return self
 
- 
+
 
     def next(self):
         """
@@ -574,7 +583,7 @@ class FixedWhitespaceDelimRecs(object):
 #                print "dbg:: nx/nohit: n:{rn:d} f({field}) r({rule})".format(
 #                        rn=__rulenum, rule=str(__cr), field=__cr[FIELD_NAME])
 
-        return(self.extra_next(sio))
+        return self.extra_next(sio)
 
 
 
@@ -585,11 +594,13 @@ class SingleNameValueList(object):
     associated value
     """
 
+# pylint: disable=W0613
     def extra_init(self, *opts):
         """No-op version of optional call-out from '__init__' method"""
 
 #        print "base:extra_init: {this}".format(this=str(self))
         return
+# pylint: enable=W0613
 
     def __init__(self, *opts):
 #        print "base:__init__: this{this} file{file}".format(this=str(self),
@@ -614,7 +625,7 @@ class SingleNameValueList(object):
         return
 
     def __iter__(self):
-        return(self)
+        return self
 
     def next(self):
         """
@@ -644,7 +655,7 @@ class SingleNameValueList(object):
                             __seq += 1
 
             self.field[PFC.F_HITS] = __hits
-        return(self.field)
+        return self.field
 
 
 
@@ -655,11 +666,13 @@ class TwoLineLogicalRecs(object):
     logical record format
     """
 
+# pylint: disable=W0613
     def extra_init(self, *opts):
         """No-op version of optional call-out from '__init__' method"""
 
 #        print "base:extra_init: {this}".format(this=str(self))
         return
+# pylint: enable=W0613
 
     def __init__(self, *opts):
 #        print "base:__init__: this{this} file{file}".format(this=str(self),
@@ -681,7 +694,7 @@ class TwoLineLogicalRecs(object):
         return
 
     def __iter__(self):
-        return(self)
+        return self
 
     def next(self):
         """
@@ -718,11 +731,13 @@ class LabelledPairList(object):
     records of name/value pairs
     """
 
+# pylint: disable=W0613
     def extra_init(self, *opts):
         """No-op version of optional call-out from '__init__' method"""
 
 #        print "base:extra_init: {this}".format(this=str(self))
         return
+# pylint: enable=W0613
 
     def __init__(self, *opts):
 #        print "base:__init__: this{this} file{file}".format(this=str(self),
@@ -745,7 +760,7 @@ class LabelledPairList(object):
         return
 
     def __iter__(self):
-        return(self)
+        return self
 
     def next(self):
         """
@@ -769,7 +784,7 @@ class LabelledPairList(object):
         __result, __unk_label = self.curr_sio.read_labelled_pair_list_file(
                                     self, self.sock_type_list)
 
-        return(__result)
+        return __result
 
 
 
@@ -780,11 +795,13 @@ class ListOfTerms(object):
     like 'ip_tables_*' files
     """
 
+# pylint: disable=W0613
     def extra_init(self, *opts):
         """No-op version of optional call-out from '__init__' method"""
 
 #        print "base:extra_init: {this}".format(this=str(self))
         return
+# pylint: enable=W0613
 
     def __init__(self, *opts):
 #        print "base:__init__: this{this} file{file}".format(this=str(self),
@@ -805,7 +822,7 @@ class ListOfTerms(object):
         return
 
     def __iter__(self):
-        return(self)
+        return self
 
     def next(self):
         """
@@ -827,7 +844,7 @@ class ListOfTerms(object):
 
         self.field[F_TERM_LIST] = __lines
 
-        return(__lines)
+        return __lines
 #
 
 
@@ -838,17 +855,19 @@ class FixedColumnRecs(object):
     Class to read files whose fields are consistently in specific columns
     """
 
+# pylint: disable=W0613
     def extra_init(self, *opts):
         """No-op version of optional call-out from '__init__' method"""
 
 #        print "base:extra_init: {this}".format(this=str(self))
         return
+# pylint: enable=W0613
 
     def extra_next(self, sio):
         """No-op version of optional call-out from 'next' method"""
 
 #        print "base:extra_next: {this}".format(this=str(self))
-        return(sio.buff)
+        return sio.buff
 
     def __init__(self, *opts):
 #        print "base:__init__: this{this} file{file}".format(this=str(self),
@@ -871,7 +890,7 @@ class FixedColumnRecs(object):
 
     def __iter__(self):
         """Standard iterator method"""
-        return(self)
+        return self
 
     def next(self):
         """
@@ -889,7 +908,7 @@ class FixedColumnRecs(object):
                 __encol = self.fixedcols[__name][1]
                 self.field[__name] = sio.buff[__stcol:__encol]
 
-        return(self.extra_next(sio))
+        return self.extra_next(sio)
 
 
 
@@ -900,9 +919,11 @@ class SymLinkFile(object):
     just returning the target of a symlink as the first line.
     """
 
+# pylint: disable=W0613
     def extra_init(self, *opts):
         """No-op version of optional call-out from '__init__' method"""
         return
+# pylint: enable=W0613
 
     def __init__(self, *opts):
         if len(opts) > 0:
@@ -925,7 +946,7 @@ class SymLinkFile(object):
 
     def __iter__(self):
         """Standard iterator method"""
-        return(self)
+        return self
 
     def next(self):
         """
@@ -955,9 +976,11 @@ class TaggedMultiLineFile(object):
     record has been built.
     """
 
+# pylint: disable=W0613
     def extra_init(self, *opts):
         """No-op version of optional call-out from '__init__' method"""
         return
+# pylint: enable=W0613
 
     def __init__(self, *opts):
         if len(opts) > 0:
@@ -988,11 +1011,13 @@ class TaggedMultiLineFile(object):
 
     def __iter__(self):
         """Standard iterator method"""
-        return(self)
+        return self
 
+# pylint: disable=W0613
     def extra_next(self, sio):
         """No-op version of logical record post-processing method"""
-        return(self.field)
+        return self.field
+# pylint: enable=W0613
 
     def add_eor_rule(self, eor, rule, order=""):
         """
@@ -1049,26 +1074,31 @@ class TaggedMultiLineFile(object):
                         __ord = ""
                     if __cr.has_key(FIELD_NAME):
                         if matches_all_crit(__line, __cr, __ord):
-#                            print "dbg:: Tagged: pr.. hit r({rule}) o({ord})".format(rule=str(__cr), ord=str(__ord))
+#                            print "dbg:: Tagged: pr.. hit r({rule}) \
+#o({ord})".format(rule=str(__cr), ord=str(__ord))
                             __empty = False
                             __parsed = conv_by_rules(__line, __cr, __ord)
                             self.field[__cr[FIELD_NAME]] = __parsed
                             __matches += 1
                             self.hit_order[__hit] = __cr[FIELD_NAME]
                             __hit += 1
-#                            print "dbg:: Tagged: pr.. hit v({conv})".format(conv=__parsed)
+#                            print "dbg:: Tagged: pr.. hit v({conv})".\
+#format(conv=__parsed)
 #                        else:
-#                            print "dbg:: Tagged: pr.. mis r({rule})".format(rule=str(__cr))
+#                            print "dbg:: Tagged: pr.. mis r({rule})".\
+#format(rule=str(__cr))
 
                 if __matches == 0:
                     self.unused_recs[__subrec] = __line
 
-#                print "dbg:: Tagged: eor: l:{line} v({val}) r({rule})".format(line=__line, val=self.eor_value, rule=str(self.eor_rule))
+#                print "dbg:: Tagged: eor: l:{line} v({val}) r({rule})".\
+#format(line=__line, val=self.eor_value, rule=str(self.eor_rule))
                 __is_eor = conv_by_rules(__line, self.eor_rule, self.eor_order)
                 if __is_eor == self.eor_value and not __empty:
                     __done = True
-#                print "dbg:: Tagged: eor: done:{eor} v({val}) ch({ch})".format(eor=__done, val=__is_eor, ch=self.eor_value)
-                    
+#                print "dbg:: Tagged: eor: done:{eor} v({val}) ch({ch})".\
+#format(eor=__done, val=__is_eor, ch=self.eor_value)
+
             except StopIteration:
                 self.at_eof = True
                 __done = True
@@ -1076,7 +1106,7 @@ class TaggedMultiLineFile(object):
         if self.lines_read == 0:
             raise StopIteration
 
-        return(self.extra_next(sio))
+        return self.extra_next(sio)
 
 
 
@@ -1086,16 +1116,18 @@ class SingleTextField(object):
     Base class for files that are one line of text, not to be parsed
     """
 
+# pylint: disable=W0613
     def extra_init(self, *opts):
         """No-op version of optional call-out from '__init__' method"""
         return
+# pylint: enable=W0613
 
     def extra_next(self, sio):
         """No-op version of optional call-out from 'next' method"""
 
         __line = sio.buff.partition("\n")[0]
         self.field[PFC.F_DATA] = __line
-        return(__line)
+        return __line
 
     def __init__(self, *opts):
         if len(opts) > 0:
@@ -1115,7 +1147,7 @@ class SingleTextField(object):
         return
 
     def __iter__(self):
-        return(self)
+        return self
 
     def next(self):
         """
@@ -1127,9 +1159,9 @@ class SingleTextField(object):
         sio = self.curr_sio
         sio.read_line()
 
-        return(self.extra_next(sio))
-        
-            
+        return self.extra_next(sio)
+
+
 
 if __name__ == "__main__":
 
