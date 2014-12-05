@@ -3159,6 +3159,12 @@ class ProcNetIGMP(PBR.FixedWhitespaceDelimRecs):
 # ... need to read the next line for the rest.
                 sio.read_line()
 
+            else:
+                self.field[PFC.F_INDEX] = 0
+                self.field[PFC.F_DEVICE] = ""
+                self.field[PFC.F_COUNT] = 0
+                self.field[PFC.F_QUERIER] = ""
+
             if sio.buff == "":
                 self.field[PFC.F_INDEX] = 0
                 self.field[PFC.F_DEVICE] = PDC.ANY_DEVICE
