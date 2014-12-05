@@ -22,6 +22,8 @@ def re_root_zoneinfo(inprecs):
         spanned  {span:d}\n\
         present  {pres:d}"
 
+    __managetemp = "        managed  {man:d}"
+
     __zonestattemp = "    {name:<12s} {val:d}"
 
     __nextpref = ", "
@@ -72,7 +74,8 @@ def re_root_zoneinfo(inprecs):
             PFC.F_NUMA_INTERLEAVE: "numa_interleave",
             PFC.F_NUMA_LOCAL: "numa_local",
             PFC.F_NUMA_OTHER: "numa_other",
-            PFC.F_NR_ANON_TRANS_HUGE: "nr_anon_transparent_hugepages"
+            PFC.F_NR_ANON_TRANS_HUGE: "nr_anon_transparent_hugepages",
+            PFC.F_NR_FREE_CMA: "nr_free_cma"
             }
 
     __fence = PFC.F_PAGES_PRESENT
@@ -92,18 +95,16 @@ def re_root_zoneinfo(inprecs):
                 low=__ff[PFC.F_PAGES_LOW], hi=__ff[PFC.F_PAGES_HIGH],
                 scan=__ff[PFC.F_PAGES_SCANNED], span=__ff[PFC.F_PAGES_SPANNED],
                 pres=__ff[PFC.F_PAGES_PRESENT])
-           
-        __show = False
-        for __off in range(0, len(__hits)):
-            if __hits[__off] == __stop:
-                break
-		
-            elif __show:
-                __key = __hits[__off]
-                print __zonestattemp.format(name=__lab[__key], val=__ff[__key])
 
-            elif __hits[__off] == __fence:
-                __show = True
+        for __off in range(0, len(__hits)):
+            if __hits[__off] == PFC.F_PAGES_MANAGED:
+                print __managetemp.format(man=__ff[PFC.F_PAGES_MANAGED])
+           
+        for __off in range(0, len(__hits)):
+            __key = __hits[__off]
+
+            if __lab.has_key(__key):
+                print __zonestattemp.format(name=__lab[__key], val=__ff[__key])
 
         __prlist = ""
         __sep = ""
