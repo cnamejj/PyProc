@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Field name constants shared by several modules, no code here"""
 
-# -- fields used for tcp, tcp6, udp and udp6 
+# -- fields used for tcp, tcp6, udp and udp6
 F_BUCKET = "bucket"
 F_ORIG_HEXIP = "orig-hexip"
 F_DEST_HEXIP = "dest-hexip"
@@ -686,6 +686,7 @@ F_MEM_ALLOW_LIST = "mem-allow-list"
 F_CSWITCH_VOL = "vol-ctx-switch"
 F_CSWITCH_NONVOL = "nonvol-ctx-switch"
 F_SEC_COMP = "seccomp"
+F_NUMA_GID = "numa-gid"
 
 # -- added for "/proc/self/sched"
 F_PROGRAM = "program-name"

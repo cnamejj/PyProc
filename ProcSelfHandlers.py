@@ -99,10 +99,10 @@ class ProcSelfLIMITS(PBR.FixedColumnRecs):
 
 # -- Sample records
 #
-# Limit                     Soft Limit           Hard Limit           Units     
-# Max cpu time              unlimited            unlimited            seconds   
-# Max file size             unlimited            unlimited            bytes     
-# Max stack size            8388608              unlimited            bytes     
+# Limit                     Soft Limit           Hard Limit           Units
+# Max cpu time              unlimited            unlimited            seconds
+# Max file size             unlimited            unlimited            bytes
+# Max stack size            8388608              unlimited            bytes
 
         if sio.buff == "":
 
@@ -191,13 +191,17 @@ class ProcSelfMAPS(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records
 #
+# pylint: disable=line-too-long
+#
 # 00400000-0041e000 r-xp 00000000 09:01 149422083                          /bin/cp
 # 0061d000-0061e000 r--p 0001d000 09:01 149422083                          /bin/cp
-# 0061f000-00620000 rw-p 00000000 00:00 0 
+# 0061f000-00620000 rw-p 00000000 00:00 0
 # 00be3000-00c04000 rw-p 00000000 00:00 0                                  [heap]
 # 7facdda3a000-7facddd03000 r--p 00000000 09:01 29890584                   /usr/lib/locale/locale-archive
 # 7facddd03000-7facddd1b000 r-xp 00000000 09:01 75238943                   /lib/x86_64-linux-gnu/libpthread-2.15.so
 # 7facddd1b000-7facddf1a000 ---p 00018000 09:01 75238943                   /lib/x86_64-linux-gnu/libpthread-2.15.so
+#
+# pylint: enable=line-too-long
 
         if sio.buff == "":
             self.field[PFC.F_START] = 0
@@ -423,12 +427,16 @@ class ProcSelfNUMAMAPS(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records
 #
+# pylint: disable=line-too-long
+#
 # 00400000 default file=/bin/cat mapped=7 mapmax=2 N0=7
 # 0060a000 default file=/bin/cat anon=1 dirty=1 N0=1
 # 0060b000 default file=/bin/cat anon=1 dirty=1 N0=1
 # 01b69000 default heap anon=3 dirty=3 active=0 N0=3
 # 7f5935a28000 default file=/usr/lib/locale/locale-archive mapped=11 mapmax=88 N0=11
 # 7f5935cf1000 default file=/lib/x86_64-linux-gnu/libc-2.15.so mapped=82 mapmax=167 N0=82
+#
+# pylint: enable=line-too-long
 
         self.field[PFC.F_HEAP] = 0
         self.field[PFC.F_STACK] = 0
@@ -460,7 +468,7 @@ class ProcSelfNUMAMAPS(PBR.FixedWhitespaceDelimRecs):
                             self.field[PFC.F_NODE_ORDER][str(__nseq)] = \
                                     __split[0][1:]
                             __nseq += 1
-            
+
         self.start = self.field[PFC.F_START]
         self.buffname = self.field[PFC.F_BUFFNAME]
         self.path = self.field[PFC.F_FILEPATH]
@@ -494,16 +502,16 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
 # The kernel source snippets that generate this file are stored in
 # "README.ProcSelfHandlers" to reduce the size of this module.
 #
-# docs: 
+# docs:
 #
 # 3.5     /proc/<pid>/mountinfo - Information about mounts
 # --------------------------------------------------------
-# 
+#
 # This file contains lines of the form:
-# 
+#
 # 36 35 98:0 /mnt1 /mnt2 rw,noatime master:1 - ext3 /dev/root rw,errors=continue
 # (1)(2)(3)   (4)   (5)      (6)      (7)   (8) (9)   (10)         (11)
-# 
+#
 # (1) mount ID:  unique identifier of the mount (may be reused after umount)
 # (2) parent ID:  ID of parent (or of self for the top of the mount tree)
 # (3) major:minor:  value of st_dev for files on filesystem
@@ -515,15 +523,15 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
 # (9) filesystem type:  name of filesystem of the form "type[.subtype]"
 # (10) mount source:  filesystem specific information or "none"
 # (11) super options:  per super block options
-# 
+#
 # Parsers should ignore all unrecognised optional fields.  Currently the
 # possible optional fields are:
-# 
+#
 # shared:X  mount is shared in peer group X
 # master:X  mount is slave to peer group X
 # propagate_from:X  mount is slave and receives propagation from peer group X(*)
 # unbindable  mount is unbindable
-# 
+#
 # (*) X is the closest dominant peer group under the process's root.  If
 # X is the immediate master of the mount, or if there's no dominant peer
 # group under the same root, then only the "master:X" field is present
@@ -563,11 +571,15 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records
 #
+# pylint: disable=line-too-long
+#
 # 15 20 0:14 / /sys rw,nosuid,nodev,noexec,relatime - sysfs sysfs rw
 # 17 20 0:5 / /dev rw,relatime - devtmpfs udev rw,size=16454700k,nr_inodes=4113675,mode=755
 # 20 1 9:1 / / rw,relatime - ext4 /dev/disk/by-uuid/a959862a-84b7-4373-b7d6-954ac9005249 rw,errors=remount-ro,user_xattr,barrier=1,stripe=256,data=ordered
 # 21 15 0:16 / /sys/fs/fuse/connections rw,relatime - fusectl none rw
 # 27 20 9:0 / /boot rw,relatime - ext4 /dev/md0 rw,user_xattr,barrier=1,stripe=128,data=ordered
+#
+# pylint: enable=line-too-long
 
         self.field[PFC.F_EXTRA_OPTS] = ""
         self.field[PFC.F_FS_TYPE] = ""
@@ -633,6 +645,8 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 # --and--
 # source: net/sunrpc/xprtsock.c
 #
+# pylint: disable=line-too-long
+#
 # The kernel source snippets that generate this file are stored in
 # "README.ProcSelfHandlers" to reduce the size of this module.
 #
@@ -663,6 +677,8 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 # (M) \txprt: (15) !INT! !INT! !INT! !INT! !INT! !INT! !INT!
 #     (15) local|udp
 # (N) \txprt: tcp !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT! !INT!
+#
+# pylint: enable=line-too-long
 
     def extra_init(self, *opts):
         """Custom processing for the record just read"""
@@ -775,6 +791,8 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         Driver for parsing options subrecords
         """
 
+# pylint: disable=line-too-long
+#
 # (B) \topts: (2){,sync}{,noatime}{,nodiratime}(3)(4)(5)(6)(7)(8)(9)
 #     (2) ro|rw
 #     (3) ,vers=!INT!,rsize=!INT!,wsize=!INT!{,bsize=!INT!},namelen=!INT!
@@ -786,6 +804,8 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 #         (10) !IP4!|!IP6!|unspecified
 #         (11) !PROTOCOL!|auto
 #     (9) {,fsc}{,lookupcache={none|pos}}{,local_lock={none|all|flock|posix}}
+#
+# pylint: enable=line-too-long
 
 
         __opt = PBR.breakout_option_list(sio.get_word(1))
@@ -866,9 +886,11 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
     def parse_nfsv4_line(self, sio):
         """
         Parse a subrecord with NFS v4 info
-
-# (E) \tnfsv4: bm0=0x!HEX!,bm1=0x!HEX!,acl=0x!HEX!{,sessions}{,pnfs={!NAME!|not configured}}
         """
+
+# pylint: disable=line-too-long
+# (E) \tnfsv4: bm0=0x!HEX!,bm1=0x!HEX!,acl=0x!HEX!{,sessions}{,pnfs={!NAME!|not configured}}
+# pylint: enable=line-too-long
         __opts = PBR.breakout_option_list(sio.get_word(1))
 
         self.field[PFC.F_NFSV4_BM0] = PBR.conv_by_rules(
@@ -982,7 +1004,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         __val[PFC.F_XPR_REQ] = __nums[7]
         __val[PFC.F_XPR_BACKLOG] = __nums[8]
 
-        return(__val)
+        return __val
 
     def parse_xprt_udp(self, sio):
         """Parse a udp version of an 'xprt' subrecord"""
@@ -998,7 +1020,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         __val[PFC.F_XPR_REQ] = __nums[5]
         __val[PFC.F_XPR_BACKLOG] = __nums[6]
 
-        return(__val)
+        return __val
 
     def parse_xprt_tcp(self, sio):
         """Parse a tcp version of an 'xprt' subrecord"""
@@ -1017,7 +1039,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
         __val[PFC.F_XPR_REQ] = __nums[8]
         __val[PFC.F_XPR_BACKLOG] = __nums[9]
 
-        return(__val)
+        return __val
 
 # (M) \txprt: (15) !INT! !INT! !INT! !INT! !INT! !INT! !INT!
 #     (15) local|udp
@@ -1088,7 +1110,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
                 result = self.extra_next(self.curr_sio)
             else:
                 raise StopIteration
-        return(result)
+        return result
 
     def init_field_values(self):
         """Reset field dictionary to startng values"""
@@ -1126,12 +1148,15 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records (NFS mounts add all the complex sub-records, no sample
 #    available yet)
+# pylint: disable=line-too-long
 #
 # device udev mounted on /dev with fstype devtmpfs
 # device devpts mounted on /dev/pts with fstype devpts
 # device tmpfs mounted on /run with fstype tmpfs
 # device /dev/disk/by-uuid/a959862a-84b7-4373-b7d6-954ac9005249 mounted on / with fstype ext4
 # device none mounted on /sys/fs/fuse/connections with fstype fusectl
+#
+# pylint: enable=line-too-long
 
 #        print "dbg:: readline: '{line}'".format(line=sio.buff[:-1])
         self.__is_per_op = False
@@ -1176,7 +1201,7 @@ REGISTER_PARTIAL_FILE("mountstats", ProcSelfMOUNTSTATS)
 # ---
 class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/self/smaps"""
-# 
+#
 # source: fs/proc/task_mmu.c
 #
 # The kernel source snippets that generate this file are stored in
@@ -1235,6 +1260,7 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
     def extra_next(self, sio):
 
 # -- Sample records
+# pylint: disable=line-too-long
 #
 # 00400000-00420000 r-xp 00000000 09:01 149422156                          /bin/less
 # Size:                128 kB
@@ -1252,6 +1278,8 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
 # MMUPageSize:           4 kB
 # Locked:                0 kB
 # VmFlags: rd ex mr mw me dw
+#
+# pylint: enable=line-too-long
 
         if sio.buff == "":
             self.field[PFC.F_START] = 0
@@ -1323,7 +1351,7 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
                 sio.queue_line(sio.buff)
 
             __hold_pref = __pref
-                
+
         self.field[PFC.F_FL_READ] = self.field[PFC.F_FLAGS][:1]
         self.field[PFC.F_FL_WRITE] = self.field[PFC.F_FLAGS][1:2]
         self.field[PFC.F_FL_EXEC] = self.field[PFC.F_FLAGS][2:3]
@@ -1406,11 +1434,13 @@ class ProcSelfSTATUS(PBR.TaggedMultiLineFile):
 
     def extra_init(self, *opts):
         self.minfields = 2
-        
+
         PBR.add_parse_rule(self, { PREFIX: "Name:\t", NAME: PFC.F_PROG_NAME } )
         PBR.add_parse_rule(self, { PREFIX: "State:\t",
                 NAME: PFC.F_RUNSTATUS } )
         PBR.add_parse_rule(self, { PREFIX: "Tgid:\t", NAME: PFC.F_THREAD_GID,
+                CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "Ngid:\t", NAME: PFC.F_NUMA_GID,
                 CONV: long } )
         PBR.add_parse_rule(self, { PREFIX: "Pid:\t", NAME: PFC.F_PID,
                 CONV: long } )
@@ -1553,7 +1583,7 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
     def extra_init(self, *opts):
 #        self.minfields = 2
         self.minfields = 1
-        
+
         self.two_longs = ( PFC.F_EXEC_START, PFC.F_RUNTIME,
                 PFC.F_EXEC_RUNTIME, PFC.F_ST_WAIT_START, PFC.F_ST_SLEEP_START,
                 PFC.F_ST_BLOCK_START, PFC.F_ST_SLEEP_MAX, PFC.F_ST_BLOCK_MAX,
@@ -1671,7 +1701,7 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
         self.field[PFC.F_THREADS] = PBR.conv_by_rules(__mix, {
                 NAME: PFC.F_THREADS, AFTER: "#threads: ", BEFORE: ")",
                 CONV: long } )
-        self.field[PFC.F_PROGRAM] = PBR.conv_by_rules(__mix, { 
+        self.field[PFC.F_PROGRAM] = PBR.conv_by_rules(__mix, {
                 NAME: PFC.F_PROGRAM, BEFORE: " (" } )
 
         for __key in self.two_longs:
@@ -1692,7 +1722,7 @@ class ProcSelfPERSONALITY(PBR.FixedWhitespaceDelimRecs):
 # source: fs/proc/base.c
 #
 # Extract from that code
-# 
+#
 # static int proc_pid_personality(struct seq_file *m, struct pid_namespace *ns,
 #                                 struct pid *pid, struct task_struct *task)
 # {
@@ -1740,11 +1770,11 @@ class ProcSelfAUTOGROUP(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 3
 
-        PBR.add_parse_rule(self, { POS: 0, PREFIX: "/autogroup-", CONV: long, 
+        PBR.add_parse_rule(self, { POS: 0, PREFIX: "/autogroup-", CONV: long,
                 NAME: PFC.F_ID } )
         PBR.add_parse_rule(self, { POS: 2, CONV: long, NAME: PFC.F_NICE } )
         return
-                 
+
 
     def extra_next(self, sio):
 
@@ -1773,7 +1803,7 @@ class ProcSelfCOMM(PBR.SingleTextField):
     def extra_next(self, sio):
         __line = sio.buff.partition("\n")[0]
         self.field[PFC.F_COMM] = __line
-        return(__line)
+        return __line
 
 REGISTER_FILE("/proc/self/comm", ProcSelfCOMM)
 REGISTER_PARTIAL_FILE("comm", ProcSelfCOMM)
@@ -1796,7 +1826,7 @@ class ProcSelfCMDLINE(PBR.SingleTextField):
         __split = sio.buff.split("\0")
         self.field[PFC.F_COMM] = " ".join(__split)
         self.field[PFC.F_COMM_ARGS] = __split
-        return(self.field[PFC.F_COMM])
+        return self.field[PFC.F_COMM]
 
 REGISTER_FILE("/proc/self/cmdline", ProcSelfCMDLINE)
 REGISTER_PARTIAL_FILE("ps/cmdline", ProcSelfCMDLINE)
@@ -1811,15 +1841,13 @@ class ProcSelfCPUSET(PBR.SingleTextField):
     Parse /proc/self/cpuset file
     """
 
-# source: 
-#
-#
+# source:
 #
 
     def extra_next(self, sio):
         __line = sio.buff.partition("\n")[0]
         self.field[PFC.F_CPU_SET] = __line
-        return(self.field[PFC.F_CPU_SET])
+        return self.field[PFC.F_CPU_SET]
 
 REGISTER_FILE("/proc/self/cpuset", ProcSelfCPUSET)
 REGISTER_PARTIAL_FILE("cpuset", ProcSelfCPUSET)
@@ -1855,7 +1883,7 @@ class ProcSelfSYSCALL(PBR.SingleTextField):
 
         sio.close_file()
 
-        return(self.field[PFC.F_SYSCALL])
+        return self.field[PFC.F_SYSCALL]
 
 REGISTER_FILE("/proc/self/syscall", ProcSelfSYSCALL)
 REGISTER_PARTIAL_FILE("syscall", ProcSelfSYSCALL)
@@ -1888,7 +1916,7 @@ class ProcSelfWCHAN(PBR.SingleTextField):
 
         sio.close_file()
 
-        return(self.field[PFC.F_WCHAN])
+        return self.field[PFC.F_WCHAN]
 
 REGISTER_FILE("/proc/self/wchan", ProcSelfWCHAN)
 REGISTER_PARTIAL_FILE("wchan", ProcSelfWCHAN)
@@ -1916,7 +1944,7 @@ class ProcSelfSESSIONID(PBR.SingleTextField):
         __line = sio.buff.partition("\n")[0]
         self.field[PFC.F_SESSIONID] = __line
 
-        return(self.field[PFC.F_SESSIONID])
+        return self.field[PFC.F_SESSIONID]
 
 REGISTER_FILE("/proc/self/sessionid", ProcSelfSESSIONID)
 REGISTER_PARTIAL_FILE("sessionid", ProcSelfSESSIONID)
@@ -1944,7 +1972,7 @@ class ProcSelfLOGINUID(PBR.SingleTextField):
         __line = sio.buff.partition("\n")[0]
         self.field[PFC.F_LOGINUID] = __line
 
-        return(self.field[PFC.F_LOGINUID])
+        return self.field[PFC.F_LOGINUID]
 
 REGISTER_FILE("/proc/self/loginuid", ProcSelfLOGINUID)
 REGISTER_PARTIAL_FILE("loginuid", ProcSelfLOGINUID)
@@ -1979,7 +2007,7 @@ class ProcSelfSTATM(PBR.FixedWhitespaceDelimRecs):
         PBR.add_parse_rule(self, { POS: 5, CONV: long,
                 NAME: PFC.F_DATA_SIZE } )
         return
-                 
+
 
     def extra_next(self, sio):
 
@@ -2002,7 +2030,7 @@ class ProcSelfSTAT(PBR.FixedWhitespaceDelimRecs):
     Parse /proc/self/stat file
     """
 
-# source: 
+# source:
 #
 # Excerpt from that code
 #
@@ -2042,7 +2070,7 @@ class ProcSelfSTAT(PBR.FixedWhitespaceDelimRecs):
         PBR.add_parse_rule(self, { POS: 23, CONV: long,
                 NAME: PFC.F_RSS_SIZE } )
         PBR.add_parse_rule(self, { POS: 24, CONV: long, NAME: PFC.F_RSS_LIM } )
-                
+
         PBR.add_parse_rule(self, { POS: 25, CONV: long,
                 NAME: PFC.F_START_CODE } )
         PBR.add_parse_rule(self, { POS: 26, CONV: long,
@@ -2072,20 +2100,26 @@ class ProcSelfSTAT(PBR.FixedWhitespaceDelimRecs):
         PBR.add_parse_rule(self, { POS: 43, CONV: long, NAME: PFC.F_CGTIME } )
 
         # -- The next 8 parameters are only available in newer kernels
-        PBR.add_parse_rule(self, { POS: 44, CONV: long, NAME: PFC.F_START_DATA } )
-        PBR.add_parse_rule(self, { POS: 45, CONV: long, NAME: PFC.F_END_DATA } )
-        PBR.add_parse_rule(self, { POS: 46, CONV: long, NAME: PFC.F_START_BRK } )
-        PBR.add_parse_rule(self, { POS: 47, CONV: long, NAME: PFC.F_ARG_START } )
+        PBR.add_parse_rule(self, { POS: 44, CONV: long,
+                NAME: PFC.F_START_DATA } )
+        PBR.add_parse_rule(self, { POS: 45, CONV: long,
+                NAME: PFC.F_END_DATA } )
+        PBR.add_parse_rule(self, { POS: 46, CONV: long,
+                NAME: PFC.F_START_BRK } )
+        PBR.add_parse_rule(self, { POS: 47, CONV: long,
+                NAME: PFC.F_ARG_START } )
         PBR.add_parse_rule(self, { POS: 48, CONV: long, NAME: PFC.F_ARG_END } )
-        PBR.add_parse_rule(self, { POS: 49, CONV: long, NAME: PFC.F_ENV_START } )
+        PBR.add_parse_rule(self, { POS: 49, CONV: long,
+                NAME: PFC.F_ENV_START } )
         PBR.add_parse_rule(self, { POS: 50, CONV: long, NAME: PFC.F_ENV_END } )
-        PBR.add_parse_rule(self, { POS: 51, CONV: long, NAME: PFC.F_EXIT_CODE } )
-        
+        PBR.add_parse_rule(self, { POS: 51, CONV: long,
+                NAME: PFC.F_EXIT_CODE } )
+
         return
-                 
+
 
     def extra_next(self, sio):
-        return(self.field)
+        return self.field
 
 REGISTER_FILE("/proc/self/stat", ProcSelfSTAT)
 REGISTER_PARTIAL_FILE("ps/stat", ProcSelfSTAT)
@@ -2120,7 +2154,7 @@ class ProcSelfSCHEDSTAT(PBR.FixedWhitespaceDelimRecs):
         PBR.add_parse_rule(self, { POS: 2, CONV: long,
                 NAME: PFC.F_RUN_TIMESLICES } )
         return
-                 
+
 
     def extra_next(self, sio):
 
@@ -2157,9 +2191,9 @@ class ProcSelfCOREDUMPFILTER(PBR.FixedWhitespaceDelimRecs):
         PBR.add_parse_rule(self, { POS: 0, CONV: long, BASE: 16,
                 NAME: PFC.F_COREDUMP_FILTER } )
         return
-                 
+
     def extra_next(self, sio):
-        return(self.field[PFC.F_COREDUMP_FILTER])
+        return self.field[PFC.F_COREDUMP_FILTER]
 
 REGISTER_FILE("/proc/self/coredump_filter", ProcSelfCOREDUMPFILTER)
 REGISTER_PARTIAL_FILE("ps/coredump_filter", ProcSelfCOREDUMPFILTER)
@@ -2188,9 +2222,9 @@ class ProcSelfOOMSCORE(PBR.FixedWhitespaceDelimRecs):
         PBR.add_parse_rule(self, { POS: 0, CONV: long,
                 NAME: PFC.F_OOM_SCORE } )
         return
-                 
+
     def extra_next(self, sio):
-        return(self.field[PFC.F_OOM_SCORE])
+        return self.field[PFC.F_OOM_SCORE]
 
 REGISTER_FILE("/proc/self/oom_score", ProcSelfOOMSCORE)
 REGISTER_PARTIAL_FILE("oom_score", ProcSelfOOMSCORE)
@@ -2223,9 +2257,9 @@ class ProcSelfOOMADJ(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 1
         PBR.add_parse_rule(self, { POS: 0, CONV: long, NAME: PFC.F_OOM_ADJ } )
         return
-                 
+
     def extra_next(self, sio):
-        return(self.field[PFC.F_OOM_ADJ])
+        return self.field[PFC.F_OOM_ADJ]
 
 REGISTER_FILE("/proc/self/oom_adj", ProcSelfOOMADJ)
 REGISTER_PARTIAL_FILE("oom_adj", ProcSelfOOMADJ)
@@ -2256,9 +2290,9 @@ class ProcSelfOOMSCOREADJ(PBR.FixedWhitespaceDelimRecs):
         PBR.add_parse_rule(self, { POS: 0, CONV: long,
                 NAME: PFC.F_OOM_SCORE_ADJ } )
         return
-                 
+
     def extra_next(self, sio):
-        return(self.field[PFC.F_OOM_SCORE_ADJ])
+        return self.field[PFC.F_OOM_SCORE_ADJ]
 
 REGISTER_FILE("/proc/self/oom_score_adj", ProcSelfOOMSCOREADJ)
 REGISTER_PARTIAL_FILE("oom_score_adj", ProcSelfOOMSCOREADJ)
@@ -2297,7 +2331,7 @@ class ProcSelfENVIRON(PBR.SingleTextField):
                 __val = __ref.partition("=")[2]
                 self.field[__key] = __val
 
-        return(self.field)
+        return self.field
 
 REGISTER_FILE("/proc/self/environ", ProcSelfENVIRON)
 REGISTER_PARTIAL_FILE("environ", ProcSelfENVIRON)
