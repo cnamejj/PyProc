@@ -3731,7 +3731,7 @@ REGISTER_FILE("/proc/net/fib_trie", ProcNetFIBTRIE)
 REGISTER_PARTIAL_FILE("fib_trie", ProcNetFIBTRIE)
 
 
-
+# pylint: disable=R0914
 #
 class ProcNetFIBTRIESTAT(PBR.FixedWhitespaceDelimRecs):
     """
@@ -3871,6 +3871,7 @@ class ProcNetFIBTRIESTAT(PBR.FixedWhitespaceDelimRecs):
 REGISTER_FILE("/proc/net/fib_triestat", ProcNetFIBTRIESTAT)
 REGISTER_PARTIAL_FILE("fib_triestat", ProcNetFIBTRIESTAT)
 
+# pylint: enable=R0914
 
 
 if __name__ == "__main__":

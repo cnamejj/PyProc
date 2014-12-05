@@ -2,6 +2,8 @@
 """Get the Python field name associated with a descriptive label
 """
 
+# pylint: disable=C0103
+
 import sys
 import ProcFieldConstants
 

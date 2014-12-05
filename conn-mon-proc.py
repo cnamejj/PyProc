@@ -9,6 +9,9 @@ sockets that were found as it was written and the number of
 times each was seen.
 """
 
+
+# pylint: disable=C0103
+
 import time
 import sys
 import operator
@@ -16,7 +19,7 @@ import operator
 import ProcHandlers
 import ProcessInfo
 import CachedDNS
-    
+
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)

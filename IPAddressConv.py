@@ -21,7 +21,7 @@ def ipv6_hexstring_to_presentation(hexip):
     Convert an IPv6 address, expressed as a string of hex digits, into
     the standard text presentation format.  See file /proc/net/if_net6
     for an example of where that format is used.
-    """    
+    """
 
     __delim = ipv6_hexstring_to_hexdelimited(hexip)
     __pres = socket.inet_ntop(socket.AF_INET6, socket.inet_pton(

@@ -3,7 +3,7 @@
 
 import socket
 
-class LookupIP:
+class LookupIP(object):
     """
     Map IP's to hostnames using local cache where possible, using DNS lookups
     otherwise
@@ -53,7 +53,7 @@ class LookupIP:
     def get_cache_list(self):
         """Return a copy of the cached names/IP's"""
 
-        return(self.__hostname_cache)
+        return self.__hostname_cache
 
 
 

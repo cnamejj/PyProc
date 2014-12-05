@@ -2,8 +2,13 @@
 """Get descriptive label associated with a field name
 """
 
+# pylint: disable=C0103
+
 import sys
+
+# pylint: disable=W0611
 import ProcFieldConstants
+# pylint: enable=W0611
 
 # ---
 
@@ -21,7 +26,7 @@ if len(sys.argv) > 1:
 
         except AttributeError:
             FIELD_VAL = NO_SUCH_FIELD
-	    
+
         except SyntaxError:
             FIELD_VAL = NO_SUCH_FIELD
 

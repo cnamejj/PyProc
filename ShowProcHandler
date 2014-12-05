@@ -7,7 +7,7 @@ import sys
 import ProcHandlers
 
 PBR = ProcHandlers.PBR
-    
+
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
@@ -37,6 +37,9 @@ else:
     if QUALIFY != "":
         TARGET = "{dir}/{file}".format(dir=TARGET, file=QUALIFY)
 
+# Looks like 'pylint' can't figure this one out...
+# pylint: disable=E1103
     print "File {file} handled by {name:s} from {mod}".format(file=TARGET,
             name=HANDLER.__name__, mod=HANDLER.__module__)
+# pylint: enable=E1103
 

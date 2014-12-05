@@ -2,6 +2,9 @@
 """List all the active timers currently on any CPU
 """
 
+# pylint: disable=C0103
+
+
 import sys
 import ProcHandlers
 import ProcFieldConstants
@@ -10,7 +13,7 @@ import ProcessInfo
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
-    
+
 PFC = ProcFieldConstants
 PIN = ProcessInfo
 

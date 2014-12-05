@@ -20,7 +20,7 @@
 """
 Main programmatic interface to collected '/proc' file handlers
 
-This is an umbrella module that imports all the classes that 
+This is an umbrella module that imports all the classes that
 read/parse file in the '/proc' filesystem.  A registry mapping
 specific files (and partial filenames) to handler objects is
 created in the process.  And the are lookup routines included
@@ -34,10 +34,12 @@ import ProcessInfo
 import ProcBaseRoutines
 import ProcFieldConstants
 import ProcDataConstants
+# pylint: disable=W0611
 import ProcNetHandlers
 import ProcRootHandlers
 import ProcSelfHandlers
 import ProcSysvipcHandlers
+# pylint: enable=W0611
 
 PBR = ProcBaseRoutines
 PFC = ProcFieldConstants

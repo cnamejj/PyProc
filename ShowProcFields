@@ -3,7 +3,7 @@
 
 import sys
 import ProcHandlers
-    
+
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
@@ -33,7 +33,7 @@ def show_recs_from_one_file( ioh, proc_file):
                         subseq = subseq + 1
                         __templ = "- - - {seq}.{subseq}. {subkey} : {subval}"
                         if type(subent) == str:
-                            print __templ.format(seq=fseq, subseq=subseq, 
+                            print __templ.format(seq=fseq, subseq=subseq,
                                     subkey=subent,
                                     subval=str(currval[subent]))
                         else:

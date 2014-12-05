@@ -9,7 +9,7 @@ import ProcHandlers
 PBR = ProcHandlers.PBR
 
 NOT_FOUND = "N/A"
-    
+
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)

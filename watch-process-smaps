@@ -3,6 +3,8 @@
 Display memory use changes over time for a specific process.
 """
 
+# pylint: disable=C0103
+
 import sys
 import time
 import ProcHandlers
@@ -134,7 +136,7 @@ def get_current_smaps_counts(smap_path):
             __path = __fields[PFC.F_PATH]
 
         __counters = dict()
-        
+
         for __cname in COUNTER_LIST:
             if DISP_LIST[__cname]:
                 __counters[__cname] = __fields[__cname]
@@ -390,7 +392,7 @@ else:
                             DPC = (delta[key] * 100.0) / pset[key]
                         except ZeroDivisionError:
                             DPC = PDC.INF
- 
+
                         if delta[key] > 0:
                             desc = IS_UP
                         else:

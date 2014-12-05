@@ -1880,7 +1880,8 @@ REGISTER_FILE("/proc/vmallocinfo", ProcRootVMALLOCINFO)
 REGISTER_PARTIAL_FILE("vmallocinfo", ProcRootVMALLOCINFO)
 
 
-
+# pylint: disable=R0902
+#
 # ---
 class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/mdstat"""
@@ -2363,6 +2364,7 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
 REGISTER_FILE("/proc/mdstat", ProcRootMDSTAT)
 REGISTER_PARTIAL_FILE("mdstat", ProcRootMDSTAT)
 
+# pylint: enable=R0902
 
 
 
@@ -3759,7 +3761,7 @@ class ProcRootTIMERLIST(PBR.TaggedMultiLineFile):
 
         return(__matched, __result)
 
-
+# pylint: disable=R0914
     def extra_next(self, sio):
 
         try:
@@ -3856,6 +3858,8 @@ class ProcRootTIMERLIST(PBR.TaggedMultiLineFile):
                 self.field[__key] = self.field[__key].strip()
 
         return self.field
+
+# pylint: enable=R0914
 
 REGISTER_FILE("/proc/timer_list", ProcRootTIMERLIST)
 REGISTER_PARTIAL_FILE("timer_list", ProcRootTIMERLIST)

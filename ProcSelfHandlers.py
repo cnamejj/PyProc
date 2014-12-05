@@ -630,7 +630,8 @@ REGISTER_FILE("/proc/self/mountinfo", ProcSelfMOUNTINFO)
 REGISTER_PARTIAL_FILE("mountinfo", ProcSelfMOUNTINFO)
 
 
-
+# pylint: disable=R0902
+#
 # ---
 class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
     """
@@ -1196,6 +1197,8 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
 #
 REGISTER_FILE("/proc/self/mountstats", ProcSelfMOUNTSTATS)
 REGISTER_PARTIAL_FILE("mountstats", ProcSelfMOUNTSTATS)
+
+# pylint: enable=R0902
 
 
 # ---

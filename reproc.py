@@ -2,10 +2,13 @@
 
 """Code to re-create /proc data files from parsed records"""
 
+# pylint: disable=W0614,W0401
+
 import ProcHandlers as PH
 import sys
 from regentest import *
 import regentest as RG
+
 
 # ---
 

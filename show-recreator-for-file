@@ -2,10 +2,15 @@
 
 """Lookup the recreator method for the given file"""
 
+# pylint: disable=C0103
+
+
 import ProcHandlers as PH
 import sys
+# pylint: disable=W0401,W0614
 from regentest import *
 import regentest as RG
+# pylint: enable=W0401,W0614
 
 # ---
 

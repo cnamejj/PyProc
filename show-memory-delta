@@ -2,6 +2,9 @@
 """Monitor classes of memory use and note significant changes
 """
 
+# pylint: disable=C0103
+
+
 import sys
 import time
 import ProcHandlers
@@ -11,7 +14,7 @@ import ProcDataConstants
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
-    
+
 PFC = ProcFieldConstants
 PDC = ProcDataConstants
 

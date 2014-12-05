@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """Get process related info from ip/port unique socket info"""
-    
+
 from subprocess import Popen, PIPE
 import pwd
 import os
@@ -87,6 +87,8 @@ def inode_to_socket_map():
 
 # ---
 
+# pylint: disable=R0914
+
 def socket_inode_to_pid_map():
     """
     Create a dictionary mapping inodes to the PID that has them open.
@@ -127,6 +129,8 @@ def socket_inode_to_pid_map():
         pass
 
     return __inode_map
+
+# pylint: enable=R0914
 
 
 def pid_to_proc_summ_pieces(targetpid = "self"):

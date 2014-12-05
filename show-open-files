@@ -2,6 +2,9 @@
 """Show all the open files on all processes on the system.
 """
 
+# pylint: disable=C0103
+
+
 import sys
 import os
 import ProcHandlers
@@ -11,7 +14,7 @@ import ProcessInfo
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
     sys.exit(0)
-    
+
 PFC = ProcFieldConstants
 PSI = ProcessInfo
 
