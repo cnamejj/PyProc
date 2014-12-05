@@ -18,6 +18,9 @@ def re_net_igmp(inprecs):
     __template = "{idx:d}\t{dev:<10s}: {count:5d} {query:>7s}\n\
 \t\t\t\t{group:08X} {users:5d} {timer:d}:{zero:08x}\t\t{rep:d}"
 
+    __nolabeltemp = "\t\t\t\t{group:08X} {users:5d} \
+{timer:d}:{zero:08x}\t\t{rep:d}"
+
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 
     print __head
@@ -25,11 +28,15 @@ def re_net_igmp(inprecs):
     for __hilit in inprecs:
         __ff = inprecs.field
 
-        print __template.format(idx=__ff[PFC.F_INDEX], dev=__ff[PFC.F_DEVICE], 
-                count=__ff[PFC.F_COUNT], query=__ff[PFC.F_QUERIER], 
-                group=__ff[PFC.F_GROUP], users=__ff[PFC.F_USERS], 
-                timer=__ff[PFC.F_TIMER], zero=__ff[PFC.F_ZERO1], 
-                rep=__ff[PFC.F_REPORTER]
-                )
+        if __ff[PFC.F_DEVICE] == "":
+            print __nolabeltemp.format(group=__ff[PFC.F_GROUP],
+                    users=__ff[PFC.F_USERS], timer=__ff[PFC.F_TIMER],
+                    zero=__ff[PFC.F_ZERO1], rep=__ff[PFC.F_REPORTER])
+        else:
+            print __template.format(idx=__ff[PFC.F_INDEX],
+                    dev=__ff[PFC.F_DEVICE], count=__ff[PFC.F_COUNT],
+                    query=__ff[PFC.F_QUERIER], group=__ff[PFC.F_GROUP],
+                    users=__ff[PFC.F_USERS], timer=__ff[PFC.F_TIMER],
+                    zero=__ff[PFC.F_ZERO1], rep=__ff[PFC.F_REPORTER])
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/net/igmp")] = re_net_igmp
