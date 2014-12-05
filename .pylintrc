@@ -38,8 +38,8 @@ load-plugins=
 # R0903: Too few public methods
 # R0912: Too many branches
 # R0915: Too many statements
-disable=R0201,R0903,R0912,R0915
-
+# I0011: Locally disable ???
+disable=R0201,R0903,R0912,R0915,I0011
 
 [REPORTS]
 
