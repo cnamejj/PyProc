@@ -245,7 +245,7 @@ class ProcRootMTRR(PBR.FixedWhitespaceDelimRecs):
 
             __offset += 2
             self.field[PFC.F_TYPE] = sio.get_word(__offset)
-                
+
         self.index = self.field[PFC.F_INDEX]
         self.base = self.field[PFC.F_BASE_MEMORY]
         self.size = self.field[PFC.F_SIZE]
@@ -398,9 +398,13 @@ class ProcRootBUDDYINFO(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records
 #
-# Node 0, zone      DMA      1      0      1      0      1      1      1      0      1      1      3 
-# Node 0, zone    DMA32  18435  13755   5520    786      7      1      0      1      0      0      0 
-# Node 0, zone   Normal  36118   8165   6999    374      0      0      0      0      0      0      1 
+# pylint: disable=C0301
+#
+# Node 0, zone      DMA      1      0      1      0      1      1      1      0      1      1      3
+# Node 0, zone    DMA32  18435  13755   5520    786      7      1      0      1      0      0      0
+# Node 0, zone   Normal  36118   8165   6999    374      0      0      0      0      0      0      1
+#
+# pylint: enable=C0301
 
         if sio.buff == "":
             self.field[PFC.F_NODE] = 0
@@ -435,6 +439,8 @@ class ProcRootSWAPS(PBR.FixedWhitespaceDelimRecs):
 
 # source: mm/swapfile.c
 #
+# pylint: disable=C0301
+#
 #        if (si == SEQ_START_TOKEN) {
 #                seq_puts(swap,"Filename\t\t\t\tType\t\tSize\tUsed\tPriority\n");
 #                return 0;
@@ -450,6 +456,7 @@ class ProcRootSWAPS(PBR.FixedWhitespaceDelimRecs):
 #                        si->inuse_pages << (PAGE_SHIFT - 10),
 #                        si->prio);
 #
+# pylint: enable=C0301
 
     def extra_init(self, *opts):
         self.minfields = 5
@@ -660,11 +667,15 @@ class ProcRootDISKSTATS(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records
 #
+# pylint: disable=C0301
+#
 # 7       6 loop6 0 0 0 0 0 0 0 0 0 0 0
 # 7       7 loop7 0 0 0 0 0 0 0 0 0 0 0
 # 8       0 sda 15235018 10980568 3312891398 74957548 8362788 4577595 144647677 114936764 0 90848652 189870564
 # 8       1 sda1 398 1129 4568 1424 1 0 1 0 0 800 1424
 # 8       2 sda2 15185612 10961911 3312352646 74838696 7650568 4513340 143561212 103557888 0 79839900 178373748
+#
+# pylint: enable=C0301
 
         if sio.buff == "":
             self.field[PFC.F_MAJOR_DEV] = 0
@@ -841,7 +852,7 @@ class ProcRootPARTITIONS(PBR.FixedWhitespaceDelimRecs):
 # -- Sample records
 #
 # major minor  #blocks  name
-# 
+#
 #    8        0 1953514584 sda
 #    8        1     102400 sda1
 #    8        2 1610612736 sda2
@@ -1042,7 +1053,7 @@ class ProcRootDMA(PBR.FixedWhitespaceDelimRecs):
 # static int proc_dma_show(struct seq_file *m, void *v)
 # {
 #         int i;
-# 
+#
 #         for (i = 0 ; i < MAX_DMA_CHANNELS ; i++) {
 #                 if (dma_chan_busy[i].lock) {
 #                         seq_printf(m, "%2d: %s\n", i,
@@ -1095,7 +1106,7 @@ REGISTER_PARTIAL_FILE("dma", ProcRootDMA)
 # ---
 class ProcRootFB(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/fb"""
-# source: 
+# source:
 #
 #        struct fb_info *fi = registered_fb[i];
 #
@@ -1287,7 +1298,7 @@ REGISTER_PARTIAL_FILE("key-users", ProcRootKEYUSERS)
 # ---
 class ProcRootVERSIONSIGNATURE(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/version_signature"""
-# source: 
+# source:
 #
 #         seq_printf(m, "%s\n", CONFIG_VERSIONSIGNATURE);
 
@@ -1311,7 +1322,7 @@ class ProcRootVERSIONSIGNATURE(PBR.FixedWhitespaceDelimRecs):
 
         self.version = self.field[PFC.F_VERSION_STRING]
 
-        return(self.version)
+        return self.version
 
 #
 REGISTER_FILE("/proc/version_signature", ProcRootVERSIONSIGNATURE)
@@ -1332,11 +1343,6 @@ class ProcRootVERSION(PBR.FixedWhitespaceDelimRecs):
     def extra_init(self, *opts):
         self.minfields = 3
 
-#        PBR.add_parse_rule(self, { NAME: PFC.F_SYSNAME, BEFORE: " version " } )
-#        PBR.add_parse_rule(self, { NAME: PFC.F_RELEASE, AFTER: " version ", BEFORE: " (" } )
-#        PBR.add_parse_rule(self, { NAME: PFC.F_COMP_BY, AFTER: " (", BEFORE: "@" } )
-#        PBR.add_parse_rule(self, { NAME: PFC.F_COMP_HOST, AFTER: "@", BEFORE: ") " } )
-#
         self.full_string = ""
         self.sysname = ""
         self.release = ""
@@ -1347,7 +1353,11 @@ class ProcRootVERSION(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records
 #
+# pylint: disable=C0301
+#
 # Linux version 3.2.0-24-generic (buildd@crested) (gcc version 4.6.3 (Ubuntu/Linaro 4.6.3-1ubuntu5) ) #39-Ubuntu SMP Mon May 21 16:52:17 UTC 2012
+#
+# pylint: enable=C0301
 
         if sio.buff == "":
             self.field[PFC.F_VERSION_STRING] = ""
@@ -1520,7 +1530,11 @@ class ProcRootCMDLINE(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records
 #
+# pylint: disable=C0301
+#
 # BOOT_IMAGE=/vmlinuz-3.2.0-24-generic root=UUID=a959862a-84b7-4373-b7d6-954ac9005249 ro quiet splash vt.handoff=7
+#
+# pylint: enable=C0301
 
         if sio.buff == "":
             self.field[PFC.F_CMDLINE] = ""
@@ -1530,7 +1544,7 @@ class ProcRootCMDLINE(PBR.FixedWhitespaceDelimRecs):
 
         self.cmdline = self.field[PFC.F_CMDLINE]
 
-        return(self.cmdline)
+        return self.cmdline
 #
 REGISTER_FILE("/proc/cmdline", ProcRootCMDLINE)
 
@@ -1612,11 +1626,15 @@ class ProcRootSLABINFO(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records
 #
+# pylint: disable=C0301
+#
 # slabinfo - version: 2.1
 # # name            <active_objs> <num_objs> <objsize> <objperslab> <pagesperslab> : tunables <limit> <batchcount> <sharedfactor> : slabdata <active_slabs> <num_slabs> <sharedavail>
 # fat_inode_cache      216    216    672   24    4 : tunables    0    0    0 : slabdata      9      9      0
 # fat_cache            714    714     40  102    1 : tunables    0    0    0 : slabdata      7      7      0
 # nf_conntrack_expect      0      0    240   34    2 : tunables    0    0    0 : slabdata      0      0      0
+#
+# pylint: enable=C0301
 
         if sio.buff == "":
             self.field[PFC.F_SLAB_NAME] = ""
@@ -1671,7 +1689,7 @@ REGISTER_PARTIAL_FILE("slabinfo", ProcRootSLABINFO)
 # ---
 class ProcRootVMALLOCINFO(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/vmallocinfo"""
-# source: 
+# source:
 #
 #        seq_printf(m, "0x%p-0x%p %7ld",
 #                v->addr, v->addr + v->size, v->size);
@@ -1742,12 +1760,16 @@ class ProcRootVMALLOCINFO(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records
 #
+# pylint: disable=C0301
+#
 # 0xffffc900100c0000-0xffffc900100e1000  135168 e1000_probe+0x21b/0xa0b [e1000e] phys=fbf00000 ioremap
 # 0xffffc900100e1000-0xffffc900100ea000   36864 xt_alloc_table_info+0xda/0x10e [x_tables] pages=8 vmalloc N0=8
 # 0xffffc900100ea000-0xffffc900100f3000   36864 xt_alloc_table_info+0xda/0x10e [x_tables] pages=8 vmalloc N0=8
 # 0xffffc900100fb000-0xffffc90010100000   20480 swap_cgroup_swapon+0x60/0x170 pages=4 vmalloc N0=4
 # 0xffffc90010100000-0xffffc90011101000 16781312 efi_ioremap+0x1a/0x57 phys=ff000000 ioremap
 # 0xffffc90011101000-0xffffc90013102000 33558528 alloc_large_system_hash+0x14b/0x215 pages=8192 vmalloc vpages N0=8192
+#
+# pylint: enable=C0301
 
         __flags = ""
         __numa = ""
@@ -1831,7 +1853,7 @@ class ProcRootVMALLOCINFO(PBR.FixedWhitespaceDelimRecs):
                 if __check[0:1] == self.__prefix_numa:
                     __numa = "{curr} {app}".format(curr=__numa, app=__check)
                 else:
-                    __invalid = "{curr} {app}".format(curr=__invalid, 
+                    __invalid = "{curr} {app}".format(curr=__invalid,
                             app=__check)
 
             if __numa[0:1] == " ":
@@ -2029,12 +2051,16 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
         self.append_parse_res(PFC.F_RESYNC_STAT)
         self.field[PFC.F_RESYNC_STAT] = __curr.partition(self.__resync_delim)[2]
 
+# pylint: disable=C0301
+#
 # Ex: [===>.................]  recovery = 19.1% (299892800/1564531200) finish=84.0min speed=250770K/sec
+#
+# pylint: enable=C0301
     def parse_rebuild_subrec(self, sio):
         """Parse rebuild status indicator info"""
 
         __curr = sio.get_word(0)
- 
+
         self.append_parse_res(PFC.F_REBUILD_PROG)
         self.field[PFC.F_REBUILD_PROG] = sio.get_word(0)
         self.append_parse_res(PFC.F_REBUILD_ACTION)
@@ -2215,23 +2241,28 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
     def extra_next(self, sio):
 
 # -- Sample records #1
-# Personalities : [linear] [multipath] [raid0] [raid1] [raid10] [raid6] [raid5] [raid4] 
+#
+# pylint: disable=C0301
+#
+# Personalities : [linear] [multipath] [raid0] [raid1] [raid10] [raid6] [raid5] [raid4]
 # md1 : active raid10 sda2[0] sdd1[3] sdb2[1] sdc2[2]
 #       3221222400 blocks super 1.2 512K chunks 2 near-copies [4/4] [UUUU]
-#       
+#
 # md0 : active raid10 sdb1[0] sdc1[1]
 #       104856064 blocks super 1.2 2 near-copies [2/2] [UU]
-#       
+#
 # unused devices: <none>
 #
 # -- Sample records #2
-# Personalities : [raid10] 
+# Personalities : [raid10]
 # md127 : active raid10 sda2[0] sdb1[1]
 #       1564531200 blocks super 1.1 2 near-copies [2/1] [_U]
 #       [=>...................]  recovery =  5.2% (82101312/1564531200) finish=115.9min speed=213025K/sec
 #       bitmap: 12/12 pages [48KB], 65536KB chunk
-# 
+#
 # unused devices: <none>
+#
+# pylint: enable=C0301
 
 
         self.field[PFC.F_REC_TYPE] = ""
@@ -2359,7 +2390,7 @@ class ProcRootMOUNTS(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
-# -- Sample records 
+# -- Sample records
 #
 # rootfs / rootfs rw 0 0
 # sysfs /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0
@@ -2415,7 +2446,7 @@ class ProcRootSOFTIRQS(PBR.FixedWhitespaceDelimRecs):
     def extra_next(self, sio):
 #
 # -- Sample records
-#              CPU0       CPU1       CPU2       CPU3       
+#              CPU0       CPU1       CPU2       CPU3
 #    HI:          0          0          0          0
 # TIMER:  284022609  287940296  327374992  337143936
 #NET_TX:       4142        158     520084         98
@@ -2446,7 +2477,7 @@ class ProcRootSOFTIRQS(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_CPU_ORDER] = __cpu_order
             self.field[PFC.F_IRQ_ORDER] = __irq_order
 
-        return(self.field)
+        return self.field
 
 REGISTER_FILE("/proc/softirqs", ProcRootSOFTIRQS)
 REGISTER_PARTIAL_FILE("softirqs", ProcRootSOFTIRQS)
@@ -2476,7 +2507,7 @@ class ProcRootSTAT(PBR.TaggedMultiLineFile):
         self.__pref_cpu = "cpu"
 
         self.__intr_summ = "total"
-       
+
         self.__cpu_plist = dict()
         self.__cpu_plist[0] = "user"
         self.__cpu_plist[1] = "nice"
@@ -2561,7 +2592,7 @@ class ProcRootSTAT(PBR.TaggedMultiLineFile):
             else:
                 self.field[__key] = __conv
 
-        return(self.field)
+        return self.field
 
 REGISTER_FILE("/proc/stat", ProcRootSTAT)
 REGISTER_PARTIAL_FILE("pr/stat", ProcRootSTAT)
@@ -2608,12 +2639,16 @@ class ProcRootINTERRUPTS(PBR.FixedWhitespaceDelimRecs):
 
 # -- Sample records
 #
-#          CPU0       CPU1       CPU2       CPU3       
+# pylint: disable=C0301
+#
+#          CPU0       CPU1       CPU2       CPU3
 # 0:        132          0          0          0   IO-APIC-edge      timer
 # 1:          1          1          0          1   IO-APIC-edge      i8042
 # 8:          1          0          0          0   IO-APIC-edge      rtc0
 # 9:          0          0          0          0   IO-APIC-fasteoi   acpi
 #16:          5          5    5591774    4662973   IO-APIC-fasteoi   ahci, uhci_hcd:usb3, nouveau
+#
+# pylint: enable=C0301
 
         if self.__num_cpus == 0:
             self.__num_cpus = sio.linewords
@@ -2663,7 +2698,7 @@ class ProcRootINTERRUPTS(PBR.FixedWhitespaceDelimRecs):
                 self.field[PFC.F_INTERRUPT_DESC] = \
                         sio.buff[__rest:].rstrip("\n")
 
-        return(self.field)
+        return self.field
 
 REGISTER_FILE("/proc/interrupts", ProcRootINTERRUPTS)
 REGISTER_PARTIAL_FILE("interrupts", ProcRootINTERRUPTS)
@@ -2696,7 +2731,7 @@ class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
         self.__batch_key = "batch"
         self.__vm_stats_key = "vm-stats-thresh"
 
-        PBR.add_parse_rule(self, { PREFIX: "Node", BEFORE: ",", 
+        PBR.add_parse_rule(self, { PREFIX: "Node", BEFORE: ",",
                 CONV: long, NAME: PFC.F_NODE } )
         PBR.add_parse_rule(self, { PREFIX: "Node", AFTER: " zone ",
                 NAME: PFC.F_ZONE } )
@@ -2831,8 +2866,8 @@ class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
             __nums[__off] = PBR.conv_by_rules(__pl[__off], { CONV: long } )
 
         self.field[PFC.F_PROTECTION] = __nums
-                
-        return(self.field)
+
+        return self.field
 
 REGISTER_FILE("/proc/zoneinfo", ProcRootZONEINFO)
 REGISTER_PARTIAL_FILE("zoneinfo", ProcRootZONEINFO)
@@ -2886,7 +2921,7 @@ class ProcRootSCHEDSTAT(PBR.TaggedMultiLineFile):
             __res[PFC.F_RUNNING_SUM] = __nums[6]
             __res[PFC.F_WAITING_SUM] = __nums[7]
             __res[PFC.F_SLICES] = __nums[8]
-        return __res            
+        return __res
 
 
     def parse_domain_line(self, words):
@@ -2955,8 +2990,8 @@ class ProcRootSCHEDSTAT(PBR.TaggedMultiLineFile):
         for __key in __vals:
             self.field[__key] = __vals[__key]
 
-        return(self.field)
-                 
+        return self.field
+
 
     def extra_next(self, sio):
         __per_cpu = dict()
@@ -2979,7 +3014,7 @@ class ProcRootSCHEDSTAT(PBR.TaggedMultiLineFile):
                 __per_cpu[__cpu][PFC.F_DOM_ORDER][__dom_seq] = __tag
                 __dom_seq += 1
 
-        return(__per_cpu)
+        return __per_cpu
 
 REGISTER_FILE("/proc/schedstat", ProcRootSCHEDSTAT)
 REGISTER_PARTIAL_FILE("pr/schedstat", ProcRootSCHEDSTAT)
@@ -3042,7 +3077,7 @@ class ProcRootCRYPTO(PBR.TaggedMultiLineFile):
 
         self.add_eor_rule( "", { WORDS: 0, CONV: str, ERRVAL: "continue" } )
         return
-                 
+
 
     def extra_next(self, sio):
 
@@ -3050,7 +3085,7 @@ class ProcRootCRYPTO(PBR.TaggedMultiLineFile):
             if type(self.field[__key]) is str:
                 self.field[__key] = self.field[__key].strip()
 
-        return(self.field)
+        return self.field
 
 REGISTER_FILE("/proc/crypto", ProcRootCRYPTO)
 REGISTER_PARTIAL_FILE("crypto", ProcRootCRYPTO)
@@ -3309,17 +3344,17 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
 
         if __first == self.__timer_tag:
             self.__hold[PFC.F_VERSION] = sio.get_word(3)
-            return(self.next())
+            return self.next()
 
         if __first == self.__sample_tag:
             __val = PBR.conv_by_rules(sio.get_word(2), { CONV: float } )
             self.__hold[PFC.F_SAMPLE_PERIOD] = __val
-            return(self.next())
+            return self.next()
 
         if __first == self.__overflow_tag:
             __val = PBR.conv_by_rules(sio.get_word(1), { CONV: long } )
             self.__hold[PFC.F_OVERFLOW] = __val
-            return(self.next())
+            return self.next()
 
         if __sec == self.__total_tag:
             self.field[PFC.F_DEFERRABLE] = ""
@@ -3350,7 +3385,7 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
             __tail = "{proc:s}{rest:s}".format(proc=__proc, rest=__split[2])
             self.field[PFC.F_PROC_NAME] = __tail[:16].rstrip()
             __tail = __tail[17:]
-            self.field[PFC.F_INIT_ROUT] = PBR.conv_by_rules(__tail, 
+            self.field[PFC.F_INIT_ROUT] = PBR.conv_by_rules(__tail,
                     { BEFORE: " " } )
             self.field[PFC.F_CBACK_ROUT] = PBR.conv_by_rules(__tail,
                     { AFTER: "(", BEFORE: ")" } )
@@ -3359,7 +3394,7 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
         self.field[PFC.F_SAMPLE_PERIOD] = self.__hold[PFC.F_SAMPLE_PERIOD]
         self.field[PFC.F_OVERFLOW] = self.__hold[PFC.F_OVERFLOW]
 
-        return(self.field)
+        return self.field
 
 REGISTER_FILE("/proc/timer_stats", ProcRootTIMERSTATS)
 REGISTER_PARTIAL_FILE("timer_stats", ProcRootTIMERSTATS)
@@ -3467,7 +3502,7 @@ class ProcRootPAGETYPEINFO(PBR.FixedWhitespaceDelimRecs):
         self.field[PFC.F_BLOCK_ORDER] = self.__hold[PFC.F_BLOCK_ORDER]
         self.field[PFC.F_PAGES_PER_BLOCK] = self.__hold[PFC.F_PAGES_PER_BLOCK]
 
-        return(self.field)
+        return self.field
 
 REGISTER_FILE("/proc/pagetypeinfo", ProcRootPAGETYPEINFO)
 REGISTER_PARTIAL_FILE("pagetypeinfo", ProcRootPAGETYPEINFO)
@@ -3609,7 +3644,7 @@ class ProcRootTIMERLIST(PBR.TaggedMultiLineFile):
         PBR.add_parse_rule(self, { PREFIX: "  .idle_expires", AFTER: ":",
                 NAME: PFC.F_IDLE_EXPIRES, CONV: long, SUFFIX: "nsecs" },
                 __rpl )
-        PBR.add_parse_rule(self, { PREFIX: "jiffies:", 
+        PBR.add_parse_rule(self, { PREFIX: "jiffies:",
                 NAME: PFC.F_JIFFIES, CONV: long }, __rpl )
 
         PBR.add_parse_rule(self, { PREFIX: "Tick Device: mode:",
@@ -3734,7 +3769,7 @@ class ProcRootTIMERLIST(PBR.TaggedMultiLineFile):
                 self.field[PFC.F_BCAST_DEVICE] = False
         except KeyError:
             self.field[PFC.F_BCAST_DEVICE] = False
-   
+
         if self.field[PFC.F_VERSION] != "":
             __ver = self.field[PFC.F_VERSION].strip()
             __clb = self.field[PFC.F_HRT_MAX_CL_BASES]
@@ -3779,7 +3814,7 @@ class ProcRootTIMERLIST(PBR.TaggedMultiLineFile):
                                 pass
                         except KeyError:
                             __detail[self.__active_tag] = dict()
-                        
+
                     __in_active = False
                     __detail = dict()
                     __seq = len(__clock_list)
@@ -3820,7 +3855,7 @@ class ProcRootTIMERLIST(PBR.TaggedMultiLineFile):
             if type(self.field[__key]) is str:
                 self.field[__key] = self.field[__key].strip()
 
-        return(self.field)
+        return self.field
 
 REGISTER_FILE("/proc/timer_list", ProcRootTIMERLIST)
 REGISTER_PARTIAL_FILE("timer_list", ProcRootTIMERLIST)
