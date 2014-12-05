@@ -53,6 +53,8 @@ CapPrm:\t{perm:s}\n\
 CapEff:\t{eff:s}\n\
 CapBnd:\t{bset:s}"
 
+    __seccomptemp = "Seccomp:\t{sec:d}"
+
     __cpustemp = "Cpus_allowed:\t{cpus:s}\n\
 Cpus_allowed_list:\t{cpus_list:s}\n\
 Mems_allowed:\t{mems:s}\n\
@@ -61,8 +63,20 @@ Mems_allowed_list:\t{mems_list:s}"
     __cswitchtemp = "voluntary_ctxt_switches:\t{vol:d}\n\
 nonvoluntary_ctxt_switches:\t{nonvol:d}"
 
+    __first = True
+    __has_seccomp = False
+
     for __hilit in inprecs:
         __ff = inprecs.field
+
+        if __first:
+            __first = False
+            __hits = inprecs.hit_order
+
+            for __seq in __hits:
+                if __hits[__seq] == PFC.F_SEC_COMP:
+                    __has_seccomp = True
+                    break
 
         print __nametemp.format(prog=__ff[PFC.F_PROG_NAME])
 
@@ -95,6 +109,9 @@ nonvoluntary_ctxt_switches:\t{nonvol:d}"
         print __captemp.format(inh=__ff[PFC.F_CAP_INHERIT],
                 perm=__ff[PFC.F_CAP_PERM], eff=__ff[PFC.F_CAP_EFF],
                 bset=__ff[PFC.F_CAP_BSET])
+
+        if __has_seccomp:
+            print __seccomptemp.format(sec=__ff[PFC.F_SEC_COMP])
 
         print __cpustemp.format(cpus=__ff[PFC.F_CPU_ALLOW_MASK],
                 cpus_list=__ff[PFC.F_CPU_ALLOW_LIST],
