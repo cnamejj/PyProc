@@ -685,6 +685,7 @@ F_MEM_ALLOW_MASK = "mem-allow-mask"
 F_MEM_ALLOW_LIST = "mem-allow-list"
 F_CSWITCH_VOL = "vol-ctx-switch"
 F_CSWITCH_NONVOL = "nonvol-ctx-switch"
+F_SEC_COMP = "seccomp"
 
 # -- added for "/proc/self/sched"
 F_PROGRAM = "program-name"

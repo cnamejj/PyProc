@@ -1466,6 +1466,8 @@ class ProcSelfSTATUS(PBR.TaggedMultiLineFile):
         PBR.add_parse_rule(self, { PREFIX: "CapEff:\t", NAME: PFC.F_CAP_EFF } )
         PBR.add_parse_rule(self, { PREFIX: "CapBnd:\t",
                 NAME: PFC.F_CAP_BSET } )
+        PBR.add_parse_rule(self, { PREFIX: "Seccomp:\t",
+                NAME: PFC.F_SEC_COMP, CONV: long } )
         PBR.add_parse_rule(self, { PREFIX: "Cpus_allowed:\t",
                 NAME: PFC.F_CPU_ALLOW_MASK } )
         PBR.add_parse_rule(self, { PREFIX: "Cpus_allowed_list:\t",
