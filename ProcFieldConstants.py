@@ -193,6 +193,7 @@ F_ZERO4 = "zero4"
 F_ZERO5 = "zero5"
 F_CPU_COLL = "cpu-collision"
 F_RECEIVED_RPS = "received-rps"
+F_FLOW_LIM_COUNT = "flow-limit-count"
 
 # -- fields added to support the "protocols" data
 F_SIZE = "size"

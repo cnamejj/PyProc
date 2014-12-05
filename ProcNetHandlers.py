@@ -476,11 +476,25 @@ REGISTER_PARTIAL_FILE("packet", ProcNetPACKET)
 # ---
 class ProcNetSOFTNETSTAT(PBR.FixedWhitespaceDelimRecs):
     """Pull records from /proc/net/softnet_stat"""
+#
+# Different kernels handle this differently, barring further changes, one of the
+# following should apply to your system.
+#
 # source: net/core/dev.c
 #         seq_printf(seq, "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x\n",
 #                   sd->processed, sd->dropped, sd->time_squeeze, 0,
 #                   0, 0, 0, 0, /* was fastroute */
 #                   sd->cpu_collision, sd->received_rps);
+#
+# --or--
+#
+# source: net/core/net-procfs.c
+#
+#        seq_printf(seq,
+#                   "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x\n",
+#                   sd->processed, sd->dropped, sd->time_squeeze, 0,
+#                   0, 0, 0, 0, /* was fastroute */
+#                   sd->cpu_collision, sd->received_rps, flow_limit_count);
 
     def extra_init(self, *opts):
         self.minfields = 10
@@ -505,6 +519,8 @@ class ProcNetSOFTNETSTAT(PBR.FixedWhitespaceDelimRecs):
                 BASE: 16 } )
         PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_RECEIVED_RPS,
                 CONV: long, BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 10, NAME: PFC.F_FLOW_LIM_COUNT,
+                CONV: long, BASE: 16 } )
 
         self.processed = 0
         self.dropped = 0
@@ -521,6 +537,8 @@ class ProcNetSOFTNETSTAT(PBR.FixedWhitespaceDelimRecs):
 # 001fc1c7 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 # 00002970 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 # 000041b2 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+#
+# For some systems an additional colum with the "flow limit count" will be in the file
 
         if sio.buff == "":
             self.field[PFC.F_PROCESSED] = 0
@@ -533,6 +551,7 @@ class ProcNetSOFTNETSTAT(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_ZERO5] = 0
             self.field[PFC.F_CPU_COLL] = 0
             self.field[PFC.F_RECEIVED_RPS] = 0
+            self.field[PFC.F_FLOW_LIM_COUNT] = 0
 
         self.processed = self.field[PFC.F_PROCESSED]
         self.dropped = self.field[PFC.F_DROPPED]
