@@ -2068,6 +2068,17 @@ class ProcSelfSTAT(PBR.FixedWhitespaceDelimRecs):
                 NAME: PFC.F_IO_TICKS } )
         PBR.add_parse_rule(self, { POS: 42, CONV: long, NAME: PFC.F_GTIME } )
         PBR.add_parse_rule(self, { POS: 43, CONV: long, NAME: PFC.F_CGTIME } )
+
+        # -- The next 8 parameters are only available in newer kernels
+        PBR.add_parse_rule(self, { POS: 44, CONV: long, NAME: PFC.F_START_DATA } )
+        PBR.add_parse_rule(self, { POS: 45, CONV: long, NAME: PFC.F_END_DATA } )
+        PBR.add_parse_rule(self, { POS: 46, CONV: long, NAME: PFC.F_START_BRK } )
+        PBR.add_parse_rule(self, { POS: 47, CONV: long, NAME: PFC.F_ARG_START } )
+        PBR.add_parse_rule(self, { POS: 48, CONV: long, NAME: PFC.F_ARG_END } )
+        PBR.add_parse_rule(self, { POS: 49, CONV: long, NAME: PFC.F_ENV_START } )
+        PBR.add_parse_rule(self, { POS: 50, CONV: long, NAME: PFC.F_ENV_END } )
+        PBR.add_parse_rule(self, { POS: 51, CONV: long, NAME: PFC.F_EXIT_CODE } )
+        
         return
                  
 
