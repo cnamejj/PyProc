@@ -2714,6 +2714,8 @@ class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
                 CONV: long, NAME: PFC.F_PAGES_SPANNED } )
         PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " present ",
                 CONV: long, NAME: PFC.F_PAGES_PRESENT } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " managed ",
+                CONV: long, NAME: PFC.F_PAGES_MANAGED } )
         PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_free_pages ",
                 CONV: long, NAME: PFC.F_NR_FREE_PAGES } )
         PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_inactive_anon ",
@@ -2783,6 +2785,8 @@ class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
         PBR.add_parse_rule(self, { PREFIX: " ",
                 AFTER: " nr_anon_transparent_hugepages ",
 		CONV: long, NAME: PFC.F_NR_ANON_TRANS_HUGE } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_free_cma ",
+		CONV: long, NAME: PFC.F_NR_FREE_CMA } )
         PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " protection: (",
                 SUFFIX: ")", NAME: PFC.F_PROTECTION } )
         PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " all_unreclaimable: ",
