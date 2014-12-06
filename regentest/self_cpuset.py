@@ -20,5 +20,5 @@ def re_self_cpuset(inprecs):
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         print __template.format(cpuset=__ff[PFC.F_CPU_SET])
-    
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/cpuset")] = re_self_cpuset

@@ -55,5 +55,5 @@ def re_sysvipc_shm(inprecs):
                 ctime=__ff[PFC.F_CHAN_TIME], rss=__rss, swap=__swap)
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
-    
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/sysvipc/shm")] = re_sysvipc_shm

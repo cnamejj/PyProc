@@ -29,7 +29,7 @@ def re_net_unix(inprecs):
 
         print __template.format(num=__ff[PFC.F_NUM], refct=__ff[PFC.F_REFCOUNT],
                 prot=__ff[PFC.F_PROTOCOL], flags=__ff[PFC.F_FLAGS],
-                typ=__ff[PFC.F_TYPE], state=__ff[PFC.F_STATE], 
+                typ=__ff[PFC.F_TYPE], state=__ff[PFC.F_STATE],
                 inode=__ff[PFC.F_INODE], path=path
                 )
 

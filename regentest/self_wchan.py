@@ -21,6 +21,3 @@ def re_self_wchan(inprecs):
         print(__ff[PFC.F_WCHAN], end="")
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/wchan")] = re_self_wchan
-
-    
-

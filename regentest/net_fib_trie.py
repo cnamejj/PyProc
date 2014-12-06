@@ -7,7 +7,7 @@ import ProcHandlers as PH
 import socket
 import struct
 
-PFC = PH.PFC 
+PFC = PH.PFC
 
 __NODETEMP = "{pad:s}+-- {net:s}/{mask:d} {bits:d} {full:d} {empty:d}"
 __LEAFTEMP = "{pad:s}|-- {net:s}"
@@ -54,7 +54,7 @@ def print_node_and_dive(lev, node):
     print __NODETEMP.format(pad=__pad[1:], net=node[PFC.F_NETWORK],
        mask=node[PFC.F_NETMASK], bits=node[PFC.F_FIB_BITS],
        full=node[PFC.F_FULL_CHILDREN], empty=node[PFC.F_EMPTY_CHILDREN])
- 
+
     lev += 1
     __pick = -1
     __ceil = dip2long("255.255.255.255") + 1

@@ -20,7 +20,7 @@ def re_net_psched(inprecs):
     for __hilit in inprecs:
         __ff = inprecs.field
 
-        print __template.format(usec=__ff[PFC.F_NSEC_PER_USEC], 
+        print __template.format(usec=__ff[PFC.F_NSEC_PER_USEC],
                 ticks=__ff[PFC.F_PSCHED_TICKS],
                 unk=__ff[PFC.F_UNKNOWN_FIELD],
                 hrtime=__ff[PFC.F_NSEC_PER_HRTIME]

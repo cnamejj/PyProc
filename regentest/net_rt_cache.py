@@ -29,15 +29,14 @@ Source\t\tMTU\tWindow\tIRTT\tTOS\tHHRef\tHHUptod\tSpecDst"
     for __hilit in inprecs:
         __ff = inprecs.field
 
-        __out = __template.format(iface=__ff[PFC.F_INTERFACE], 
-                dhex=__ff[PFC.F_DEST_HEXIP], ghex=__ff[PFC.F_GATE_HEXIP], 
-                flags=__ff[PFC.F_FLAGS], refc=__ff[PFC.F_REFCOUNT], 
-                usec=__ff[PFC.F_USECOUNT], metric=__ff[PFC.F_METRIC], 
-                shex=__ff[PFC.F_SRCE_HEXIP], mtu=__ff[PFC.F_MTU], 
-                win=__ff[PFC.F_WINDOW], irtt=__ff[PFC.F_IRTT], 
-                tos=__ff[PFC.F_TOS], hhref=__ff[PFC.F_HHREF], 
-                hhup=__ff[PFC.F_HHUPTOD], sphex=__ff[PFC.F_SPEC_HEXIP]
-                )
+        __out = __template.format(iface=__ff[PFC.F_INTERFACE],
+                dhex=__ff[PFC.F_DEST_HEXIP], ghex=__ff[PFC.F_GATE_HEXIP],
+                flags=__ff[PFC.F_FLAGS], refc=__ff[PFC.F_REFCOUNT],
+                usec=__ff[PFC.F_USECOUNT], metric=__ff[PFC.F_METRIC],
+                shex=__ff[PFC.F_SRCE_HEXIP], mtu=__ff[PFC.F_MTU],
+                win=__ff[PFC.F_WINDOW], irtt=__ff[PFC.F_IRTT],
+                tos=__ff[PFC.F_TOS], hhref=__ff[PFC.F_HHREF],
+                hhup=__ff[PFC.F_HHUPTOD], sphex=__ff[PFC.F_SPEC_HEXIP])
 
         print __fixedline.format(line=__out)
 

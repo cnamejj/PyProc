@@ -27,7 +27,7 @@ def re_root_crypto(inprecs):
         __hitlist = inprecs.hit_order
 
         __prefix = dict()
-        __conv = dict()    
+        __conv = dict()
 
         for __seq in range(0, len(__rulelist)):
             __rule = __rulelist[__seq][0]

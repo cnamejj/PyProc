@@ -66,5 +66,5 @@ Sample period: 0.000 s\n\
 
     if __first:
         print __emptytemp
-    
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/timer_stats")] = re_root_timer_stats

@@ -30,7 +30,7 @@ def re_net_softnet_stat(inprecs):
                 __flc = __flctemp.format(count=__ff[PFC.F_FLOW_LIM_COUNT])
                 break
 
-        print __template.format(proc=__ff[PFC.F_PROCESSED], 
+        print __template.format(proc=__ff[PFC.F_PROCESSED],
                 drop=__ff[PFC.F_DROPPED], tsq=__ff[PFC.F_TIME_SQUEEZE],
                 zero1=__ff[PFC.F_ZERO1], zero2=__ff[PFC.F_ZERO2],
                 zero3=__ff[PFC.F_ZERO3], zero4=__ff[PFC.F_ZERO4],

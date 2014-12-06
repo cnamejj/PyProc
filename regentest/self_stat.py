@@ -75,6 +75,3 @@ def re_self_stat(inprecs):
                 cgtime=__ff[PFC.F_CGTIME], extra=__extra)
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/stat")] = re_self_stat
-
-    
-

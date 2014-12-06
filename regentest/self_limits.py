@@ -47,5 +47,5 @@ def re_self_limits(inprecs):
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         print __template.format(name=__name, soft=__soft, hard=__hard,
                 units=__units)
-    
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/limits")] = re_self_limits

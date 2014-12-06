@@ -42,7 +42,7 @@ FRAG6: inuse {fruse:s} memory {frmem:s}"
         __frmem = __spd[MEMORY]
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
-        print __template.format(tcpuse=__tcpuse, udpuse=__udpuse, 
+        print __template.format(tcpuse=__tcpuse, udpuse=__udpuse,
                 ultuse=__ultuse, rawuse=__rawuse, fruse=__fruse, frmem=__frmem
                 )
 

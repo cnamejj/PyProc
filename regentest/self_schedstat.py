@@ -21,8 +21,7 @@ def re_self_schedstat(inprecs):
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         print __template.format(rtime=__ff[PFC.F_RUN_TIME],
                 rqueue=__ff[PFC.F_RUNQUEUE_TIME],
-                rslice=__ff[PFC.F_RUN_TIMESLICES]
-                )
-    
+                rslice=__ff[PFC.F_RUN_TIMESLICES])
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/schedstat")] = re_self_schedstat
 

@@ -20,5 +20,5 @@ def re_self_comm(inprecs):
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         print __template.format(comm=__ff[PFC.F_COMM])
-    
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/comm")] = re_self_comm

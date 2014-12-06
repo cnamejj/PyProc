@@ -28,7 +28,7 @@ lrpid   uid   gid  cuid  cgid      stime      rtime      ctime"
         __ff = inprecs.field
 
         print __template.format(key=__ff[PFC.F_KEY], id=__ff[PFC.F_ID],
-                mode=__ff[PFC.F_MODE], bytes=__ff[PFC.F_BYTES], 
+                mode=__ff[PFC.F_MODE], bytes=__ff[PFC.F_BYTES],
                 qnum=__ff[PFC.F_QUEUES], spid=__ff[PFC.F_SEND_PID],
                 rpid=__ff[PFC.F_RECV_PID], ow_uid=__ff[PFC.F_OW_UID],
                 ow_gid=__ff[PFC.F_OW_GID], cr_uid=__ff[PFC.F_CR_UID],

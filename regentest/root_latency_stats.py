@@ -5,7 +5,7 @@
 import regentest as RG
 import ProcHandlers as PH
 
-PFC = PH.PFC 
+PFC = PH.PFC
 
 # ---
 

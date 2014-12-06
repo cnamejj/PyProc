@@ -9,6 +9,8 @@ PFC = PH.ProcFieldConstants
 
 # ---
 
+# pylint: disable=R0914
+
 def re_self_status(inprecs):
 
     """Iterate through parsed records and re-generate data file"""
@@ -130,6 +132,8 @@ nonvoluntary_ctxt_switches:\t{nonvol:d}"
 
         print __cswitchtemp.format(vol=__ff[PFC.F_CSWITCH_VOL],
                 nonvol=__ff[PFC.F_CSWITCH_NONVOL])
+
+# pylint: enable=R0914
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 

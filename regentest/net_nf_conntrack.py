@@ -10,6 +10,8 @@ PFC = PH.ProcFieldConstants
 
 # ---
 
+# pylint: disable=R0914
+
 def re_net_nf_conntrack(inprecs):
 
     """Iterate through parsed records and re-generate data file"""
@@ -119,5 +121,7 @@ def re_net_nf_conntrack(inprecs):
                 secctx=__secctx, zone=__zone, delta=__delta, use=__use)
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
-    
+
+# pylint: enable=R0914
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/net/nf_conntrack")] = re_net_nf_conntrack

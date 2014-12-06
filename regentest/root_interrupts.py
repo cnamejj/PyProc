@@ -9,6 +9,8 @@ PFC = PH.ProcFieldConstants
 
 # ---
 
+# pylint: disable=R0914
+
 def re_root_interrupts(inprecs):
 
     """Iterate through parsed records and re-generate data file"""
@@ -59,5 +61,7 @@ def re_root_interrupts(inprecs):
                 desc=__ff[PFC.F_INTERRUPT_DESC])
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
+
+# pylint: enable=R0914
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/interrupts")] = re_root_interrupts

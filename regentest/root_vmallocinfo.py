@@ -9,6 +9,8 @@ PFC = PH.ProcFieldConstants
 
 # ---
 
+# pylint: disable=R0914
+
 def re_root_vmallocinfo(inprecs):
 
     """Iterate through parsed records and re-generate data file"""
@@ -79,6 +81,8 @@ def re_root_vmallocinfo(inprecs):
                 phys=__phys, ioremap=__ioremap, vmalloc=__vmalloc,
                 vmmap=__vmmap, usermap=__usermap, vpages=__vpages, numa=__numa)
 
+# pylint: enable=R0914
+
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
-    
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/vmallocinfo")] = re_root_vmallocinfo

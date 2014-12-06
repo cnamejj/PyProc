@@ -9,6 +9,8 @@ PFC = PH.ProcFieldConstants
 
 # ---
 
+# pylint: disable=R0914
+
 def re_self_numa_maps(inprecs):
 
     """Iterate through parsed records and re-generate data file"""
@@ -20,7 +22,7 @@ def re_self_numa_maps(inprecs):
     __stack = " stack"
     __huge = " huge"
 
-    __label = { PFC.F_ANON: 'anon', PFC.F_DIRTY: 'dirty', 
+    __label = { PFC.F_ANON: 'anon', PFC.F_DIRTY: 'dirty',
             PFC.F_MAPPED: 'mapped', PFC.F_MAPMAX: 'mapmax',
             PFC.F_SWAPCACHE: 'swapcache', PFC.F_ACTIVE_PAGES: 'active',
             PFC.F_WRITEBACK: 'writeback' }
@@ -63,7 +65,7 @@ def re_self_numa_maps(inprecs):
             buff=__ff[PFC.F_BUFFNAME], path=__path, huge=__is_huge,
             nvplist=__float, nodelist=__nodes)
 
-RG.RECREATOR[PH.GET_HANDLER("/proc/self/numa_maps")] = re_self_numa_maps
+# pylint: enable=R0914
 
-    
+RG.RECREATOR[PH.GET_HANDLER("/proc/self/numa_maps")] = re_self_numa_maps
 

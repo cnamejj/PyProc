@@ -25,8 +25,8 @@ Locks     Drops     Inode"
         __ff = inprecs.field
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
-        print __template.format(sk=__ff[PFC.F_SOCKET_POINTER], 
-                prot=__ff[PFC.F_PROTOCOL], pid=__ff[PFC.F_PID], 
+        print __template.format(sk=__ff[PFC.F_SOCKET_POINTER],
+                prot=__ff[PFC.F_PROTOCOL], pid=__ff[PFC.F_PID],
                 gr=__ff[PFC.F_GROUPS], rmem=__ff[PFC.F_RMEM_ALLOC],
                 wmem=__ff[PFC.F_WMEM_ALLOC], dump=__ff[PFC.F_DUMP],
                 lock=__ff[PFC.F_LOCKS], drop=__ff[PFC.F_DROPS],

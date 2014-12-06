@@ -20,5 +20,5 @@ def re_self_autogroup(inprecs):
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         print __template.format(id=__ff[PFC.F_ID], nice=__ff[PFC.F_NICE])
-    
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/autogroup")] = re_self_autogroup

@@ -23,8 +23,8 @@ def re_root_cgroups(inprecs):
         __ff = inprecs.field
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
-        print __template.format(subsys=__ff[PFC.F_SUBSYSTEM], 
-                hier=__ff[PFC.F_HIERARCHY], ncgr=__ff[PFC.F_NUM_CGROUPS], 
+        print __template.format(subsys=__ff[PFC.F_SUBSYSTEM],
+                hier=__ff[PFC.F_HIERARCHY], ncgr=__ff[PFC.F_NUM_CGROUPS],
                 enab=__ff[PFC.F_ENABLED]
                 )
 

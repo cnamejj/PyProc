@@ -21,6 +21,3 @@ def re_self_cmdline(inprecs):
         print("\0".join(__ff[PFC.F_COMM_ARGS]), end="")
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/cmdline")] = re_self_cmdline
-
-    
-

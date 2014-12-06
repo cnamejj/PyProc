@@ -29,7 +29,7 @@ def re_root_locks(inprecs):
             __end_st = __endtemp.format(en=__end)
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
-        print __template.format(en=__end_st, idx=__ff[PFC.F_INDEX], 
+        print __template.format(en=__end_st, idx=__ff[PFC.F_INDEX],
                ltype=__ff[PFC.F_LOCK_TYPE], lsubt=__ff[PFC.F_LOCK_SUBTYPE],
                iot=__ff[PFC.F_LOCK_IO], pid=__ff[PFC.F_PID],
                inode=__ff[PFC.F_LOCK_INODE], st=__ff[PFC.F_START]

@@ -17,6 +17,8 @@ MEMORY = 'memory'
 
 # ---
 
+# pylint: disable=R0914
+
 def re_net_sockstat(inprecs):
 
     """Iterate through parsed records and re-generate data file"""
@@ -60,7 +62,8 @@ FRAG: inuse {fruse} memory {frmem}"
         print __template.format(used=__socks, tcpuse=__tcpuse,
                 tcporph=__tcporph, tcptw=__tcptw, tcpall=__tcpall,
                 tcpmem=__tcpmem, udpuse=__udpuse, udpmem=__udpmem,
-                ultuse=__ultuse, rawuse=__rawuse, fruse=__fruse, frmem=__frmem
-                )
+                ultuse=__ultuse, rawuse=__rawuse, fruse=__fruse, frmem=__frmem)
+
+# pylint: enable=R0914
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/net/sockstat")] = re_net_sockstat

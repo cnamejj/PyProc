@@ -9,6 +9,8 @@ PFC = PH.ProcFieldConstants
 
 # ---
 
+# pylint: disable=R0914
+
 def re_root_zoneinfo(inprecs):
 
     """Iterate through parsed records and re-generate data file"""
@@ -99,7 +101,7 @@ def re_root_zoneinfo(inprecs):
         for __off in range(0, len(__hits)):
             if __hits[__off] == PFC.F_PAGES_MANAGED:
                 print __managetemp.format(man=__ff[PFC.F_PAGES_MANAGED])
-           
+
         for __off in range(0, len(__hits)):
             __key = __hits[__off]
 
@@ -128,6 +130,8 @@ def re_root_zoneinfo(inprecs):
 
         print __finishtemp.format(unrec=__ff[PFC.F_ALL_UNRECLAIM],
                 spfn=__ff[PFC.F_START_PFN], inrat=__ff[PFC.F_INACTIVE_RATIO])
+
+# pylint: enable=R0914
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 

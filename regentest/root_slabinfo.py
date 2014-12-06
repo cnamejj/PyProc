@@ -9,6 +9,8 @@ PFC = PH.PFC
 
 # ---
 
+# pylint: disable=R0914
+
 def re_root_slabinfo(inprecs):
 
     """Iterate through parsed records and re-generate data file"""
@@ -65,22 +67,24 @@ def re_root_slabinfo(inprecs):
             __stats = __statstemp.format(lisall=__ff[PFC.F_LIST_ALLOCS],
                     maxobj=__ff[PFC.F_MAX_OBJS], grow=__ff[PFC.F_GROWN],
                     reap=__ff[PFC.F_REAPED], err=__ff[PFC.F_ERROR],
-                    maxfree=__ff[PFC.F_MAX_FREEABLE], 
-                    nodall=__ff[PFC.F_NODE_ALLOCS], 
+                    maxfree=__ff[PFC.F_MAX_FREEABLE],
+                    nodall=__ff[PFC.F_NODE_ALLOCS],
                     remfree=__ff[PFC.F_REMOTE_FREES],
-                    alov=__ff[PFC.F_ALIEN_OVERFLOW], 
+                    alov=__ff[PFC.F_ALIEN_OVERFLOW],
                     hitall=__ff[PFC.F_ALLOC_HIT],
                     misall=__ff[PFC.F_ALLOC_MISS],
                     hitfree=__ff[PFC.F_FREE_HIT],
                     misfree=__ff[PFC.F_FREE_MISS])
 
-        print __template.format(name=__ff[PFC.F_SLAB_NAME], 
+        print __template.format(name=__ff[PFC.F_SLAB_NAME],
                 actobj=__ff[PFC.F_ACTIVE_OBJS], nobj=__ff[PFC.F_NUM_OBJS],
                 osize=__ff[PFC.F_OBJ_SIZE], opsl=__ff[PFC.F_OBJ_PER_SLAB],
                 ppsl=__ff[PFC.F_PAGES_PER_SLAB], lim=__ff[PFC.F_LIMIT],
                 bcount=__ff[PFC.F_BATCHCOUNT], shfac=__ff[PFC.F_SHARED],
                 nsla=__ff[PFC.F_ACTIVE_SLABS], shsla=__ff[PFC.F_NUM_SLABS],
                 actsla=__ff[PFC.F_SHARED_AVAIL], stats=__stats)
+
+# pylint: enable=R0914
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 

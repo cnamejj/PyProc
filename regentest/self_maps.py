@@ -38,5 +38,5 @@ def re_self_maps(inprecs):
         else:
             __pref = __preftemp.format(pref=__lead)
             print __template.format(pref=__pref, path=__ff[PFC.F_PATH])
-    
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/maps")] = re_self_maps

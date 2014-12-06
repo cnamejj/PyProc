@@ -30,6 +30,3 @@ def re_net_netfilter_nf_queue(inprecs):
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/net/netfilter/nf_queue")] = \
         re_net_netfilter_nf_queue
-
-    
-

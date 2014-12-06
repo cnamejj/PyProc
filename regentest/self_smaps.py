@@ -64,6 +64,6 @@ def re_self_smaps(inprecs):
             print __vmflagstemp.format(flags=__ff[PFC.F_VMFLAGS])
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
-    
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/smaps")] = re_self_smaps
 

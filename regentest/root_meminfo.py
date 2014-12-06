@@ -29,7 +29,7 @@ def re_root_meminfo(inprecs):
         elif __ff[PFC.F_UNITS] != "":
             print __template.format(cat=__ff[PFC.F_CATEGORY],
                    size=__ff[PFC.F_SIZE], unit=__ff[PFC.F_UNITS])
-        else:                   
+        else:
             print __alttemp.format(cat=__ff[PFC.F_CATEGORY],
                    size=__ff[PFC.F_SIZE])
 

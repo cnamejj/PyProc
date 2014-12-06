@@ -34,7 +34,7 @@ st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode"
                 retrans=__ff[PFC.F_RETRANS], uid=__ff[PFC.F_UID],
                 tout=__ff[PFC.F_TIMEOUT], inode=__ff[PFC.F_INODE],
                 refcount=__ff[PFC.F_REFCOUNT], ptr=__ff[PFC.F_POINTER],
-                ret_tout=__ff[PFC.F_RETRY_TIMEOUT], 
+                ret_tout=__ff[PFC.F_RETRY_TIMEOUT],
                 ack_tout=__ff[PFC.F_ACK_TIMEOUT],
                 qop=__ff[PFC.F_QUICK_OR_PPONG],
                 cong=__ff[PFC.F_CONGEST_WINDOW],

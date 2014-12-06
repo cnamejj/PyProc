@@ -20,5 +20,5 @@ def re_root_version_sig(inprecs):
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         print __template.format(line=__ff[PFC.F_VERSION_STRING])
-    
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/version_signature")] = re_root_version_sig

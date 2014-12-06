@@ -19,9 +19,9 @@ def re_net_igmp6(inprecs):
         __ff = inprecs.field
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
-        print __template.format(idx=__ff[PFC.F_INT_INDEX], 
-                dev=__ff[PFC.F_DEVICE], mcax=__ff[PFC.F_MCAST_ADDR_HEX], 
-                mcus=__ff[PFC.F_MCAST_USERS], flags=__ff[PFC.F_MCAST_FLAGS], 
+        print __template.format(idx=__ff[PFC.F_INT_INDEX],
+                dev=__ff[PFC.F_DEVICE], mcax=__ff[PFC.F_MCAST_ADDR_HEX],
+                mcus=__ff[PFC.F_MCAST_USERS], flags=__ff[PFC.F_MCAST_FLAGS],
                 tex=__ff[PFC.F_TIMER_EXPIRE]
                 )
 

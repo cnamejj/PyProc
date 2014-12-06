@@ -29,7 +29,7 @@ gc_ignored gc_goal_miss gc_dst_overflow in_hlist_search out_hlist_search"
         print __template.format(ents=__ff[PFC.F_ENTRIES],
                 ihit=__ff[PFC.F_IN_HIT], istot=__ff[PFC.F_IN_SLOW_TOT],
                 ismc=__ff[PFC.F_IN_SLOW_MC], ibrd=__ff[PFC.F_IN_BRD],
-                imdst=__ff[PFC.F_IN_MARTIAN_DST], 
+                imdst=__ff[PFC.F_IN_MARTIAN_DST],
                 imsrc=__ff[PFC.F_IN_MARTIAN_SRC], inor=__ff[PFC.F_IN_NO_ROUTE],
                 ohit=__ff[PFC.F_OUT_HIT], ostot=__ff[PFC.F_OUT_SLOW_TOT],
                 osmc=__ff[PFC.F_OUT_SLOW_MC], gctot=__ff[PFC.F_GC_TOTAL],
@@ -40,6 +40,3 @@ gc_ignored gc_goal_miss gc_dst_overflow in_hlist_search out_hlist_search"
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/net/stat/rt_cache")] = re_net_stat_rt_cache
-
-    
-

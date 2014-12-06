@@ -9,6 +9,8 @@ PFC = PH.ProcFieldConstants
 
 # ---
 
+# pylint: disable=R0914
+
 def re_root_pagetypeinfo(inprecs):
 
     """Iterate through parsed records and re-generate data file"""
@@ -80,5 +82,7 @@ at order")
                         count=__totals[__mig[__seq]])
 
             print __blsum
+
+# pylint: enable=R0914
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/pagetypeinfo")] = re_root_pagetypeinfo

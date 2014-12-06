@@ -20,12 +20,11 @@ def re_net_ipv6_route(inprecs):
         __ff = inprecs.field
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
-        print __template.format(dad=__ff[PFC.F_DEST_HEXIP], 
-                dpl=__ff[PFC.F_DEST_PREFIX_LEN], sad=__ff[PFC.F_SRCE_HEXIP], 
-                spl=__ff[PFC.F_SRCE_PREFIX_LEN], pkey=__ff[PFC.F_PRIMARY_KEY], 
-                metric=__ff[PFC.F_RT6I_METRIC], refc=__ff[PFC.F_DEST_REFCOUNT], 
-                use=__ff[PFC.F_DEST_USE], flags=__ff[PFC.F_RT6I_FLAGS], 
-                dev=__ff[PFC.F_DEVICE]
-                )
+        print __template.format(dad=__ff[PFC.F_DEST_HEXIP],
+                dpl=__ff[PFC.F_DEST_PREFIX_LEN], sad=__ff[PFC.F_SRCE_HEXIP],
+                spl=__ff[PFC.F_SRCE_PREFIX_LEN], pkey=__ff[PFC.F_PRIMARY_KEY],
+                metric=__ff[PFC.F_RT6I_METRIC], refc=__ff[PFC.F_DEST_REFCOUNT],
+                use=__ff[PFC.F_DEST_USE], flags=__ff[PFC.F_RT6I_FLAGS],
+                dev=__ff[PFC.F_DEVICE])
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/net/ipv6_route")] = re_net_ipv6_route

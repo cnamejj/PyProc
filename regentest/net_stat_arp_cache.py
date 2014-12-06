@@ -39,5 +39,3 @@ unresolved_discards"
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/net/stat/arp_cache")] = re_net_stat_arp_cache
 
-    
-

@@ -40,5 +40,3 @@ unresolved_discards"
 RG.RECREATOR[PH.GET_HANDLER("/proc/net/stat/ndisc_cache")] = \
         re_net_stat_ndisc_cache
 
-    
-

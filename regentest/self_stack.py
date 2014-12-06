@@ -22,6 +22,6 @@ def re_self_stack(inprecs):
                 entry=__ff[PFC.F_STACK_ENTRY])
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
-    
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/stack")] = re_self_stack
 

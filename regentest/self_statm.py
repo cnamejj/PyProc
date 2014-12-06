@@ -22,8 +22,7 @@ def re_self_statm(inprecs):
         print __template.format(size=__ff[PFC.F_SIZE],
                 resident=__ff[PFC.F_RESIDENT_SIZE],
                 shared=__ff[PFC.F_SHARED_SIZE], text=__ff[PFC.F_TEXT_SIZE],
-                data=__ff[PFC.F_DATA_SIZE]
-                )
-    
+                data=__ff[PFC.F_DATA_SIZE])
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/statm")] = re_self_statm
 

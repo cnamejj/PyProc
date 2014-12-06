@@ -23,6 +23,3 @@ def re_self_sessionid(inprecs):
         print(__template.format(sess=__ff[PFC.F_SESSIONID]), end="")
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/sessionid")] = re_self_sessionid
-
-    
-

@@ -22,6 +22,3 @@ def re_self_syscall(inprecs):
         print __template.format(line=__ff[PFC.F_SYSCALL])
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/syscall")] = re_self_syscall
-
-    
-

@@ -31,8 +31,7 @@ def re_root_swaps(inprecs):
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         print __template.format(name=__ff[PFC.F_FILENAME], typ=__st,
-                size=__ff[PFC.F_SIZE], used=__ff[PFC.F_USED], 
-                prior=__ff[PFC.F_PRIORITY]
-                )
-    
+                size=__ff[PFC.F_SIZE], used=__ff[PFC.F_USED],
+                prior=__ff[PFC.F_PRIORITY])
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/swaps")] = re_root_swaps

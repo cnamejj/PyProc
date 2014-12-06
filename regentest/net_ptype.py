@@ -24,7 +24,7 @@ def re_net_ptype(inprecs):
     for __hilit in inprecs:
         __ff = inprecs.field
 
-        print __template.format(dev_type=__ff[PFC.F_DEVICE_TYPE], 
+        print __template.format(dev_type=__ff[PFC.F_DEVICE_TYPE],
                 dev_name=__ff[PFC.F_DEVICE_NAME],
                 dev_func=__ff[PFC.F_DEVICE_FUNC]
                 )

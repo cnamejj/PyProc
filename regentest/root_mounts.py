@@ -19,7 +19,7 @@ def re_root_mounts(inprecs):
         __ff = inprecs.field
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
-        print __template.format(msrc=__ff[PFC.F_MOUNT_SRC], 
+        print __template.format(msrc=__ff[PFC.F_MOUNT_SRC],
                 mfs=__ff[PFC.F_MOUNT_FS], fst=__ff[PFC.F_FS_TYPE],
                 mopts=__ff[PFC.F_MOUNT_OPTS]
                 )

@@ -26,7 +26,7 @@ expect_delete search_restart"
     for __hilit in inprecs:
         __ff = inprecs.field
 
-        print __template.format(ents=__ff[PFC.F_ENTRIES], 
+        print __template.format(ents=__ff[PFC.F_ENTRIES],
                 search=__ff[PFC.F_SEARCHED], found=__ff[PFC.F_FOUND],
                 new=__ff[PFC.F_NEW], inv=__ff[PFC.F_INVALID],
                 ign=__ff[PFC.F_IGNORE], delete=__ff[PFC.F_DELETE],
@@ -40,6 +40,3 @@ expect_delete search_restart"
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/net/stat/nf_conntrack")] = \
         re_net_stat_nf_conntrack
-
-    
-

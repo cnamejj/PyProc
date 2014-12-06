@@ -5,7 +5,7 @@
 import regentest as RG
 import ProcHandlers as PH
 
-PFC = PH.PFC 
+PFC = PH.PFC
 
 # ---
 
@@ -19,7 +19,7 @@ def re_root_version(inprecs):
     for __hilit in inprecs:
         __ff = inprecs.field
 
-        print __template.format(sys=__ff[PFC.F_SYSNAME], 
+        print __template.format(sys=__ff[PFC.F_SYSNAME],
                 rel=__ff[PFC.F_RELEASE], comp_by=__ff[PFC.F_COMP_BY],
                 comp_host=__ff[PFC.F_COMP_HOST], compiler=__ff[PFC.F_COMPILER],
                 vers=__ff[PFC.F_VERSION])

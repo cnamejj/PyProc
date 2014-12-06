@@ -9,6 +9,8 @@ PFC = PH.ProcFieldConstants
 
 # ---
 
+# pylint: disable=R0914
+
 def re_root_softirqs(inprecs):
 
     """Iterate through parsed records and re-generate data file"""
@@ -47,7 +49,7 @@ def re_root_softirqs(inprecs):
 
     print __headtemp.format(out=__out)
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
-    
+
     for __off in range(0, len(__irqs)):
         __key = __irqs[__off]
         __cts = inprecs.field[__key]
@@ -58,5 +60,7 @@ def re_root_softirqs(inprecs):
             __out = __irqstemp.format(out=__out, irqs=__cts[__cols[__cnum]])
 
         print __out
+
+# pylint: enable=R0914
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/softirqs")] = re_root_softirqs

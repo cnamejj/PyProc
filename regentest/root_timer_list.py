@@ -45,7 +45,7 @@ Clock Event Device: {devname:s}"
             print __detailtemp.format(maxdn=recs[PFC.F_MAX_DELTA],
                     mindn=recs[PFC.F_MIN_DELTA], mult=recs[PFC.F_MULT],
                     shift=recs[PFC.F_SHIFT], modenum=recs[PFC.F_MODE],
-                    nextsecs=recs[PFC.F_NEXT_EVENT], 
+                    nextsecs=recs[PFC.F_NEXT_EVENT],
                     nextevent=recs[PFC.F_SET_NEXT_EVENT],
                     modename=recs[PFC.F_SET_MODE],
                     handler=recs[PFC.F_EVENT_HANDLER],
@@ -92,6 +92,8 @@ def show_timer_details(active):
             left1=active[PFC.F_SOFT_EXP_DIFF], left2=active[PFC.F_EXP_DIFF])
 
 # ---
+
+# pylint: disable=R0914
 
 def recreate_cpu_info(recs, hits):
     """Generate output describing a CPU, it's clocks and timers"""
@@ -198,6 +200,8 @@ def recreate_cpu_info(recs, hits):
 
             if __show:
                 print __temp.format(label=__pref, val=recs[__key])
+
+# pylint: enable=R0914
 
 # ---
 

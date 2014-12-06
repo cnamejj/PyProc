@@ -42,8 +42,8 @@ tm->when retrnsmt   uid  timeout inode"
                 )
 
         if __ff[PFC.F_HEXSTATE] != TIME_WAIT:
-            __out = __extras.format(line=__out, 
-                    ret_tout=__ff[PFC.F_RETRY_TIMEOUT], 
+            __out = __extras.format(line=__out,
+                    ret_tout=__ff[PFC.F_RETRY_TIMEOUT],
                     ack_tout=__ff[PFC.F_ACK_TIMEOUT],
                     qop=__ff[PFC.F_QUICK_OR_PPONG],
                     cong=__ff[PFC.F_CONGEST_WINDOW],

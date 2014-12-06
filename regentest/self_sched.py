@@ -10,6 +10,8 @@ PFC = PH.ProcFieldConstants
 
 # ---
 
+# pylint: disable=R0914
+
 def re_self_sched(inprecs):
 
     """Iterate through parsed records and re-generate data file"""
@@ -69,6 +71,8 @@ def re_self_sched(inprecs):
 
                 print __template[__keyconv[__key]].format(desc=__keydesc[__key],
                         count=__ff[__key])
+
+# pylint: enable=R0914
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 

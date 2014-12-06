@@ -21,5 +21,5 @@ def re_root_vmstat(inprecs):
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         print __template.format(cat=__ff[PFC.F_CATEGORY],
                 count=__ff[PFC.F_COUNT])
-    
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/vmstat")] = re_root_vmstat

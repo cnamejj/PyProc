@@ -20,7 +20,7 @@ def re_net_dev_mcast(inprecs):
     for __hilit in inprecs:
         __ff = inprecs.field
 
-        print __template.format(ifind=__ff[PFC.F_INT_INDEX], 
+        print __template.format(ifind=__ff[PFC.F_INT_INDEX],
                 name=__ff[PFC.F_DEVICE],
                 refc=__ff[PFC.F_REFCOUNT],
                 glob=__ff[PFC.F_GLOBAL_USE],

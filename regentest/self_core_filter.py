@@ -20,5 +20,5 @@ def re_self_core_filter(inprecs):
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         print __template.format(cdf=__ff[PFC.F_COREDUMP_FILTER])
-    
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/coredump_filter")] = re_self_core_filter

@@ -26,7 +26,7 @@ Mask     Device"
     for __hilit in inprecs:
         __ff = inprecs.field
 
-        print __template.format(ip=__ff[PFC.F_IP_ADDRESS], 
+        print __template.format(ip=__ff[PFC.F_IP_ADDRESS],
                 hw_type=__ff[PFC.F_HW_TYPE],
                 flags=__ff[PFC.F_FLAGS],
                 hw_addr=__ff[PFC.F_HW_ADDRESS],

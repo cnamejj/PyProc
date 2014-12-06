@@ -45,19 +45,15 @@ def re_root_schedstat(inprecs):
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 
-#        print "dbg:: {inp}".format(inp=__ff)
-#        print "dbg:: dom-order t'{typ}' l'{ll}' v'{val}'".format(type=type(__ff[PFC.F_DOM_ORDER]),
-# ll=len(__ff[PFC.F_DOM_ORDER]), val=__ff[PFC.F_DOM_ORDER])
-
         __dlist = __ff[PFC.F_DOM_ORDER]
         for __key in __dlist:
             __dom = __ff[__dlist[__key]]
             print __domaintemp.format(dom=__dlist[__key],
                     mask=__dom[PFC.F_CPU_MASK],
-                    id_lb=__dom[PFC.F_IDLE_LB], 
+                    id_lb=__dom[PFC.F_IDLE_LB],
                     id_lb_pass=__dom[PFC.F_IDLE_LB_PASS],
                     id_lb_fail=__dom[PFC.F_IDLE_LB_FAIL],
-                    id_lb_imb=__dom[PFC.F_IDLE_LB_IMBAL], 
+                    id_lb_imb=__dom[PFC.F_IDLE_LB_IMBAL],
                     id_pt=__dom[PFC.F_IDLE_PT],
                     id_pt_hot=__dom[PFC.F_IDLE_PT_CACHE_HOT],
                     id_lb_noqu=__dom[PFC.F_IDLE_LB_NO_QUEUE],

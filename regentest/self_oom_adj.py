@@ -20,6 +20,6 @@ def re_self_oom_adj(inprecs):
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         print __template.format(oom=__ff[PFC.F_OOM_ADJ])
-    
+
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/oom_adj")] = re_self_oom_adj
 

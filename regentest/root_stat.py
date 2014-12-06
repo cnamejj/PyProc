@@ -9,6 +9,8 @@ PFC = PH.ProcFieldConstants
 
 # ---
 
+# pylint: disable=R0914
+
 def string_from_list_of_longs(lset):
 
     """Convert a list of longs to a space delimited string"""
@@ -22,12 +24,12 @@ def string_from_list_of_longs(lset):
             __nent += 1
         elif __off == __total_key:
             __res = " {tot:d}".format(tot=lset[__off])
-    
+
     for __off in range(0, __nent):
         __res = "{acc:s} {next:d}".format(acc=__res, next=lset[__off])
 
     return __res
-    
+
 # ---
 
 def parse_cpu_stats(cpu_stats, stats_order):
@@ -82,7 +84,7 @@ def re_root_stat(inprecs):
 
         __out = parse_cpu_stats(__ff[PFC.F_SS_CPU], __stat_name)
         print __cputemp.format(cn=" ", stlist=__out)
-      
+
         for __key in __ff:
             if __key.startswith(__cpu_pref) and __key != PFC.F_SS_CPU:
                 __ncpu += 1
@@ -102,5 +104,6 @@ def re_root_stat(inprecs):
         __out = string_from_list_of_longs(__ff[PFC.F_SS_SOFTIRQ])
         print __irqtemp.format(irqlist=__out)
 
+# pylint: enable=R0914
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/stat")] = re_root_stat

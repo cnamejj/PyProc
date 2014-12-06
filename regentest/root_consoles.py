@@ -19,7 +19,7 @@ def re_root_consoles(inprecs):
         __ff = inprecs.field
 
         __sp = __ff[PFC.F_DEVICE_NUMBER].partition(":")
-        
+
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         print __template.format(devname=__ff[PFC.F_DEVICE_NAME],
                 iot=__ff[PFC.F_IO_TYPE], flags=__ff[PFC.F_FLAGS],

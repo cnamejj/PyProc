@@ -24,5 +24,3 @@ def re_self_loginuid(inprecs):
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/self/loginuid")] = re_self_loginuid
 
-    
-
