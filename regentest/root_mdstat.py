@@ -62,7 +62,7 @@ def gen_bitmap_subrec_info(pdata, pmap):
                 pgtot=pdata[PFC.F_PAGES_TOTAL],
                 pgnomkb=pdata[PFC.F_PAGES_NOMISS_KB], chunk=__chunk,
                 un=__units, path=__path)
-    
+
 # ---
 
 def gen_rebuild_subrec_info(pdata, pmap):
@@ -134,7 +134,7 @@ def gen_mdstat_info(inprecs):
     for __seq in range(0, len(__order)):
         __pnum = __order[__seq]
 
-        __out = __PART_TEMP.format(acc=__out, 
+        __out = __PART_TEMP.format(acc=__out,
                 part=__ff[PFC.F_PARTITION_LIST][__pnum], pnum=__pnum,
                 wrmostly=__WRMOSTLY_DESC[__ff[PFC.F_WRMOSTLY_LIST][__pnum]],
                 faulty=__FAULTY_DESC[__ff[PFC.F_FAULTY_LIST][__pnum]],
@@ -161,7 +161,7 @@ def re_root_mdstat(inprecs):
 
     """Iterate through parsed records and re-generate data file"""
 
-    __perstemp = "Personalities : {plist:s} "
+    __perstemp = "Personalities : {plist:s}{trail:s}"
     __unusedtemp = "unused devices: {devs:s}"
 
     __rec_personality = "Personalities"
@@ -172,7 +172,12 @@ def re_root_mdstat(inprecs):
         __rec = __ff[PFC.F_REC_TYPE]
 
         if __rec == __rec_personality:
-            print __perstemp.format(plist=" ".join(__ff[PFC.F_PERSONALITIES]))
+            __plist = " ".join(__ff[PFC.F_PERSONALITIES])
+            if __plist != "":
+                __trail = " "
+            else:
+                __trail = ""
+            print __perstemp.format(plist=__plist, trail=__trail)
 
         elif __rec == __rec_unused:
             print __unusedtemp.format(devs=" ".join(__ff[PFC.F_DEVICE_LIST]))
