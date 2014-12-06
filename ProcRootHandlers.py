@@ -2577,7 +2577,7 @@ class ProcRootSTAT(PBR.TaggedMultiLineFile):
 #btime 1390806357
 #processes 4128591
 
-        for __subrec in self.unused_recs:
+        for __subrec in sorted(self.unused_recs):
             __key = self.unused_recs[__subrec].partition(" ")
             if __key[0].startswith(self.__pref_cpu):
                 self.__list_of_longs.add(__key[0])
@@ -2842,11 +2842,10 @@ class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
     def extra_next(self, sio):
 
         self.field[PFC.F_ZONE] = self.field[PFC.F_ZONE].strip()
-        __unrec = self.unused_recs
 
         __per_cpu = dict()
-        for __subrec in sorted(__unrec):
-            __line = __unrec[__subrec].strip()
+        for __subrec in sorted(self.unused_recs):
+            __line = self.unused_recs[__subrec].strip()
             if __line.startswith(self.__cpu_pref):
                 __cpu = PBR.conv_by_rules( __line, { AFTER: self.__cpu_pref,
                         CONV: long } )
@@ -3002,7 +3001,7 @@ class ProcRootSCHEDSTAT(PBR.TaggedMultiLineFile):
         __per_cpu = dict()
         __cpu = self.__no_cpu
 
-        for __subrec in self.unused_recs:
+        for __subrec in sorted(self.unused_recs):
             __line = self.unused_recs[__subrec].split()
             __tag = __line[0]
 
@@ -3794,7 +3793,7 @@ class ProcRootTIMERLIST(PBR.TaggedMultiLineFile):
         __st_comm = ""
         __st_pid = PDC.NO_PID
 
-        for __subrec in self.unused_recs:
+        for __subrec in sorted(self.unused_recs):
             __line = self.unused_recs[__subrec]
             __hit, __plist = self.parse_by_ruleset(__line)
 
