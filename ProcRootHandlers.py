@@ -2755,6 +2755,8 @@ class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
                 CONV: long, NAME: PFC.F_PAGES_MANAGED } )
         PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_free_pages ",
                 CONV: long, NAME: PFC.F_NR_FREE_PAGES } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_alloc_batch ",
+                CONV: long, NAME: PFC.F_NR_ALLOC_BATCH } )
         PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_inactive_anon ",
                 CONV: long, NAME: PFC.F_NR_INACTIVE_ANON } )
         PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_active_anon ",
@@ -2840,10 +2842,11 @@ class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
     def extra_next(self, sio):
 
         self.field[PFC.F_ZONE] = self.field[PFC.F_ZONE].strip()
+        __unrec = self.unused_recs
 
         __per_cpu = dict()
-        for __subrec in self.unused_recs:
-            __line = self.unused_recs[__subrec].strip()
+        for __subrec in sorted(__unrec):
+            __line = __unrec[__subrec].strip()
             if __line.startswith(self.__cpu_pref):
                 __cpu = PBR.conv_by_rules( __line, { AFTER: self.__cpu_pref,
                         CONV: long } )

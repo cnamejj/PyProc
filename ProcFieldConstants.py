@@ -802,6 +802,7 @@ F_CPU_PAGESETS = "pagesets-per-cpu"
 F_CPU_ID = "cpu-id"
 F_PAGES_MANAGED = "pages-managed"
 F_NR_FREE_CMA = "nr-free-cma"
+F_NR_ALLOC_BATCH = "nr-alloc-batch"
 
 # -- added for /proc/schedstat
 F_SCH_YIELD = "sched-yield"
