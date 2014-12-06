@@ -45,6 +45,7 @@ def re_root_zoneinfo(inprecs):
   inactive_ratio:    {inrat:d}"
 
     __lab = { PFC.F_NR_FREE_PAGES: "nr_free_pages",
+            PFC.F_NR_ALLOC_BATCH: "nr_alloc_batch",
             PFC.F_NR_INACTIVE_ANON: "nr_inactive_anon",
             PFC.F_NR_ACTIVE_ANON: "nr_active_anon",
             PFC.F_NR_INACTIVE_FILE: "nr_inactive_file",
