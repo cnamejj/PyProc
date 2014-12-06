@@ -1569,7 +1569,7 @@ class ProcNetPTYPE(PBR.FixedWhitespaceDelimRecs):
         else:
             if sio.linewords > 2:
                 self.field[PFC.F_DEVICE_NAME] = sio.get_word(1)
-                self.field[PFC.F_DEVICE_FUNC] = sio.get_word(2)
+                self.field[PFC.F_DEVICE_FUNC] = " ".join(sio.lineparts[2:])
             else:
                 self.field[PFC.F_DEVICE_NAME] = ""
                 self.field[PFC.F_DEVICE_FUNC] = sio.get_word(1)
