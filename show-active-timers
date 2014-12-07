@@ -32,7 +32,7 @@ print HEAD.format(cpu="---", clock="---", seq="---", pid="------",
 # ---
 
 for dlist in TRECS:
-    cpu_id = dlist[PFC.F_CPU_ID]
+    cpu_id = dlist[PFC.F_CPU]
 
     cklist = dlist[PFC.F_CLOCK_LIST]
     for cl_off in range(0, len(cklist)):
