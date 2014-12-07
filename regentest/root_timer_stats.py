@@ -16,6 +16,7 @@ def re_root_timer_stats(inprecs):
     __headtemp = "Timer Stats Version: {vers:s}\n\
 Sample period: {samper:.3f} s"
 
+    __collectiontemp = "Collection: {st:s}"
     __overflowtemp = "Overflow: {over:d} entries"
     __fulltotaltemp = "{tot:d} total events, {evrate:.3f} events/sec"
     __shorttotaltemp = "{tot:d} total events"
@@ -38,21 +39,15 @@ Sample period: 0.000 s\n\
             print __headtemp.format(vers=__ff[PFC.F_VERSION],
                     samper=__ff[PFC.F_SAMPLE_PERIOD])
 
+            if __ff[PFC.F_COLLECTION] != "":
+                print __collectiontemp.format(st=__ff[PFC.F_COLLECTION])
+
             # -- This is false if the value is "NaN"
             if __ff[PFC.F_OVERFLOW] == __ff[PFC.F_OVERFLOW]:
                 print __overflowtemp.format(over=__ff[PFC.F_OVERFLOW])
             __first = False
 
-        if __ff[PFC.F_EVENT_TOTAL] > 0:
-
-            # -- Another "NAN check"
-            if __ff[PFC.F_EVENT_RATE] == __ff[PFC.F_EVENT_RATE]:
-                print __fulltotaltemp.format(tot=__ff[PFC.F_EVENT_TOTAL],
-                        evrate=__ff[PFC.F_EVENT_RATE])
-            else:
-                print __shorttotaltemp.format(tot=__ff[PFC.F_EVENT_TOTAL])
-
-        else:
+        if __ff[PFC.F_COUNT] > 0:
             if __ff[PFC.F_DEFERRABLE] == "":
                 __count = __normtemp.format(count=__ff[PFC.F_COUNT])
             else:
@@ -61,6 +56,15 @@ Sample period: 0.000 s\n\
             print __template.format(count=__count, pid=__ff[PFC.F_PID],
                     comm=__ff[PFC.F_PROC_NAME], stfunc=__ff[PFC.F_INIT_ROUT],
                     exfunc=__ff[PFC.F_CBACK_ROUT])
+
+        else:
+
+            # -- Another "NAN check"
+            if __ff[PFC.F_EVENT_RATE] == __ff[PFC.F_EVENT_RATE]:
+                print __fulltotaltemp.format(tot=__ff[PFC.F_EVENT_TOTAL],
+                        evrate=__ff[PFC.F_EVENT_RATE])
+            else:
+                print __shorttotaltemp.format(tot=__ff[PFC.F_EVENT_TOTAL])
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 

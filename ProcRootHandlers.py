@@ -3295,11 +3295,13 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
 # "README.ProcRootHandlers" to reduce the size of this module.
 
     def extra_init(self, *opts):
-        self.minfields = 4
+#        self.minfields = 4
+        self.minfields = 2
         self.__timer_tag = "Timer"
         self.__sample_tag = "Sample"
         self.__total_tag = "total"
         self.__overflow_tag = "Overflow:"
+        self.__collection_tag = "Collection:"
 
         self.__hold = dict()
         self.__hold[PFC.F_VERSION] = ""
@@ -3307,6 +3309,7 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
         self.__hold[PFC.F_EVENT_TOTAL] = 0
         self.__hold[PFC.F_EVENT_RATE] = 0.0
         self.__hold[PFC.F_OVERFLOW] = PDC.NAN
+        self.__hold[PFC.F_COLLECTION] = ""
 
         PBR.add_parse_rule(self, { POS: 0, BEFORE: ",",
                 NAME: PFC.F_DEFERRABLE } )
@@ -3360,6 +3363,10 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
             self.__hold[PFC.F_OVERFLOW] = __val
             return self.next()
 
+        if __first == self.__collection_tag:
+            self.__hold[PFC.F_COLLECTION] = sio.get_word(1)
+            return self.next()
+
         if __sec == self.__total_tag:
             self.field[PFC.F_DEFERRABLE] = ""
             self.field[PFC.F_PID] = 0
@@ -3397,6 +3404,7 @@ class ProcRootTIMERSTATS(PBR.FixedWhitespaceDelimRecs):
         self.field[PFC.F_VERSION] = self.__hold[PFC.F_VERSION]
         self.field[PFC.F_SAMPLE_PERIOD] = self.__hold[PFC.F_SAMPLE_PERIOD]
         self.field[PFC.F_OVERFLOW] = self.__hold[PFC.F_OVERFLOW]
+        self.field[PFC.F_COLLECTION] = self.__hold[PFC.F_COLLECTION]
 
         return self.field
 
