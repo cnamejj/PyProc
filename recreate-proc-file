@@ -39,7 +39,7 @@ fi
 
 # ---
 
-if [ ! -f "${inp}" ]
+if [ ! -f "${inp}" -a ! -L "${inp}" ]
 then
 	if [ -f "${PREF1}${inp}" ]
 	then

@@ -1,0 +1,33 @@
+#!/bin/bash
+
+HELPER="/proc/net/dev_snmp6/lo"
+
+pathlist=( $(./ShowProcHandler all \
+    | gawk '$2 != "/dev/null" { print $2 }')
+)
+
+# ---
+
+typeset -i seq total
+
+total="${#pathlist[@]}"
+seq=1
+
+# ---
+
+for inpfile in ${pathlist[@]}
+do
+	if [ "${inpfile}" = "${HELPER}" ]
+	then
+		subseq=1
+		for fn in /proc/net/dev_snmp6/*
+		do
+			echo "[${seq}.${subseq}/${total}] ${fn} $(./recreate-proc-file "${fn}" /proc/net/dev_snmp6)"
+			subseq=$(( ${subseq} + 1 ))
+		done
+	else
+		echo "[${seq}/${total}] ${inpfile} $(./recreate-proc-file "${inpfile}")"
+	fi
+
+        seq=$(( ${seq} + 1 ))
+done
