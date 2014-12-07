@@ -87,6 +87,7 @@ class ProcNetNETLINK(PBR.FixedWhitespaceDelimRecs):
         PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_WMEM_ALLOC,
                 CONV: long } )
         PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_DUMP, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_DUMP_STR } )
         PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_LOCKS, CONV: long } )
         PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_DROPS, CONV: long } )
         PBR.add_parse_rule(self, { POS: 9, NAME: PFC.F_INODE, CONV: long } )

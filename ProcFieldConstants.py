@@ -238,6 +238,7 @@ F_GROUPS = "groups"
 F_WMEM_ALLOC = "wmem-alloc"
 F_DUMP = "dump"
 F_LOCKS = "locks"
+F_DUMP_STR = "dump-string"
 
 # -- fields added to support the "netfilter/nf_log" data
 F_INDEX = "index"
