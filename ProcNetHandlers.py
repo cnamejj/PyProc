@@ -86,7 +86,6 @@ class ProcNetNETLINK(PBR.FixedWhitespaceDelimRecs):
                 CONV: long } )
         PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_WMEM_ALLOC,
                 CONV: long } )
-        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_DUMP, CONV: long } )
         PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_DUMP_STR } )
         PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_LOCKS, CONV: long } )
         PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_DROPS, CONV: long } )
@@ -122,10 +121,15 @@ class ProcNetNETLINK(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_RMEM_ALLOC] = 0
             self.field[PFC.F_WMEM_ALLOC] = 0
             self.field[PFC.F_DUMP] = 0
+            self.field[PFC.F_DUMP_STR] = ""
             self.field[PFC.F_LOCKS] = 0
             self.field[PFC.F_DROPS] = 0
             self.field[PFC.F_INODE] = 0
 
+        if len(self.field[PFC.F_DUMP_STR]) == 16:
+            self.field[PFC.F_DUMP] = long(self.field[PFC.F_DUMP_STR], 16)
+        else:
+            self.field[PFC.F_DUMP] = long(self.field[PFC.F_DUMP_STR])
         self.protocol = self.field[PFC.F_PROTOCOL]
         self.pid = self.field[PFC.F_PID]
         self.groups = self.field[PFC.F_GROUPS]
