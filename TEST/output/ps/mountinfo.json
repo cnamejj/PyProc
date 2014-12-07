@@ -4,7 +4,7 @@
     },
     "1": {
         "extra-options": "",
-        "filesystem": "sysfs",
+        "fstype": "sysfs",
         "major-dev-num": 0,
         "minor-dev-num": 14,
         "mount-id": "15",
@@ -17,7 +17,7 @@
     },
     "2": {
         "extra-options": "",
-        "filesystem": "proc",
+        "fstype": "proc",
         "major-dev-num": 0,
         "minor-dev-num": 3,
         "mount-id": "16",
@@ -30,7 +30,7 @@
     },
     "3": {
         "extra-options": "",
-        "filesystem": "devtmpfs",
+        "fstype": "devtmpfs",
         "major-dev-num": 0,
         "minor-dev-num": 5,
         "mount-id": "17",
@@ -43,7 +43,7 @@
     },
     "4": {
         "extra-options": "",
-        "filesystem": "devpts",
+        "fstype": "devpts",
         "major-dev-num": 0,
         "minor-dev-num": 11,
         "mount-id": "18",
@@ -56,7 +56,7 @@
     },
     "5": {
         "extra-options": "",
-        "filesystem": "tmpfs",
+        "fstype": "tmpfs",
         "major-dev-num": 0,
         "minor-dev-num": 15,
         "mount-id": "19",
@@ -69,7 +69,7 @@
     },
     "6": {
         "extra-options": "",
-        "filesystem": "ext4",
+        "fstype": "ext4",
         "major-dev-num": 9,
         "minor-dev-num": 1,
         "mount-id": "20",
@@ -82,7 +82,7 @@
     },
     "7": {
         "extra-options": "",
-        "filesystem": "fusectl",
+        "fstype": "fusectl",
         "major-dev-num": 0,
         "minor-dev-num": 16,
         "mount-id": "22",
@@ -95,7 +95,7 @@
     },
     "8": {
         "extra-options": "",
-        "filesystem": "debugfs",
+        "fstype": "debugfs",
         "major-dev-num": 0,
         "minor-dev-num": 6,
         "mount-id": "23",
@@ -108,7 +108,7 @@
     },
     "9": {
         "extra-options": "",
-        "filesystem": "securityfs",
+        "fstype": "securityfs",
         "major-dev-num": 0,
         "minor-dev-num": 10,
         "mount-id": "24",
@@ -121,7 +121,7 @@
     },
     "10": {
         "extra-options": "",
-        "filesystem": "tmpfs",
+        "fstype": "tmpfs",
         "major-dev-num": 0,
         "minor-dev-num": 17,
         "mount-id": "25",
@@ -134,7 +134,7 @@
     },
     "11": {
         "extra-options": "",
-        "filesystem": "tmpfs",
+        "fstype": "tmpfs",
         "major-dev-num": 0,
         "minor-dev-num": 18,
         "mount-id": "26",
@@ -147,7 +147,7 @@
     },
     "12": {
         "extra-options": "",
-        "filesystem": "ext4",
+        "fstype": "ext4",
         "major-dev-num": 252,
         "minor-dev-num": 0,
         "mount-id": "27",
@@ -160,7 +160,7 @@
     },
     "13": {
         "extra-options": "",
-        "filesystem": "ext4",
+        "fstype": "ext4",
         "major-dev-num": 9,
         "minor-dev-num": 0,
         "mount-id": "28",
@@ -173,7 +173,7 @@
     },
     "14": {
         "extra-options": "",
-        "filesystem": "vfat",
+        "fstype": "vfat",
         "major-dev-num": 8,
         "minor-dev-num": 1,
         "mount-id": "29",
@@ -186,7 +186,7 @@
     },
     "15": {
         "extra-options": "",
-        "filesystem": "binfmt_misc",
+        "fstype": "binfmt_misc",
         "major-dev-num": 0,
         "minor-dev-num": 19,
         "mount-id": "30",
@@ -199,7 +199,7 @@
     },
     "16": {
         "extra-options": "",
-        "filesystem": "rpc_pipefs",
+        "fstype": "rpc_pipefs",
         "major-dev-num": 0,
         "minor-dev-num": 20,
         "mount-id": "32",

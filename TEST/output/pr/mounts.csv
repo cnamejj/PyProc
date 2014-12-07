@@ -1,4 +1,4 @@
-TEST/data/pr/mounts|mount-options|mount-point|mount-source|filesystem
+TEST/data/pr/mounts|mount-options|mount-point|mount-source|fstype
 1|rw|/|rootfs|rootfs
 2|rw,nosuid,nodev,noexec,relatime|/sys|sysfs|sysfs
 3|rw,nosuid,nodev,noexec,relatime|/proc|proc|proc

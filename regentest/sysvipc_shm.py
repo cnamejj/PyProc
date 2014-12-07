@@ -48,7 +48,7 @@ def re_sysvipc_shm(inprecs):
 
         print __template.format(key=__ff[PFC.F_KEY], id=__ff[PFC.F_ID],
                 mode=__ff[PFC.F_MODE], size=__size, cpid=__ff[PFC.F_CPID],
-                lpid=__ff[PFC.F_LPID], attach=__ff[PFC.F_ATTACH],
+                lpid=__ff[PFC.F_LAST_PID], attach=__ff[PFC.F_ATTACH],
                 ow_uid=__ff[PFC.F_OW_UID], ow_gid=__ff[PFC.F_OW_GID],
                 cr_uid=__ff[PFC.F_CR_UID], cr_gid=__ff[PFC.F_CR_GID],
                 atime=__ff[PFC.F_ACC_TIME], dtime=__ff[PFC.F_DEST_TIME],

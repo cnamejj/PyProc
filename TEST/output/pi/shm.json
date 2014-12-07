@@ -16,7 +16,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 184320,
+        "rss": 184320,
         "size": 184320,
         "swap": 0
     },
@@ -34,7 +34,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 8110080,
+        "rss": 8110080,
         "size": 8110080,
         "swap": 0
     },
@@ -52,7 +52,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 20480,
+        "rss": 20480,
         "size": 17028,
         "swap": 0
     },
@@ -70,7 +70,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 24576,
+        "rss": 24576,
         "size": 23364,
         "swap": 0
     },
@@ -88,7 +88,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 28672,
+        "rss": 28672,
         "size": 25476,
         "swap": 0
     },
@@ -106,7 +106,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 28672,
+        "rss": 28672,
         "size": 27852,
         "swap": 0
     },
@@ -124,7 +124,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 24576,
+        "rss": 24576,
         "size": 20856,
         "swap": 0
     },
@@ -142,7 +142,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 20480,
+        "rss": 20480,
         "size": 19272,
         "swap": 0
     },
@@ -160,7 +160,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 32768,
+        "rss": 32768,
         "size": 30888,
         "swap": 0
     },
@@ -178,7 +178,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 28672,
+        "rss": 28672,
         "size": 26532,
         "swap": 0
     },
@@ -196,7 +196,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 24576,
+        "rss": 24576,
         "size": 23496,
         "swap": 0
     },
@@ -214,7 +214,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 20480,
+        "rss": 20480,
         "size": 19800,
         "swap": 0
     },
@@ -232,7 +232,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 7835648,
+        "rss": 7835648,
         "size": 7835520,
         "swap": 0
     },
@@ -250,7 +250,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 16384,
+        "rss": 16384,
         "size": 14916,
         "swap": 0
     },
@@ -268,7 +268,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 24576,
+        "rss": 24576,
         "size": 23364,
         "swap": 0
     },
@@ -286,7 +286,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 20480,
+        "rss": 20480,
         "size": 19140,
         "swap": 0
     },
@@ -304,7 +304,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 36864,
+        "rss": 36864,
         "size": 33660,
         "swap": 0
     },
@@ -322,7 +322,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 24576,
+        "rss": 24576,
         "size": 24552,
         "swap": 0
     },
@@ -340,7 +340,7 @@
         "mode": 896,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 393216,
+        "rss": 393216,
         "size": 393216,
         "swap": 0
     },
@@ -358,7 +358,7 @@
         "mode": 896,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 196608,
+        "rss": 196608,
         "size": 393216,
         "swap": 0
     },
@@ -376,7 +376,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 20480,
+        "rss": 20480,
         "size": 19668,
         "swap": 0
     },
@@ -394,7 +394,7 @@
         "mode": 896,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 12288,
+        "rss": 12288,
         "size": 12288,
         "swap": 0
     },
@@ -412,7 +412,7 @@
         "mode": 896,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 131072,
+        "rss": 131072,
         "size": 393216,
         "swap": 0
     },
@@ -430,7 +430,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 20480,
+        "rss": 20480,
         "size": 20196,
         "swap": 0
     },
@@ -448,7 +448,7 @@
         "mode": 960,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 16384,
+        "rss": 16384,
         "size": 14124,
         "swap": 0
     },
@@ -466,7 +466,7 @@
         "mode": 896,
         "owner-gid": 500,
         "owner-uid": 500,
-        "rss-size": 393216,
+        "rss": 393216,
         "size": 393216,
         "swap": 0
     },
@@ -484,7 +484,7 @@
         "mode": 384,
         "owner-gid": 501,
         "owner-uid": 501,
-        "rss-size": 24576,
+        "rss": 24576,
         "size": 64528,
         "swap": 0
     }

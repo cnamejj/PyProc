@@ -23,6 +23,10 @@ def re_self_sched(inprecs):
     __longtemptemp = "{{desc:<{dlen:d}s}}:{{count:21d}}"
     __floattemptemp = "{{desc:<{dlen:d}s}}:{{count:21.6f}}"
 
+    __numamigtemp = "{desc:s} {count:d}"
+    __numafaulttemp = "numa_faults, {idx:d}, {node:d}, {cpu:d}, {home:d}, \
+{flt:d}"
+
     __template = ()
 
     for __hilit in inprecs:
@@ -67,10 +71,23 @@ def re_self_sched(inprecs):
         for __seq in range(0, len(__hits)):
             __key = __hits[__seq]
             if __keydesc.has_key(__key):
-                __val = __ff[__key]
-
-                print __template[__keyconv[__key]].format(desc=__keydesc[__key],
+                if __key == PFC.F_NUMA_MIGRATE:
+                    print __numamigtemp.format(desc=__keydesc[__key],
                         count=__ff[__key])
+
+                else:
+                    __val = __ff[__key]
+
+                    print __template[__keyconv[__key]].format(
+                            desc=__keydesc[__key], count=__ff[__key])
+
+        if __ff.has_key(PFC.F_NUMA_FAULTS):
+            __faultlist = __ff[PFC.F_NUMA_FAULTS]
+            for __seq in range(0, len(__faultlist)):
+                __fset = __faultlist[__seq]
+                print __numafaulttemp.format(idx=__fset[PFC.F_INDEX],
+                        node=__fset[PFC.F_NODE], cpu=__fset[PFC.F_CPU],
+                        home=__fset[PFC.F_HOME], flt=__fset[PFC.F_FAULT])
 
 # pylint: enable=R0914
 

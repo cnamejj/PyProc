@@ -41,6 +41,7 @@ HAS = PBR.HAS_VAL
 WORDS = PBR.WORDS_VAL
 CONV = PBR.CONVERSION
 BASE = PBR.NUM_BASE
+PSUB = PBR.SUBWORD
 
 REGISTER_FILE = PBR.register_file
 REGISTER_PARTIAL_FILE = PBR.register_partial_file
@@ -582,7 +583,7 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
 # pylint: enable=C0301
 
         self.field[PFC.F_EXTRA_OPTS] = ""
-        self.field[PFC.F_FS_TYPE] = ""
+        self.field[PFC.F_FSTYPE] = ""
         self.field[PFC.F_MOUNT_SRC] = ""
         self.field[PFC.F_SUPER_OPTS] = ""
 
@@ -602,7 +603,7 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_EXTRA_OPTS] = __extras
 
             if sio.linewords > __off:
-                self.field[PFC.F_FS_TYPE] = sio.get_word(__off)
+                self.field[PFC.F_FSTYPE] = sio.get_word(__off)
                 __off += 1
             if sio.linewords > __off:
                 self.field[PFC.F_MOUNT_SRC] = sio.get_word(__off)
@@ -618,7 +619,7 @@ class ProcSelfMOUNTINFO(PBR.FixedWhitespaceDelimRecs):
         self.mount_prel = self.field[PFC.F_MOUNT_REL]
         self.mnt_options = self.field[PFC.F_MOUNT_OPTS]
         self.more_options = self.field[PFC.F_EXTRA_OPTS]
-        self.fstype = self.field[PFC.F_FS_TYPE]
+        self.fstype = self.field[PFC.F_FSTYPE]
         self.mnt_source = self.field[PFC.F_MOUNT_SRC]
         self.super_options = self.field[PFC.F_SUPER_OPTS]
 
@@ -729,7 +730,7 @@ class ProcSelfMOUNTSTATS(PBR.FixedWhitespaceDelimRecs):
                 PFC.F_ACDIRMIN, PFC.F_ACDIRMAX, PFC.F_PORT, PFC.F_TIMEO,
                 PFC.F_MOUNTSTATS_RETRANS, PFC.F_MOUNTPORT, PFC.F_MINORVERS,
                 PFC.F_DTSIZE, PFC.F_FLAVOR, PFC.F_PSEUDOFLAVOR, PFC.F_RPC_PROG,
-                PFC.F_RPC_VERS, PFC.F_NAMLEN, PFC.F_WTMULT )
+                PFC.F_RPC_VERS, PFC.F_NAMELEN, PFC.F_WTMULT )
 
         self.__nfs_mount_opts_hex = ( PFC.F_CAPS, PFC.F_NFSV4_BM0,
                 PFC.F_NFSV4_BM1, PFC.F_NFSV4_ACL )
@@ -1587,6 +1588,8 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
 #        self.minfields = 2
         self.minfields = 1
 
+        self.__numa_faults_pref = "numa_faults,"
+
         self.two_longs = ( PFC.F_EXEC_START, PFC.F_RUNTIME,
                 PFC.F_EXEC_RUNTIME, PFC.F_ST_WAIT_START, PFC.F_ST_SLEEP_START,
                 PFC.F_ST_BLOCK_START, PFC.F_ST_SLEEP_MAX, PFC.F_ST_BLOCK_MAX,
@@ -1691,8 +1694,12 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
                 AFTER: ":", CONV: long } )
         PBR.add_parse_rule(self, { NAME: PFC.F_CLOCK_DELTA,
                 PREFIX: "clock-delta", AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_NUMA_SCAN_SEQ,
+                PREFIX: "mm->numa_scan_seq", AFTER: ":", CONV: long } )
+        PBR.add_parse_rule(self, { NAME: PFC.F_NUMA_MIGRATE,
+                PREFIX: "numa_migrations,", AFTER: " ", CONV: long } )
 
-        self.add_eor_rule( "clock-delta", { BEFORE: ":" } )
+#        self.add_eor_rule( "clock-delta", { BEFORE: ":" } )
 
         return
 
@@ -1709,6 +1716,25 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
 
         for __key in self.two_longs:
             self.field[__key] = PBR.hilo_pair_from_str(self.field[__key])
+
+        __fset = []
+        for __subrec in sorted(self.unused_recs):
+            __line = self.unused_recs[__subrec]
+            if __line.startswith(self.__numa_faults_pref):
+                __idx = PBR.conv_by_rules(__line, { PSUB: 1, CONV: long,
+                        BEFORE: "," } )
+                __node = PBR.conv_by_rules(__line, { PSUB: 2, CONV: long,
+                        BEFORE: "," } )
+                __cpu = PBR.conv_by_rules(__line, { PSUB: 3, CONV: long,
+                        BEFORE: "," } )
+                __home = PBR.conv_by_rules(__line, { PSUB: 4, CONV: long,
+                        BEFORE: "," } )
+                __faults = PBR.conv_by_rules(__line, { PSUB: 5, CONV: long } )
+                __fset.append( { PFC.F_INDEX: __idx, PFC.F_NODE: __node,
+                        PFC.F_CPU: __cpu, PFC.F_HOME: __home,
+                        PFC.F_FAULT: __faults } )
+
+        self.field[PFC.F_NUMA_FAULTS] = __fset
 
         return self.field
 

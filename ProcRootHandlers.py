@@ -2381,7 +2381,7 @@ class ProcRootMOUNTS(PBR.FixedWhitespaceDelimRecs):
 
         PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_MOUNT_SRC } )
         PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_MOUNT_FS } )
-        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_FS_TYPE } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_FSTYPE } )
         PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_MOUNT_OPTS } )
 
         self.mnt_source = ""
@@ -2402,7 +2402,7 @@ class ProcRootMOUNTS(PBR.FixedWhitespaceDelimRecs):
 
         self.mnt_source = self.field[PFC.F_MOUNT_SRC]
         self.mount_fs = self.field[PFC.F_MOUNT_FS]
-        self.fstype = self.field[PFC.F_FS_TYPE]
+        self.fstype = self.field[PFC.F_FSTYPE]
         self.mnt_options = self.field[PFC.F_MOUNT_OPTS]
 
         return(self.mnt_source, self.mount_fs, self.fstype, self.mnt_options)
@@ -3053,7 +3053,7 @@ class ProcRootCRYPTO(PBR.TaggedMultiLineFile):
         PBR.add_parse_rule(self, { PREFIX: "priority", AFTER: ": ", CONV: long,
                 NAME: PFC.F_PRIORITY }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "refcnt", AFTER: ": ", CONV: long,
-                NAME: PFC.F_REF_COUNT }, __rpl )
+                NAME: PFC.F_REFCOUNT }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "selftest", AFTER: ": ",
                 NAME: PFC.F_SELFTEST }, __rpl )
         PBR.add_parse_rule(self, { PREFIX: "flags", AFTER: ": 0x", CONV: long,

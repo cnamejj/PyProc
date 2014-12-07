@@ -358,7 +358,7 @@
                 "clock-resolution": 1
             }
         },
-        "cpu-id": 0,
+        "cpu": 0,
         "event-handler": "",
         "expires-next": 4210973140000000,
         "hres-active": 1,
@@ -629,7 +629,7 @@
                 "clock-resolution": 1
             }
         },
-        "cpu-id": 1,
+        "cpu": 1,
         "event-handler": "",
         "expires-next": 4210973212982515,
         "hres-active": 1,
@@ -900,7 +900,7 @@
                 "clock-resolution": 1
             }
         },
-        "cpu-id": 2,
+        "cpu": 2,
         "event-handler": "",
         "expires-next": 4210973153543913,
         "hres-active": 1,
@@ -1199,7 +1199,7 @@
                 "clock-resolution": 1
             }
         },
-        "cpu-id": 3,
+        "cpu": 3,
         "event-handler": "",
         "expires-next": 4210973144845641,
         "hres-active": 1,
@@ -1428,7 +1428,7 @@
                 "clock-resolution": 1
             }
         },
-        "cpu-id": 4,
+        "cpu": 4,
         "event-handler": "",
         "expires-next": 4210973352997855,
         "hres-active": 1,
@@ -1544,7 +1544,7 @@
                 "clock-resolution": 1
             }
         },
-        "cpu-id": 5,
+        "cpu": 5,
         "event-handler": "",
         "expires-next": 4210973140000000,
         "hres-active": 1,
@@ -1689,7 +1689,7 @@
                 "clock-resolution": 1
             }
         },
-        "cpu-id": 6,
+        "cpu": 6,
         "event-handler": "",
         "expires-next": 4210973140000000,
         "hres-active": 1,
@@ -1932,7 +1932,7 @@
                 "clock-resolution": 1
             }
         },
-        "cpu-id": 7,
+        "cpu": 7,
         "event-handler": "",
         "expires-next": 4210973314776276,
         "hres-active": 1,
@@ -1977,7 +1977,7 @@
         "broadcast-device": true,
         "clock-event-device": "hpet",
         "clock-list": {},
-        "cpu-id": 0,
+        "cpu": 0,
         "event-handler": "tick_handle_oneshot_broadcast",
         "expires-next": 0,
         "hres-active": 0,
@@ -2022,7 +2022,7 @@
         "broadcast-device": false,
         "clock-event-device": "lapic",
         "clock-list": {},
-        "cpu-id": 0,
+        "cpu": 0,
         "event-handler": "hrtimer_interrupt",
         "expires-next": 0,
         "hres-active": 0,
@@ -2067,7 +2067,7 @@
         "broadcast-device": false,
         "clock-event-device": "lapic",
         "clock-list": {},
-        "cpu-id": 0,
+        "cpu": 0,
         "event-handler": "hrtimer_interrupt",
         "expires-next": 0,
         "hres-active": 0,
@@ -2112,7 +2112,7 @@
         "broadcast-device": false,
         "clock-event-device": "lapic",
         "clock-list": {},
-        "cpu-id": 0,
+        "cpu": 0,
         "event-handler": "hrtimer_interrupt",
         "expires-next": 0,
         "hres-active": 0,
@@ -2157,7 +2157,7 @@
         "broadcast-device": false,
         "clock-event-device": "lapic",
         "clock-list": {},
-        "cpu-id": 0,
+        "cpu": 0,
         "event-handler": "hrtimer_interrupt",
         "expires-next": 0,
         "hres-active": 0,
@@ -2202,7 +2202,7 @@
         "broadcast-device": false,
         "clock-event-device": "lapic",
         "clock-list": {},
-        "cpu-id": 0,
+        "cpu": 0,
         "event-handler": "hrtimer_interrupt",
         "expires-next": 0,
         "hres-active": 0,
@@ -2247,7 +2247,7 @@
         "broadcast-device": false,
         "clock-event-device": "lapic",
         "clock-list": {},
-        "cpu-id": 0,
+        "cpu": 0,
         "event-handler": "hrtimer_interrupt",
         "expires-next": 0,
         "hres-active": 0,
@@ -2292,7 +2292,7 @@
         "broadcast-device": false,
         "clock-event-device": "lapic",
         "clock-list": {},
-        "cpu-id": 0,
+        "cpu": 0,
         "event-handler": "hrtimer_interrupt",
         "expires-next": 0,
         "hres-active": 0,
@@ -2337,7 +2337,7 @@
         "broadcast-device": false,
         "clock-event-device": "lapic",
         "clock-list": {},
-        "cpu-id": 0,
+        "cpu": 0,
         "event-handler": "hrtimer_interrupt",
         "expires-next": 0,
         "hres-active": 0,
