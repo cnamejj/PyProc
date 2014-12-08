@@ -63,7 +63,7 @@ def re_self_stat(inprecs):
                 cstime=__ff[PFC.F_CSTIME], pri=__ff[PFC.F_PRIORITY],
                 nice=__ff[PFC.F_NICE], thr=__ff[PFC.F_THREADS],
                 stt=__ff[PFC.F_START_TIME], vsz=__ff[PFC.F_VSIZE],
-                rss=__ff[PFC.F_RSS_SIZE], rssl=__ff[PFC.F_RSS_LIM],
+                rss=__ff[PFC.F_RSS], rssl=__ff[PFC.F_RSS_LIM],
                 stcode=__ff[PFC.F_START_CODE], encode=__ff[PFC.F_END_CODE],
                 ststack=__ff[PFC.F_START_STACK], esp=__ff[PFC.F_ESP],
                 eip=__ff[PFC.F_EIP], sigpn=__ff[PFC.F_SIG_PEND],

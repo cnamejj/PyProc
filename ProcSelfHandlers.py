@@ -2096,8 +2096,7 @@ class ProcSelfSTAT(PBR.FixedWhitespaceDelimRecs):
         PBR.add_parse_rule(self, { POS: 21, CONV: long,
                 NAME: PFC.F_START_TIME } )
         PBR.add_parse_rule(self, { POS: 22, CONV: long, NAME: PFC.F_VSIZE } )
-        PBR.add_parse_rule(self, { POS: 23, CONV: long,
-                NAME: PFC.F_RSS_SIZE } )
+        PBR.add_parse_rule(self, { POS: 23, CONV: long, NAME: PFC.F_RSS } )
         PBR.add_parse_rule(self, { POS: 24, CONV: long, NAME: PFC.F_RSS_LIM } )
 
         PBR.add_parse_rule(self, { POS: 25, CONV: long,
