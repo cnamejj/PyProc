@@ -1536,11 +1536,7 @@ class ProcRootCMDLINE(PBR.FixedWhitespaceDelimRecs):
 #
 # pylint: enable=C0301
 
-        if sio.buff == "":
-            self.field[PFC.F_CMDLINE] = ""
-
-        else:
-            self.field[PFC.F_CMDLINE] = " ".join(sio.lineparts)
+        self.field[PFC.F_CMDLINE] = sio.buff.rstrip("\n")
 
         self.cmdline = self.field[PFC.F_CMDLINE]
 
