@@ -45,6 +45,22 @@ def pid_to_cmdline(target = "self"):
 
 # ---
 
+def pid_to_comm(target = "self"):
+    """Find the binary associated with the given process"""
+
+    __cmd = ""
+    __from = "/proc/{pid}/comm".format(pid=target)
+
+    __handler = ProcHandlers.GET_HANDLER("/proc/self/comm")
+    __act = __handler(__from)
+    for __res in __act:
+        if __cmd == "":
+            __cmd = __res
+    return __cmd
+
+
+# ---
+
 def inode_to_socket_map():
     """Create a lookup table mapping inodes to sockets"""
 

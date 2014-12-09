@@ -7,6 +7,7 @@ Display memory use changes over time for a specific process.
 
 import sys
 import time
+import os
 import ProcHandlers
 import ProcFieldConstants
 import ProcessInfo
@@ -39,7 +40,7 @@ ST_GET_PID = 6
 
 SMAP_FILE_TEMPLATE = "/proc/{pid}/smaps"
 KEY_TEMPLATE = "{low:x}-{high:x} {path}"
-DISP_FORMAT = "{tstamp} {pid:5} {curr:7} {dir} {diff:7} {pc:6.1f}%\
+DISP_FORMAT = "{tstamp} {pid:5} {comm:<15s} {curr:7} {dir} {diff:7} {pc:6.1f}%\
  {low:7} {hi:7} {cat} {name:14}"
 
 MSEG_HEADER = { True: " Memory-Segment", False: "" }
@@ -49,12 +50,19 @@ HEADER_PID = "pid: #{pid}, cmd: {cmdline}"
 HEADER_FORMAT = "pause: {plen} secs, thresholds: abs {minabs}, pc {pc}%\n\
 display:{show} {breakout}\n\
 watch:{output}\n\
-\n\
-Date     Time     PID   Current DR   Delta %-Delta Minimum Maximum{mseg} Path Type\n\
--------- -------- ----- ------- -- ------- ------- ------- ------- - - -"
+"
 
-SHOW_SYNTAX = "Syntax: {comm} -pid ### options...\n\
+COL_HEADER_FORMAT = "\
+Date     Time     PID   Command         Current DR   Delta %-Delta Minimum \
+Maximum{mseg} Path Type{{pidsumm:s}}\n\
+-------- -------- ----- --------------- ------- -- ------- ------- ------- \
+------- - - -"
+
+PIDSUMM = " [Watching {count:d} PIDs]"
+
+SHOW_SYNTAX = "Syntax: {comm} options...\n\
 Options:\n\
+    -pid ###,###,###\n\
     <+/-details>\n\
     <+/-totals>\n\
     <+/-ignore cat1 cat2 cat3 ...> | <+/-ignore all>\n\
@@ -62,7 +70,16 @@ Options:\n\
     <+/-percent threshold>\n\
     <+/-change threshold>\n\
     <+/-pause seconds>\n\
-    <+/-memory-segments> | <+/-mseg>"
+    <+/-memory-segments> | <+/-mseg>\n\
+\n\
+At least one process id must be specified. The symbolic name 'all' can be used\n\
+and will be expanded to a list of all processes running when the program starts.\n\
+It is not refreshed as the program runs.\n\
+\n\
+Categories are any of the following:\n\
+AnonHugePages, Anonymous, KernelPageSize, Locked, MMUPageSize, Private_Clean,\n\
+Private_Dirty, Pss, Referenced, Rss, Shared_Clean, Shared_Dirty, Size, Swap\n\
+"
 
 OP_PID = "-pid"
 OP_TOTALS = "-totals"
@@ -94,13 +111,14 @@ OPT_STATE_MAP = {
 
 HANDLER = ProcHandlers.GET_HANDLER("/proc/self/smaps")
 
+COLHEADER_INT = 40
 PAUSE_LEN = 5
 PC_THRESH = 10.0
 ABS_THRESH = 1
 DO_SHOW_DETAILS = True
 DO_SHOW_TOTALS = True
 DONE = False
-SEQ = 0
+SEQ = COLHEADER_INT
 PID_LIST = dict()
 DO_SPLIT_MSEG = True
 STAT = ST_GET_PID
@@ -117,6 +135,21 @@ DISP_LIST = dict()
 for __cn in COUNTER_LIST:
     DISP_LIST[__cn] = True
 
+# ---
+
+def get_all_running_procs():
+    """Return a list of all the processes currently on the system"""
+
+    PROC_BASE = "/proc"
+    __plist = []
+
+    for dirinfo in os.walk(PROC_BASE):
+        for dirname in dirinfo[1]:
+            if dirname.isdigit():
+                __plist.append(dirname)
+        break
+
+    return __plist
 # ---
 
 def get_current_smaps_counts(smap_path):
@@ -228,7 +261,11 @@ else:
         elif STAT == ST_GET_PID:
             STAT = ST_SCAN
             for __pid in __opt.split(","):
-                PID_LIST[__pid] = True
+                if __pid == OPT_ALL:
+                    for __scpid in get_all_running_procs():
+                        PID_LIST[__scpid] = True
+                else:
+                    PID_LIST[__pid] = True
 
         elif STAT == ST_GET_PC:
             STAT = ST_SCAN
@@ -297,8 +334,8 @@ else:
             print HEADER_PID.format(pid=cpid, cmdline=PIN.pid_to_cmdline(cpid))
 
         print HEADER_FORMAT.format(plen=PAUSE_LEN, minabs=ABS_THRESH,
-            pc=PC_THRESH, show=SHOW, mseg=MSEG_HEADER[DO_SPLIT_MSEG],
-            output=OUTLIST, breakout=MSEG_BREAKOUT[DO_SPLIT_MSEG])
+            pc=PC_THRESH, show=SHOW, output=OUTLIST,
+            breakout=MSEG_BREAKOUT[DO_SPLIT_MSEG])
 
     PATH = dict()
     CURR = dict()
@@ -306,17 +343,21 @@ else:
     DELTA = dict()
     MINVAL = dict()
     MAXVAL = dict()
+    PID2COMM = dict()
 
     for curr_pid in PID_LIST:
         PATH[curr_pid] = SMAP_FILE_TEMPLATE.format(pid=curr_pid)
         CURR[curr_pid] = get_current_smaps_counts(PATH[curr_pid])
         MINVAL[curr_pid] = dict()
         MAXVAL[curr_pid] = dict()
+        PID2COMM[curr_pid] = PIN.pid_to_comm(curr_pid)
 
     try:
+        COL_HEADER = COL_HEADER_FORMAT.format(mseg=MSEG_HEADER[DO_SPLIT_MSEG])
+
         while not DONE:
-            SEQ += 1
             NOW = time.strftime("%y-%m-%d %H:%M:%S")
+            TRACKING = 0
 
             DONE = True
             PID_POST = dict()
@@ -328,6 +369,7 @@ else:
                     print "Process {pid} not running".format(pid=curr_pid)
                 else:
                     PID_POST[curr_pid] = PID_LIST[curr_pid]
+                    TRACKING += 1
                     DONE = False
 
             PID_LIST = PID_POST
@@ -399,10 +441,19 @@ else:
                             desc = IS_DOWN
 
                         if abs(DPC) >= PC_THRESH:
+                            SEQ += 1
+                            if SEQ >= COLHEADER_INT:
+                                SEQ = 0
+                                if TRACKING > 1:
+                                    pidsumm = PIDSUMM.format(count=TRACKING)
+                                else:
+                                    pidsumm = ""
+                                print COL_HEADER.format(pidsumm=pidsumm)
                             print DISP_FORMAT.format(tstamp=NOW, name=key,
                                     curr=cset[key], diff=delta[key], dir=desc,
                                     pc=DPC, low=min_seen, hi=max_seen,
-                                    cat=dcat, pid=curr_pid)
+                                    cat=dcat, pid=curr_pid,
+				    comm=PID2COMM[curr_pid])
 
             time.sleep(PAUSE_LEN)
 
