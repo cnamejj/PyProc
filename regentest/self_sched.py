@@ -24,7 +24,7 @@ def re_self_sched(inprecs):
     __floattemptemp = "{{desc:<{dlen:d}s}}:{{count:21.6f}}"
 
     __numamigtemp = "{desc:s} {count:d}"
-    __numafaulttemp = "numa_faults, {idx:d}, {node:d}, {cpu:d}, {home:d}, \
+    __numafaulttemp = "{label:s} {idx:d}, {node:d}, {cpu:d}, {home:d}, \
 {flt:d}"
 
     __template = ()
@@ -87,7 +87,8 @@ def re_self_sched(inprecs):
                 __fset = __faultlist[__seq]
                 print __numafaulttemp.format(idx=__fset[PFC.F_INDEX],
                         node=__fset[PFC.F_NODE], cpu=__fset[PFC.F_CPU],
-                        home=__fset[PFC.F_HOME], flt=__fset[PFC.F_FAULT])
+                        home=__fset[PFC.F_HOME], flt=__fset[PFC.F_FAULT],
+                        label=__fset[PFC.F_NUMA_FAULTS_LAB])
 
 # pylint: enable=R0914
 
