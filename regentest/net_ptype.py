@@ -15,7 +15,7 @@ def re_net_ptype(inprecs):
 
     __head = "Type Device      Function"
 
-    __template = "{dev_type:<4s} {dev_name:<8s} {dev_func:s}"
+    __template = "{dev_type:s} {dev_name:s} {dev_func:s}"
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 

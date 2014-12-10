@@ -4,47 +4,47 @@
     },
     "1": {
         "dev-function": "tpacket_rcv+0x0/0x7d0",
-        "dev-name": "eth0",
-        "dev-type": "ALL"
+        "dev-name": "eth0    ",
+        "dev-type": "ALL "
     },
     "2": {
         "dev-function": "ip_rcv+0x0/0x300",
-        "dev-name": "",
+        "dev-name": "        ",
         "dev-type": "0800"
     },
     "3": {
         "dev-function": "llc_rcv+0x0/0x370",
-        "dev-name": "",
+        "dev-name": "        ",
         "dev-type": "0011"
     },
     "4": {
         "dev-function": "llc_rcv+0x0/0x370",
-        "dev-name": "",
+        "dev-name": "        ",
         "dev-type": "0004"
     },
     "5": {
         "dev-function": "arp_rcv+0x0/0x140",
-        "dev-name": "",
+        "dev-name": "        ",
         "dev-type": "0806"
     },
     "6": {
         "dev-function": "edsa_rcv+0x0/0x2c0",
-        "dev-name": "",
+        "dev-name": "        ",
         "dev-type": "dada"
     },
     "7": {
         "dev-function": "dsa_rcv+0x0/0x290",
-        "dev-name": "",
+        "dev-name": "        ",
         "dev-type": "001b"
     },
     "8": {
         "dev-function": "trailer_rcv+0x0/0x170",
-        "dev-name": "",
+        "dev-name": "        ",
         "dev-type": "001c"
     },
     "9": {
         "dev-function": "ipv6_rcv+0x0/0x3c0",
-        "dev-name": "",
+        "dev-name": "        ",
         "dev-type": "86dd"
     }
 }

@@ -1524,7 +1524,7 @@ REGISTER_PARTIAL_FILE("psched", ProcNetPSCHED)
 
 
 # ---
-class ProcNetPTYPE(PBR.FixedWhitespaceDelimRecs):
+class ProcNetPTYPE(PBR.FixedColumnRecs):
     """Abstraction layer to pull records from /proc/net/ptype"""
 # source: net/core/dev.c
 #
@@ -1543,7 +1543,9 @@ class ProcNetPTYPE(PBR.FixedWhitespaceDelimRecs):
         self.minfields = 2
         self.skipped = "Type"
 
-        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_DEVICE_TYPE } )
+        self.fixedcols[PFC.F_DEVICE_TYPE] = (0, 4)
+        self.fixedcols[PFC.F_DEVICE_NAME] = (5, 13)
+        self.fixedcols[PFC.F_DEVICE_FUNC] = (14, -1)
 
         self.device_name = ""
         self.device_type = ""
@@ -1570,14 +1572,6 @@ class ProcNetPTYPE(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_DEVICE_TYPE] = ""
             self.field[PFC.F_DEVICE_NAME] = ""
             self.field[PFC.F_DEVICE_FUNC] = ""
-
-        else:
-            if sio.linewords > 2:
-                self.field[PFC.F_DEVICE_NAME] = sio.get_word(1)
-                self.field[PFC.F_DEVICE_FUNC] = " ".join(sio.lineparts[2:])
-            else:
-                self.field[PFC.F_DEVICE_NAME] = ""
-                self.field[PFC.F_DEVICE_FUNC] = sio.get_word(1)
 
         self.device_type = self.field[PFC.F_DEVICE_TYPE]
         self.device_name = self.field[PFC.F_DEVICE_NAME]
