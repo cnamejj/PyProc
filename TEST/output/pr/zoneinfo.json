@@ -25,6 +25,7 @@
         "nr-mapped": 16,
         "nr-mlock": 14,
         "nr-page-table-pages": 22,
+        "nr-pages-scanned": 0,
         "nr-shmem": 31,
         "nr-slab-reclaimable": 20,
         "nr-slab-unreclaimable": 21,
@@ -106,6 +107,9 @@
             44
         ],
         "start-pfn": 78,
+        "workingset-activate": 0,
+        "workingset-nodereclaim": 0,
+        "workingset-refault": 0,
         "zone": "DMA"
     },
     "2": {
@@ -131,6 +135,7 @@
         "nr-mapped": 711,
         "nr-mlock": 0,
         "nr-page-table-pages": 55,
+        "nr-pages-scanned": 0,
         "nr-shmem": 0,
         "nr-slab-reclaimable": 37093,
         "nr-slab-unreclaimable": 225,
@@ -212,6 +217,9 @@
             28980
         ],
         "start-pfn": 4096,
+        "workingset-activate": 0,
+        "workingset-nodereclaim": 0,
+        "workingset-refault": 0,
         "zone": "DMA32"
     },
     "3": {
@@ -237,6 +245,7 @@
         "nr-mapped": 50793,
         "nr-mlock": 1665,
         "nr-page-table-pages": 11531,
+        "nr-pages-scanned": 0,
         "nr-shmem": 4874,
         "nr-slab-reclaimable": 157049,
         "nr-slab-unreclaimable": 13026,
@@ -318,6 +327,9 @@
             0
         ],
         "start-pfn": 1048576,
+        "workingset-activate": 0,
+        "workingset-nodereclaim": 0,
+        "workingset-refault": 0,
         "zone": "Normal"
     }
 }

@@ -2805,6 +2805,8 @@ class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
 		CONV: long, NAME: PFC.F_NR_DIRTIED } )
         PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_written ",
 		CONV: long, NAME: PFC.F_NR_WRITTEN } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " nr_pages_scanned ",
+		CONV: long, NAME: PFC.F_NR_PAGE_SCAN } )
         PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " numa_hit ",
 		CONV: long, NAME: PFC.F_NUMA_HIT } )
         PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " numa_miss ",
@@ -2817,6 +2819,13 @@ class ProcRootZONEINFO(PBR.TaggedMultiLineFile):
 		CONV: long, NAME: PFC.F_NUMA_LOCAL } )
         PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " numa_other ",
 		CONV: long, NAME: PFC.F_NUMA_OTHER } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " workingset_refault ",
+		CONV: long, NAME: PFC.F_WKSET_REFAULT } )
+        PBR.add_parse_rule(self, { PREFIX: " ", AFTER: " workingset_activate ",
+		CONV: long, NAME: PFC.F_WKSET_ACTIVATE } )
+        PBR.add_parse_rule(self, { PREFIX: " ",
+                AFTER: " workingset_nodereclaim ",
+		CONV: long, NAME: PFC.F_WKSET_NODEREC } )
         PBR.add_parse_rule(self, { PREFIX: " ",
                 AFTER: " nr_anon_transparent_hugepages ",
 		CONV: long, NAME: PFC.F_NR_ANON_TRANS_HUGE } )

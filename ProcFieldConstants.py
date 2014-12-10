@@ -808,6 +808,10 @@ F_CPU_ID = "cpu-id"
 F_PAGES_MANAGED = "pages-managed"
 F_NR_FREE_CMA = "nr-free-cma"
 F_NR_ALLOC_BATCH = "nr-alloc-batch"
+F_NR_PAGE_SCAN = "nr-pages-scanned"
+F_WKSET_REFAULT = "workingset-refault"
+F_WKSET_ACTIVATE = "workingset-activate"
+F_WKSET_NODEREC = "workingset-nodereclaim"
 
 # -- added for /proc/schedstat
 F_SCH_YIELD = "sched-yield"

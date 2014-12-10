@@ -71,12 +71,16 @@ def re_root_zoneinfo(inprecs):
             PFC.F_NR_SHMEM: "nr_shmem",
             PFC.F_NR_DIRTIED: "nr_dirtied",
             PFC.F_NR_WRITTEN: "nr_written",
+            PFC.F_NR_PAGE_SCAN: "nr_pages_scanned",
             PFC.F_NUMA_HIT: "numa_hit",
             PFC.F_NUMA_MISS: "numa_miss",
             PFC.F_NUMA_FOREIGN: "numa_foreign",
             PFC.F_NUMA_INTERLEAVE: "numa_interleave",
             PFC.F_NUMA_LOCAL: "numa_local",
             PFC.F_NUMA_OTHER: "numa_other",
+            PFC.F_WKSET_REFAULT: "workingset_refault",
+            PFC.F_WKSET_ACTIVATE: "workingset_activate",
+            PFC.F_WKSET_NODEREC: "workingset_nodereclaim",
             PFC.F_NR_ANON_TRANS_HUGE: "nr_anon_transparent_hugepages",
             PFC.F_NR_FREE_CMA: "nr_free_cma"
             }
