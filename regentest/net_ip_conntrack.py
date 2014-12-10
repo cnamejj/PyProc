@@ -26,7 +26,7 @@ def re_net_ip_conntrack(inprecs):
     __unreptemp = "[UNREPLIED] "
     __assuretemp = "[ASSURED] "
     __marktemp = "mark={mark:d} "
-    __secctxtemp = "secctx={sec:d} "
+    __secctxtemp = "secctx={sec:s} "
     __usetemp = "use={use:d}"
 
     for __hilit in inprecs:
@@ -87,7 +87,7 @@ def re_net_ip_conntrack(inprecs):
             __mark = __marktemp.format(mark=__val)
 
         __val = __ff[PFC.F_SECCTX]
-        if __val != __val:
+        if __val == "":
             __secctx = ""
         else:
             __secctx = __secctxtemp.format(secctx=__val)

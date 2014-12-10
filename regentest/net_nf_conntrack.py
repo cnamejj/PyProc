@@ -27,7 +27,7 @@ def re_net_nf_conntrack(inprecs):
     __unreptemp = "[UNREPLIED] "
     __assuretemp = "[ASSURED] "
     __marktemp = "mark={mark:d} "
-    __secctxtemp = "secctx={sec:d} "
+    __secctxtemp = "secctx={sec:s} "
     __zonetemp = "zone={zone:d} "
     __deltatemp = "delta-time={delta:d} "
     __usetemp = "use={use:d}"
@@ -90,10 +90,10 @@ def re_net_nf_conntrack(inprecs):
             __mark = __marktemp.format(mark=__val)
 
         __val = __ff[PFC.F_SECCTX]
-        if __val != __val:
+        if __val == "":
             __secctx = ""
         else:
-            __secctx = __secctxtemp.format(secctx=__val)
+            __secctx = __secctxtemp.format(sec=__val)
 
         __val = __ff[PFC.F_ZONE]
         if __val != __val:

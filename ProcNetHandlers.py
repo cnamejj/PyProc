@@ -1040,7 +1040,7 @@ class ProcNetIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
         self.field[PFC.F_RE_BYTES] = PDC.NAN
         self.field[PFC.F_ASSURED] = ""
         self.field[PFC.F_MARK] = PDC.NAN
-        self.field[PFC.F_SECCTX] = PDC.NAN
+        self.field[PFC.F_SECCTX] = ""
         self.field[PFC.F_USE] = PDC.NAN
 
         if sio.buff == "":
@@ -1130,7 +1130,7 @@ class ProcNetIPCONNTRACK(PBR.FixedWhitespaceDelimRecs):
 
             if __word.startswith(self.__secctx_pref):
                 self.field[PFC.F_SECCTX] = PBR.conv_by_rules(__word,
-                        { CONV: long, PREFIX: self.__secctx_pref } )
+                        { PREFIX: self.__secctx_pref } )
                 __off += 1
                 __word = sio.get_word(__off)
 
@@ -1341,7 +1341,7 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
         self.field[PFC.F_RE_BYTES] = PDC.NAN
         self.field[PFC.F_ASSURED] = ""
         self.field[PFC.F_MARK] = PDC.NAN
-        self.field[PFC.F_SECCTX] = PDC.NAN
+        self.field[PFC.F_SECCTX] = ""
         self.field[PFC.F_ZONE] = PDC.NAN
         self.field[PFC.F_DELTA_TIME] = PDC.NAN
         self.field[PFC.F_USE] = PDC.NAN
@@ -1434,7 +1434,7 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
 
             if __word.startswith(self.__secctx_pref):
                 self.field[PFC.F_SECCTX] = PBR.conv_by_rules(__word,
-                        { CONV: long, PREFIX: self.__secctx_pref } )
+                        { PREFIX: self.__secctx_pref } )
                 __off += 1
                 __word = sio.get_word(__off)
 
