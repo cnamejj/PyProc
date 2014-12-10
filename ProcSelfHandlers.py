@@ -1589,6 +1589,7 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
         self.minfields = 1
 
         self.__numa_faults_pref = "numa_faults,"
+        self.__numa_faults_mem_pref = "numa_faults_memory,"
 
         self.two_longs = ( PFC.F_EXEC_START, PFC.F_RUNTIME,
                 PFC.F_EXEC_RUNTIME, PFC.F_ST_WAIT_START, PFC.F_ST_SLEEP_START,
@@ -1720,7 +1721,16 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
         __fset = []
         for __subrec in sorted(self.unused_recs):
             __line = self.unused_recs[__subrec]
-            if __line.startswith(self.__numa_faults_pref):
+            if __line.startswith(self.__numa_faults_mem_pref):
+                __lab = self.__numa_faults_mem_pref
+                __parse_numa = True
+            elif __line.startswith(self.__numa_faults_pref):
+                __lab = self.__numa_faults_pref
+                __parse_numa = True
+            else:
+                __parse_numa = False
+
+            if __parse_numa:
                 __idx = PBR.conv_by_rules(__line, { PSUB: 1, CONV: long,
                         BEFORE: "," } )
                 __node = PBR.conv_by_rules(__line, { PSUB: 2, CONV: long,
@@ -1732,7 +1742,7 @@ class ProcSelfSCHED(PBR.TaggedMultiLineFile):
                 __faults = PBR.conv_by_rules(__line, { PSUB: 5, CONV: long } )
                 __fset.append( { PFC.F_INDEX: __idx, PFC.F_NODE: __node,
                         PFC.F_CPU: __cpu, PFC.F_HOME: __home,
-                        PFC.F_FAULT: __faults } )
+                        PFC.F_FAULT: __faults, PFC.F_NUMA_FAULTS_LAB: __lab } )
 
         self.field[PFC.F_NUMA_FAULTS] = __fset
 

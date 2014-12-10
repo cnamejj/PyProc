@@ -737,6 +737,7 @@ F_NUMA_MIGRATE = "numa-migrations"
 F_HOME = "home"
 F_FAULT = "fault"
 F_NUMA_FAULTS = "numa-faults"
+F_NUMA_FAULTS_LAB = "numa-fault-label"
 
 # -- added to support /proc/self/personality
 F_PERSONALITY = "personality"
