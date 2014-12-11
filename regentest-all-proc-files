@@ -25,8 +25,23 @@ do
 			echo "[${seq}.${subseq}/${total}] ${fn} $(./recreate-proc-file "${fn}" /proc/net/dev_snmp6)"
 			subseq=$(( ${subseq} + 1 ))
 		done
+
+	elif [ ! -f "${inpfile}" ]
+	then
+		echo "[${seq}/${total}] ${inpfile} Skip No such file '${inpfile}'."
+
+	elif [ ! -r "${inpfile}" ]
+	then
+		echo "[${seq}/${total}] ${inpfile} Skip No read permission for '${inpfile}'."
+
 	else
-		echo "[${seq}/${total}] ${inpfile} $(./recreate-proc-file "${inpfile}")"
+		recreator="$(./show-recreator-for-file "${inpfile}" | gawk '{ print $1 }')"
+		if [ "${recreator}" = "N/A" ]
+		then
+			echo "[${seq}/${total}] ${inpfile} Skip No recreator script available yet."
+		else
+			echo "[${seq}/${total}] ${inpfile} $(./recreate-proc-file "${inpfile}")"
+		fi
 	fi
 
         seq=$(( ${seq} + 1 ))
