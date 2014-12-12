@@ -95,7 +95,7 @@ def show_timer_details(active):
 def recreate_cpu_info(recs, hits):
     """Generate output describing a CPU, it's clocks and timers"""
 
-    __cputemp = "\ncpu: {cpu:d}"
+    __cputemp = "cpu: {cpu:d}"
 
     __clocktemp = " clock {clock:d}:\n\
   .base:       {base:016x}\n\
@@ -210,7 +210,7 @@ def re_root_timer_list(inprecs):
 
     __headtemp = "Timer List Version: {vers:s}\n\
 HRTIMER_MAX_CLOCK_BASES: {maxcb:d}\n\
-now at {secs:d} nsecs"
+now at {secs:d} nsecs\n"
 
     __ticksectionpref = "\n"
     __nulldev = "<NULL>"
