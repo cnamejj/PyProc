@@ -33,8 +33,9 @@ def re_net_fib_triestat(inprecs):
 
     __finishtemp = "\tPointers: {ptrs:d}\n\
 Null ptrs: {nullp:d}\n\
-Total size: {tsize:d}  kB\n\
-\n\
+Total size: {tsize:d}  kB"
+
+    __optionaltemp = "\n\n\
 Counters:\n\
 ---------\n\
 gets = {gets:d}\n\
@@ -44,7 +45,7 @@ semantic match miss = {smiss:d}\n\
 null node hit= {nulln:d}\n\
 skipped node resize = {skip:d}\n"
 
-    __template = "{p1}{p2}\n{p3}"
+    __template = "{p1}{p2}\n{p3}{p4}"
 
     for __hilit in inprecs:
         __ff = inprecs.field
@@ -77,14 +78,19 @@ skipped node resize = {skip:d}\n"
 
         # ---
         __finish = __finishtemp.format(ptrs=__ff[PFC.F_POINTERS],
-                nullp=__ff[PFC.F_NULL_PTRS], tsize=__ff[PFC.F_TOTAL_SIZE],
-                gets=__ff[PFC.F_GETS], btrack=__ff[PFC.F_BACKTRACKS],
-                spass=__ff[PFC.F_SEM_PASS], smiss=__ff[PFC.F_SEM_MISS],
-                nulln=__ff[PFC.F_NULL_NODE], skip=__ff[PFC.F_SKIPPED]
-                )
+                nullp=__ff[PFC.F_NULL_PTRS], tsize=__ff[PFC.F_TOTAL_SIZE])
+
+        if __ff.has_key(PFC.F_GETS):
+            __optional = __optionaltemp.format(gets=__ff[PFC.F_GETS],
+                btrack=__ff[PFC.F_BACKTRACKS], spass=__ff[PFC.F_SEM_PASS],
+                smiss=__ff[PFC.F_SEM_MISS], nulln=__ff[PFC.F_NULL_NODE],
+                skip=__ff[PFC.F_SKIPPED])
+        else:
+            __optional = ""
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
-        print __template.format(p1=__lead, p2=__nodes, p3=__finish)
+        print __template.format(p1=__lead, p2=__nodes, p3=__finish,
+                p4=__optional)
 
 # pylint: enable=R0914
 
