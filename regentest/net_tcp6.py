@@ -18,13 +18,33 @@ st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode"
 
     __template = "{seq:4d}: {lip}:{lport:04X} {rip}:{rport:04X} \
 {state} {txq:08X}:{rxq:08X} {tr:02X}:{when:08X} {retrans:08X} \
-{uid:5d} {tout:8d} {inode:d} {refcount:d} {ptr:016x} {ret_tout:d} \
-{ack_tout:d} {qop:d} {cong:d} {sstart:}"
+{uid:5d} {tout:8d} {inode:d} {refcount:d} {ptr:016x}{optional:s}"
+
+    __optionaltemp = " {ret_tout:d} {ack_tout:d} {qop:d} {cong:d} \
+{sstart:}"
 
     print __head
 
     for __hilit in inprecs:
         __ff = inprecs.field
+        __hits = inprecs.fixpos_hits
+
+        __has_optional = False
+        for __seq in range(0, len(__hits)):
+            if __hits[__seq] == PFC.F_RETRY_TIMEOUT:
+                __has_optional = True
+                break
+
+        if __has_optional:
+            __optional = __optionaltemp.format(
+                    ret_tout=__ff[PFC.F_RETRY_TIMEOUT],
+                    ack_tout=__ff[PFC.F_ACK_TIMEOUT],
+                    qop=__ff[PFC.F_QUICK_OR_PPONG],
+                    cong=__ff[PFC.F_CONGEST_WINDOW],
+                    sstart=__ff[PFC.F_SSTART_THRESH])
+        else:
+            __optional = ""
+
         print __template.format(seq=__ff[PFC.F_BUCKET],
                 lip=__ff[PFC.F_ORIG_HEXIP], lport=__ff[PFC.F_ORIG_PORT],
                 rip=__ff[PFC.F_DEST_HEXIP], rport=__ff[PFC.F_DEST_PORT],
@@ -34,11 +54,9 @@ st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode"
                 retrans=__ff[PFC.F_RETRANS], uid=__ff[PFC.F_UID],
                 tout=__ff[PFC.F_TIMEOUT], inode=__ff[PFC.F_INODE],
                 refcount=__ff[PFC.F_REFCOUNT], ptr=__ff[PFC.F_POINTER],
-                ret_tout=__ff[PFC.F_RETRY_TIMEOUT],
-                ack_tout=__ff[PFC.F_ACK_TIMEOUT],
-                qop=__ff[PFC.F_QUICK_OR_PPONG],
-                cong=__ff[PFC.F_CONGEST_WINDOW],
-                sstart=__ff[PFC.F_SSTART_THRESH]
-                )
+                optional=__optional)
 
 RG.RECREATOR[PH.GET_HANDLER("/proc/net/tcp6")] = re_net_tcp6
+
+#...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
+
