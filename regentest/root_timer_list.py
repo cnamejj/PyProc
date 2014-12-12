@@ -14,7 +14,7 @@ def recreate_tickdev_info(recs):
 
     __devtypetemp = "Per CPU device: {cpu:d}"
     __bcastmasktemp = "tick_broadcast_mask: {mask:s}"
-    __oneshotmasktemp = "tick_broadcast_oneshot_mask: {mask:s}\n"
+    __oneshotmasktemp = "tick_broadcast_oneshot_mask: {mask:s}"
     __nulldev = "<NULL>"
 
     __template = "Tick Device: mode:     {tdm:d}\n\
@@ -56,11 +56,8 @@ Clock Event Device: {devname:s}"
 
     if len(recs[PFC.F_TICK_BCAST_ONESHOT]) > 0:
         print __oneshotmasktemp.format(mask=recs[PFC.F_TICK_BCAST_ONESHOT])
-    elif len(recs[PFC.F_TICK_BCAST_MASK]) > 0:
-        print ""
 
-    if recs[PFC.F_CLOCK_EV_DEV] != "":
-        print ""
+    print ""
 
 # ---
 
@@ -201,6 +198,8 @@ def recreate_cpu_info(recs, hits):
             if __show:
                 print __temp.format(label=__pref, val=recs[__key])
 
+    print ""
+
 # pylint: enable=R0914
 
 # ---
@@ -228,16 +227,16 @@ now at {secs:d} nsecs"
                     secs=__ff[PFC.F_TIME_NOW])
             __first = False
 
+        try:
+            if inprecs.unused_recs[1] == "":
+                print ""
+        except KeyError:
+            pass
+
         if len(__ff[PFC.F_CLOCK_LIST]) > 0:
             recreate_cpu_info(__ff, inprecs.hit_order)
 
         else:
-            if __first_tick:
-                print ""
-                __first_tick = False
-                if __ff[PFC.F_CLOCK_EV_DEV] == __nulldev:
-                    print ""
-
             recreate_tickdev_info(__ff)
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
