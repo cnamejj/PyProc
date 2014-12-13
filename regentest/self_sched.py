@@ -23,6 +23,8 @@ def re_self_sched(inprecs):
     __longtemptemp = "{{desc:<{dlen:d}s}}:{{count:21d}}"
     __floattemptemp = "{{desc:<{dlen:d}s}}:{{count:21.6f}}"
 
+    __hilotemp = "{hi:14d}.{low:06d}"
+
     __numamigtemp = "{desc:s} {count:d}"
     __numafaulttemp = "{label:s} {idx:d}, {node:d}, {cpu:d}, {home:d}, \
 {flt:d}"
@@ -60,8 +62,9 @@ def re_self_sched(inprecs):
 
         for __key in inprecs.two_longs:
             try:
-                __keyconv[__key] = float
-                __ff[__key] /= 1000000.0
+                __keyconv[__key] = str
+                __ff[__key] = __hilotemp.format(hi=__ff[__key] / 1000000,
+                        low=__ff[__key] % 1000000)
             except KeyError:
                 pass
 
