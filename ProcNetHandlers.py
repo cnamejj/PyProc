@@ -1294,15 +1294,17 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
         self.__zone_pref = "zone="
         self.__delta_time_pref = "delta-time="
         self.__use_pref = "use="
+        self.__sport_pref = "sport="
+        self.__dport_pref = "dport="
 
         self.__val_delim = "="
 
         self.protocol = ""
-        self.src_port = 0
+        self.src_port = PDC.NO_PORT
         self.src_ip = PDC.ANY_IP_ADDR
         self.state = PDC.UNKNOWN_STATE
         self.l3_protocol = ""
-        self.dst_port = 0
+        self.dst_port = PDC.NO_PORT
         self.timeout = 0
         self.dst_ip = PDC.ANY_IP_ADDR
         return
@@ -1322,6 +1324,11 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
 # ipv4     2 tcp      6 431934 ESTABLISHED src=192.168.1.14 dst=173.201.192.71 sport=33934 dport=993 src=173.201.192.71 dst=192.168.1.14 sport=993 dport=33934 [ASSURED] mark=0 zone=0 use=2
 # ipv4     2 tcp      6 431964 ESTABLISHED src=192.168.1.14 dst=173.201.192.71 sport=35348 dport=993 src=173.201.192.71 dst=192.168.1.14 sport=993 dport=35348 [ASSURED] mark=0 zone=0 use=2
 # ipv4     2 tcp      6 431798 ESTABLISHED src=192.168.1.14 dst=72.167.218.187 sport=53880 dport=993 src=72.167.218.187 dst=192.168.1.14 sport=993 dport=53880 [ASSURED] mark=0 zone=0 use=2
+#
+# And some sample records seen on CentOS that have missing fields
+#
+# ipv4     2 unknown  2 143 src=192.168.122.1 dst=224.0.0.22 [UNREPLIED] src=224.0.0.22 dst=192.168.122.1 mark=0 secctx=system_u:object_r:unlabeled_t:s0 zone=0 use=2
+# ipv4     2 unknown  2 136 src=192.168.1.110 dst=224.0.0.22 [UNREPLIED] src=224.0.0.22 dst=192.168.1.110 mark=0 secctx=system_u:object_r:unlabeled_t:s0 zone=0 use=2
 #
 # pylint: enable=C0301
 
@@ -1366,14 +1373,22 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_OR_DST_IP] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=" } )
             __off += 1
-            self.field[PFC.F_OR_SRC_PORT] = PBR.conv_by_rules(
-                    sio.get_word(__off), { AFTER: "=",
-                    CONV: long } )
-            __off += 1
-            self.field[PFC.F_OR_DST_PORT] = PBR.conv_by_rules(
-                    sio.get_word(__off), { AFTER: "=",
-                    CONV: long } )
-            __off += 1
+
+            if sio.get_word(__off).startswith(self.__sport_pref):
+                self.field[PFC.F_OR_SRC_PORT] = PBR.conv_by_rules(
+                        sio.get_word(__off), { AFTER: "=",
+                        CONV: long } )
+                __off += 1
+            else:
+                self.field[PFC.F_OR_SRC_PORT] = PDC.NO_PORT
+
+            if sio.get_word(__off).startswith(self.__dport_pref):
+                self.field[PFC.F_OR_DST_PORT] = PBR.conv_by_rules(
+                        sio.get_word(__off), { AFTER: "=",
+                        CONV: long } )
+                __off += 1
+            else:
+                self.field[PFC.F_OR_DST_PORT] = PDC.NO_PORT
 
             __word = sio.get_word(__off)
             if __word.startswith(self.__unreplied_pref):
@@ -1399,14 +1414,22 @@ class ProcNetNFCONNTRACK(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_RE_DST_IP] = PBR.conv_by_rules(
                     sio.get_word(__off), { AFTER: "=" } )
             __off += 1
-            self.field[PFC.F_RE_SRC_PORT] = PBR.conv_by_rules(
-                    sio.get_word(__off), { AFTER: "=",
-                    CONV: long } )
-            __off += 1
-            self.field[PFC.F_RE_DST_PORT] = PBR.conv_by_rules(
-                    sio.get_word(__off), { AFTER: "=",
-                    CONV: long } )
-            __off += 1
+
+            if sio.get_word(__off).startswith(self.__sport_pref):
+                self.field[PFC.F_RE_SRC_PORT] = PBR.conv_by_rules(
+                        sio.get_word(__off), { AFTER: "=",
+                        CONV: long } )
+                __off += 1
+            else:
+                self.field[PFC.F_RE_SRC_PORT] = PDC.NO_PORT
+
+            if sio.get_word(__off).startswith(self.__dport_pref):
+                self.field[PFC.F_RE_DST_PORT] = PBR.conv_by_rules(
+                        sio.get_word(__off), { AFTER: "=",
+                        CONV: long } )
+                __off += 1
+            else:
+                self.field[PFC.F_RE_DST_PORT] = PDC.NO_PORT
 
             __word = sio.get_word(__off)
             if __word.startswith(self.__packets_pref):

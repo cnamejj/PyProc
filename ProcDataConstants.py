@@ -32,6 +32,7 @@ NO_DEVICE = "none"
 NO_GID = -1
 NO_UID = -1
 NO_PID = -1
+NO_PORT = 0
 
 STATE_LIST = dict()
 STATE_LIST["01"] = "ESTABLISHED"

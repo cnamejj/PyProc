@@ -23,6 +23,7 @@ def re_net_nf_conntrack(inprecs):
 
     __statetemp = "{state:s} "
     __tupletemp = "src={sip:s} dst={dip:s} sport={sport:d} dport={dport:d} "
+    __noportstemp = "src={sip:s} dst={dip:s} "
     __accttemp = "packets={packs:d} bytes={bytes:d} "
     __unreptemp = "[UNREPLIED] "
     __assuretemp = "[ASSURED] "
@@ -44,6 +45,9 @@ def re_net_nf_conntrack(inprecs):
         __val = __ff[PFC.F_OR_SRC_PORT]
         if __val != __val:
             __orig = ""
+        elif __val == PDC.NO_PORT:
+            __orig = __noportstemp.format(sip=__ff[PFC.F_OR_SRC_IP],
+                    dip=__ff[PFC.F_OR_DST_IP])
         else:
             __orig = __tupletemp.format(sip=__ff[PFC.F_OR_SRC_IP],
                     dip=__ff[PFC.F_OR_DST_IP], sport=__ff[PFC.F_OR_SRC_PORT],
@@ -65,6 +69,9 @@ def re_net_nf_conntrack(inprecs):
         __val = __ff[PFC.F_RE_SRC_PORT]
         if __val != __val:
             __reply = ""
+        elif __val == PDC.NO_PORT:
+            __reply = __noportstemp.format(sip=__ff[PFC.F_RE_SRC_IP],
+                    dip=__ff[PFC.F_RE_DST_IP])
         else:
             __reply = __tupletemp.format(sip=__ff[PFC.F_RE_SRC_IP],
                     dip=__ff[PFC.F_RE_DST_IP], sport=__ff[PFC.F_RE_SRC_PORT],
@@ -85,7 +92,7 @@ def re_net_nf_conntrack(inprecs):
 
         __val = __ff[PFC.F_MARK]
         if __val != __val:
-            __reply = ""
+            __mark = ""
         else:
             __mark = __marktemp.format(mark=__val)
 
