@@ -1387,8 +1387,8 @@ class ProcRootVERSION(PBR.FixedWhitespaceDelimRecs):
                         { AFTER: " (", BEFORE: "@" } )
                 self.field[PFC.F_COMP_HOST] = PBR.conv_by_rules(__line,
                         { AFTER: "@", BEFORE: ") " } )
-                __dbsp = "(".join(__line.split("(")[2:]).split(")")
-                self.field[PFC.F_COMPILER] = ")".join(__dbsp[:-1])
+                __dbsp = "(".join(__line.split("(")[2:]).split(") ")
+                self.field[PFC.F_COMPILER] = ") ".join(__dbsp[:-1])
                 self.field[PFC.F_VERSION] = __dbsp[-1].lstrip(" ")
 
         self.full_string = self.field[PFC.F_VERSION_STRING]
