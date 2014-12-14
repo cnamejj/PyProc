@@ -1,15 +1,1 @@
-#!/bin/bash
-
-if [ "$1" = "" ]
-then
-	INSTALL_DIR="/usr/local/bin/"
-else
-	INSTALL_DIR="$1"
-fi
-
-rsync -avnu --no-owner --no-group --exclude COPYING --exclude .git --exclude .gitignore --exclude TEST \
-  --exclude \*.pyc --exclude README.\* --exclude proc-file-\* --exclude .pylintrc --exclude install-PyProc\* \
-  --exclude verify\* --exclude regentest --exclude NEW.py --exclude ONELINE.py --exclude reproc.py \
-  --exclude recreate-proc-file --exclude TODO\* --exclude regentest-all-proc-files --exclude show-recreator-for-file \
-  . "${INSTALL_DIR}"
-
+install-PyProc
