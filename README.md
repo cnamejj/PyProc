@@ -420,3 +420,56 @@ primarily used for setting/unsetting system parameters.
 |wireless|TBD, the file is empty on all the systems I develop/test on
 |xfrm_stat| Planned, but only present on my Fedora system
 
+
+----------
+
+## Linux distros tested
+
+This code was developed and tested on Ubuntu 12.04LTS and several older Fedora
+releases.  Those systems had fairly complex configurations with multi-core
+CPU's, multiple disks, software RAID, LVM's, and NFS.  The "/proc" files the
+code processed on those systems were therefore more representative of what
+might be found in the real world.
+
+Verification tests have been run on other distros in order to make sure the
+data in the supported "/proc" files on those systems could be parsed without
+error.  Those configuration were very simple, VirtualBox VM's with a single
+CPU and one disk.  But they did result in a number of fixes to make the code
+capable of handling variations in a number of file.  The Linux distros that
+passed those tests are as follows.
+
+|Distro |Version
+|:---- |:----
+|OpenSuse|13.2 (Harlequin)
+|Arch|N/A (kernel 3.17.6-1)
+|CentOS|7.0.1406 (Core)
+|Slackware|14.1
+|Debian|7 (wheezy)
+|Mageia|4 (Official) - thornicroft
+|Mint|17.1 Rebecca
+|Fedora|Fedora 21 (Twenty One)
+|Ubuntu|14.04.1 LTS, Trusty Tahr
+
+To verify that the PyProc code is able to parse, and then recreate verbatim,
+all the recognized "/proc" files on a given system run the command in the
+directory where you clone the repo:
+
+```
+./regentest-all-proc-files
+```
+
+Files that were parsed and then recreated exactly are given a "Pass" result.
+And files that don't exist on your system, files that are not readable by the
+user running the regenerator script, and files which can be parse but not
+"regenerated" will get a "Skip" result.
+
+The files that can be parse but not regenerated include any /proc files which
+is just a symlink to another file/object.  For instance, /proc/self/exe or
+/proc/self/fd/0 have no data they are just symlinks where the target of the
+symlink is the relevant information.
+
+There currenly only two "/proc" files that contain data which can be parse but
+not regenerated.  Those are /proc/self/mountstats and /proc/self/mountinfo.
+Both will be supported in the future, but interpretted the myriad of NFS
+related data that can be presented in those files makes writing code to
+regenerate all possible variants of the files rather tedious.
