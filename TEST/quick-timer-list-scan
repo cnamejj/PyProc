@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+"""
+Check meta-data in parsed /proc/timer_list records
+"""
+
+import ProcHandlers
+import ProcFieldConstants
+import sys
+
+GET_HANDLER = ProcHandlers.GET_HANDLER
+
+if sys.platform == "darwin":
+    print "MacOS doesn't have a '/proc' filesystem, quitting."
+    sys.exit(0)
+
+PFC = ProcFieldConstants
+
+handler = GET_HANDLER("/proc/timer_list")
+
+act = handler()
+seq = 0
+
+for hilite in act:
+    seq += 1
+    unused = act.unused_recs
+
+    for key in unused:
+        if unused[key] == "":
+            print "{seq}. {sub} blank, {tot} total".format(seq=seq, sub=key, tot=act.lines_read)

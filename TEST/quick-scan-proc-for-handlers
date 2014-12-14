@@ -1,0 +1,24 @@
+#!/bin/bash
+
+typeset -i lines
+
+find /proc /proc/net/ /proc/self/ \( -name [0-9]\* -prune \) -o -print 2>/dev/null \
+| gawk -F'/' '
+    NF > 2 \
+    && $3 != "fs" \
+    && $3 != "sys" \
+    && $3 != "asound" \
+    && !($3 == "self" && $4 == "net") \
+    && !($3 == "self" && $4 == "attr")' \
+| while read path
+    do
+	if [ ! -d "${path}" -a ! -L "${path}" -a -r "${path}" ]
+	then
+		lines=$(wc -l "${path}" 2>/dev/null | gawk '{ print $1 }')
+		if [ ${lines} -gt 1 ]
+		then
+			echo "$(./ShowProcHandler $path) size: ${lines} lines"
+		fi
+	fi
+    done \
+| gawk '/ProcNetNULL/'
