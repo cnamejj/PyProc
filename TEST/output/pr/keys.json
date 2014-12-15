@@ -1,0 +1,60 @@
+{
+    "0": {
+        "source": "TEST/data/pr/keys"
+    },
+    "1": {
+        "description": "_ses: 1",
+        "expires": "perm",
+        "flags": "I--Q---",
+        "gid": 1000,
+        "key-name": "keyring",
+        "permissions": 1057161216,
+        "serial": 88795941,
+        "uid": 1000,
+        "usage": 13
+    },
+    "2": {
+        "description": "_ses: 1",
+        "expires": "perm",
+        "flags": "I--Q---",
+        "gid": 1000,
+        "key-name": "keyring",
+        "permissions": 1057161216,
+        "serial": 169417232,
+        "uid": 1000,
+        "usage": 6
+    },
+    "3": {
+        "description": "_ses: 1",
+        "expires": "perm",
+        "flags": "I--Q---",
+        "gid": 1000,
+        "key-name": "keyring",
+        "permissions": 1057161216,
+        "serial": 410777073,
+        "uid": 1000,
+        "usage": 6
+    },
+    "4": {
+        "description": "_uid.1000: empty",
+        "expires": "perm",
+        "flags": "I--Q---",
+        "gid": 65534,
+        "key-name": "keyring",
+        "permissions": 524222464,
+        "serial": 532029434,
+        "uid": 1000,
+        "usage": 5
+    },
+    "5": {
+        "description": "_uid_ses.1000: 1",
+        "expires": "perm",
+        "flags": "I--Q---",
+        "gid": 65534,
+        "key-name": "keyring",
+        "permissions": 524222464,
+        "serial": 1045187889,
+        "uid": 1000,
+        "usage": 1
+    }
+}

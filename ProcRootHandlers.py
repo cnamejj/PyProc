@@ -3881,6 +3881,64 @@ REGISTER_PARTIAL_FILE("timer_list", ProcRootTIMERLIST)
 
 
 
+
+#
+class ProcRootKEYS(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/keys file
+    """
+
+# security/keys/proc.c
+#
+##define showflag(KEY, LETTER, FLAG) \
+#  (test_bit(FLAG, &(KEY)->flags) ? LETTER : '-')
+#
+#  seq_printf(m, "%08x %c%c%c%c%c%c%c %5d %4s %08x %5d %5d %-9.9s ",
+#         key->serial,
+#         showflag(key, 'I', KEY_FLAG_INSTANTIATED),
+#         showflag(key, 'R', KEY_FLAG_REVOKED),
+#         showflag(key, 'D', KEY_FLAG_DEAD),
+#         showflag(key, 'Q', KEY_FLAG_IN_QUOTA),
+#         showflag(key, 'U', KEY_FLAG_USER_CONSTRUCT),
+#         showflag(key, 'N', KEY_FLAG_NEGATIVE),
+#         showflag(key, 'i', KEY_FLAG_INVALIDATED),
+#         atomic_read(&key->usage),
+#         xbuf,
+#         key->perm,
+#         from_kuid_munged(seq_user_ns(m), key->uid),
+#         from_kgid_munged(seq_user_ns(m), key->gid),
+#         key->type->name);
+
+    def extra_init(self, *opts):
+        self.minfields = 8
+
+#...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_SERIAL, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_FLAGS } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_USAGE, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_EXPIRES } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_PERMS, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_UID, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_GID, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_KEY_NAME } )
+        return
+
+    def extra_next(self, sio):
+        __desc = " ".join(sio.lineparts[8:])
+        __ff = self.field
+        __ff[PFC.F_DESCRIPTION] = __desc
+
+        return(__ff[PFC.F_SERIAL], __ff[PFC.F_FLAGS], __ff[PFC.F_USAGE],
+                __ff[PFC.F_EXPIRES], __ff[PFC.F_PERMS], __ff[PFC.F_UID],
+                __ff[PFC.F_GID], __ff[PFC.F_KEY_NAME], __desc)
+
+REGISTER_FILE("/proc/keys", ProcRootKEYS)
+REGISTER_PARTIAL_FILE("keys", ProcRootKEYS)
+
+
+
 if __name__ == "__main__":
 
     print "Collection of handlers to parse file in the root /proc directory"

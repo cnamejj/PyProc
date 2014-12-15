@@ -1114,3 +1114,10 @@ F_CPU_ORDER = "cpu-order"
 
 # -- added for /proc/self/cmdline
 F_COMM_ARGS = "command-args"
+
+# -- added for /proc/keys
+F_SERIAL = "serial"
+F_EXPIRES = "expires"
+F_PERMS = "permissions"
+F_KEY_NAME = "key-name"
+F_DESCRIPTION = "description"

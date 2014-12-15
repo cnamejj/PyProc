@@ -1,0 +1,6 @@
+TEST/data/pr/keys|uid|description|expires|key-name|gid|flags|usage|serial|permissions
+1|1000|_ses: 1|perm|keyring|1000|I--Q---|13|88795941|1057161216
+2|1000|_ses: 1|perm|keyring|1000|I--Q---|6|169417232|1057161216
+3|1000|_ses: 1|perm|keyring|1000|I--Q---|6|410777073|1057161216
+4|1000|_uid.1000: empty|perm|keyring|65534|I--Q---|5|532029434|524222464
+5|1000|_uid_ses.1000: 1|perm|keyring|65534|I--Q---|1|1045187889|524222464
