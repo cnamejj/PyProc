@@ -9,7 +9,10 @@ find /proc /proc/net/ /proc/self/ \( -name [0-9]\* -prune \) -o -print 2>/dev/nu
     && $3 != "sys" \
     && $3 != "asound" \
     && !($3 == "self" && $4 == "net") \
-    && !($3 == "self" && $4 == "attr")' \
+    && !($3 == "self" && $4 == "attr") \
+    && $NF != "kmsg" && $NF != "kcore" && $NF != "pagemap" \
+    && $NF != "kpagecount" && $NF != "cpuinfo" && $NF != "sched_debug" \
+    ' \
 | while read path
     do
 	if [ ! -d "${path}" -a ! -L "${path}" -a -r "${path}" ]
