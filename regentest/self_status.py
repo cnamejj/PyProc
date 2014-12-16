@@ -6,6 +6,7 @@ import regentest as RG
 import ProcHandlers as PH
 
 PFC = PH.ProcFieldConstants
+PDC = PH.ProcDataConstants
 
 # ---
 
@@ -92,7 +93,8 @@ nonvoluntary_ctxt_switches:\t{nonvol:d}"
         __grlist = ""
         __grs = __ff[PFC.F_GROUPS]
         for __off in range(0, len(__grs)):
-            __grlist = __grlisttemp.format(acc=__grlist, gr=__grs[__off])
+            if __grs[__off] != PDC.NO_GID:
+                __grlist = __grlisttemp.format(acc=__grlist, gr=__grs[__off])
 
         if __has_ngid:
             __ngid = __ngidtemp.format(ngid=__ff[PFC.F_NUMA_GID])
