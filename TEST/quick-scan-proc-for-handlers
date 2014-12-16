@@ -12,6 +12,7 @@ find /proc /proc/net/ /proc/self/ \( -name [0-9]\* -prune \) -o -print 2>/dev/nu
     && !($3 == "self" && $4 == "attr") \
     && $NF != "kmsg" && $NF != "kcore" && $NF != "pagemap" \
     && $NF != "kpagecount" && $NF != "cpuinfo" && $NF != "sched_debug" \
+    && $NF != "use-gss-proxy" \
     ' \
 | while read path
     do
