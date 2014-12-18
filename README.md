@@ -387,7 +387,6 @@ primarily used for setting/unsetting system parameters.
 |attr/fscreate| TBD, files in the "attr" subdir need to be researched
 |attr/keycreate|TBD, files in the "attr" subdir need to be researched
 |attr/sockcreate| TBD, files in the "attr" subdir need to be researched
-|cgroup|TBD, it's an empty file, no idea what it's for yet
 
 
 
