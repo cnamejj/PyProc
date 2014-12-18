@@ -235,7 +235,7 @@ Code to parse the following file format are included in this package.
 |mtrr | 
 |cgroups | 
 |mounts |The "mounts" file appears both in the root and the PID directories.  The "mount options" field is returned as-is and not parsed
-
+|keys |
 
 
 ### In "/proc/net" and subdirectories:
@@ -337,7 +337,7 @@ Code to parse the following file format are included in this package.
 |sessionid 
 |coredump_filter 
 |io 
-
+|cgroup
 
 
 
