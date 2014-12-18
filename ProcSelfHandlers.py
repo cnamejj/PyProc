@@ -2376,9 +2376,52 @@ REGISTER_PARTIAL_FILE("environ", ProcSelfENVIRON)
 
 
 
+#
+class ProcSelfCGROUP(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse /proc/self/cgroup file
+    """
+
+# source: fs/kernel/cgroup.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcSelfHandlers" to reduce the size of this module.
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 1
+        self.__delim = ":"
+        self.__subdelim = ","
+
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_SUBSYS_ID,
+                CONV: long, BEFORE: ":"} )
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_RAW_NAMES,
+                CONV: str, AFTER: ":"} )
+
+    def extra_next(self, sio):
+
+        __ff = self.field
+
+        __ssinfo = __ff[PFC.F_RAW_NAMES].partition(self.__delim)
+        __ff[PFC.F_RAW_NAMES] = __ssinfo[0]
+        __ff[PFC.F_PATH] = __ssinfo[2]
+
+        __ff[PFC.F_NAME_LIST] = []
+        for __val in __ssinfo[0].split(self.__subdelim):
+            __ff[PFC.F_NAME_LIST].append(__val)
+
+#...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
+        return (__ff[PFC.F_SUBSYS_ID], __ff[PFC.F_RAW_NAMES], __ff[PFC.F_PATH])
+
+REGISTER_FILE("/proc/self/cgroup", ProcSelfCGROUP)
+REGISTER_PARTIAL_FILE("cgroup", ProcSelfCGROUP)
+
+
+
 
 if __name__ == "__main__":
 
     print "Collection of handlers to parse file in the root /proc/self and \
 /proc/[0-9]* directories"
+
 

@@ -1,0 +1,11 @@
+TEST/data/ps/cgroup|subsystem-id|name-list|raw-name-list|path
+1|10|['hugetlb']|hugetlb|/
+2|9|['perf_event']|perf_event|/
+3|8|['blkio']|blkio|/
+4|7|['net_cls', 'net_prio']|net_cls,net_prio|/
+5|6|['freezer']|freezer|/
+6|5|['devices']|devices|/user.slice
+7|4|['memory']|memory|/
+8|3|['cpu', 'cpuacct']|cpu,cpuacct|/
+9|2|['cpuset']|cpuset|/
+10|1|['name=systemd']|name=systemd|/user.slice/user-42.slice/session-c1.scope

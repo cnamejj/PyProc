@@ -1121,3 +1121,8 @@ F_EXPIRES = "expires"
 F_PERMS = "permissions"
 F_KEY_NAME = "key-name"
 F_DESCRIPTION = "description"
+
+# -- added for /proc/self/cgroup
+F_NAME_LIST = "name-list"
+F_RAW_NAMES = "raw-name-list"
+F_SUBSYS_ID = "subsystem-id"

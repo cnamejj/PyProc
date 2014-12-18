@@ -1385,3 +1385,36 @@ Excerpts from that code:
 # 	return 0;
 # }
 
+
+
+--- File: /proc/self/mountinfo
+
+source: fs/kernel/cgroup.c
+
+Excerpts from that code:
+
+#      for_each_root(root) {
+#         struct cgroup_subsys *ss;
+#         struct cgroup *cgrp;
+#         int ssid, count = 0;
+#
+#         if (root == &cgrp_dfl_root && !cgrp_dfl_root_visible)
+#                 continue;
+#
+#         seq_printf(m, "%d:", root->hierarchy_id);
+#         for_each_subsys(ss, ssid)
+#            if (root->subsys_mask & (1 << ssid))
+#               seq_printf(m, "%s%s", count++ ? "," : "", ss->name);
+#         if (strlen(root->name))
+#            seq_printf(m, "%sname=%s", count ? "," : "",
+#                  root->name);
+#         seq_putc(m, ':');
+#         cgrp = task_cgroup_from_root(tsk, root);
+#         path = cgroup_path(cgrp, buf, PATH_MAX);
+#         if (!path) {
+#            retval = -ENAMETOOLONG;
+#            goto out_unlock;
+#         }
+#         seq_puts(m, path);
+#         seq_putc(m, '\n');
+#      }

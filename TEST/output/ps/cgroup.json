@@ -1,0 +1,87 @@
+{
+    "0": {
+        "source": "TEST/data/ps/cgroup"
+    },
+    "1": {
+        "name-list": [
+            "hugetlb"
+        ],
+        "path": "/",
+        "raw-name-list": "hugetlb",
+        "subsystem-id": 10
+    },
+    "2": {
+        "name-list": [
+            "perf_event"
+        ],
+        "path": "/",
+        "raw-name-list": "perf_event",
+        "subsystem-id": 9
+    },
+    "3": {
+        "name-list": [
+            "blkio"
+        ],
+        "path": "/",
+        "raw-name-list": "blkio",
+        "subsystem-id": 8
+    },
+    "4": {
+        "name-list": [
+            "net_cls",
+            "net_prio"
+        ],
+        "path": "/",
+        "raw-name-list": "net_cls,net_prio",
+        "subsystem-id": 7
+    },
+    "5": {
+        "name-list": [
+            "freezer"
+        ],
+        "path": "/",
+        "raw-name-list": "freezer",
+        "subsystem-id": 6
+    },
+    "6": {
+        "name-list": [
+            "devices"
+        ],
+        "path": "/user.slice",
+        "raw-name-list": "devices",
+        "subsystem-id": 5
+    },
+    "7": {
+        "name-list": [
+            "memory"
+        ],
+        "path": "/",
+        "raw-name-list": "memory",
+        "subsystem-id": 4
+    },
+    "8": {
+        "name-list": [
+            "cpu",
+            "cpuacct"
+        ],
+        "path": "/",
+        "raw-name-list": "cpu,cpuacct",
+        "subsystem-id": 3
+    },
+    "9": {
+        "name-list": [
+            "cpuset"
+        ],
+        "path": "/",
+        "raw-name-list": "cpuset",
+        "subsystem-id": 2
+    },
+    "10": {
+        "name-list": [
+            "name=systemd"
+        ],
+        "path": "/user.slice/user-42.slice/session-c1.scope",
+        "raw-name-list": "name=systemd",
+        "subsystem-id": 1
+    }
+}
