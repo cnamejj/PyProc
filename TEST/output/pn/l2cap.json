@@ -1,0 +1,27 @@
+{
+    "0": {
+        "source": "TEST/data/pn/l2cap"
+    },
+    "1": {
+        "bluetooth-destination": "00:00:00:00:00:00",
+        "bluetooth-source": "00:00:00:00:00:00",
+        "inode": 10700,
+        "parent": 0,
+        "ref-count": 2,
+        "rmem-alloc": 0,
+        "sk-address": 18446612166625482752,
+        "uid": 0,
+        "wmem-alloc": 0
+    },
+    "2": {
+        "bluetooth-destination": "00:00:00:00:00:00",
+        "bluetooth-source": "00:00:00:00:00:00",
+        "inode": 9926,
+        "parent": 0,
+        "ref-count": 2,
+        "rmem-alloc": 0,
+        "sk-address": 18446612166613256192,
+        "uid": 0,
+        "wmem-alloc": 0
+    }
+}

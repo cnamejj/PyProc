@@ -1,0 +1,16 @@
+{
+    "0": {
+        "source": "TEST/data/pn/sco"
+    },
+    "1": {
+        "bluetooth-destination": "00:00:00:00:00:00",
+        "bluetooth-source": "00:00:00:00:00:00",
+        "inode": 12659,
+        "parent": 0,
+        "ref-count": 2,
+        "rmem-alloc": 0,
+        "sk-address": 18446612166685725696,
+        "uid": 0,
+        "wmem-alloc": 0
+    }
+}

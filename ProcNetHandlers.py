@@ -3863,12 +3863,6 @@ class ProcNetFIBTRIESTAT(PBR.FixedWhitespaceDelimRecs):
                         self.field[PFC.F_NODE_NAME] = __node
 
             elif sio.buff.startswith(self.__intnode_pref):
-#                __line = sio.buff.rstrip("\n")
-#                __key = PBR.conv_by_rules(__line,
-#                        { CONV: long, BEFORE: ":" } )
-#                __val = PBR.conv_by_rules(__line,
-#                        { CONV: long, AFTER: ":" } )
-#                self.field[PFC.F_INT_NODE_LIST][__key] = __val
                 __off = 0
                 for __nw in range(1, sio.linewords, 2):
                     __key = sio.get_word(__nw - 1).rstrip(":")
@@ -3893,8 +3887,91 @@ class ProcNetFIBTRIESTAT(PBR.FixedWhitespaceDelimRecs):
 REGISTER_FILE("/proc/net/fib_triestat", ProcNetFIBTRIESTAT)
 REGISTER_PARTIAL_FILE("fib_triestat", ProcNetFIBTRIESTAT)
 
-# pylint: enable=R0914
 
+
+#
+class ProcNetGPBLUETOOTH(PBR.FixedWhitespaceDelimRecs):
+    """
+    General purpose parse for multiple 'bluetooth' files in /proc/net
+    """
+
+# source: net/bluetooth/af_bluetooth.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcNetHandlers" to reduce the size of this module.
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 9
+        self.skipped = "sk"
+
+        PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_SK_ADDR, CONV: long,
+                BASE: 16 } )
+        PBR.add_parse_rule(self, { POS: 1, NAME: PFC.F_REFCOUNT, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 2, NAME: PFC.F_RMEM_ALLOC,
+                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 3, NAME: PFC.F_WMEM_ALLOC,
+                CONV: long } )
+        PBR.add_parse_rule(self, { POS: 4, NAME: PFC.F_UID, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 5, NAME: PFC.F_INODE, CONV: long } )
+        PBR.add_parse_rule(self, { POS: 6, NAME: PFC.F_BT_SOURCE, CONV: str } )
+        PBR.add_parse_rule(self, { POS: 7, NAME: PFC.F_BT_DEST, CONV: str } )
+        PBR.add_parse_rule(self, { POS: 8, NAME: PFC.F_PARENT, CONV: long } )
+
+        return
+
+    def extra_next(self, sio):
+
+        return (PFC.F_SK_ADDR, PFC.F_REFCOUNT, PFC.F_RMEM_ALLOC,
+                PFC.F_WMEM_ALLOC, PFC.F_UID, PFC.F_INODE, PFC.F_BT_SOURCE,
+                PFC.F_BT_DEST, PFC.F_PARENT)
+
+
+
+#
+class ProcNetBNEP(ProcNetGPBLUETOOTH):
+    """
+    Parse /proc/net/bnep files (generic 'bluetooth' format)
+    """
+
+REGISTER_FILE("/proc/net/bnep", ProcNetBNEP)
+REGISTER_PARTIAL_FILE("bnep", ProcNetBNEP)
+
+
+
+#
+class ProcNetSCO(ProcNetGPBLUETOOTH):
+    """
+    Parse /proc/net/sco files (generic 'bluetooth' format)
+    """
+
+REGISTER_FILE("/proc/net/sco", ProcNetSCO)
+REGISTER_PARTIAL_FILE("sco", ProcNetSCO)
+
+
+
+#
+class ProcNetHCI(ProcNetGPBLUETOOTH):
+    """
+    Parse /proc/net/hci files (generic 'bluetooth' format)
+    """
+
+REGISTER_FILE("/proc/net/hci", ProcNetHCI)
+REGISTER_PARTIAL_FILE("hci", ProcNetHCI)
+
+
+
+#
+class ProcNetL2CAP(ProcNetGPBLUETOOTH):
+    """
+    Parse /proc/net/l2cap files (generic 'bluetooth' format)
+    """
+
+REGISTER_FILE("/proc/net/l2cap", ProcNetL2CAP)
+REGISTER_PARTIAL_FILE("l2cap", ProcNetL2CAP)
+
+
+#...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 
 if __name__ == "__main__":
 

@@ -1126,3 +1126,10 @@ F_DESCRIPTION = "description"
 F_NAME_LIST = "name-list"
 F_RAW_NAMES = "raw-name-list"
 F_SUBSYS_ID = "subsystem-id"
+
+
+# -- added for multiple /proc/net/bluetooth/ files
+F_SK_ADDR = "sk-address"
+F_BT_DEST = "bluetooth-destination"
+F_BT_SOURCE = "bluetooth-source"
+F_PARENT = "parent"

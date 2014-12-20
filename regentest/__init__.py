@@ -43,7 +43,7 @@ __all__ = ["net_tcp", "net_udp", "net_tcp6", "net_udp6", "net_unix",
     "net_ip_tables_names", "self_sched", "net_snmp", "net_netstat",
     "net_fib_trie", "root_crypto", "self_environ", "root_slabinfo",
     "root_version", "root_latency_stats", "root_mdstat", "root_keys",
-    "self_cgroup"]
+    "self_cgroup", "net_bnep", "net_hci", "net_l2cap", "net_sco"]
 
 # pylint: enable=E0603
 
@@ -89,3 +89,30 @@ def twoline_data_format(inprecs):
 
         print __label
         print __count
+
+# ---
+
+def bluetooth_data_format(inprecs):
+
+    """
+    Several bluetooth related files use the exact same format, so
+    the function is shared by all of them just with different filenames
+    registered.
+    """
+
+    __header = "sk               RefCnt Rmem   Wmem   User   Inode  Src Dst \
+Parent"
+    __template = "{sk:16x} {refc:<6d} {rmem:<-6d} {wmem:<6d} {uid:<6d} \
+{ino:<6d} {src:s} {dst:s} {parent:<6d}"
+
+    print __header
+
+    for __hilit in inprecs:
+        __ff = inprecs.field
+
+#...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
+        print __template.format(sk=__ff[PFC.F_SK_ADDR],
+                refc=__ff[PFC.F_REFCOUNT], rmem=__ff[PFC.F_RMEM_ALLOC],
+                wmem=__ff[PFC.F_WMEM_ALLOC], uid=__ff[PFC.F_UID], 
+                ino=__ff[PFC.F_INODE], src=__ff[PFC.F_BT_SOURCE],
+                dst=__ff[PFC.F_BT_DEST], parent=__ff[PFC.F_PARENT])
