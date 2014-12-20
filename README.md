@@ -243,6 +243,7 @@ Code to parse the following file format are included in this package.
 |File |Notes
 |:---- |:----
 |arp 
+|bnep
 |connector 
 |dev 
 |dev_mcast 
@@ -252,6 +253,7 @@ Code to parse the following file format are included in this package.
 |fib_trie | parsed data represented as a tree, dictionaries within dictionaries
 |fib_triestat|one field in logical record returned is a dictionary of inodes, the rest are simple values
 |if_inet6|The IPv6 addresses in each logical record is provided as 32 character string (as listed in the file), and as converted to typical semicolon delimited display format
+|hci
 |igmp
 |igmp6|The IPv6 field in the record is provided as-is, meaning a 32 character string, and in semicolon delimited display format
 |ip6_tables_matches | only root can read the file, other UID's get an empty dataset
@@ -262,6 +264,7 @@ Code to parse the following file format are included in this package.
 |ip_tables_names | only root can read the file, other UID's get an empty dataset
 |ip_tables_targets | only root can read the file, other UID's get an empty dataset
 |ipv6_route|IPv6 address fields are provided as-is (meaning 32 character strings) and as semicolon delimited display format
+|l2cap
 |netfilter/nf_log 
 |netfilter/nf_queue 
 |netlink 
@@ -274,6 +277,7 @@ Code to parse the following file format are included in this package.
 |route|The IP addresses in the file are provided as-is, meaning an 8 digit hex string, and in period delimited display format
 |rt6_stats 
 |rt_cache|The IP addresses in the file are provided as-is, meaning an 8 digit hex string, and in period delimited display format
+|sco
 |snmp|The fields returned vary from logical record to logical record since each represents a different network protocol
 |snmp6|One logical record with all the settings listed in the dataset is returned
 |sockstat|One logical record is returned, each field identifies a protocol and it's value is a dictionary of counters
@@ -395,8 +399,6 @@ primarily used for setting/unsetting system parameters.
 |File |Status
 |:---- |:----
 |anycast6|TBD, the file is empty on all the systems I develop/test on
-|bnep|Planned, but only present on my Fedora system
-|hci| Planned, but only present on my Fedora system
 |icmp|TBD, the file is empty on all the systems I develop/test on
 |icmp6| Planned, but only present on my Fedora system, and it's empty there
 |ip6_flowlabel| TBD, the file is empty on all the systems I develop/test on
@@ -405,14 +407,12 @@ primarily used for setting/unsetting system parameters.
 |ip_conntrack_expect |TBD, the file is empty on the systems I have, plus it only readable by root
 |ip_mr_cache| TBD, the file is empty on all the systems I develop/test on
 |ip_mr_vif| TBD, the file is empty on all the systems I develop/test on
-|l2cap| Planned, but only present on my Fedora system
 |mcfilter|TBD, the file is empty on all the systems I develop/test on
 |mcfilter6| TBD, the file is empty on all the systems I develop/test on
 |nf_conntrack_expect |TBD, the file is empty on the systems I have, plus it only readable by root
 |raw| TBD, the file is empty on all the systems I develop/test on
 |raw6|TBD, the file is empty on all the systems I develop/test on
 |rt_acct| TBD, the file is empty on all the systems I develop/test on
-|sco| Planned, but only present on my Fedora system
 |tr_rif|TBD, the file is empty on all the systems I develop/test on
 |udplite| TBD, the file is empty on all the systems I develop/test on
 |udplite6|TBD, the file is empty on all the systems I develop/test on
