@@ -1,0 +1,4 @@
+#MANUAL
+nameserver 192.168.1.1
+nameserver 0.0.0.0
+nameserver 0.0.0.0

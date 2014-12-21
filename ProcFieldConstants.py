@@ -1127,9 +1127,14 @@ F_NAME_LIST = "name-list"
 F_RAW_NAMES = "raw-name-list"
 F_SUBSYS_ID = "subsystem-id"
 
-
 # -- added for multiple /proc/net/bluetooth/ files
 F_SK_ADDR = "sk-address"
 F_BT_DEST = "bluetooth-destination"
 F_BT_SOURCE = "bluetooth-source"
 F_PARENT = "parent"
+
+# -- added for /proc/net/pnp
+F_PROTO_USED = "protocol-used"
+F_DOMAIN = "domain-name"
+F_NAMESERVER = "nameserver"
+F_BOOTSERVER = "bootserver"

@@ -1,0 +1,23 @@
+{
+    "0": {
+        "source": "TEST/data/pn/pnp"
+    },
+    "1": {
+        "bootserver": "",
+        "domain-name": "",
+        "nameserver": "192.168.1.1",
+        "protocol-used": "MANUAL"
+    },
+    "2": {
+        "bootserver": "",
+        "domain-name": "",
+        "nameserver": "0.0.0.0",
+        "protocol-used": "MANUAL"
+    },
+    "3": {
+        "bootserver": "",
+        "domain-name": "",
+        "nameserver": "0.0.0.0",
+        "protocol-used": "MANUAL"
+    }
+}

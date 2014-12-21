@@ -3922,9 +3922,11 @@ class ProcNetGPBLUETOOTH(PBR.FixedWhitespaceDelimRecs):
 
     def extra_next(self, sio):
 
-        return (PFC.F_SK_ADDR, PFC.F_REFCOUNT, PFC.F_RMEM_ALLOC,
-                PFC.F_WMEM_ALLOC, PFC.F_UID, PFC.F_INODE, PFC.F_BT_SOURCE,
-                PFC.F_BT_DEST, PFC.F_PARENT)
+        return (self.field[PFC.F_SK_ADDR], self.field[PFC.F_REFCOUNT],
+                self.field[PFC.F_RMEM_ALLOC], self.field[PFC.F_WMEM_ALLOC],
+                self.field[PFC.F_UID], self.field[PFC.F_INODE],
+                self.field[PFC.F_BT_SOURCE], self.field[PFC.F_BT_DEST],
+                self.field[PFC.F_PARENT])
 
 
 
@@ -3970,6 +3972,56 @@ class ProcNetL2CAP(ProcNetGPBLUETOOTH):
 REGISTER_FILE("/proc/net/l2cap", ProcNetL2CAP)
 REGISTER_PARTIAL_FILE("l2cap", ProcNetL2CAP)
 
+
+
+#
+class ProcNetPNP(PBR.FixedWhitespaceDelimRecs):
+    """
+    Parse nameserver config data file /proc/net/pnp
+    """
+
+# source: net/ipv4/ipconfig.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcNetHandlers" to reduce the size of this module.
+#
+
+    def extra_init(self, *opts):
+        self.minfields = 1
+        self.proto_used_pref = "#"
+        self.__proto_used = ""
+        self.dtype_map = { "domain": PFC.F_DOMAIN,
+                "nameserver": PFC.F_NAMESERVER,
+                "bootserver": PFC.F_BOOTSERVER }
+        return
+
+    def extra_next(self, sio):
+
+        self.field[PFC.F_PROTO_USED] = self.__proto_used
+        self.field[PFC.F_DOMAIN] = ""
+        self.field[PFC.F_NAMESERVER] = ""
+        self.field[PFC.F_BOOTSERVER] = ""
+
+        if sio.linewords == 1:
+            __prot = sio.get_word(0)
+            if __prot[:1] == self.proto_used_pref:
+                self.__proto_used = __prot[1:]
+            return self.next()
+
+        __dtype = sio.get_word(0)
+
+        try:
+            __vname = self.dtype_map[__dtype]
+            self.field[__vname] = sio.get_word(1)
+
+        except KeyError:
+            pass
+
+        return (self.field[PFC.F_PROTO_USED], self.field[PFC.F_DOMAIN], 
+                self.field[PFC.F_NAMESERVER], self.field[PFC.F_BOOTSERVER])
+
+REGISTER_FILE("/proc/net/pnp", ProcNetPNP)
+REGISTER_PARTIAL_FILE("pnp", ProcNetPNP)
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 

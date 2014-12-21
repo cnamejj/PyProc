@@ -271,6 +271,7 @@ Code to parse the following file format are included in this package.
 |netstat|The fields returned vary from logical record to logical record since each represents a different network protocol
 |nf_conntrack | only root can read the file, other UID's get an empty dataset
 |packet 
+|pnp|Shows DNS related config info
 |protocols 
 |psched 
 |ptype 

@@ -43,7 +43,7 @@ __all__ = ["net_tcp", "net_udp", "net_tcp6", "net_udp6", "net_unix",
     "net_ip_tables_names", "self_sched", "net_snmp", "net_netstat",
     "net_fib_trie", "root_crypto", "self_environ", "root_slabinfo",
     "root_version", "root_latency_stats", "root_mdstat", "root_keys",
-    "self_cgroup", "net_bnep", "net_hci", "net_l2cap", "net_sco"]
+    "self_cgroup", "net_bnep", "net_hci", "net_l2cap", "net_sco", "net_pnp"]
 
 # pylint: enable=E0603
 

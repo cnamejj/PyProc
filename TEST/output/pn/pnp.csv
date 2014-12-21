@@ -1,0 +1,4 @@
+TEST/data/pn/pnp|domain-name|nameserver|protocol-used|bootserver
+1||192.168.1.1|MANUAL|
+2||0.0.0.0|MANUAL|
+3||0.0.0.0|MANUAL|
