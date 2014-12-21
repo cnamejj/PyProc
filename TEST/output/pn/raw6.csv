@@ -1,0 +1,2 @@
+TEST/data/pn/raw6|uid|hexstate|dest-hexport|retrnsmt|pointer|tx-queue|orig-ip|dest-ip|ref-count|orig-port|rx-queue|state|orig-hexip|dest-port|dest-hexip|orig-hexport|bucket|timer|inode|tm-when|timeout|drops
+1|0|07|0000|0|18446612134395700800|0|::0|::0|2|58|0|CLOSE|00000000000000000000000000000000|0|00000000000000000000000000000000|003A|58|0|18034|0|0|0

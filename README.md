@@ -275,6 +275,7 @@ Code to parse the following file format are included in this package.
 |protocols 
 |psched 
 |ptype 
+|raw6|Format is identical to 'udp6'
 |route|The IP addresses in the file are provided as-is, meaning an 8 digit hex string, and in period delimited display format
 |rt6_stats 
 |rt_cache|The IP addresses in the file are provided as-is, meaning an 8 digit hex string, and in period delimited display format
@@ -412,7 +413,6 @@ primarily used for setting/unsetting system parameters.
 |mcfilter6| TBD, the file is empty on all the systems I develop/test on
 |nf_conntrack_expect |TBD, the file is empty on the systems I have, plus it only readable by root
 |raw| TBD, the file is empty on all the systems I develop/test on
-|raw6|TBD, the file is empty on all the systems I develop/test on
 |rt_acct| TBD, the file is empty on all the systems I develop/test on
 |tr_rif|TBD, the file is empty on all the systems I develop/test on
 |udplite| TBD, the file is empty on all the systems I develop/test on
