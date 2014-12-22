@@ -9,13 +9,9 @@ import sys
 import time
 import os
 import ProcHandlers
-import ProcFieldConstants
-import ProcessInfo
-import ProcDataConstants
-
-PFC = ProcFieldConstants
-PIN = ProcessInfo
-PDC = ProcDataConstants
+import ProcFieldConstants as PFC
+import ProcessInfo as PIN
+import ProcDataConstants as PDC
 
 if sys.platform == "darwin":
     print "MacOS doesn't have a '/proc' filesystem, quitting."
@@ -77,9 +73,12 @@ and will be expanded to a list of all processes running when the program starts.
 It is not refreshed as the program runs.\n\
 \n\
 Categories are any of the following:\n\
-AnonHugePages, Anonymous, KernelPageSize, Locked, MMUPageSize, Private_Clean,\n\
-Private_Dirty, Pss, Referenced, Rss, Shared_Clean, Shared_Dirty, Size, Swap\n\
+anon-huge-pages anonymous kernel-page-size locked mmu-page-size private-clean\n\
+private-dirty prop-share referenced rss shared-clean shared-dirty size swap\n\
 "
+
+# Need to figure out what these categories map to...
+#     KernelPageSize, MMUPageSize,
 
 OP_PID = "-pid"
 OP_TOTALS = "-totals"
