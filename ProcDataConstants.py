@@ -5,11 +5,11 @@ network state mapping array.  There's no code here.
 """
 
 try:
-# pylint: disable=E1101
+# pylint: disable=E1101,F0401
     import numpy
     NAN = numpy.nan
     INF = numpy.inf
-# pylint: enable=E1101
+# pylint: enable=E1101,F0401
 except ImportError:
     import pickle
     NAN = pickle.loads('Fnan\n.')
