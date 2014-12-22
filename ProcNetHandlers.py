@@ -4042,6 +4042,87 @@ REGISTER_FILE("/proc/net/raw6", ProcNetRAW6)
 REGISTER_PARTIAL_FILE("raw6", ProcNetRAW6)
 
 
+
+# ---
+class ProcNetXFRMSTAT(PBR.TaggedMultiLineFile):
+    """
+    Parsing class for Fedora/Centos file /proc/net/xfrm_stat
+    """
+
+# source: net/xfrm/xfrm_proc.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcNetHandlers" to reduce the size of this module.
+
+    def extra_init(self, *opts):
+        self.minfields = 2
+
+        PBR.add_parse_rule(self, { PREFIX: "XfrmInError ", NAME: PFC.F_INERROR,
+                CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmInBufferError ",
+                NAME: PFC.F_INBUFFERERROR, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmInHdrError ",
+                NAME: PFC.F_INHDRERROR, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmInNoStates ",
+                NAME: PFC.F_INNOSTATES, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmInStateProtoError ",
+                NAME: PFC.F_INSTATEPROTOERROR, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmInStateModeError ",
+                NAME: PFC.F_INSTATEMODEERROR, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmInStateSeqError ",
+                NAME: PFC.F_INSTATESEQERROR, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmInStateExpired ",
+                NAME: PFC.F_INSTATEEXPIRED, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmInStateMismatch ",
+                NAME: PFC.F_INSTATEMISMATCH, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmInStateInvalid ",
+                NAME: PFC.F_INSTATEINVALID, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmInTmplMismatch ",
+                NAME: PFC.F_INTMPLMISMATCH, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmInNoPols ",
+                NAME: PFC.F_INNOPOLS, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmInPolBlock ",
+                NAME: PFC.F_INPOLBLOCK, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmInPolError ",
+                NAME: PFC.F_INPOLERROR, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmOutError ",
+                NAME: PFC.F_OUTERROR, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmOutBundleGenError ",
+                NAME: PFC.F_OUTBUNDLEGENERROR, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmOutBundleCheckError ",
+                NAME: PFC.F_OUTBUNDLECHECKERROR, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmOutNoStates ",
+                NAME: PFC.F_OUTNOSTATES, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmOutStateProtoError ",
+                NAME: PFC.F_OUTSTATEPROTOERROR, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmOutStateModeError ",
+                NAME: PFC.F_OUTSTATEMODEERROR, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmOutStateSeqError ",
+                NAME: PFC.F_OUTSTATESEQERROR, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmOutStateExpired ",
+                NAME: PFC.F_OUTSTATEEXPIRED, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmOutPolBlock ",
+                NAME: PFC.F_OUTPOLBLOCK, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmOutPolDead ",
+                NAME: PFC.F_OUTPOLDEAD, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmOutPolError ",
+                NAME: PFC.F_OUTPOLERROR, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmFwdHdrError ",
+                NAME: PFC.F_FWDHDRERROR, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmOutStateInvalid ",
+                NAME: PFC.F_OUTSTATEINVALID, CONV: long } )
+        PBR.add_parse_rule(self, { PREFIX: "XfrmAcquireError ",
+                NAME: PFC.F_ACQUIREERROR, CONV: long } )
+
+        return
+
+    def extra_next(self, sio):
+        return self.field
+
+REGISTER_FILE("/proc/net/xfrm_stat", ProcNetXFRMSTAT)
+REGISTER_PARTIAL_FILE("xfrm_stat", ProcNetXFRMSTAT)
+
+
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 
 if __name__ == "__main__":

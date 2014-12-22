@@ -1,0 +1,2 @@
+TEST/data/pn/xfrm_stat|in-st-invalid|in-st-mismatch|in-st-prot-err|in-buff-err|in-err|out-no-states|out-bund-gen-err|in-hdr-err|out-poll-block|in-st-expired|out-err|out-poll-dead|out-st-invalid|in-st-seq-err|in-tmpl-mismatch|in-st-mode-err|out-st-seq-err|out-st-expired|out-poll-err|out-st-prot-err|in-poll-block|in-poll-err|acquire-err|in-no-states|in-no-polls|fwd-hdr-err|out-bun-chk-err|out-st-mode-err
+1|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0

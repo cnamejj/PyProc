@@ -1,0 +1,35 @@
+{
+    "0": {
+        "source": "TEST/data/pn/xfrm_stat"
+    },
+    "1": {
+        "acquire-err": 0,
+        "fwd-hdr-err": 0,
+        "in-buff-err": 0,
+        "in-err": 0,
+        "in-hdr-err": 0,
+        "in-no-polls": 0,
+        "in-no-states": 0,
+        "in-poll-block": 0,
+        "in-poll-err": 0,
+        "in-st-expired": 0,
+        "in-st-invalid": 0,
+        "in-st-mismatch": 0,
+        "in-st-mode-err": 0,
+        "in-st-prot-err": 0,
+        "in-st-seq-err": 0,
+        "in-tmpl-mismatch": 0,
+        "out-bun-chk-err": 0,
+        "out-bund-gen-err": 0,
+        "out-err": 0,
+        "out-no-states": 0,
+        "out-poll-block": 0,
+        "out-poll-dead": 0,
+        "out-poll-err": 0,
+        "out-st-expired": 0,
+        "out-st-invalid": 0,
+        "out-st-mode-err": 0,
+        "out-st-prot-err": 0,
+        "out-st-seq-err": 0
+    }
+}

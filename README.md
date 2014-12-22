@@ -295,6 +295,7 @@ Code to parse the following file format are included in this package.
 |udp|IP addresses, port numbers, and socket state are provided as given the input file and also translated to display format (IP's), decimal (port), and text representation (socket state)
 |udp6|IP addresses, port numbers, and socket state are provided as given the input file and also translated to display format (IP's), decimal (port), and text representation (socket state)
 |unix|The "path" field in the returned logical records are presentes as they appear in the input file and may include binary characters, usually "\0" characters
+|xfrm_stat|Of the distros tested, only CentOS and Fedora include this file
 
 
 ### In the "/proc/sysvipc" directory
@@ -418,7 +419,6 @@ primarily used for setting/unsetting system parameters.
 |udplite| TBD, the file is empty on all the systems I develop/test on
 |udplite6|TBD, the file is empty on all the systems I develop/test on
 |wireless|TBD, the file is empty on all the systems I develop/test on
-|xfrm_stat| Planned, but only present on my Fedora system
 
 
 ----------
