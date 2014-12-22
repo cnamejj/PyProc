@@ -4017,11 +4017,30 @@ class ProcNetPNP(PBR.FixedWhitespaceDelimRecs):
         except KeyError:
             pass
 
-        return (self.field[PFC.F_PROTO_USED], self.field[PFC.F_DOMAIN], 
+        return (self.field[PFC.F_PROTO_USED], self.field[PFC.F_DOMAIN],
                 self.field[PFC.F_NAMESERVER], self.field[PFC.F_BOOTSERVER])
 
 REGISTER_FILE("/proc/net/pnp", ProcNetPNP)
 REGISTER_PARTIAL_FILE("pnp", ProcNetPNP)
+
+
+
+# ---
+class ProcNetRAW6(ProcNetUDP6):
+    """
+    Parse records from /proc/net/raw6, format is identical to 'udp6'
+    """
+
+# source #1: net/ipv6/raw.c
+# source #2: include/net/transp_v6.h
+# source #3: net/ipv6/datagram.c
+#
+# The kernel source snippets that generate this file are stored in
+# "README.ProcNetHandlers" to reduce the size of this module.
+
+REGISTER_FILE("/proc/net/raw6", ProcNetRAW6)
+REGISTER_PARTIAL_FILE("raw6", ProcNetRAW6)
+
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
 

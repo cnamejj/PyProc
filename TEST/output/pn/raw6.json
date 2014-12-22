@@ -1,0 +1,29 @@
+{
+    "0": {
+        "source": "TEST/data/pn/raw6"
+    },
+    "1": {
+        "bucket": 58,
+        "dest-hexip": "00000000000000000000000000000000",
+        "dest-hexport": "0000",
+        "dest-ip": "::0",
+        "dest-port": 0,
+        "drops": 0,
+        "hexstate": "07",
+        "inode": 18034,
+        "orig-hexip": "00000000000000000000000000000000",
+        "orig-hexport": "003A",
+        "orig-ip": "::0",
+        "orig-port": 58,
+        "pointer": 18446612134395700800,
+        "ref-count": 2,
+        "retrnsmt": 0,
+        "rx-queue": 0,
+        "state": "CLOSE",
+        "timeout": 0,
+        "timer": 0,
+        "tm-when": 0,
+        "tx-queue": 0,
+        "uid": 0
+    }
+}
