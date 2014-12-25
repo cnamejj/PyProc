@@ -25,6 +25,7 @@ IS_UP = "UP"
 IS_DOWN = "DO"
 OPT_ALL = "all"
 OPT_NONE = "none"
+OPT_RUNNING = "running"
 
 ST_SCAN = 0
 ST_IGN_LIST = 1
@@ -48,6 +49,10 @@ display:{show} {breakout}\n\
 watch:{output}\n\
 "
 
+NEW_PID_FORMAT = "Adding pid: #{pid}, cmd: {cmdline}"
+
+NO_PID_INFO_FORMAT = "Process #{pid} not running or permission denied"
+
 COL_HEADER_FORMAT = "\
 Date     Time     PID   Command         Current DR   Delta %-Delta Minimum \
 Maximum{mseg} Path Type{{pidsumm:s}}\n\
@@ -68,13 +73,14 @@ Options:\n\
     <+/-pause seconds>\n\
     <+/-memory-segments> | <+/-mseg>\n\
 \n\
-At least one process id must be specified. The symbolic name 'all' can be used\n\
-and will be expanded to a list of all processes running when the program starts.\n\
-It is not refreshed as the program runs.\n\
+At least one process id must be specified. The symbolic names 'all' and 'running'\n\
+can be used and will be expanded to a list of all processes running when the \n\
+program starts.  The difference between them is that 'running' is translated to a\n\
+list of all running PID's each time the program loops.\n\
 \n\
 Categories are any of the following:\n\
-anon-huge-pages anonymous kernel-page-size locked mmu-page-size private-clean\n\
-private-dirty prop-share referenced rss shared-clean shared-dirty size swap\n\
+anon-huge-pages anonymous locked private-clean private-dirty prop-share\n\
+referenced rss shared-clean shared-dirty size swap\n\
 "
 
 # Need to figure out what these categories map to...
@@ -121,6 +127,7 @@ SEQ = COLHEADER_INT
 PID_LIST = dict()
 DO_SPLIT_MSEG = True
 STAT = ST_GET_PID
+REFRESH_PIDS = False
 
 # ---
 
@@ -260,9 +267,11 @@ else:
         elif STAT == ST_GET_PID:
             STAT = ST_SCAN
             for __pid in __opt.split(","):
-                if __pid == OPT_ALL:
+                if __pid == OPT_ALL or __pid == OPT_RUNNING:
                     for __scpid in get_all_running_procs():
                         PID_LIST[__scpid] = True
+                    if __pid == OPT_RUNNING:
+                        REFRESH_PIDS = True
                 else:
                     PID_LIST[__pid] = True
 
@@ -343,6 +352,7 @@ else:
     MINVAL = dict()
     MAXVAL = dict()
     PID2COMM = dict()
+    DEAD_PID = dict()
 
     for curr_pid in PID_LIST:
         PATH[curr_pid] = SMAP_FILE_TEMPLATE.format(pid=curr_pid)
@@ -365,11 +375,36 @@ else:
                 CURR[curr_pid] = get_current_smaps_counts(PATH[curr_pid])
 
                 if len(CURR[curr_pid]) == 0:
-                    print "Process {pid} not running".format(pid=curr_pid)
+                    print NO_PID_INFO_FORMAT.format(pid=curr_pid)
+                    DEAD_PID[curr_pid] = True
                 else:
                     PID_POST[curr_pid] = PID_LIST[curr_pid]
                     TRACKING += 1
                     DONE = False
+
+            if REFRESH_PIDS:
+                for __scpid in get_all_running_procs():
+                    try:
+                        __dead = DEAD_PID[__scpid]
+                    except KeyError:
+                        __dead = False
+
+                    try:
+                        __in_play = PID_POST[__scpid]
+                    except KeyError:
+                        __in_play = False
+
+                    if not __in_play and not __dead:
+                        print NEW_PID_FORMAT.format(pid=__scpid,
+                                cmdline=PIN.pid_to_cmdline(__scpid))
+                        PID_POST[__scpid] = True
+                        DONE = False
+                        PATH[__scpid] = SMAP_FILE_TEMPLATE.format(pid=__scpid)
+                        CURR[__scpid] = get_current_smaps_counts(PATH[__scpid])
+                        PREV[__scpid] = CURR[__scpid]
+                        MINVAL[__scpid] = dict()
+                        MAXVAL[__scpid] = dict()
+                        PID2COMM[__scpid] = PIN.pid_to_comm(__scpid)
 
             PID_LIST = PID_POST
 
