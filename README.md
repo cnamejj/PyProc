@@ -470,6 +470,6 @@ symlink is the relevant information.
 
 There currenly only two "/proc" files that contain data which can be parse but
 not regenerated.  Those are /proc/self/mountstats and /proc/self/mountinfo.
-Both will be supported in the future, but interpreting the myriad NFS related
-data that can be presented in those files makes writing code to regenerate all
-possible variants of the files rather tedious.
+Both will be supported in the future, but writing code to handle all the
+variants of those files is tedious given the number of different NFS status
+bits that can be present.
