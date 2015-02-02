@@ -103,7 +103,7 @@ def bluetooth_data_format(inprecs):
 
     __header = "sk               RefCnt Rmem   Wmem   User   Inode  Src Dst \
 Parent"
-    __template = "{sk:16x} {refc:<6d} {rmem:<-6d} {wmem:<6d} {uid:<6d} \
+    __template = "{sk:016x} {refc:<6d} {rmem:<-6d} {wmem:<6d} {uid:<6d} \
 {ino:<6d} {src:s} {dst:s} {parent:<6d}"
 
     print __header
