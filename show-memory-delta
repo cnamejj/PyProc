@@ -102,3 +102,17 @@ try:
 
 except KeyboardInterrupt:
     print "Stopping..."
+
+# ---
+
+try:
+    sys.stdout.close()
+
+except:
+    pass
+
+try:
+    sys.stderr.close()
+
+except:
+    pass

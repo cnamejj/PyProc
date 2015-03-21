@@ -47,5 +47,24 @@ for dlist in TRECS:
             comm = act[PFC.F_START_COMM]
             pid = act[PFC.F_START_PID]
             delta = (act[PFC.F_EXP_DIFF] - clock_offset) / 1000000000.0
-            print DATA.format(cpu=cpu_id, clock=clock_id, seq=num,
-                pid=pid, exp=delta, comm=comm, cmd=PIN.pid_to_cmdline(pid))
+
+            try:
+                print DATA.format(cpu=cpu_id, clock=clock_id, seq=num,
+                    pid=pid, exp=delta, comm=comm, cmd=PIN.pid_to_cmdline(pid))
+
+            except IOError:
+                break
+
+# ---
+
+try:
+    sys.stdout.close()
+
+except:
+    pass
+
+try:
+    sys.stderr.close()
+
+except:
+    pass

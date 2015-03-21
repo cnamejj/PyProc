@@ -65,3 +65,17 @@ for srec in ACTIVE:
                 out = "{out}{delim}{keyval}".format(out=out, delim=DELIM,
                         keyval=str(ACTIVE.field[key]))
             print "{seq}{datalist}".format(seq=SEQ, datalist=out)
+
+# ---
+
+try:
+    sys.stdout.close()
+
+except:
+    pass
+
+try:
+    sys.stderr.close()
+
+except:
+    pass

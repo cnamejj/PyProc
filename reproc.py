@@ -44,3 +44,16 @@ format(inp=TARGET)
         ACTIVE = HANDLER(TARGET)
         RECREATE(ACTIVE)
 
+# ---
+
+try:
+    sys.stdout.close()
+
+except:
+    pass
+
+try:
+    sys.stderr.close()
+
+except:
+    pass

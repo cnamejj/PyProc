@@ -38,3 +38,17 @@ for srec in ACTIVE:
             FIELD_LIST[REC][fname] = ACTIVE.field[fname]
 
 print json.dumps(FIELD_LIST, sort_keys=True, indent=4, separators=(',', ': '))
+
+# ---
+
+try:
+    sys.stdout.close()
+
+except:
+    pass
+
+try:
+    sys.stderr.close()
+
+except:
+    pass

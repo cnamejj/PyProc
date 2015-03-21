@@ -80,6 +80,24 @@ for base, dlist, flist in os.walk(BASE):
                         else:
                             sockinfo = ""
 
-                        print OPEN_FORMAT.format(fd=fn, fn=sym, psi=psi,
-                                sock=sockinfo)
+                        try:
+                            print OPEN_FORMAT.format(fd=fn, fn=sym, psi=psi,
+                                    sock=sockinfo)
+
+                        except IOError:
+                            break
     break
+
+# ---
+
+try:
+    sys.stdout.close()
+
+except:
+    pass
+
+try:
+    sys.stderr.close()
+
+except:
+    pass

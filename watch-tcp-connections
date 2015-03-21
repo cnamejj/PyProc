@@ -106,5 +106,17 @@ for ip, freq in ORDERED_FREQ:
 
     print "{0:d} {1:s} host: {2:s}".format( freq, ip, ip2host)
 
-sys.stderr.flush()
-sys.stdout.flush()
+# ---
+
+try:
+    sys.stdout.close()
+
+except:
+    pass
+
+try:
+    sys.stderr.close()
+
+except:
+    pass
+

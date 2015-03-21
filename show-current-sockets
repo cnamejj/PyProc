@@ -51,3 +51,16 @@ for __prot in PROT_LIST:
         print "{seq}. {orig} -> {dest} {pr} {st} {ps}".format(seq=SEQ,
                 orig=__orig, dest=__dest, ps=__ps_summ, st=__state, pr=__prot)
 
+# ---
+
+try:
+    sys.stdout.close()
+
+except:
+    pass
+
+try:
+    sys.stderr.close()
+
+except:
+    pass
