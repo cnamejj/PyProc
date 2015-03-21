@@ -40,6 +40,18 @@ class SeqFileIO(object):
         # For pylint only...
         self.pnt_fd = file(DEF_PATH, "r")
 
+
+    def __iter__(self):
+        """Standard iterator"""
+        return(self)
+
+
+    def next(self):
+        """Fetch the next line from the file"""
+        self.read_line()
+        return self.buff
+
+
     def queue_line(self, line):
         """Remember a line of data to be used for the next 'read'"""
 
