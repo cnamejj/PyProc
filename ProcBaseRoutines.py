@@ -498,7 +498,8 @@ class FixedWhitespaceDelimRecs(object):
         self.field = dict()
         self.curr_sio = SeqFileIO.SeqFileIO()
 #        print "base:__init__: inp({infile})".format(infile=self.infile)
-        self.curr_sio.open_file(path=self.infile, min_words=self.minfields, skip_line=self.skipped)
+        self.curr_sio.open_file(path=self.infile, min_words=self.minfields,
+                skip_line=self.skipped)
         return
 
     def __iter__(self):
@@ -618,7 +619,8 @@ class SingleNameValueList(object):
 
         self.field = dict()
         self.curr_sio = SeqFileIO.SeqFileIO()
-        self.curr_sio.open_file(path=self.infile, min_words=self.minfields, skip_line=self.skipped)
+        self.curr_sio.open_file(path=self.infile, min_words=self.minfields,
+                skip_line=self.skipped)
         if self.debug_level >= 5:
             print "dbg:: {name:s} reading '{infile}'".format(name=str(self),
                     infile=self.infile)
@@ -690,7 +692,8 @@ class TwoLineLogicalRecs(object):
         self.field = dict()
         self.curr_sio = SeqFileIO.SeqFileIO()
 #        print "base:__init__: inp({infile})".format(infile=self.infile)
-        self.curr_sio.open_file(path=self.infile, min_words=self.minfields, skip_line=self.skipped)
+        self.curr_sio.open_file(path=self.infile, min_words=self.minfields,
+                skip_line=self.skipped)
         return
 
     def __iter__(self):
@@ -756,7 +759,8 @@ class LabelledPairList(object):
         self.field = dict()
         self.curr_sio = SeqFileIO.SeqFileIO()
 #        print "base:__init__: inp({infile})".format(infile=self.infile)
-        self.curr_sio.open_file(path=self.infile, min_words=self.minfields, skip_line=self.skipped)
+        self.curr_sio.open_file(path=self.infile, min_words=self.minfields,
+                skip_line=self.skipped)
         return
 
     def __iter__(self):
@@ -818,7 +822,8 @@ class ListOfTerms(object):
         self.field = dict()
         self.curr_sio = SeqFileIO.SeqFileIO()
 #        print "base:__init__: inp({infile})".format(infile=self.infile)
-        self.curr_sio.open_file(path=self.infile, min_words=self.minfields, skip_line=self.skipped)
+        self.curr_sio.open_file(path=self.infile, min_words=self.minfields,
+                skip_line=self.skipped)
         return
 
     def __iter__(self):
@@ -885,7 +890,8 @@ class FixedColumnRecs(object):
         self.field = dict()
         self.curr_sio = SeqFileIO.SeqFileIO()
 #        print "base:__init__: inp({infile})".format(infile=self.infile)
-        self.curr_sio.open_file(path=self.infile, min_words=self.minfields, skip_line=self.skipped)
+        self.curr_sio.open_file(path=self.infile, min_words=self.minfields,
+                skip_line=self.skipped)
         return
 
     def __iter__(self):
@@ -1006,7 +1012,8 @@ class TaggedMultiLineFile(object):
         self.unused_recs = dict()
         self.curr_sio = SeqFileIO.SeqFileIO()
 #        print "base:__init__: inp({infile})".format(infile=self.infile)
-        self.curr_sio.open_file(path=self.infile, min_words=self.minfields, skip_line=self.skipped)
+        self.curr_sio.open_file(path=self.infile, min_words=self.minfields,
+                skip_line=self.skipped)
         return
 
     def __iter__(self):
@@ -1143,7 +1150,8 @@ class SingleTextField(object):
 
         self.field = dict()
         self.curr_sio = SeqFileIO.SeqFileIO()
-        self.curr_sio.open_file(path=self.infile, min_words=self.minfields, skip_line=self.skipped)
+        self.curr_sio.open_file(path=self.infile, min_words=self.minfields,
+                skip_line=self.skipped)
         return
 
     def __iter__(self):

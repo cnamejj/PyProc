@@ -58,6 +58,7 @@ class SeqFileIO(object):
         self.queued_lines.append(line)
 
 
+# pylint: disable=R0913
     def open_file(self, path=DEF_PATH, min_words=DEF_MIN_WORDS,
             skip_line=DEF_SKIP_PREF, delim=DEF_DELIM, strip=DEF_STRIP):
         """Open the specified file and stash away basic status info"""
@@ -71,6 +72,8 @@ class SeqFileIO(object):
         self.min_words = min_words
         self.skip_line = skip_line
         self.delim = delim
+        self.strip = strip
+# pylint: enable=R0913
 
 
     def get_word(self, which):
