@@ -41,6 +41,8 @@ print json.dumps(FIELD_LIST, sort_keys=True, indent=4, separators=(',', ': '))
 
 # ---
 
+# pylint: disable=W0702
+
 try:
     sys.stdout.close()
 

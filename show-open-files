@@ -90,6 +90,8 @@ for base, dlist, flist in os.walk(BASE):
 
 # ---
 
+# pylint: disable=W0702
+
 try:
     sys.stdout.close()
 

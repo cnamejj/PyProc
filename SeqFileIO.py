@@ -1,5 +1,13 @@
 #!/usr/bin/env python
-"""I/O routines for reading column oriented text data files"""
+"""
+I/O routines for reading column-oriented and text delimitted data files
+"""
+
+DEF_DELIM = ""
+DEF_SKIP_PREF = ""
+DEF_MIN_WORDS = 0
+DEF_PATH = "/dev/null"
+DEF_STRIP = False
 
 def pair_list_to_dictionary(line, start_pos):
     """Transform a list of word pairs to a dictionary."""
@@ -15,39 +23,42 @@ def pair_list_to_dictionary(line, start_pos):
 
 
 class SeqFileIO(object):
-    """Utility routines to handle I/O to proc file system files"""
+    """Utility routines to handle file I/O"""
 
     def __init__(self):
         self.lineparts = dict()
         self.linewords = 0
         self.buff = ""
         self.is_open = False
-        self.min_words = 0
-        self.skip_line = ""
+        self.min_words = DEF_MIN_WORDS
+        self.skip_line = DEF_SKIP_PREF
         self.raw_lines_read = 0
         self.queued_lines = []
+        self.delim = DEF_DELIM
+        self.strip = DEF_STRIP
 
         # For pylint only...
-        self.pnt_fd = file("/dev/null", "r")
+        self.pnt_fd = file(DEF_PATH, "r")
 
     def queue_line(self, line):
         """Remember a line of data to be used for the next 'read'"""
 
         self.queued_lines.append(line)
 
-    def open_file(self, procfile, *options):
+
+    def open_file(self, path=DEF_PATH, min_words=DEF_MIN_WORDS,
+            skip_line=DEF_SKIP_PREF, delim=DEF_DELIM, strip=DEF_STRIP):
         """Open the specified file and stash away basic status info"""
 
         try:
-            self.pnt_fd = open(procfile)
+            self.pnt_fd = open(path)
             self.is_open = True
         except IOError:
             self.is_open = False
 
-        if len(options) > 0:
-            self.min_words = options[0]
-            if len(options) > 1:
-                self.skip_line = options[1]
+        self.min_words = min_words
+        self.skip_line = skip_line
+        self.delim = delim
 
 
     def get_word(self, which):
@@ -85,8 +96,9 @@ class SeqFileIO(object):
             else:
                 try:
                     self.buff = self.pnt_fd.readline()
+                    if self.strip and self.buff[-1:] == "\n":
+                        self.buff = self.buff[:-1]
                     self.raw_lines_read += 1
-#                except IOError as err:
                 except IOError:
                     self.pnt_fd.close()
                     self.is_open = False
@@ -108,7 +120,11 @@ class SeqFileIO(object):
                 raise StopIteration
 
             else:
-                self.lineparts = self.buff.split()
+                if self.delim != "":
+                    self.lineparts = self.buff.split(self.delim)
+                else:
+                    self.lineparts = self.buff.split()
+
                 self.linewords = len(self.lineparts)
                 if self.linewords < __min_words:
                     self.read_line()
@@ -142,7 +158,6 @@ class SeqFileIO(object):
                     if __lines[__off][-1:] == "\n":
                         __lines[__off] = __lines[__off][:-1]
                     if __skip_pref_len > 1:
-#                        if __lines[__off][1:__skip_pref_len] == __skip_pref:
                         if __lines[__off].startswith(__skip_pref):
                             __lines[__off:__off+1] = []
                     elif __lines[__off] == "":

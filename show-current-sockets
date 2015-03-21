@@ -53,6 +53,8 @@ for __prot in PROT_LIST:
 
 # ---
 
+# pylint: disable=W0702
+
 try:
     sys.stdout.close()
 

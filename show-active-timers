@@ -57,6 +57,8 @@ for dlist in TRECS:
 
 # ---
 
+# pylint: disable=W0702
+
 try:
     sys.stdout.close()
 

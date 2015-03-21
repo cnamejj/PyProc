@@ -46,6 +46,8 @@ format(inp=TARGET)
 
 # ---
 
+# pylint: disable=W0702
+
 try:
     sys.stdout.close()
 
