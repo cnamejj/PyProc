@@ -36,6 +36,7 @@ class SeqFileIO(object):
         self.queued_lines = []
         self.delim = DEF_DELIM
         self.strip = DEF_STRIP
+        self.debug = False
 
         # For pylint only...
         self.pnt_fd = file(DEF_PATH, "r")
@@ -43,7 +44,7 @@ class SeqFileIO(object):
 
     def __iter__(self):
         """Standard iterator"""
-        return(self)
+        return self
 
 
     def next(self):
@@ -56,7 +57,6 @@ class SeqFileIO(object):
         """Remember a line of data to be used for the next 'read'"""
 
         self.queued_lines.append(line)
-
 
 # pylint: disable=R0913
     def open_file(self, path=DEF_PATH, min_words=DEF_MIN_WORDS,
@@ -103,18 +103,28 @@ class SeqFileIO(object):
         self.buff = ""
 
         if not self.is_open:
+            if self.debug:
+                print "dbg:: SeqFileIO: read_line(): File already closed"
             raise StopIteration
 
         else:
             if len(self.queued_lines) > 0:
-                self.buff = self.queued_lines.pop(0)
+                if self.debug:
+                    print "dbg:: SeqFileIO: read_line(): Pop line off queue, no I/O"
+                __raw_buff = self.queued_lines.pop(0)
+                self.buff = __raw_buff
             else:
                 try:
-                    self.buff = self.pnt_fd.readline()
+                    __raw_buff = self.pnt_fd.readline()
+                    self.buff = __raw_buff
                     if self.strip and self.buff[-1:] == "\n":
                         self.buff = self.buff[:-1]
                     self.raw_lines_read += 1
+                    if self.debug:
+                        print "dbg:: SeqFileIO: read_line(): Read #{nl} {ll} bytes from file".format(nl=self.raw_lines_read, ll=len(self.buff))
                 except IOError:
+                    if self.debug:
+                        print "dbg:: SeqFileIO: read_line(): I/O error on read, wrap up."
                     self.pnt_fd.close()
                     self.is_open = False
                     raise StopIteration
@@ -129,7 +139,9 @@ class SeqFileIO(object):
             except AttributeError:
                 __skip_line = ""
 
-            if self.buff == "":
+            if __raw_buff == "":
+                if self.debug:
+                    print "dbg:: SeqFileIO: read_line(): Got blank line, assuming EOF"
                 self.pnt_fd.close()
                 self.is_open = False
                 raise StopIteration
@@ -142,10 +154,16 @@ class SeqFileIO(object):
 
                 self.linewords = len(self.lineparts)
                 if self.linewords < __min_words:
+                    if self.debug:
+                        print "dbg:: SeqFileIO: read_line(): Skip, wanted >= {mw} words, got {lw}".format(mw=__min_words, lw=self.linewords)
                     self.read_line()
                 elif __skip_line != "":
                     if self.lineparts[0] == __skip_line:
+                        if self.debug:
+                            print "dbg:: SeqFileIO: read_line(): Skip, wanted >= {mw} words, got {lw}".format(mw=__min_words, lw=self.linewords)
                         self.read_line()
+                    elif self.debug:
+                        print "dbg:: SeqFileIO: read_line(): Keep line, found {lw} words".format(lw=self.linewords)
 
         return self.is_open
 

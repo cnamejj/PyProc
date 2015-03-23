@@ -7,6 +7,7 @@
 import ProcHandlers as PH
 
 PFC = PH.ProcFieldConstants
+PDC = PH.ProcDataConstants
 
 # ---
 
@@ -101,15 +102,29 @@ def bluetooth_data_format(inprecs):
     registered.
     """
 
-    __header = "sk               RefCnt Rmem   Wmem   User   Inode  Src Dst \
+    __full_header = "sk               RefCnt Rmem   Wmem   User   Inode  Src \
+Dst Parent"
+    __short_header = "sk               RefCnt Rmem   Wmem   User   Inode  \
 Parent"
-    __template = "{sk:016x} {refc:<6d} {rmem:<-6d} {wmem:<6d} {uid:<6d} \
+    __full_template = "{sk:016x} {refc:<6d} {rmem:<-6d} {wmem:<6d} {uid:<6d} \
 {ino:<6d} {src:s} {dst:s} {parent:<6d}"
+    __short_template = "{sk:016x} {refc:<6d} {rmem:<-6d} {wmem:<6d} {uid:<6d} \
+{ino:<6d} {parent:<6d}"
 
-    print __header
+    __first = True
 
     for __hilit in inprecs:
+
         __ff = inprecs.field
+
+        if __first:
+            __first = False
+            if __ff[PFC.F_BT_SOURCE] == PDC.NO_BLUETOOTH_ADDR:
+                print __short_header
+                __template = __short_template
+            else:
+                print __full_header
+                __template = __full_template
 
 #...+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8
         print __template.format(sk=__ff[PFC.F_SK_ADDR],

@@ -33,6 +33,7 @@ NO_GID = -1
 NO_UID = -1
 NO_PID = -1
 NO_PORT = 0
+NO_BLUETOOTH_ADDR = "xx:xx:xx:xx:xx:xx"
 
 STATE_LIST = dict()
 STATE_LIST["01"] = "ESTABLISHED"

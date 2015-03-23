@@ -22,6 +22,7 @@ Handlers for file in the /proc/net directory (and subdirectories)
 """
 
 # pylint: disable=C0302
+# pylint: disable=C0326
 
 import socket
 import binascii
@@ -49,6 +50,8 @@ AFTER = PBR.AFTER_VAL
 WORDS = PBR.WORDS_VAL
 SUBWORD = PBR.SUBWORD
 HAS = PBR.HAS_VAL
+BTOOTH_FULL_REC_SIZE = 9
+BTOOTH_MIN_REC_SIZE = 7
 
 STATE_LIST = PDC.STATE_LIST
 
@@ -3902,7 +3905,7 @@ class ProcNetGPBLUETOOTH(PBR.FixedWhitespaceDelimRecs):
 #
 
     def extra_init(self, *opts):
-        self.minfields = 9
+        self.minfields = BTOOTH_MIN_REC_SIZE
         self.skipped = "sk"
 
         PBR.add_parse_rule(self, { POS: 0, NAME: PFC.F_SK_ADDR, CONV: long,
@@ -3921,6 +3924,15 @@ class ProcNetGPBLUETOOTH(PBR.FixedWhitespaceDelimRecs):
         return
 
     def extra_next(self, sio):
+        if sio.linewords >= BTOOTH_FULL_REC_SIZE:
+            self.field[PFC.F_BT_SOURCE] = sio.get_word(6)
+            self.field[PFC.F_BT_DEST] = sio.get_word(7)
+            self.field[PFC.F_PARENT] = long(sio.get_word(8))
+
+        else:
+            self.field[PFC.F_PARENT] = long(sio.get_word(6))
+            self.field[PFC.F_BT_SOURCE] = PDC.NO_BLUETOOTH_ADDR
+            self.field[PFC.F_BT_DEST] = PDC.NO_BLUETOOTH_ADDR
 
         return (self.field[PFC.F_SK_ADDR], self.field[PFC.F_REFCOUNT],
                 self.field[PFC.F_RMEM_ALLOC], self.field[PFC.F_WMEM_ALLOC],
