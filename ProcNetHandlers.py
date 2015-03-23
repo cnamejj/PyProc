@@ -22,7 +22,6 @@ Handlers for file in the /proc/net directory (and subdirectories)
 """
 
 # pylint: disable=C0302
-# pylint: disable=C0326
 
 import socket
 import binascii

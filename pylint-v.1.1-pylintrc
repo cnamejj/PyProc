@@ -40,7 +40,8 @@ load-plugins=
 # R0915: Too many statements
 # C0326: ...ugh...
 # I0011: Locally disabling ????
-disable=R0201,R0903,R0912,R0915,C0326,I0011
+# C0326: Spaces not allowed before/after brackets
+disable=R0201,R0903,R0912,R0915,C0326,I0011,C0326
 
 
 [REPORTS]

@@ -110,7 +110,7 @@ class SeqFileIO(object):
         else:
             if len(self.queued_lines) > 0:
                 if self.debug:
-                    print "dbg:: SeqFileIO: read_line(): Pop line off queue, no I/O"
+                    print "dbg:: SeqFileIO: read_line(): Pop line off queue"
                 __raw_buff = self.queued_lines.pop(0)
                 self.buff = __raw_buff
             else:
@@ -121,10 +121,12 @@ class SeqFileIO(object):
                         self.buff = self.buff[:-1]
                     self.raw_lines_read += 1
                     if self.debug:
-                        print "dbg:: SeqFileIO: read_line(): Read #{nl} {ll} bytes from file".format(nl=self.raw_lines_read, ll=len(self.buff))
+                        print "dbg:: SeqFileIO: read_line(): Read #{nl} {ll} \
+bytes from file".format(nl=self.raw_lines_read, ll=len(self.buff))
                 except IOError:
                     if self.debug:
-                        print "dbg:: SeqFileIO: read_line(): I/O error on read, wrap up."
+                        print "dbg:: SeqFileIO: read_line(): I/O error on \
+read, wrap up."
                     self.pnt_fd.close()
                     self.is_open = False
                     raise StopIteration
@@ -141,7 +143,8 @@ class SeqFileIO(object):
 
             if __raw_buff == "":
                 if self.debug:
-                    print "dbg:: SeqFileIO: read_line(): Got blank line, assuming EOF"
+                    print "dbg:: SeqFileIO: read_line(): Got blank line, \
+assuming EOF"
                 self.pnt_fd.close()
                 self.is_open = False
                 raise StopIteration
@@ -155,15 +158,18 @@ class SeqFileIO(object):
                 self.linewords = len(self.lineparts)
                 if self.linewords < __min_words:
                     if self.debug:
-                        print "dbg:: SeqFileIO: read_line(): Skip, wanted >= {mw} words, got {lw}".format(mw=__min_words, lw=self.linewords)
+                        print "dbg:: SeqFileIO: read_line(): Skip, \
+wanted >= {mw} words, got {lw}".format(mw=__min_words, lw=self.linewords)
                     self.read_line()
                 elif __skip_line != "":
                     if self.lineparts[0] == __skip_line:
                         if self.debug:
-                            print "dbg:: SeqFileIO: read_line(): Skip, wanted >= {mw} words, got {lw}".format(mw=__min_words, lw=self.linewords)
+                            print "dbg:: SeqFileIO: read_line(): Skip, \
+wanted >= {mw} words, got {lw}".format(mw=__min_words, lw=self.linewords)
                         self.read_line()
                     elif self.debug:
-                        print "dbg:: SeqFileIO: read_line(): Keep line, found {lw} words".format(lw=self.linewords)
+                        print "dbg:: SeqFileIO: read_line(): Keep line, found \
+{lw} words".format(lw=self.linewords)
 
         return self.is_open
 
