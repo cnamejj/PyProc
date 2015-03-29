@@ -2203,7 +2203,8 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
         """Parse device specific record"""
 
         self.append_parse_res(PFC.F_ACTIVE_STAT)
-        self.field[PFC.F_ACTIVE_STAT] = sio.get_word(2)
+        __active_stat = sio.get_word(2)
+        self.field[PFC.F_ACTIVE_STAT] = __active_stat
         __off = 3
         if sio.get_word(__off) == self.__readonly_flag:
             self.append_parse_res(PFC.F_READONLY)
@@ -2214,8 +2215,11 @@ class ProcRootMDSTAT(PBR.FixedWhitespaceDelimRecs):
             self.field[PFC.F_READONLY] = 2
             __off += 1
         self.append_parse_res(PFC.F_PERS_NAME)
-        self.field[PFC.F_PERS_NAME] = sio.get_word(__off)
-        __off += 1
+        if __active_stat == PDC.INACTIVE_STATE:
+            self.field[PFC.F_PERS_NAME] = PDC.NO_STATUS_AVAILABLE
+        else:
+            self.field[PFC.F_PERS_NAME] = sio.get_word(__off)
+            __off += 1
         self.parse_partition_list(" ".join(sio.lineparts[__off:]))
 
         sio.min_words = self.__min_words_second

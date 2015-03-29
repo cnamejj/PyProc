@@ -1,0 +1,17 @@
+Personalities : [raid1] 
+md0 : active raid1 sda1[1]
+      19514240 blocks super 1.2 [2/1] [_U]
+      
+md1 : inactive sda5[1](S) sdb5[2](S)
+      195182815 blocks super 1.2
+      
+md4 : active raid1 sda8[1]
+      244008768 blocks super 1.2 [2/1] [_U]
+      
+md3 : inactive sda7[1](S) sdb7[2](S)
+      19515968 blocks super 1.2
+      
+md2 : inactive sda6[1](S) sdb6[2](S)
+      195182815 blocks super 1.2
+      
+unused devices: <none>

@@ -35,6 +35,9 @@ NO_PID = -1
 NO_PORT = 0
 NO_BLUETOOTH_ADDR = "xx:xx:xx:xx:xx:xx"
 
+INACTIVE_STATE = "inactive"
+NO_STATUS_AVAILABLE = ""
+
 STATE_LIST = dict()
 STATE_LIST["01"] = "ESTABLISHED"
 STATE_LIST["02"] = "SYN_SENT"

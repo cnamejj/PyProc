@@ -6,10 +6,11 @@ import regentest as RG
 import ProcHandlers as PH
 
 PFC = PH.PFC
+PDC = PH.PDC
 
 __MDPREF_TEMP = "{rec:s} : {stat:s}"
 __READONLY_TEMP = "{acc:s} {stat:s}"
-__PERS_TEMP = "{acc:s} {pers:s}"
+__PERS_TEMP = "{acc:s}{pers:s}"
 __PART_TEMP = "{acc:s} {part:s}[{pnum:d}]{wrmostly:s}{faulty:s}{spare:s}"
 
 __BLOCKPREF_TEMP = "      {blocks:d} blocks"
@@ -107,8 +108,9 @@ def gen_blocks_subrec_info(pdata, pmap):
     if pmap.has_key(PFC.F_FAR_COPY):
         __out = __FAR_TEMP.format(acc=__out, size=pdata[PFC.F_FAR_COPY])
 
-    __out = __RPARTS_TEMP.format(acc=__out, tot=pdata[PFC.F_TOTAL_PARTS],
-            act=pdata[PFC.F_ACTIVE_PARTS], use=pdata[PFC.F_PART_USEMAP])
+    if pdata[PFC.F_ACTIVE_STAT] != PDC.INACTIVE_STATE:
+        __out = __RPARTS_TEMP.format(acc=__out, tot=pdata[PFC.F_TOTAL_PARTS],
+                act=pdata[PFC.F_ACTIVE_PARTS], use=pdata[PFC.F_PART_USEMAP])
 
     print __out
 
@@ -129,7 +131,10 @@ def gen_mdstat_info(inprecs):
         __out = __READONLY_TEMP.format(acc=__out,
                 stat=__READONLY_DESC[__ff[PFC.F_READONLY]])
 
-    __out = __PERS_TEMP.format(acc=__out, pers=__ff[PFC.F_PERS_NAME])
+    __persname = __ff[PFC.F_PERS_NAME]
+    if __persname != "":
+        __persname = " {pers}".format(pers=__persname)
+    __out = __PERS_TEMP.format(acc=__out, pers=__persname)
 
     for __seq in range(0, len(__order)):
         __pnum = __order[__seq]
