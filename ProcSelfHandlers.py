@@ -1354,6 +1354,10 @@ class ProcSelfSMAPS(PBR.FixedWhitespaceDelimRecs):
                 __complete = True
                 sio.queue_line(sio.buff)
 
+            elif sio.linewords >= 5:
+                __complete = True
+                sio.queue_line(sio.buff)
+
             __hold_pref = __pref
 
         self.field[PFC.F_FL_READ] = self.field[PFC.F_FLAGS][:1]
