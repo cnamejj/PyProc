@@ -3,11 +3,15 @@
 I/O routines for reading column-oriented and text delimitted data files
 """
 
+import sys
+
 DEF_DELIM = ""
 DEF_SKIP_PREF = ""
 DEF_MIN_WORDS = 0
 DEF_PATH = "/dev/null"
 DEF_STRIP = False
+
+USE_STDIN = "-"
 
 def pair_list_to_dictionary(line, start_pos):
     """Transform a list of word pairs to a dictionary."""
@@ -63,11 +67,15 @@ class SeqFileIO(object):
             skip_line=DEF_SKIP_PREF, delim=DEF_DELIM, strip=DEF_STRIP):
         """Open the specified file and stash away basic status info"""
 
-        try:
-            self.pnt_fd = open(path)
+        if path == USE_STDIN:
+            self.pnt_fd = sys.stdin
             self.is_open = True
-        except IOError:
-            self.is_open = False
+        else:
+            try:
+                self.pnt_fd = open(path)
+                self.is_open = True
+            except IOError:
+                self.is_open = False
 
         self.min_words = min_words
         self.skip_line = skip_line
