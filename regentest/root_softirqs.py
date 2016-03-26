@@ -6,6 +6,7 @@ import regentest as RG
 import ProcHandlers as PH
 
 PFC = PH.ProcFieldConstants
+AT_HEADER_ALIGN_BUG = 10
 
 # ---
 
@@ -45,6 +46,8 @@ def re_root_softirqs(inprecs):
     __out = __headpref
 
     for __off in range(0, len(__cols)):
+        if __off == AT_HEADER_ALIGN_BUG:
+            __out = "{acc} ".format(acc=__out)
         __out = __colheadtemp.format(out=__out, cpu=__cols[__off])
 
     print __headtemp.format(out=__out)
